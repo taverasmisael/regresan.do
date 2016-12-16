@@ -6,14 +6,12 @@ import { HttpModule } from '@angular/http';
 import { AppRoutes } from './app.routes';
 
 import { AppComponent } from './app.component';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WelcomeComponent,
     LoginComponent,
     DashboardComponent
   ],
