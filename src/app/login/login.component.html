@@ -1,10 +1,11 @@
 <section class="section section--full section--splash mdl-grid">
   <div class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-desktop mdl-cell--6-col-tablet mdl-cell--1-offset-tablet mdl-cell--4-phone mdl-cell--middle">
     <div class="login-form login-form__container is--full mdl-shadow--2dp">
+      <div class="mdl-progress mdl-js-progress" [ngClass]="{'mdl-progress__indeterminate': requesting, 'hidden': !requesting}"></div>
       <form [formGroup]="loginForm" (ngSubmit)="logUser()" class="login-form__form">
         <img src="../assets/images/Identidad-Regresando-2016.png" class="u__img--responsive login-form__branding" />
-        <div class="login-form__messages">
-          <span class="login-form__message login-form__message--is-error">El correo o contraseña introducidas no son validas</span>
+        <div class="login-form__messages" [ngClass]="{'is--visible': loginError}">
+          <span class="login-form__message login-form__message--is-error">{{loginError}}</span>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input class="mdl-textfield__input" type="email" id="username" [formControl]="username">

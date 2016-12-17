@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   username: FormControl;
   password: FormControl;
+  private requesting = false;
+  private loginError: string;
 
   constructor(fb: FormBuilder, private userService: UserService) {
     this.username = new FormControl('', [ Validators.required ]);
@@ -41,12 +43,32 @@ export class LoginComponent implements OnInit {
   }
 
   logUser() {
+    this.requesting = true;
+    this.loginError = undefined;
     this.userService.login(this.loginForm.value)
       .subscribe(
-        success => console.log(success),
-        error => console.error(error),
+        success => {console.log(success); this.requesting = false;},
+        error => {this.showError(error); this.requesting = false;},
         () => console.log('DONE!')
       );
+  }
+
+  showError(error: any) {
+    console.error(error);
+    switch (error) {
+      case('invalid_grant'): {
+        this.loginError = 'El usuario o contraseña son incorrectos';
+        break;
+      }
+      case('unsupported_grant_type'): {
+        this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
+        break;
+      }
+      default: {
+        this.loginError = 'Error comunicandose con el servidor';
+        break;
+      }
+    }
   }
 
 }
