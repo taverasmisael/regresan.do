@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/material-design-lite/dist/material.blue-purple.min.css";
+@import "../node_modules/material-design-lite/dist/material.teal-cyan.min.css";
 * {
   box-sizing: border-box;
 }
@@ -9,4 +9,13 @@
   line-height: 1;
   height: 1em;
   vertical-align: middle;
+}
+
+.u {
+  &__img {
+    &--responsive {
+      max-width: 100%;
+      height: auto;
+    }
+  }
 }
