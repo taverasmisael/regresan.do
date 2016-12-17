@@ -9,6 +9,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
+import * as Services from './services';
+
+const mapValuesToArray = (obj) => Object.keys(obj).map(key => obj[key]);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,9 +24,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     FormsModule,
     HttpModule,
     AppRoutes,
-    ReactiveFormsModule 
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    ...mapValuesToArray(Services)
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
