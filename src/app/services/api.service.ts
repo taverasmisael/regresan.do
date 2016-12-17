@@ -20,6 +20,7 @@ import { JWT } from '../models/jwt';
 @Injectable()
 export class ApiService {
   private BASE_URL: string = 'https://devregresando.azurewebsites.net';
+  private COMMON_HEADERS = new Headers([{'Content-Type': 'application/x-www-form-urlencoded'}]);
   constructor(private http: Http) { }
 
   get(path: string | Request, options?: RequestOptionsArgs):Observable<{}> {
@@ -29,19 +30,25 @@ export class ApiService {
   }
 
   post(path: string | Request, body: any, options?: RequestOptionsArgs):Observable<{}> {
-    return this.http.post(`${this.BASE_URL}/${path}`, body, options)
+    // This Line Ensure All 'FormRequest' are sended with the right content-type
+    const innerOptions = Object.assign({}, options, {headers: this.COMMON_HEADERS});
+    return this.http.post(`${this.BASE_URL}/${path}`, body, innerOptions)
       .map(this.HandleResponse)
       .catch(this.HandleErrors);
   }
 
   delete(path: string | Request, options?: RequestOptionsArgs):Observable<{}> {
-    return this.http.delete(`${this.BASE_URL}/${path}`, options)
+    // This Line Ensure All 'FormRequest' are sended with the right content-type
+    const innerOptions = Object.assign({}, options, {headers: this.COMMON_HEADERS});
+    return this.http.delete(`${this.BASE_URL}/${path}`, innerOptions)
     .map(this.HandleResponse)
     .catch(this.HandleErrors);
   }
 
   put(path: string | Request, body: any, options?: RequestOptionsArgs):Observable<{}> {
-    return this.http.put(`${this.BASE_URL}/${path}`, body, options)
+    // This Line Ensure All 'FormRequest' are sended with the right content-type
+    const innerOptions = Object.assign({}, options, {headers: this.COMMON_HEADERS});
+    return this.http.put(`${this.BASE_URL}/${path}`, body, innerOptions)
     .map(this.HandleResponse)
     .catch(this.HandleErrors);
   }
@@ -51,6 +58,15 @@ export class ApiService {
 
     newHeader.append('Authorization', `${token.token_type} ${token.access_token}`);
     return newHeader;
+  }
+
+  encodeBody(body: Object) {
+    let encoded = '';
+
+    Object.keys(body).forEach(key => {
+      encoded += `${key}=${body[key]}&`
+    });
+    return encoded.slice(0, -1);
   }
 
   private HandleResponse(res: Response){
