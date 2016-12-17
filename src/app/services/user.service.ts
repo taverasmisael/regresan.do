@@ -25,9 +25,10 @@ export class UserService {
   constructor(private api: ApiService) { }
 
   login(creds: IUserLoginCredentials) {
-    let body = Object.assign({}, creds, {
+    let credentials = Object.assign({}, creds, {
       grant_type: 'password'
     });
+    const body = this.api.encodeBody(credentials);
     return this.api.post('token', body);
   }
 
