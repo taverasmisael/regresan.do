@@ -45,4 +45,20 @@
       color: #545454;
     }
   }
+  .#{$component}__messages {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: none;
+    &.is-visible {
+      display: block;
+    }
+    .#{$component}__message {
+      &.#{$component}__message--is-error {
+        color: #F44336;
+      }
+    }
+  }
+  .#{$component}__branding {
+    margin-bottom: 0.5rem;
+  }
 }
