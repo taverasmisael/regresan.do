@@ -1,17 +1,17 @@
 <section class="section section--full section--splash mdl-grid">
   <div class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-desktop mdl-cell--8-col-tablet mdl-cell--4-phone mdl-cell--middle">
     <div class="login-form login-form__container is--full mdl-shadow--2dp">
-      <form class="login-form__form">
+      <form [formGroup]="loginForm" (ngSubmit)="logUser()" class="login-form__form">
         <h2 class="login-form__headline">Ingresa a Regresan.do</h2>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="email" id="username">
+          <input class="mdl-textfield__input" type="email" id="username" [formControl]="username">
           <label class="mdl-textfield__label" for="username"><i class="material-icons">mail_outline</i> Correo Electronico</label>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="password" id="password">
+          <input class="mdl-textfield__input" type="password" id="password" [formControl]="password">
           <label class="mdl-textfield__label" for="password"><i class="material-icons">lock_outline</i> Contraseña</label>
         </div>
-        <button type=submit class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored">Iniciar Sesion</button>
+        <button [disabled]="!loginForm.valid" type=submit class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored">Iniciar Sesion</button>
       </form>
       <footer class="login-form__footer">
         <small><a href="#">¿Problemas Iniciando Sesión?</a></small>
