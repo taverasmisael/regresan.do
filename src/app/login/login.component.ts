@@ -7,6 +7,16 @@ import {
   Validators
 } from '@angular/forms';
 
+import { UserService } from '../services/user.service';
+
+
+// RXJS Stuffs
+import {Observable} from 'rxjs/Rx';
+
+// Import RxJs required methods
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -17,7 +27,7 @@ export class LoginComponent implements OnInit {
   username: FormControl;
   password: FormControl;
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private userService: UserService) {
     this.username = new FormControl('', [ Validators.required ]);
     this.password = new  FormControl('', [ Validators.required ]);
     this.loginForm = fb.group({
@@ -31,7 +41,12 @@ export class LoginComponent implements OnInit {
   }
 
   logUser() {
-    console.log(this.loginForm.value);
+    this.userService.login(this.loginForm.value)
+      .subscribe(
+        success => console.log(success),
+        error => console.error(error),
+        () => console.log('DONE!')
+      );
   }
 
 }
