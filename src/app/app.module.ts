@@ -13,6 +13,8 @@ import * as Services from './services';
 
 const mapValuesToArray = (obj) => Object.keys(obj).map(key => obj[key]);
 
+const mappedServices = [...mapValuesToArray(Services)];
+const Providers = [...mappedServices]
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,9 +28,7 @@ const mapValuesToArray = (obj) => Object.keys(obj).map(key => obj[key]);
     AppRoutes,
     ReactiveFormsModule
   ],
-  providers: [
-    ...mapValuesToArray(Services)
-  ],
+  providers: Providers,
   bootstrap: [AppComponent]
 })
 export class AppModule { }
