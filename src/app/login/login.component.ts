@@ -35,17 +35,20 @@ export class LoginComponent implements OnInit {
   private loginError: any;
   private Store: Observable<AppState>;
 
-  constructor(fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private userService: UserService,
-    private store: Store<AppState>) {
+    private store: Store<AppState>) { }
+
+  ngOnInit() {
+    console.log(`Initializing 'LoginComponent'`);
     this.username = new FormControl('', [ Validators.required ]);
     this.password = new  FormControl('', [ Validators.required ]);
-    this.loginForm = fb.group({
+    this.loginForm = this.fb.group({
       username: this.username,
       password: this.password
     });
 
-    this.Store  = store.select<AppState>('MainStore');
+    this.Store  = this.store.select<AppState>('MainStore');
     this.Store.map(value => {
       return value.auth.loading
     }).subscribe(value => {
@@ -71,10 +74,6 @@ export class LoginComponent implements OnInit {
         }
       }
     });
-  }
-
-  ngOnInit() {
-    console.log(`Initializing 'LoginComponent'`);
   }
 
   logUser() {
