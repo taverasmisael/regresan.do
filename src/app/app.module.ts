@@ -3,7 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+// Routes
 import { AppRoutes } from './app.routes';
+
+// Redux and ngrx
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import RootReducer from './reducers';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -26,7 +32,9 @@ const Providers = [...mappedServices]
     FormsModule,
     HttpModule,
     AppRoutes,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.provideStore({MainStore: RootReducer}),
+    StoreDevtoolsModule.instrumentOnlyWithExtension()
   ],
   providers: Providers,
   bootstrap: [AppComponent]
