@@ -19,7 +19,7 @@ const INITIAL_STATE: AuthState = {
 export default function AuthReducer(state = INITIAL_STATE, action: Action) {
   return {
     [LOGIN]: loginUser,
-      [LOGIN_START]: loginUser,
+    [LOGIN_START]: loginUser,
     [LOGIN_SUCCESS]: loginSucessful,
     [SAVE_USER]: saveUser,
     [LOGIN_FAILURE]: loginFailed,
