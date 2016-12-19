@@ -27,3 +27,9 @@ export class LoginSuccess implements Action {
 
   constructor(public payload) {}
 }
+
+export class SaveUser implements Action {
+  type = ActionTypes.SAVE_USER;
+
+  constructor(public payload) {}
+}
