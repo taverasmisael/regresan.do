@@ -27,9 +27,3 @@ export class LoginSuccess implements Action {
 
   constructor(public payload) {}
 }
-
-export class TokenRecived implements Action {
-  type = ActionTypes.TOKEN_RECIVED;
-
-  constructor(public payload) {}
-}
