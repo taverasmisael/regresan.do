@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import {
   FormBuilder,
   FormControl,
@@ -49,11 +48,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.Store  = this.store.select<AppState>('MainStore');
-    this.Store.map(value => {
-      return value.auth.loading
-    }).subscribe(value => {
-      this.requesting = value
-    });
+    this.Store.map(value => value.auth.loading).subscribe(value => this.requesting = value);
     this.Store.map(value => value.auth.error).subscribe(error=> {
       switch (error) {
         case(undefined): {
