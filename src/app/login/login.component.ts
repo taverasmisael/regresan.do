@@ -7,6 +7,11 @@ import {
   Validators
 } from '@angular/forms';
 
+import { Store } from '@ngrx/store';
+import { AppState } from '../models/appstate';
+import { AuthState } from '../models/authstate';
+import { Login, LoginFailure, LoginSuccess } from '../actions/auth.actions';
+
 import { UserService } from '../services/user.service';
 
 
@@ -26,15 +31,45 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   username: FormControl;
   password: FormControl;
-  private requesting = false;
-  private loginError: string;
+  private requesting: Boolean;
+  private loginError: any;
+  private Store: Observable<AppState>;
 
-  constructor(fb: FormBuilder, private userService: UserService) {
+  constructor(fb: FormBuilder,
+    private userService: UserService,
+    private store: Store<AppState>) {
     this.username = new FormControl('', [ Validators.required ]);
     this.password = new  FormControl('', [ Validators.required ]);
     this.loginForm = fb.group({
       username: this.username,
       password: this.password
+    });
+
+    this.Store  = store.select<AppState>('MainStore');
+    this.Store.map(value => {
+      return value.auth.loading
+    }).subscribe(value => {
+      this.requesting = value
+    });
+    this.Store.map(value => value.auth.error).subscribe(error=> {
+      switch (error) {
+        case(undefined): {
+          this.loginError = '';
+          break;
+        }
+        case('invalid_grant'): {
+          this.loginError = 'El usuario o contraseña son incorrectos';
+          break;
+        }
+        case('unsupported_grant_type'): {
+          this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
+          break;
+        }
+        default: {
+          this.loginError = 'Error comunicandose con el servidor';
+          break;
+        }
+      }
     });
   }
 
@@ -43,32 +78,12 @@ export class LoginComponent implements OnInit {
   }
 
   logUser() {
-    this.requesting = true;
-    this.loginError = undefined;
+    this.store.dispatch(new Login(this.loginForm.value));
     this.userService.login(this.loginForm.value)
       .subscribe(
-        success => {console.log(success); this.requesting = false;},
-        error => {this.showError(error); this.requesting = false;},
+        user => {this.store.dispatch(new LoginSuccess(user['access_token']))},
+        error => {this.store.dispatch(new LoginFailure(error))},
         () => console.log('DONE!')
       );
   }
-
-  showError(error: any) {
-    console.error(error);
-    switch (error) {
-      case('invalid_grant'): {
-        this.loginError = 'El usuario o contraseña son incorrectos';
-        break;
-      }
-      case('unsupported_grant_type'): {
-        this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
-        break;
-      }
-      default: {
-        this.loginError = 'Error comunicandose con el servidor';
-        break;
-      }
-    }
-  }
-
 }

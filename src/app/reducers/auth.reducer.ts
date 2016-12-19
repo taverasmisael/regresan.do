@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { AuthState } from '../models/authstate';
+import { AppState } from '../models/appstate';
 
 import { ActionTypes } from '../actions/auth.actions';
 
@@ -10,13 +11,13 @@ const { LOGIN, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE,
 import { updateObject } from '../utilities/objects';
 
 export const INITIAL_STATE: AuthState = {
-  token: null,
-  currentUser: null,
-  error: null,
+  token: undefined,
+  currentUser: undefined,
+  error: undefined,
   loading: false
 };
 
-export default function AuthReducer(state = INITIAL_STATE, action: Action) {
+export default function AuthReducer() {
   return {
     [LOGIN]: loginUser,
     [LOGIN_START]: loginUser,
@@ -29,22 +30,41 @@ export default function AuthReducer(state = INITIAL_STATE, action: Action) {
   }
 }
 
-function loginUser(state: AuthState, action: Action): AuthState {
-  return updateObject(state, {loading: true});
+function loginUser(state: AppState, action: Action): AppState {
+  const { payload } = action;
+  const newState: AppState = {
+    auth: updateObject(state.auth, updateObject(INITIAL_STATE, {loading: true}))
+  }
+  return newState;
 }
 
-function loginSucessful(state: AuthState, action: Action): AuthState {
-  return updateObject(state, {token: action.payload, loading: false});
+function loginSucessful(state: AppState, action: Action): AppState {
+  const { payload } = action;
+  const newState: AppState = {
+    auth: updateObject(state.auth, {token: payload, loading: false})
+  }
+  return newState;
 }
 
-function saveUser(state: AuthState, action: Action): AuthState {
-  return updateObject(state, {token: action.payload, loading: false});
+function saveUser(state: AppState, action: Action): AppState {
+  const { payload } = action;
+  const newState: AppState = {
+    auth: updateObject(state.auth, {currentUser: action.payload, loading: false})
+  }
+  return newState;
 }
 
-function loginFailed(state: AuthState, action: Action): AuthState {
-  return updateObject(state, {currentUser: action.payload, loading: false});
+function loginFailed(state: AppState, action: Action): AppState {
+  const { payload } = action;
+  const newState: AppState = {
+    auth: updateObject(state.auth, {error: action.payload, loading: false})
+  }
+  return newState;
 }
 
-function logOutUser(state: AuthState, action: Action): AuthState {
-  return INITIAL_STATE;
+function logOutUser(state: AppState, action: Action): AppState {
+  const newState: AppState = {
+    auth: INITIAL_STATE
+  };
+  return newState;
 }
