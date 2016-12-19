@@ -11,6 +11,10 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import RootReducer from './reducers';
 
+// Redux Side Effects
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './effects/auth.effects';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -34,7 +38,8 @@ const Providers = [...mappedServices]
     AppRoutes,
     ReactiveFormsModule,
     StoreModule.provideStore({MainStore: RootReducer}),
-    StoreDevtoolsModule.instrumentOnlyWithExtension()
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    EffectsModule.run(AuthEffects)
   ],
   providers: Providers,
   bootstrap: [AppComponent]
