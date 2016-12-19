@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit {
     this.store.dispatch(new Login(this.loginForm.value));
     this.userService.login(this.loginForm.value)
       .subscribe(
-        user => {this.store.dispatch(new LoginSuccess(user['access_token']))},
+        access => {this.store.dispatch(new LoginSuccess(access))},
         error => {this.store.dispatch(new LoginFailure(error))},
         () => console.log('DONE!')
       );
