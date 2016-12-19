@@ -9,7 +9,7 @@ const { LOGIN, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE,
 
 import { updateObject } from '../utilities/objects';
 
-const INITIAL_STATE: AuthState = {
+export const INITIAL_STATE: AuthState = {
   token: null,
   currentUser: null,
   error: null,
