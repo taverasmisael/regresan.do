@@ -9,7 +9,7 @@ import { AppRoutes } from './app.routes';
 // Redux and ngrx
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import RootReducer from './reducers';
+import { RootReducer } from './reducers';
 
 // Redux Side Effects
 import { EffectsModule } from '@ngrx/effects';
@@ -19,12 +19,11 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-import * as Services from './services';
+import { ApiService} from './services/api.service'
+import { AuthGuardService} from './services/auth-guard.service'
+import { LocalStorageService } from './services/localstorage.service'
+import { UserService} from './services/user.service';
 
-const mapValuesToArray = (obj) => Object.keys(obj).map(key => obj[key]);
-
-const mappedServices = [...mapValuesToArray(Services)];
-const Providers = [...mappedServices]
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +40,12 @@ const Providers = [...mappedServices]
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     EffectsModule.run(AuthEffects)
   ],
-  providers: Providers,
+  providers: [
+    ApiService,
+    AuthGuardService,
+    LocalStorageService,
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,5 +10,5 @@ const initialState: AppState = {
 const reducers = updateObject({}, AuthReducer()); // TODO agregar los otros reducers que se creen
 
 const RootReducer = createReducer(initialState, reducers);
-export default RootReducer;
+
 export { RootReducer };
