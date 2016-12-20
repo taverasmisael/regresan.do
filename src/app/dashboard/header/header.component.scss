@@ -1,0 +1,25 @@
+.logo-holder {
+  display: flex;
+  height: 100%;
+  width: 15rem;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.notification__link {
+  position: relative;
+}
+.profile {
+  &__image {
+    width: 2em;
+  }
+  &__name {
+
+  }
+}
+@media screen and (max-width: 1024px){
+  .mdl-layout__header-row {
+      height: 56px;
+      padding: 0 16px 0 50px;
+  }
+}

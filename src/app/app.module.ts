@@ -24,13 +24,15 @@ import { AuthGuardService} from './services/auth-guard.service'
 import { LocalStorageService } from './services/localstorage.service'
 import { UserService} from './services/user.service';
 import { NavbarComponent } from './dashboard/navbar/navbar.component';
+import { DashboardHeaderComponent } from './dashboard/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    NavbarComponent
+    NavbarComponent,
+    DashboardHeaderComponent
   ],
   imports: [
     BrowserModule,
