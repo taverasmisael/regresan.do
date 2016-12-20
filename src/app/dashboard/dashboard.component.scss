@@ -1,0 +1,19 @@
+.logo-holder {
+  display: flex;
+  height: 100%;
+  width: 15rem;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.notification__link {
+  position: relative;
+}
+.profile {
+  &__image {
+    width: 2em;
+  }
+  &__name {
+
+  }
+}
