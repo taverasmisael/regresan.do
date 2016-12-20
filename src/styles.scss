@@ -10,12 +10,57 @@
   height: 1em;
   vertical-align: middle;
 }
+.mdl-button--icon.mdl-button--extra-padding {
+  padding: 2rem;
+}
+.mdl-layout__header .mdl-layout__drawer-button {
+  background: transparent;
+  color: rgba(0,0,0,.5);
+  .material-icons {
+    vertical-align: baseline;
+  }
+}
+.mdl-layout__drawer {
+  border: none;
+}
+.mdl-button--no-effect {
+  &:hover,
+  &:active,
+  &:focus {
+    background: transparent;
+  }
+}
 
+.mdl-layout__drawer.mdl-color--primary,
+.mdl-layout__drawer.mdl-color--primary .mdl-navigation__link,
+.mdl-layout__drawer.mdl-color--primary-dark,
+.mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link {
+  color: white;
+
+}
+.mdl-layout__drawer.mdl-color--primary .mdl-navigation__link:hover,
+.mdl-layout__drawer.mdl-color--primary .mdl-navigation__link.mdl-navigation__link--active,
+.mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link:hover,
+.mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link.mdl-navigation__link--active {
+  background: rgba(50, 50, 50, 0.36);
+}
+.mdl-badge[data-badge]:after {
+  // TODO hay que cambiar esto cada vez que se cambie la paleta de colores para que se ajuste
+  background: #00BCD4;
+  color: rgb(255, 255, 255);
+}
+a {
+  // TODO hay que cambiar esto cada vez que se cambie la paleta de colores para que se ajuste
+  color: #00BCD4;
+}
 .u {
   &__img {
     &--responsive {
       max-width: 100%;
       height: auto;
+    }
+    &--circle {
+      border-radius: 50%;
     }
   }
 }
