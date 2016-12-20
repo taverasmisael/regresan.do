@@ -1,3 +1,5 @@
+import {JWT} from './jwt';
+
 export interface AuthState {
   currentUser: {
     fullName: String,
@@ -8,7 +10,7 @@ export interface AuthState {
     message: string,
     lastLogon: string
   }
-  token: string,
+  token: JWT,
   error: string,
   loading: boolean
 }
