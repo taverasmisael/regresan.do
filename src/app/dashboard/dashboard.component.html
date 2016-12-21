@@ -1,7 +1,9 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-  <header class="mdl-layout__header mdl-color--primary" dashboard-header></header>
+  <header class="mdl-layout__header mdl-color--primary" dashboard-header [user]="currentUser | async"></header>
   <div class="mdl-layout__drawer mdl-color--primary-dark" dashboard-navbar></div>
   <main class="mdl-layout__content">
-    <div class="page-content">Nuevo contenido L&H</div>
+    <div class="page-content">
+      Aqui va el contenido
+    </div>
   </main>
 </div>
