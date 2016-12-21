@@ -15,7 +15,7 @@
           <input class="mdl-textfield__input" type="password" id="password" [formControl]="password">
           <label class="mdl-textfield__label" for="password"><i class="material-icons">lock_outline</i> Contraseña</label>
         </div>
-        <button [disabled]="!loginForm.valid" type=submit class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored">Iniciar Sesion</button>
+        <button [disabled]="!loginForm.valid || requesting" type=submit class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored">Iniciar Sesion</button>
       </form>
       <footer class="login-form__footer">
         <small><a href="#">¿Problemas Iniciando Sesión?</a></small>
