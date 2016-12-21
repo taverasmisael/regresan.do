@@ -23,7 +23,7 @@ import { ApiService} from './services/api.service'
 import { AuthGuardService} from './services/auth-guard.service'
 import { LocalStorageService } from './services/localstorage.service'
 import { UserService} from './services/user.service';
-import { NavbarComponent } from './dashboard/navbar/navbar.component';
+import { DashboardNavbarComponent } from './dashboard/navbar/navbar.component';
 import { DashboardHeaderComponent } from './dashboard/header/header.component';
 
 @NgModule({
@@ -31,7 +31,7 @@ import { DashboardHeaderComponent } from './dashboard/header/header.component';
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    NavbarComponent,
+    DashboardNavbarComponent,
     DashboardHeaderComponent
   ],
   imports: [
