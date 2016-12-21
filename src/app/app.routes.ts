@@ -14,4 +14,6 @@ export const router: Routes = [
   {path: '**', redirectTo: 'login', pathMatch: 'full'}, // All other Routes
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(router);
+export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(router, {
+    useHash: true
+});
