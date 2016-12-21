@@ -5,7 +5,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { createReducer } from '../utilities/reducers';
 import { updateObject } from '../utilities/objects';
 import { AppState } from '../models/appstate';
-import AuthReducer, { INITIAL_STATE } from './auth.reducer';
+import { AuthReducer, INITIAL_STATE } from './auth.reducer';
 
 const initialState: AppState = {
   auth: INITIAL_STATE

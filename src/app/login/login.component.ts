@@ -48,8 +48,8 @@ export class LoginComponent implements OnInit {
     });
 
     this.Store  = this.store.select<AppState>('MainStore');
-    this.Store.map(value => value.auth.loading).subscribe(value => this.requesting = value);
-    this.Store.map(value => value.auth.error).subscribe(error=> {
+    this.Store.map(value => value.auth ? value.auth.loading : undefined).subscribe(value => this.requesting = value);
+    this.Store.map(value => value.auth ? value.auth.error : undefined).subscribe(error=> {
       switch (error) {
         case(undefined): {
           this.loginError = '';

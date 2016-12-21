@@ -26,6 +26,7 @@ export class AuthEffects {
   @Effect() loginUser$ = this.actions$
     .ofType(LOGIN_SUCCESS)
     .switchMap(action => {
+      console.info('I am going to fetch UserData....')
       return this.userService.getUserData(action.payload)
         .map(res => new SaveUser(res))
         .catch(() => Observable.of(new LoginFailure({})))

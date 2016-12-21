@@ -17,7 +17,7 @@ export const INITIAL_STATE: AuthState = {
   loading: false
 };
 
-export default function AuthReducer() {
+export function AuthReducer() {
   return {
     [LOGIN]: loginUser,
     [LOGIN_START]: loginUser,

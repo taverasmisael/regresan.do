@@ -1,52 +1,19 @@
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-  <header class="mdl-layout__header mdl-color--primary">
-    <div class="mdl-layout__header-row mdl-color--primary-contrast">
-      <div class="logo-holder">
-        <img src="../assets/images/Identidad-Regresando-2016.png" alt="Logo Regresando" class="logo u__img--responsive">
-      </div>
-      <div class="mdl-layout-spacer"></div>
-      <button id="menu--notifications" class="mdl-button mdl-js-button mdl-button--no-effect mdl-button--icon mdl-button--extra-padding mdl-color-text--accent-contrast">
-        <span class="mdl-badge material-icons mdl-badge--overlap" data-badge="3">notifications</span>
-      </button>
-      <button id="menu--user-config" class="mdl-button mdl-js-button mdl-button--no-effect mdl-color-text--accent-contrast profile mdl-cell--hide-phone">
-        <img src="http://adminregresando.azurewebsites.net/Images/Users/B2F5D421-3D88-4156-9DE5-DFE6E0C26656.png" class="profile__image u__img--responsive u__img--circle" alt="profile pic">
-          <span class="profile__name">Yao Asian <i class="material-icons">arrow_drop_down</i></span>
-      </button>
-      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="menu--user-config">
-        <li class="mdl-menu__item">Perfil</li>
-        <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">Sucursales</li>
-        <li class="mdl-menu__item">Cerrar Sesión</li>
-      </ul>
-      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-    data-mdl-for="menu--notifications">
-        <li class="mdl-menu__item"><span class="mdl-badge" data-badge="2">Respuestas</span></li>
-        <li class="mdl-menu__item"><i class="material-icons">account_box</i> Otra notificacion</li>
-        <li class="mdl-menu__item">Otra notificacion</li>
-      </ul>
-    </div>
-  </header>
-<div class="mdl-layout__drawer mdl-color--primary-dark">
-  <nav class="mdl-navigation">
-    <a class="mdl-navigation__link mdl-navigation__link--active" href="">
-      <i class="material-icons">content_paste</i><br>
-      <span>Resumen</span>
-    </a>
-    <a class="mdl-navigation__link" href="">
-      <i class="material-icons">show_chart</i><br>
-      <span>Detalles</span>
-    </a>
-    <a class="mdl-navigation__link" href="">
-      <i class="material-icons">description</i><br>
-      <span>Reportes</span>
-    </a>
-    <a class="mdl-navigation__link" href="">
-      <i class="material-icons">comment</i><br>
-      <span>Comentario</span>
-    </a>
-    <div class="mdl-layout-spacer"></div>
-  </nav>
-</div>
-<main class="mdl-layout__content">
-  <div class="page-content"><ng-content></ng-content></div>
-</main>
-</div>
+<nav class="mdl-navigation">
+  <a class="mdl-navigation__link mdl-navigation__link--active" href="">
+    <i class="material-icons">content_paste</i><br>
+    <span>Resumen</span>
+  </a>
+  <a class="mdl-navigation__link" href="">
+    <i class="material-icons">show_chart</i><br>
+    <span>Detalles</span>
+  </a>
+  <a class="mdl-navigation__link" href="">
+    <i class="material-icons">description</i><br>
+    <span>Reportes</span>
+  </a>
+  <a class="mdl-navigation__link" href="">
+    <i class="material-icons">comment</i><br>
+    <span>Comentario</span>
+  </a>
+  <div class="mdl-layout-spacer"></div>
+</nav>

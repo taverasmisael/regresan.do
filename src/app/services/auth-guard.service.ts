@@ -17,7 +17,7 @@ export class AuthGuardService implements CanActivate {
 
   canActivate() {
     return this.state.map(state => {
-      if (!!state.auth.token) {
+      if (!!state && !!state.auth && !!state.auth.token) {
         return true;
       } else {
         this.router.navigate(['/login']);
