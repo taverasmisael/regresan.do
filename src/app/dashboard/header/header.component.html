@@ -7,8 +7,8 @@
     <span class="mdl-badge material-icons mdl-badge--overlap" data-badge="3">notifications</span>
   </button>
   <button id="menu--user-config" class="mdl-button mdl-js-button mdl-button--no-effect mdl-color-text--accent-contrast profile mdl-cell--hide-phone">
-    <img src="http://adminregresando.azurewebsites.net/Images/Users/B2F5D421-3D88-4156-9DE5-DFE6E0C26656.png" class="profile__image u__img--responsive u__img--circle" alt="profile pic">
-      <span class="profile__name">Yao Asian <i class="material-icons">arrow_drop_down</i></span>
+    <img src="http://adminregresando.azurewebsites.net/Images/Users/{{user.UserImage}}" class="profile__image u__img--responsive u__img--circle" alt="profile pic">
+      <span class="profile__name">{{user.FullName}} <i class="material-icons">arrow_drop_down</i></span>
   </button>
   <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="menu--user-config">
     <li class="mdl-menu__item">Perfil</li>
