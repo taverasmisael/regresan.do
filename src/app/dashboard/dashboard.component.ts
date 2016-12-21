@@ -3,6 +3,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
+import { ActionTypes } from '../actions/auth.actions';
 import { AppState } from '../models/appstate';
 import { AuthState } from '../models/authstate';
 import { User } from '../models/user';
@@ -26,12 +27,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.Store = this.store.select<AppState>('MainStore');
     this.userData = this.Store.map(slice => slice.auth);
-    this.currentUser = this.userData.map(userData => userData.currentUser.User);
-    this.userProfiles = this.userData.map(userData => userData.currentUser.Profiles);
+    this.currentUser = this.userData.map(userData => {
+      return userData &&userData.currentUser ? userData.currentUser.User : undefined;
+    });
+    this.userProfiles = this.userData.map(userData => {
+      return  userData && userData.currentUser ? userData.currentUser.Profiles : undefined;
+    });
   }
 
   ngAfterViewInit() {
     componentHandler.upgradeAllRegistered();
+  }
+  logOut() {
+    this.store.dispatch({type: ActionTypes.LOGOUT_START})
   }
 
 }

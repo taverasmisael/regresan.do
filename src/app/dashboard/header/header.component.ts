@@ -1,4 +1,9 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component,
+  OnInit,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+  EventEmitter } from '@angular/core';
 
 import { User } from '../../models/user';
 
@@ -10,6 +15,7 @@ import { User } from '../../models/user';
 })
 export class DashboardHeaderComponent implements OnInit {
   @Input() user: User;
+  @Output() loginout = new EventEmitter();
   constructor() { }
 
   ngOnInit() {

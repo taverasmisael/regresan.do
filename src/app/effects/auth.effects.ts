@@ -15,7 +15,7 @@ import { ActionTypes, SaveUser, LoginFailure } from '../actions/auth.actions';
 
 import { UserService } from '../services/user.service'
 
-const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START } = ActionTypes;
+const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START, LOGOUT, LOGOUT_START } = ActionTypes;
 
 @Injectable()
 export class AuthEffects {
@@ -35,7 +35,16 @@ export class AuthEffects {
   @Effect() saveUser$ = this.actions$
     .ofType(SAVE_USER)
     .switchMap(action => {
+      console.log('saving user');
       this.router.navigate(['dashboard']);
       return Observable.of({type: false});
     });
+
+  @Effect() logoutUser = this.actions$
+  .ofType(LOGOUT_START)
+  .switchMap(action => {
+    console.log('hi!');
+    this.router.navigate(['login']);
+    return Observable.of({type: LOGOUT});
+  });
 }
