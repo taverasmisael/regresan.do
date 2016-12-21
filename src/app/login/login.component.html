@@ -3,7 +3,7 @@
     <div class="login-form login-form__container is--full mdl-shadow--2dp">
       <div class="mdl-progress mdl-js-progress" [ngClass]="{'mdl-progress__indeterminate': requesting, 'hidden': !requesting}"></div>
       <form [formGroup]="loginForm" (ngSubmit)="logUser()" class="login-form__form">
-        <img src="../assets/images/Identidad-Regresando-2016.png" class="u__img--responsive login-form__branding" />
+        <img src="assets/images/Identidad-Regresando-2016.png" class="u__img--responsive login-form__branding" />
         <div class="login-form__messages" [ngClass]="{'is--visible': loginError}">
           <span class="login-form__message login-form__message--is-error">{{loginError}}</span>
         </div>
