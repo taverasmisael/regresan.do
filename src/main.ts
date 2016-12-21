@@ -1,5 +1,5 @@
 import './polyfills.ts';
-import 'material-design-lite/dist/material.min.js';
+import './thirdparty';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
