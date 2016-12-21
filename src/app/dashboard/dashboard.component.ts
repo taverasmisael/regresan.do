@@ -9,8 +9,6 @@ import { AuthState } from '../models/authstate';
 import { User } from '../models/user';
 import { UserProfile } from '../models/userprofile';
 
-declare var componentHandler: any
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
