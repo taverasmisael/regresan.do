@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 
 import { AuthState } from '../models/authstate';
-import { AppState } from '../models/appstate';
 
 import { ActionTypes } from '../actions/auth.actions';
 
@@ -30,41 +29,29 @@ export function AuthReducer() {
   }
 }
 
-function loginUser(state: AppState, action: Action): AppState {
+function loginUser(state: AuthState, action: Action): AuthState {
   const { payload } = action;
-  const newState: AppState = {
-    auth: updateObject(state.auth, updateObject(INITIAL_STATE, {loading: true}))
-  }
-  return newState;
+  return updateObject(state, updateObject(INITIAL_STATE, {loading: true}))
 }
 
-function loginSucessful(state: AppState, action: Action): AppState {
+function loginSucessful(state: AuthState, action: Action): AuthState {
   const { payload } = action;
-  const newState: AppState = {
-    auth: updateObject(state.auth, {token: payload, loading: false})
-  }
-  return newState;
+
+  return updateObject(state, {token: payload, loading: false});
 }
 
-function saveUser(state: AppState, action: Action): AppState {
+function saveUser(state: AuthState, action: Action): AuthState {
   const { payload } = action;
-  const newState: AppState = {
-    auth: updateObject(state.auth, {currentUser: action.payload, loading: false})
-  }
-  return newState;
+
+  return updateObject(state, {currentUser: action.payload, loading: false});
 }
 
-function loginFailed(state: AppState, action: Action): AppState {
+function loginFailed(state: AuthState, action: Action): AuthState {
   const { payload } = action;
-  const newState: AppState = {
-    auth: updateObject(state.auth, {error: action.payload, loading: false})
-  }
-  return newState;
+
+  return updateObject(state, {error: action.payload, loading: false});
 }
 
-function logOutUser(state: AppState, action: Action): AppState {
-  const newState: AppState = {
-    auth: INITIAL_STATE
-  };
-  return newState;
+function logOutUser(state: AuthState, action: Action): AuthState {
+  return INITIAL_STATE;
 }

@@ -6,13 +6,13 @@ import { createReducer } from '../utilities/reducers';
 import { updateObject } from '../utilities/objects';
 import { AppState } from '../models/appstate';
 import { AuthReducer, INITIAL_STATE } from './auth.reducer';
+import { DataReducer } from './data.reducer';
 
-const initialState: AppState = {
-  auth: INITIAL_STATE
-}; // TODO ir agregando los demas estados en el mainstate
+const authReducer = createReducer(INITIAL_STATE, AuthReducer());
+const dataReducer = createReducer([], DataReducer());
 
-const reducers = updateObject({}, AuthReducer()); // TODO agregar los otros reducers que se creen
-const authReducer = createReducer(initialState, reducers);
-const RootReducer = compose(localStorageSync(['auth'], true))(authReducer);
+const RootReducer = compose(
+  localStorageSync(['auth'], true),
+  combineReducers)({auth: authReducer, data: dataReducer});
 
 export { RootReducer };
