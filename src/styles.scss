@@ -3,13 +3,34 @@
 * {
   box-sizing: border-box;
 }
-// Material Icons Fix
-.material-icons {
-  width: 1em;
-  line-height: 1;
-  height: 1em;
-  vertical-align: middle;
+
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(assets/fonts/material-icons.woff2) format('woff2');
 }
+
+.material-icons {
+  direction: ltr;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  height: 1em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  width: 1em;
+  word-wrap: normal;
+  vertical-align: middle;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
 .mdl-button--icon.mdl-button--extra-padding {
   padding: 2rem;
 }
