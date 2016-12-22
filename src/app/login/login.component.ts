@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   password: FormControl;
   private requesting: Boolean;
   private loginError: any;
-  private Store: Observable<AppState>;
+  private AuthState: Observable<AuthState>;
 
   constructor(private fb: FormBuilder,
     private userService: UserService,
@@ -47,10 +47,11 @@ export class LoginComponent implements OnInit {
       password: this.password
     });
 
-    this.Store  = this.store.select<AppState>('MainStore');
-    this.Store.subscribe(console.log.bind(console));
-    this.Store.map(({auth}) => auth? auth.loading : undefined).subscribe(value => this.requesting = value);
-    this.Store.map(({auth}) => auth? auth.error : undefined).subscribe(error=> {
+    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
+    this.store.dispatch({type: '[DATA]: LOAD', payload: 'Hero'});
+    this.AuthState.subscribe(console.log.bind(console));
+    this.AuthState.map(({loading}) => loading).subscribe(value => this.requesting = value);
+    this.AuthState.map(({error}) => error).subscribe(error=> {
       switch (error) {
         case(undefined): {
           this.loginError = '';
