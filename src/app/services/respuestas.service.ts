@@ -29,8 +29,12 @@ export class RespuestasService {
     store.select<AppState>('MainStore')
       .map(slice => slice.auth)
       .subscribe(val => {
-        const {access_token: token, token_type: type} = val.token
-        this.authHeader = new Headers({'Authorization': `${type} ${token}`});
+        if (val.token) {
+          const {access_token: token, token_type: type} = val.token
+          this.authHeader = new Headers({'Authorization': `${type} ${token}`});
+        } else {
+          this.authHeader = undefined;
+        }
       })
   }
 
