@@ -2,25 +2,6 @@
   <header class="mdl-layout__header mdl-color--primary" dashboard-header (loginout)="logOut($event)" [user]="currentUser | async"></header>
   <div class="mdl-layout__drawer mdl-color--primary-dark" dashboard-navbar></div>
   <main class="mdl-layout__content">
-    <div class="page-content">
-      <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--8-col mdl--cell-4-col-tablet mdl-shadow--3dp mdl-card">
-          <div class="mdl-card__title">
-            <h5 class="mdl-card__title-text">Otro Chart</h5>
-          </div>
-          <div class="mdl-card__supporting-text">
-              <div id="otroChart" style="height: 250px;"></div>
-          </div>
-        </div>
-        <div class="mdl-cell mdl-cell--4-col mdl--cell-4-col-tablet mdl-shadow--3dp mdl-card">
-          <div class="mdl-card__title">
-            <h5 class="mdl-card__title-text">Encuestas por Sucursal</h5>
-          </div>
-          <div class="mdl-card__supporting-text">
-              <div id="chartSucursales" style="height: 250px;"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-outlet class="page-content"></router-outlet>
   </main>
 </div>
