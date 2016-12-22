@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { ApiService} from './services/api.service'
+import { RespuestasService} from './services/respuestas.service'
 import { AuthGuardService} from './services/auth-guard.service'
 import { LocalStorageService } from './services/localstorage.service'
 import { UserService} from './services/user.service';
@@ -48,7 +49,8 @@ import { DashboardHeaderComponent } from './dashboard/header/header.component';
     ApiService,
     AuthGuardService,
     LocalStorageService,
-    UserService
+    UserService,
+    RespuestasService
   ],
   bootstrap: [AppComponent]
 })
