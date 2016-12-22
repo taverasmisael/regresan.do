@@ -34,7 +34,7 @@ export class RespuestasService {
       })
   }
 
-  getAll(start: string | Date, end: string | Date) {
+  getAll(start: string | number, end: string | number) {
     let request = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
     const THE_URL = `${request}?_startDate=${start}&_endDate=${end}`
 
