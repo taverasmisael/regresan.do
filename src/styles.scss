@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/material-design-lite/dist/material.teal-cyan.min.css";
+@import "~material-design-lite/dist/material.teal-cyan.min.css";
+@import "~morris.js/morris.css";
 * {
   box-sizing: border-box;
 }

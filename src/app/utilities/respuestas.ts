@@ -1,7 +1,5 @@
-export function makeDonughtChart(prev, curr) {
-  console.log('prev', prev);
-  console.log('curr', curr);
-  return [...prev, Object.assign({}, prev, {data: curr.Total, label: curr.Sucursal})]
+export function makeDonughtChart(prev = [], curr) {
+  return [...prev, Object.assign({}, prev, {value: curr.Total, label: curr.Sucursal})]
 }
 
 interface EncuestasSucursales {
