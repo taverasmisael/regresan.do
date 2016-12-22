@@ -1,9 +1,11 @@
 <nav class="mdl-navigation">
-  <a class="mdl-navigation__link mdl-navigation__link--active" href="">
+  <a class="mdl-navigation__link" [routerLink]="['overview']"
+    routerLinkActive="mdl-navigation__link--active">
     <i class="material-icons">content_paste</i><br>
     <span>Resumen</span>
   </a>
-  <a class="mdl-navigation__link" href="">
+  <a class="mdl-navigation__link" [routerLink]="['sucursales']"
+    routerLinkActive="mdl-navigation__link--active">
     <i class="material-icons">show_chart</i><br>
     <span>Detalles</span>
   </a>
