@@ -12,6 +12,13 @@ export class AuthGuardService implements CanActivate {
 
   // Basically this canActivate makes the opposite of the AuthGuardService.canActivate
   canActivate() {
-    return this.userService.isLoggedIn();
+    return this.userService.isLoggedIn()
+      .map(val => {
+        if(!val) {
+          this.router.navigate(['login']);
+        }
+
+        return val;
+      });
   }
 }
