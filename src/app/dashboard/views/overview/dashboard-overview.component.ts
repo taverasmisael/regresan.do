@@ -39,7 +39,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         Morris.Donut({
           element: 'chartSucursales',
           data,
-          colors: this.graphColors.sort(() => 0.5 - Math.random())
+          colors: this.graphColors
         })
       })
   }
