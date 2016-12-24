@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);;
+    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
     this.currentUser = this.AuthState.map(({currentUser}) => {
       return currentUser ? currentUser.User : undefined;
     });
