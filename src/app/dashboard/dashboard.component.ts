@@ -17,19 +17,18 @@ import { UserProfile } from '../models/userprofile';
 export class DashboardComponent implements OnInit, AfterViewInit {
 
   private userData: Observable<AuthState>;
-  private Store: Observable<AppState>;
+  private AuthState: Observable<AuthState>;
   private currentUser: Observable<User>;
   private userProfiles: Observable<UserProfile[]>
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.Store = this.store.select<AppState>('MainStore');
-    this.userData = this.Store.map(slice => slice.auth);
-    this.currentUser = this.userData.map(userData => {
-      return userData &&userData.currentUser ? userData.currentUser.User : undefined;
+    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
+    this.currentUser = this.AuthState.map(({currentUser}) => {
+      return currentUser ? currentUser.User : undefined;
     });
-    this.userProfiles = this.userData.map(userData => {
-      return  userData && userData.currentUser ? userData.currentUser.Profiles : undefined;
+    this.userProfiles = this.AuthState.map(({currentUser}) => {
+      return  currentUser ? currentUser.Profiles : undefined;
     });
   }
 
