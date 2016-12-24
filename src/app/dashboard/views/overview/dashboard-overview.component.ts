@@ -12,6 +12,7 @@ import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 
+import 'morris.js/morris.js';
 import * as moment from 'moment';
 import { RespuestasService} from '../../../services/respuestas.service';
 import { makeDonughtChart} from '../../../utilities/respuestas';
