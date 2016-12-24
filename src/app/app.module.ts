@@ -18,6 +18,7 @@ import { AuthEffects } from './effects/auth.effects';
 import { ApiService} from './services/api.service'
 import { RespuestasService} from './services/respuestas.service'
 import { AuthGuardService} from './services/auth-guard.service'
+import { LoginGuardService } from './services/login-guard.service';
 import { LocalStorageService } from './services/localstorage.service'
 import { UserService} from './services/user.service';
 
@@ -56,6 +57,7 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
   providers: [
     ApiService,
     AuthGuardService,
+    LoginGuardService,
     LocalStorageService,
     UserService,
     RespuestasService
