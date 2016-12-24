@@ -1,3 +1,5 @@
+import 'morris.js/morris.min.js';
+
 import { Component, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
@@ -5,7 +7,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
-
 import * as moment from 'moment';
 import { RespuestasService} from '../../../services/respuestas.service';
 import { makeDonughtChart} from '../../../utilities/respuestas';
