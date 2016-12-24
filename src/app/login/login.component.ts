@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -26,7 +26,7 @@ import 'rxjs/add/operator/catch';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   loginForm: FormGroup;
   username: FormControl;
   password: FormControl;
@@ -38,6 +38,9 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private store: Store<AppState>) { }
 
+  ngAfterViewInit() {
+    componentHandler.upgradeAllRegistered();
+  }
   ngOnInit() {
     console.log(`Initializing 'LoginComponent'`);
     this.username = new FormControl('', [ Validators.required ]);
