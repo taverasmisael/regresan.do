@@ -3,26 +3,15 @@ import { CanActivate, Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Store } from '@ngrx/store';
-import { AppState } from '../models/appstate';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
 
-  private state: Observable<AppState>;
+  constructor(private userService: UserService, private router: Router) { }
 
-  constructor(private store: Store<AppState>, private router: Router) {
-    this.state = store.select<AppState>('MainStore');
-  }
-
+  // Basically this canActivate makes the opposite of the AuthGuardService.canActivate
   canActivate() {
-    return this.state.map(({auth}) => {
-      if (!!auth && !!auth.token) {
-        return true;
-      } else {
-        this.router.navigate(['/login']);
-        return false;
-      }
-    })
+    return this.userService.isLoggedIn();
   }
 }

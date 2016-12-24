@@ -14,6 +14,10 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { Store } from '@ngrx/store';
+import { AppState } from '../models/appstate';
+import { AuthState } from '../models/authstate';
+
 import { IUserLoginCredentials } from '../models/iuser-login-credentials';
 import { JWT } from '../models/jwt';
 
@@ -22,7 +26,7 @@ import {ApiService} from './api.service';
 @Injectable()
 export class UserService {
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private store: Store<AppState>) { }
 
   login(creds: IUserLoginCredentials) {
     let credentials = Object.assign({}, creds, {
@@ -37,5 +41,10 @@ export class UserService {
     return this.api.get('api/User/GetFullUser', {
       headers: header
     });
+  }
+
+  isLoggedIn() {
+    return this.store.select<AppState>('MainStore')
+      .map(({auth}) => (!!auth && !!auth.token));
   }
 }
