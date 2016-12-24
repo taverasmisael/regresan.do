@@ -1,3 +1,4 @@
+// @angular modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
@@ -15,13 +16,16 @@ import { RootReducer } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './effects/auth.effects';
 
-import { ApiService} from './services/api.service'
-import { RespuestasService} from './services/respuestas.service'
+// Services
+import { ApiService} from './services/api.service';
+import { RespuestasService} from './services/respuestas.service';
+import { LocalStorageService } from './services/localstorage.service';
+import { UserService} from './services/user.service';
+// Security Services
 import { AuthGuardService} from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service';
-import { LocalStorageService } from './services/localstorage.service'
-import { UserService} from './services/user.service';
 
+// Components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
