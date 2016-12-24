@@ -23,11 +23,10 @@ export class DashboardOverviewComponent implements OnInit {
   private today = moment();
   private aWeekAgo = this.today.subtract(7, 'days');
   private graphColors: string[] = ["#8BC34A", "#0D47A1", "#009688", "#F44336", "#FFEB3B", "#03A9F4"]
-  constructor(private respuestas: RespuestasService, private store: Store<AppState>) {
-      this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-  }
+  constructor(private respuestas: RespuestasService, private store: Store<AppState>) { }
 
   ngOnInit() {
+    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
     this.respuestas.getAll(this.aWeekAgo.unix(), this.today.unix())
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
       .subscribe(data => {
