@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard-overview.component';
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
+import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 
 // Security
 import { AuthGuardService } from './services/auth-guard.service';
@@ -16,7 +17,8 @@ export const router: Routes = [
   children: [
     {path: '', redirectTo: 'overview', pathMatch: 'full'},
     {path: 'overview', component: DashboardOverviewComponent},
-    {path: 'sucursales', component: DashboardSucursalesComponent}
+    {path: 'sucursales', component: DashboardSucursalesComponent},
+    {path: 'sucursales/:id', component: SucursalesDetailsComponent}
   ]},
   {path: '**', redirectTo: 'login', pathMatch: 'full'}, // All other Routes
 ];

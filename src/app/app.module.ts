@@ -28,6 +28,7 @@ import { DashboardNavbarComponent } from './dashboard/navbar/navbar.component';
 import { DashboardHeaderComponent } from './dashboard/header/header.component';
 import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard-overview.component';
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
+import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashb
     DashboardNavbarComponent,
     DashboardHeaderComponent,
     DashboardOverviewComponent,
-    DashboardSucursalesComponent
+    DashboardSucursalesComponent,
+    SucursalesDetailsComponent
   ],
   imports: [
     BrowserModule,
