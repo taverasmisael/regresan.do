@@ -37,7 +37,7 @@ function loginUser(state: AuthState, action: Action): AuthState {
 function loginSucessful(state: AuthState, action: Action): AuthState {
   const { payload } = action;
 
-  return updateObject(state, {token: payload, loading: false});
+  return updateObject(state, {token: payload});
 }
 
 function saveUser(state: AuthState, action: Action): AuthState {

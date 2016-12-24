@@ -11,11 +11,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { ActionTypes, SaveUser, LoginFailure } from '../actions/auth.actions';
+import { ActionTypes, SaveUser, LoginFailure, LoginSuccess } from '../actions/auth.actions';
 
 import { UserService } from '../services/user.service'
 
-const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START, LOGOUT, LOGOUT_START } = ActionTypes;
+const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START, LOGOUT, LOGOUT_START, LOGIN } = ActionTypes;
 
 @Injectable()
 export class AuthEffects {
@@ -23,7 +23,17 @@ export class AuthEffects {
     private actions$: Actions,
     private router: Router) { }
 
-  @Effect() loginUser$ = this.actions$
+
+  @Effect() loginUser = this.actions$
+    .ofType(LOGIN)
+    .switchMap(action => {
+      console.log(`I'm going to log in ${action.payload.username}...`);
+      return this.userService.login(action.payload)
+        .map(res => new LoginSuccess(res))
+        .catch(err =>  Observable.of(new LoginFailure(err)));
+    });
+
+  @Effect() getUserData$ = this.actions$
     .ofType(LOGIN_SUCCESS)
     .switchMap(action => {
       console.info('I am going to fetch UserData....')
