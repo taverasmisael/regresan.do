@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     componentHandler.upgradeAllRegistered();
   }
   ngOnInit() {
-    console.log(`Initializing 'LoginComponent'`);
     this.username = new FormControl('', [ Validators.required ]);
     this.password = new  FormControl('', [ Validators.required ]);
     this.loginForm = this.fb.group({
