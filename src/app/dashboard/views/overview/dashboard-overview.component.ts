@@ -1,9 +1,10 @@
 import 'morris.js/morris.min.js';
 
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { ActionTypes } from '../../../actions/auth.actions';
 
@@ -21,11 +22,12 @@ import { makeDonughtChart} from '../../../utilities/respuestas';
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit {
+export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private AuthState: Observable<AuthState>;
   private userProfiles: UserProfile[];
   private today = moment();
+  private testChart: Subscription;
   private aWeekAgo = this.today.subtract(7, 'days');
   private graphColors: string[] = ["#8BC34A", "#0D47A1", "#009688", "#F44336", "#FFEB3B", "#03A9F4"]
   constructor(private respuestas: RespuestasService, private store: Store<AppState>) { }
@@ -36,7 +38,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    this.respuestas.getAll(this.aWeekAgo.unix(), this.today.unix())
+    this.testChart = this.respuestas.getAll(this.aWeekAgo.unix(), this.today.unix())
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
       .subscribe(data => {
         Morris.Donut({
@@ -46,6 +48,11 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         })
       },
       error => {console.log(error); this.store.dispatch({type: ActionTypes.LOGOUT_START})});
+  }
+
+  ngOnDestroy() {
+    // Clean Up Subscription
+    this.testChart.unsubscribe();
   }
 
 }
