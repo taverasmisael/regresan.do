@@ -29,6 +29,7 @@ import { DashboardHeaderComponent } from './dashboard/header/header.component';
 import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard-overview.component';
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
+import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details
     DashboardHeaderComponent,
     DashboardOverviewComponent,
     DashboardSucursalesComponent,
-    SucursalesDetailsComponent
+    SucursalesDetailsComponent,
+    SucursalesListComponent
   ],
   imports: [
     BrowserModule,
