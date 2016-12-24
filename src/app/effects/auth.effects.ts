@@ -27,7 +27,6 @@ export class AuthEffects {
   @Effect() loginUser = this.actions$
     .ofType(LOGIN)
     .switchMap(action => {
-      console.log(`I'm going to log in ${action.payload.username}...`);
       return this.userService.login(action.payload)
         .map(res => new LoginSuccess(res))
         .catch(err =>  Observable.of(new LoginFailure(err)));
@@ -36,7 +35,6 @@ export class AuthEffects {
   @Effect() getUserData$ = this.actions$
     .ofType(LOGIN_SUCCESS)
     .switchMap(action => {
-      console.info('I am going to fetch UserData....')
       return this.userService.getUserData(action.payload)
         .map(res => new SaveUser(res))
         .catch(() => Observable.of(new LoginFailure({})))
@@ -45,7 +43,6 @@ export class AuthEffects {
   @Effect() saveUser$ = this.actions$
     .ofType(SAVE_USER)
     .switchMap(action => {
-      console.log('saving user');
       this.router.navigate(['dashboard']);
       return Observable.of({type: false});
     });
@@ -53,7 +50,6 @@ export class AuthEffects {
   @Effect() logoutUser = this.actions$
   .ofType(LOGOUT_START)
   .switchMap(action => {
-    console.log('hi!');
     this.router.navigate(['login']);
     return Observable.of({type: LOGOUT});
   });

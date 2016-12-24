@@ -51,8 +51,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     });
 
     this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-    this.store.dispatch({type: '[DATA]: LOAD', payload: 'Hero'});
-    this.AuthState.subscribe(console.log.bind(console));
     this.AuthState.map(({loading}) => loading).subscribe(value => this.requesting = value);
     this.AuthState.map(({error}) => error).subscribe(error=> {
       switch (error) {
