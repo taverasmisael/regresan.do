@@ -49,28 +49,32 @@ export class LoginComponent implements OnInit, AfterViewInit {
       password: this.password
     });
 
-    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-    this.AuthState.map(({loading}) => loading).subscribe(value => this.requesting = value);
-    this.AuthState.map(({error}) => error).subscribe(error=> {
-      switch (error) {
-        case(undefined): {
-          this.loginError = '';
-          break;
+    this.AuthState = this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('auth')
+      .pluck<AuthState>('auth');
+
+    this.AuthState
+    .pluck<boolean>('loading')
+    .subscribe(value => this.requesting = value);
+
+    this.AuthState
+      .pluck<any>('error')
+      .subscribe(error => {
+        switch (error) {
+          case(undefined):
+            this.loginError = '';
+            break;
+          case('invalid_grant'):
+            this.loginError = 'El usuario o contraseña son incorrectos';
+            break;
+          case('unsupported_grant_type'):
+            this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
+            break;
+          default:
+            this.loginError = 'Error comunicandose con el servidor';
+            break;
         }
-        case('invalid_grant'): {
-          this.loginError = 'El usuario o contraseña son incorrectos';
-          break;
-        }
-        case('unsupported_grant_type'): {
-          this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
-          break;
-        }
-        default: {
-          this.loginError = 'Error comunicandose con el servidor';
-          break;
-        }
-      }
-    });
+      });
   }
 
   logUser() {

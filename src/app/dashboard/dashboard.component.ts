@@ -23,13 +23,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-    this.AuthState.map(({currentUser}) => {
-      return currentUser ? currentUser.User : undefined;
-    }).subscribe(currentUser => this.currentUser = currentUser);
-    this.AuthState.map(({currentUser}) => {
-      return  currentUser ? currentUser.Profiles : undefined;
-    }).subscribe(profiles => this.userProfiles = profiles);
+    this.AuthState = this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('auth')
+      .pluck<AuthState>('auth');
+
+    this.AuthState
+      .pluck<User>('currentUser', 'User')
+      .subscribe(user => this.currentUser = user);
   }
 
   ngAfterViewInit() {

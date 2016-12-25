@@ -20,8 +20,11 @@ export class DashboardSucursalesComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-    this.userProfiles = this.AuthState.map(({currentUser}) => currentUser.Profiles)
+    this.AuthState = this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('auth')
+      .pluck<AuthState>('auth');
+
+    this.userProfiles = this.AuthState.pluck<UserProfile[]>('currentUser', 'Profiles')
   }
 
 }
