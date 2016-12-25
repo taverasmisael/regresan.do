@@ -34,8 +34,12 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   constructor(private respuestas: RespuestasService, private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.AuthState = this.store.select<AppState>('MainStore').map(({auth}) => auth);
-    this.AuthState.map(({currentUser}) => currentUser ? currentUser.Profiles : undefined)
+    this.AuthState = this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('auth')
+      .pluck<AuthState>('auth');
+
+    this.AuthState
+    .pluck<UserProfile[]>('currentUser', 'Profiles')
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
