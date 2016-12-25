@@ -19,11 +19,6 @@ const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START, LOGOUT, LOGOUT_START, LOGIN } = A
 
 @Injectable()
 export class AuthEffects {
-  constructor(private userService: UserService,
-    private actions$: Actions,
-    private router: Router) { }
-
-
   @Effect() loginUser = this.actions$
     .ofType(LOGIN)
     .switchMap(action => {
@@ -53,4 +48,8 @@ export class AuthEffects {
     this.router.navigate(['login']);
     return Observable.of({type: LOGOUT});
   });
+
+  constructor(private userService: UserService,
+    private actions$: Actions,
+    private router: Router) { }
 }
