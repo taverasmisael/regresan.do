@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { StartRequest, SaveInfo} from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
@@ -16,11 +17,12 @@ import { SucursalState } from '../../../../models/sucursalstate';
   templateUrl: './sucursales-details.component.html',
   styleUrls: ['./sucursales-details.component.scss']
 })
-export class SucursalesDetailsComponent implements OnInit {
+export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   id: number;
-  private sub: any;
+  private sub$: Subscription;
+  private profileSub$: Subscription;
   private currentProfile: UserProfile;
-  private SucursalStore: SucursalState;
+  private SucursalState: SucursalState;
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>) { }
 
@@ -28,15 +30,22 @@ export class SucursalesDetailsComponent implements OnInit {
     this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal')
-      .subscribe(store => this.SucursalStore = store);
+      .subscribe(store => this.SucursalState = store);
 
-    this.sub = this.route.params.subscribe(params => {
+    this.sub$ = this.route.params.distinctUntilChanged()
+      .subscribe(params => {
       this.id = +params['id'];
-      this.store.select<AppState>('MainStore')
-        .map(({auth}) =>
-          auth.currentUser.Profiles.filter(profiles => +profiles.$id === this.id)[0]
-        ).subscribe(profile => this.store.dispatch(new SaveInfo(profile)));
+      this.profileSub$ = this.store.select<AppState>('MainStore')
+        .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles')
+        .subscribe(profiles => {
+          let profile = profiles.find(prof => prof.OldProfileId === this.id);
+          this.store.dispatch(new SaveInfo(profile));
+        });
     });
   }
 
+  ngOnDestroy() {
+    this.sub$.unsubscribe();
+    this.profileSub$.unsubscribe();
+  }
 }
