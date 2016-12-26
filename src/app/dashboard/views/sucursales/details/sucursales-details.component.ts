@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
@@ -15,7 +15,7 @@ import { SucursalState } from '../../../../models/sucursalstate';
 @Component({
   selector: 'sucursales-details',
   templateUrl: './sucursales-details.component.html',
-  styleUrls: ['./sucursales-details.component.scss']
+  styleUrls: ['./sucursales-details.component.scss'],
 })
 export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   id: number;
@@ -24,6 +24,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   private currentProfile: UserProfile;
   private SucursalState: SucursalState;
 
+  @HostBinding('class.mdl-color--primary') true;
   constructor(private route: ActivatedRoute, private store: Store<AppState>) { }
 
   ngOnInit() {
