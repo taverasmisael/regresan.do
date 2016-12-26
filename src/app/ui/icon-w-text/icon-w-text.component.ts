@@ -9,6 +9,7 @@ export class IconWTextComponent implements OnInit {
 
   @Input() icon: string;
   @Input() text: string;
+  @Input() color: string;
   constructor() { }
 
   ngOnInit() {
