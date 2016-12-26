@@ -35,7 +35,7 @@ import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
-import { SucursalOverviewCardComponent } from './sucursal-overview-card/sucursal-overview-card.component';
+import { SucursalOverviewCardComponent } from './ui/sucursal-overview-card/sucursal-overview-card.component';
 
 @NgModule({
   declarations: [

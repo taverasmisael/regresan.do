@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sucursal-overview-card',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sucursal-overview-card.component.scss']
 })
 export class SucursalOverviewCardComponent implements OnInit {
+
+  @Input() sucursal: any;
 
   constructor() { }
 
