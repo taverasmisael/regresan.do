@@ -1,0 +1,13 @@
+.card {
+  background: white;
+  .card-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title {
+    flex: 1 0;
+    text-align: center;
+  }
+}
+
+}
