@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+.icon-holder {
+  font-size: 3em;
+  .icon {
+    font-size: 1.5em;
+    width: 100%;
+    margin-bottom: 0.2em;
+  }
+  .text {
+    font-size: 1ch;
+  }
+}

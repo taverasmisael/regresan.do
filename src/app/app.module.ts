@@ -35,6 +35,8 @@ import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
+import { SucursalOverviewCardComponent } from './ui/sucursal-overview-card/sucursal-overview-card.component';
+import { IconWTextComponent } from './ui/icon-w-text/icon-w-text.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
     DashboardOverviewComponent,
     DashboardSucursalesComponent,
     SucursalesDetailsComponent,
-    SucursalesListComponent
+    SucursalesListComponent,
+    SucursalOverviewCardComponent,
+    IconWTextComponent
   ],
   imports: [
     BrowserModule,
