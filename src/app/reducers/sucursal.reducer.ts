@@ -13,16 +13,16 @@ const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
   SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST } = ActionTypes;
 
 
-export const INITIAL_STATE: SucursalState = {
-  info: undefined,
-  questions: undefined,
-  openQuestions: undefined,
-  answers: undefined,
-  filters: undefined,
-  dates: undefined,
-  lastQuery: undefined,
-  lastResult: undefined,
-  currentAction: undefined,
+export const INITIAL_STATE = {
+  info: {},
+  questions: {},
+  openQuestions: {},
+  answers: {},
+  filters: {},
+  dates: {},
+  lastQuery: {},
+  lastResult: {},
+  currentAction: {},
   loading: false
 }
 
