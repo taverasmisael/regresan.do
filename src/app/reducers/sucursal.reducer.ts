@@ -10,7 +10,7 @@ import { updateObject } from '../utilities/objects';
 
 const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
   SAVE_LOADED_ANSWERS, START_REQUEST, FILTER_DATE, FILTER_ANSWER,
-  SAVE_INFO, SAVE_LAST, APPLY_FILTER } = ActionTypes;
+  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST } = ActionTypes;
 
 
 export const INITIAL_STATE: SucursalState = {
@@ -33,6 +33,7 @@ export function SucursalesCases() {
     [LOAD_ANSWERS]: requesting,
     [SAVE_LOADED_ANSWERS]: saveLoadedAnswers,
     [START_REQUEST]: requesting,
+    [END_REQUEST]: stopRequesting,
     [FILTER_DATE]: filterByDate,
     [FILTER_ANSWER]: filterByAnswer,
     [SAVE_INFO]: saveSucursal,
@@ -44,6 +45,11 @@ export function SucursalesCases() {
 function requesting(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
   return updateObject(state, {loading: true, currentAction: payload});
+}
+
+function stopRequesting(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+  return updateObject(state, {loading: false, currentAction: ''});
 }
 
 function saveLoadedQuestions(state: SucursalState, action: Action): SucursalState {
