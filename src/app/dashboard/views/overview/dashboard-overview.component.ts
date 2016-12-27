@@ -46,13 +46,14 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     this.testChart = this.respuestas.getAll(this.aWeekAgo.unix(), this.today.unix())
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
       .subscribe(data => {
-        Morris.Donut({
-          element: 'chartSucursales',
-          data,
-          colors: this.graphColors
-        })
-      },
-      error => {console.log(error); this.store.dispatch({type: ActionTypes.LOGOUT_START})});
+          Morris.Donut({
+            element: 'chartSucursales',
+            data,
+            colors: this.graphColors
+          })
+        },
+        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+      );
   }
 
   ngOnDestroy() {

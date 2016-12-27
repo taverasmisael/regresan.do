@@ -60,7 +60,7 @@ export class SucursalesDetailsComponent implements OnInit {
           this.store.dispatch(new SaveLoadedQuestions(qs));
           this.store.dispatch(new StopRequest({}));
         },
-        console.error.bind(console)
+        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
   }
 

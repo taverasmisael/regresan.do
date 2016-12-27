@@ -5,10 +5,11 @@ import {
   Headers,
   RequestOptions,
   RequestOptionsArgs,
-  Request } from '@angular/http';
+  Request
+} from '@angular/http';
 
 // RXJS Stuffs
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
@@ -19,7 +20,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../models/appstate';
 import { JWT } from '../models/jwt';
 
-import {ApiService} from './api.service';
+import { ApiService } from './api.service';
 
 @Injectable()
 export class RespuestasService {
@@ -30,9 +31,13 @@ export class RespuestasService {
       .distinctUntilKeyChanged('auth')
       .pluck<JWT>('auth', 'token')
       .subscribe(token => {
-        this.authHeader = new Headers({
-          'Authorization': `${token.token_type} ${token.access_token}`
-        });
+        if (token) {
+          this.authHeader = new Headers({
+            'Authorization': `${token.token_type} ${token.access_token}`
+          });
+        } else {
+          this.authHeader = undefined;
+        }
       });
   }
 

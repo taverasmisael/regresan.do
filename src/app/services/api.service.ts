@@ -70,11 +70,16 @@ export class ApiService {
     return encoded.slice(0, -1);
   }
 
-  private HandleResponse(res: Response){
+  private HandleResponse(res: Response) {
     return res.json();
   }
 
-  private HandleErrors(error:any) {
-    return Observable.throw(error.json().error || 'Server error');
+  private HandleErrors(error: any) {
+    const err = {
+      status: error.status,
+      message: error.json().error,
+      text: error.statusText
+    }
+    return Observable.throw(err);
   }
 }
