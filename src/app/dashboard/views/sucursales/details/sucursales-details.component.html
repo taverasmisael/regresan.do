@@ -2,7 +2,7 @@
   class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-contrast">
   <i class="material-icons">arrow_back</i>
 </a>
-<app-sucursal-overview-card [sucursal]="SucursalState.info"></app-sucursal-overview-card>
+<app-sucursal-overview-card [sucursal]="SucursalState"></app-sucursal-overview-card>
 <section class="section section--info">
   <div class="info__header mdl-shadow--16dp">
     <div class="headline">
@@ -14,70 +14,28 @@
     </div>
   </div>
   <div class="mdl-grid mdl-color--primary-contrast">
-    <div class="mdl-cell mdl-cell--8-col">
+    <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">Actualmente tiene 2 filtros activos.</h5>
-      <div class="mdl-grid charts-list">
-        <div class="mdl-cell mdl-shadow--2dp chart">
+      <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.questions.length">
+        <div class="mdl-cell mdl-shadow--2dp chart" *ngFor="let q of SucursalState.questions">
           <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
+            {{ q.pregunta }}
           </h5>
-          <div id="chart-1" class="chart-holder"></div>
+          <div id="chart-{{q.idPregunta}}" class="chart-holder"></div>
         </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-2" class="chart-holder"></div>
+      </div>
+      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading">
+        <div class="content">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
         </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-3" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-4" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-5" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-6" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-7" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-8" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-9" class="chart-holder"></div>
-        </div>
-        <div class="mdl-cell mdl-shadow--2dp chart">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            Nombre del Grafico
-          </h5>
-          <div id="chart-10" class="chart-holder"></div>
-        </div>
+      </div>
+      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length">
+        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+          <i class="material-icons">mood_bad</i><br />
+          NO HAY PREGUNTAS EN ESTE PERÍODO
+        </h4>
       </div>
     </div>
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">

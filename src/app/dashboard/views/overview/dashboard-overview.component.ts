@@ -14,7 +14,7 @@ import { AuthState } from '../../../models/authstate';
 
 import 'morris.js/morris.js';
 import * as moment from 'moment';
-import { RespuestasService} from '../../../services/respuestas.service';
+import { PreguntasService} from '../../../services/preguntas.service';
 import { makeDonughtChart} from '../../../utilities/respuestas';
 
 
@@ -30,8 +30,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private today = moment();
   private testChart: Subscription;
   private aWeekAgo = this.today.subtract(7, 'days');
-  private graphColors: string[] = ["#8BC34A", "#0D47A1", "#009688", "#F44336", "#FFEB3B", "#03A9F4"]
-  constructor(private respuestas: RespuestasService, private store: Store<AppState>) { }
+  private graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
+  constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
   ngOnInit() {
     this.AuthState = this.store.select<AppState>('MainStore')
@@ -43,16 +43,21 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    this.testChart = this.respuestas.getAll(this.aWeekAgo.unix(), this.today.unix())
+    let query = {
+      start: this.aWeekAgo.unix().toString(),
+      end: this.today.unix().toString(),
+    }
+    this.testChart = this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
       .subscribe(data => {
-        Morris.Donut({
-          element: 'chartSucursales',
-          data,
-          colors: this.graphColors
-        })
-      },
-      error => {console.log(error); this.store.dispatch({type: ActionTypes.LOGOUT_START})});
+          Morris.Donut({
+            element: 'chartSucursales',
+            data,
+            colors: this.graphColors
+          })
+        },
+        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+      );
   }
 
   ngOnDestroy() {

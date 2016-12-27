@@ -6,6 +6,7 @@ export const ActionTypes = {
   LOAD_ANSWERS: '[SUCURSALES] LOAD_ANSWERS',
   SAVE_LOADED_ANSWERS: '[SUCURSALES] SAVE_LOADED_ANSWERS',
   START_REQUEST: '[SUCURSALES] START_REQUEST',
+  END_REQUEST: '[SUCURSALES] END_REQUEST',
   FILTER_DATE: '[SUCURSALES] FILTER_DATE',
   FILTER_ANSWER: '[SUCURSALES] FILTER_ANSWER',
   SAVE_INFO: '[SUCURSALES] SAVE_INFO',
@@ -30,7 +31,7 @@ export class LoadAnswers implements Action {
 
   constructor(public payload) { }
 }
-export class SaveLoadAnswers implements Action {
+export class SaveLoadedAnswers implements Action {
   type = ActionTypes.SAVE_LOADED_ANSWERS;
 
   constructor(public payload) { }
@@ -38,6 +39,12 @@ export class SaveLoadAnswers implements Action {
 
 export class StartRequest implements Action {
   type = ActionTypes.START_REQUEST;
+
+  constructor(public payload) { }
+}
+
+export class StopRequest implements Action {
+  type = ActionTypes.END_REQUEST;
 
   constructor(public payload) { }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { APIRequestRespuesta } from '../models/apiparams';
+import { APIRequestParams, APIRequestUser} from '../models/apiparams';
 
 import {
   Response,
@@ -26,10 +26,9 @@ import { JWT } from '../models/jwt';
 import { ApiService } from './api.service';
 
 @Injectable()
-export class RespuestasService {
+export class PreguntasService {
   private BASE_URL = 'api/Respuesta';
   private authHeader: Headers;
-
   constructor(private api: ApiService, store: Store<AppState>) {
     store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('auth')
@@ -45,14 +44,26 @@ export class RespuestasService {
       });
   }
 
-getFromProfile(query: APIRequestRespuesta) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfiles`;
+  getAll(query: APIRequestParams) {
+    const url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
+    const params = new URLSearchParams();
+
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
+
+    return this.api.get(url, {
+      headers: this.authHeader,
+      search: params
+    });
+  }
+
+  getAllByProfile(query: APIRequestUser) {
+    const url = `${this.BASE_URL}/GetPreguntasByProfile2`;
     const params = new URLSearchParams();
 
     params.append('_startDate', query.start);
     params.append('_endDate', query.end);
     params.append('profileId', query.profile);
-    params.append('idPregunta', query.pregunta);
 
     return this.api.get(url, {
       headers: this.authHeader,

@@ -18,7 +18,8 @@ import { AuthEffects } from './effects/auth.effects';
 
 // Services
 import { ApiService} from './services/api.service';
-import { RespuestasService} from './services/respuestas.service';
+import { PreguntasService } from './services/preguntas.service';
+import { RespuestasService } from './services/respuestas.service';
 import { LocalStorageService } from './services/localstorage.service';
 import { UserService} from './services/user.service';
 // Security Services
@@ -68,7 +69,8 @@ import { IconWTextComponent } from './ui/icon-w-text/icon-w-text.component';
     LoginGuardService,
     LocalStorageService,
     UserService,
-    RespuestasService
+    RespuestasService,
+    PreguntasService
   ],
   bootstrap: [AppComponent]
 })
