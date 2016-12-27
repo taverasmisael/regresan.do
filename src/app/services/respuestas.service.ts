@@ -43,10 +43,10 @@ export class RespuestasService {
   }
 
 getFromProfile(pregunta: string | number, profile: number, start: string | number, end: string | number) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfilesAbierta2`;
+    const url = `${this.BASE_URL}/GetRespuestasByProfiles`;
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `_idPregunta=${pregunta}&_profileId=${profile}_startDate=${start}&_endDate=${end}`
+      search: `profileId=${profile}&idPregunta=${pregunta}&_startDate=${start}&_endDate=${end}`
     });
   }
 }
