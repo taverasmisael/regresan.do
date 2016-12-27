@@ -44,8 +44,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   }
   ngAfterViewInit() {
     let query = {
-      start: this.aWeekAgo.unix(),
-      end: this.today.unix(),
+      start: this.aWeekAgo.unix().toString(),
+      end: this.today.unix().toString(),
     }
     this.testChart = this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))

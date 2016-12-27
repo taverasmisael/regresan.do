@@ -57,10 +57,10 @@ export class SucursalesDetailsComponent implements OnInit {
       .subscribe(qs => {
         if (qs && qs.length) {
           let query = {
-            pregunta: qs[0].idPregunta,
-            profile: this.CurrentProfile.OldProfileId,
-            start: this.aWeekAgo.unix(),
-            end: this.today.unix()
+            pregunta: qs[0].idPregunta.toString(),
+            profile: this.CurrentProfile.OldProfileId.toString(),
+            start: this.aWeekAgo.unix().toString(),
+            end: this.today.unix().toString()
           }
           this.respuestas.getFromProfile(query)
           .subscribe(console.log.bind(console));
@@ -72,9 +72,9 @@ export class SucursalesDetailsComponent implements OnInit {
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     let profileId = this.CurrentProfile.OldProfileId;
     let query = {
-      profile: profileId,
-      start: this.aWeekAgo.unix(),
-      end: this.today.unix()
+      profile: profileId.toString(),
+      start: this.aWeekAgo.unix().toString(),
+      end: this.today.unix().toString()
     };
     this.preguntas
       .getAllByProfile(query)
