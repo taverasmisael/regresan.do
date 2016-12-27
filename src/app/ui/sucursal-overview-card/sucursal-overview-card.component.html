@@ -2,7 +2,7 @@
   <div class="mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--3-offset-desktop mdl-cell--8-col-tablet card">
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--12-col card-title">
-        <h3 class="title">{{ sucursal.Title }}</h3>
+        <h3 class="title">{{ sucursal.info.Title }}</h3>
         <button id="sucursal-settings" class="mdl-button mdl-js-button mdl-button--icon">
           <i class="material-icons">settings</i>
         </button>
@@ -16,7 +16,7 @@
             <app-icon-w-text color="#4caf50" icon="mood" text="95% Dice que volverá"></app-icon-w-text>
           </div>
           <div class="mdl-cell mdl-cell--4 mdl-cell--8-col-tablet">
-            <app-icon-w-text color="#FF9800" icon="group_work" text="13 Preguntas Activas"></app-icon-w-text>
+            <app-icon-w-text color="#FF9800" icon="group_work" text="{{ sucursal.questions ? sucursal.questions.length : 0 }} Preguntas"></app-icon-w-text>
           </div>
         </div>
       </div>
