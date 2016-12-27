@@ -49,23 +49,7 @@ export class SucursalesDetailsComponent implements OnInit {
       .pluck<number>('id');
 
     this.SaveCurrentSucursal();
-    this.LoadQuestions();
-
-    this.store.select<AppState>('MainStore')
-      .distinctUntilKeyChanged('currentSucursal')
-      .pluck<Pregunta[]>('currentSucursal', 'questions')
-      .subscribe(qs => {
-        if (qs && qs.length) {
-          let query = {
-            pregunta: qs[0].idPregunta.toString(),
-            profile: this.CurrentProfile.OldProfileId.toString(),
-            start: this.aWeekAgo.unix().toString(),
-            end: this.today.unix().toString()
-          }
-          this.respuestas.getFromProfile(query)
-          .subscribe(console.log.bind(console));
-        }
-      });
+    this.LoadQuestions().subscribe(this.loadAnswers.bind(this), this.handleErrors.bind(this));
   }
 
   private LoadQuestions() {
@@ -76,16 +60,38 @@ export class SucursalesDetailsComponent implements OnInit {
       start: this.aWeekAgo.unix().toString(),
       end: this.today.unix().toString()
     };
-    this.preguntas
+    return this.preguntas
       .getAllByProfile(query)
-      .map(res => res['Respuestas'])
-      .subscribe(
-        qs => {
-          this.store.dispatch(new SaveLoadedQuestions(qs));
-          this.store.dispatch(new StopRequest({}));
-        },
-        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
-      );
+      .map<Pregunta[]>(res => res['Respuestas'])
+  }
+
+  private loadAnswers(qs: Pregunta[]) {
+    if (qs && qs.length) {
+      const qsIds = qs.map(q => q.idPregunta);
+
+      this.store.dispatch(new StopRequest({}));
+      this.store.dispatch(new SaveLoadedQuestions(qs));
+      this.store.dispatch(new StartRequest('Cargando Respuestas...'));
+
+      const answers$ = qsIds.reduce((prev, curr) => {
+        let query = {
+          pregunta: curr.toString(),
+          profile: this.CurrentProfile.OldProfileId.toString(),
+          start: this.aWeekAgo.unix().toString(),
+          end: this.today.unix().toString()
+        }
+        return [...prev, this.preguntas.getAllByProfile(query).map(val => val['Respuestas'])];
+      }, []);
+
+      Observable.forkJoin(answers$)
+        .subscribe(console.log.bind(console));
+    }
+
+  }
+
+
+  private handleErrors(err) {
+    return err.status === 401 && this.store.dispatch({ type: ActionTypes.LOGOUT_START });
   }
 
   private SaveCurrentSucursal() {
