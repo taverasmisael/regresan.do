@@ -18,7 +18,7 @@ import { AuthEffects } from './effects/auth.effects';
 
 // Services
 import { ApiService} from './services/api.service';
-import { RespuestasService} from './services/respuestas.service';
+import { RespuestasService} from './services/preguntas.service';
 import { LocalStorageService } from './services/localstorage.service';
 import { UserService} from './services/user.service';
 // Security Services

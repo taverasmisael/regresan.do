@@ -14,7 +14,7 @@ import { AuthState } from '../../../models/authstate';
 
 import 'morris.js/morris.js';
 import * as moment from 'moment';
-import { RespuestasService} from '../../../services/respuestas.service';
+import { RespuestasService} from '../../../services/preguntas.service';
 import { makeDonughtChart} from '../../../utilities/respuestas';
 
 
