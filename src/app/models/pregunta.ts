@@ -1,4 +1,4 @@
-export interface Respuesta {
+export interface Pregunta {
   $id: string,
   id: number,
   categoriaPregunta: string,

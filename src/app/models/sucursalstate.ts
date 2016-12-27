@@ -1,12 +1,12 @@
 import { UserProfile } from './userprofile';
-import { Respuesta } from './respuesta';
+import { Pregunta } from './pregunta';
 import * as moment from 'moment';
 
 export interface SucursalState {
   info: UserProfile,
   questions: any[],
   openQuestions: any[]
-  answers: Respuesta[],
+  answers: Pregunta[],
   filters: any[],
   dates: moment.Moment[],
   lastQuery: string,
