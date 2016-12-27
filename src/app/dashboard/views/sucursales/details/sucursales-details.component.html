@@ -1,11 +1,10 @@
 <a id="btn-back" [routerLink]="['../']"
-  class="mdl-button mdl-js-button mdl-js-ripple-effect
-  mdl-button--fab mdl-button--mini-fab back-btn mdl-color--primary-contrast">
+  class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-contrast">
   <i class="material-icons">arrow_back</i>
 </a>
 <app-sucursal-overview-card [sucursal]="SucursalState.info"></app-sucursal-overview-card>
 <section class="section section--info">
-  <div class="info__header">
+  <div class="info__header mdl-shadow--16dp">
     <div class="headline">
       <h3 class="title">Información Detallada</h3>
       <button id="query-filter" class="mdl-button mdl-js-button mdl-button--raised mdl-color--primary-contrast mdl-color-text--primary mdl-js-ripple-effect">
