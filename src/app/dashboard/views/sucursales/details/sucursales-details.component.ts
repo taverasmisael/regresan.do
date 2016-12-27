@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { RespuestasService } from '../../../../services/respuestas.service';
 
-import { StartRequest, SaveInfo } from '../../../../actions/sucursal.actions';
+import { StartRequest, SaveInfo, SaveLoadedQuestions } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -55,7 +55,7 @@ export class SucursalesDetailsComponent implements OnInit {
       .getAllByProfile(profileId, this.today.unix(), this.aWeekAgo.unix())
       .map(res => res['Respuestas'])
       .subscribe(
-        console.log.bind(console),
+        qs => this.store.dispatch(new SaveLoadedQuestions(qs)),
         console.error.bind(console)
       );
   }
