@@ -1,13 +1,13 @@
 export interface APIRequestParams {
-  start: string | number,
-  end: string | number
+  start: string,
+  end: string
 };
 
 export interface APIRequestUser extends APIRequestParams {
-  profile: string | number
+  profile: string
 };
 
 export interface APIRequestRespuesta extends APIRequestUser {
-  pregunta: string | number
+  pregunta: string
 };
 
