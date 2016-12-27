@@ -7,7 +7,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RespuestasService } from '../../../../services/preguntas.service';
+import { PreguntasService } from '../../../../services/preguntas.service';
+import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { StopRequest, StartRequest, SaveInfo, SaveLoadedQuestions } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
@@ -33,6 +34,7 @@ export class SucursalesDetailsComponent implements OnInit {
   @HostBinding('class.mdl-color--primary') true;
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,
+    private preguntas: PreguntasService,
     private respuestas: RespuestasService) { }
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class SucursalesDetailsComponent implements OnInit {
   private LoadQuestions() {
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     let profileId = this.CurrentProfile.OldProfileId;
-    this.respuestas
+    this.preguntas
       .getAllByProfile(profileId, this.today.unix(), this.aWeekAgo.unix())
       .map(res => res['Respuestas'])
       .subscribe(

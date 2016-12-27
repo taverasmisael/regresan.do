@@ -23,7 +23,7 @@ import { JWT } from '../models/jwt';
 import { ApiService } from './api.service';
 
 @Injectable()
-export class RespuestasService {
+export class PreguntasService {
   private BASE_URL = 'api/Respuesta';
   private authHeader: Headers;
   constructor(private api: ApiService, store: Store<AppState>) {
