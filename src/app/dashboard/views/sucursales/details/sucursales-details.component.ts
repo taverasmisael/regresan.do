@@ -1,6 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import * as moment from 'moment';
+
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -20,8 +22,13 @@ import { SucursalState } from '../../../../models/sucursalstate';
   styleUrls: ['./sucursales-details.component.scss'],
 })
 export class SucursalesDetailsComponent implements OnInit {
-  id$: Observable<number>;
+  private id$: Observable<number>;
   private SucursalState: SucursalState;
+  private CurrentProfile: UserProfile;
+
+  private today = moment();
+  private aWeekAgo = this.today.subtract(7, 'days');
+
 
   @HostBinding('class.mdl-color--primary') true;
   constructor(private route: ActivatedRoute,
@@ -39,7 +46,18 @@ export class SucursalesDetailsComponent implements OnInit {
       .pluck<number>('id');
 
     this.SaveCurrentSucursal();
+    this.LoadQuestions();
+  }
 
+  private LoadQuestions() {
+    let profileId = this.CurrentProfile.OldProfileId;
+    this.respuestas
+      .getAllByProfile(profileId, this.today.unix(), this.aWeekAgo.unix())
+      .map(res => res['Respuestas'])
+      .subscribe(
+        console.log.bind(console),
+        console.error.bind(console)
+      );
   }
 
   private SaveCurrentSucursal() {
@@ -52,6 +70,7 @@ export class SucursalesDetailsComponent implements OnInit {
       return Observable.of(profile);
     })
       .subscribe(profile => {
+        this.CurrentProfile = profile;
         this.store.dispatch(new SaveInfo(profile));
       });
   }
