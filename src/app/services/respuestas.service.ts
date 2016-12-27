@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { APIRequestRespuesta } from '../models/apiparams';
+
 import {
   Response,
   Headers,
@@ -42,11 +44,11 @@ export class RespuestasService {
       });
   }
 
-getFromProfile(pregunta: string | number, profile: number, start: string | number, end: string | number) {
+getFromProfile(query: APIRequestRespuesta) {
     const url = `${this.BASE_URL}/GetRespuestasByProfiles`;
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `profileId=${profile}&idPregunta=${pregunta}&_startDate=${start}&_endDate=${end}`
+      search: `profileId=${query.profile}&idPregunta=${query.pregunta}&_startDate=${query.start}&_endDate=${query.end}`
     });
   }
 }

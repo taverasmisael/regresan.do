@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { APIRequestParams, APIRequestUser} from '../models/apiparams';
+
 import {
   Response,
   Headers,
@@ -41,21 +43,21 @@ export class PreguntasService {
       });
   }
 
-  getAll(start: string | number, end: string | number) {
+  getAll(query: APIRequestParams) {
     let url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
 
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `_startDate=${start}&_endDate=${end}`
+      search: `_startDate=${query.start}&_endDate=${query.end}`
     });
   }
 
-  getAllByProfile(profile: number, start: string | number, end: string | number) {
+  getAllByProfile(query: APIRequestUser) {
     let url = `${this.BASE_URL}/GetPreguntasByProfile2`;
 
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `profileId=${profile}&_startDate=${start}&_endDate=${end}`
+      search: `profileId=${query.profile}&_startDate=${query.start}&_endDate=${query.end}`
     });
   }
 }

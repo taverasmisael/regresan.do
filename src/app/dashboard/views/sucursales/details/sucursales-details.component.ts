@@ -56,7 +56,13 @@ export class SucursalesDetailsComponent implements OnInit {
       .pluck<Pregunta[]>('currentSucursal', 'questions')
       .subscribe(qs => {
         if (qs && qs.length) {
-          this.respuestas.getFromProfile(qs[0].idPregunta, this.CurrentProfile.OldProfileId, this.today.unix(), this.aWeekAgo.unix())
+          let query = {
+            pregunta: qs[0].idPregunta,
+            profile: this.CurrentProfile.OldProfileId,
+            start: this.aWeekAgo.unix(),
+            end: this.today.unix()
+          }
+          this.respuestas.getFromProfile(query)
           .subscribe(console.log.bind(console));
         }
       });
@@ -65,8 +71,13 @@ export class SucursalesDetailsComponent implements OnInit {
   private LoadQuestions() {
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     let profileId = this.CurrentProfile.OldProfileId;
+    let query = {
+      profile: profileId,
+      start: this.aWeekAgo.unix(),
+      end: this.today.unix()
+    };
     this.preguntas
-      .getAllByProfile(profileId, this.today.unix(), this.aWeekAgo.unix())
+      .getAllByProfile(query)
       .map(res => res['Respuestas'])
       .subscribe(
         qs => {

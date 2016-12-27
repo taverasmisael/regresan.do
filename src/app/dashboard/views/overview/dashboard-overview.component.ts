@@ -43,7 +43,11 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    this.testChart = this.preguntas.getAll(this.aWeekAgo.unix(), this.today.unix())
+    let query = {
+      start: this.aWeekAgo.unix(),
+      end: this.today.unix(),
+    }
+    this.testChart = this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
       .subscribe(data => {
           Morris.Donut({
