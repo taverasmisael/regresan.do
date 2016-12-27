@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { RespuestasService } from '../../../../services/respuestas.service';
 
-import { StartRequest, SaveInfo, SaveLoadedQuestions } from '../../../../actions/sucursal.actions';
+import { StopRequest, StartRequest, SaveInfo, SaveLoadedQuestions } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -50,12 +50,16 @@ export class SucursalesDetailsComponent implements OnInit {
   }
 
   private LoadQuestions() {
+    this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     let profileId = this.CurrentProfile.OldProfileId;
     this.respuestas
       .getAllByProfile(profileId, this.today.unix(), this.aWeekAgo.unix())
       .map(res => res['Respuestas'])
       .subscribe(
-        qs => this.store.dispatch(new SaveLoadedQuestions(qs)),
+        qs => {
+          this.store.dispatch(new SaveLoadedQuestions(qs));
+          this.store.dispatch(new StopRequest({}));
+        },
         console.error.bind(console)
       );
   }

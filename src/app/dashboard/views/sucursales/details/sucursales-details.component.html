@@ -17,13 +17,23 @@
     <div class="mdl-cell mdl-cell--8-col">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">Actualmente tiene 2 filtros activos.</h5>
-      <div class="mdl-grid charts-list">
+      <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading && SucursalState.questions.length">
         <div class="mdl-cell mdl-shadow--2dp chart" *ngFor="let q of SucursalState.questions">
           <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
             {{ q.pregunta }}
           </h5>
           <div id="chart-1" class="chart-holder"></div>
         </div>
+      </div>
+      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading">
+        <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
+      </div>
+      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length">
+        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+          <i class="material-icons">mood_bad</i><br />
+          NO HAY PREGUNTAS EN ESTE PERÍODO
+        </h4>
       </div>
     </div>
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
