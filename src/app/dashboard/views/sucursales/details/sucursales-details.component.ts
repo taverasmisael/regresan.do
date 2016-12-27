@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
@@ -19,7 +19,7 @@ import { SucursalState } from '../../../../models/sucursalstate';
   templateUrl: './sucursales-details.component.html',
   styleUrls: ['./sucursales-details.component.scss'],
 })
-export class SucursalesDetailsComponent implements OnInit, OnDestroy {
+export class SucursalesDetailsComponent implements OnInit {
   id$: Observable<number>;
   private SucursalState: SucursalState;
 
@@ -50,9 +50,4 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       this.store.dispatch(new SaveInfo(profile));
     });
   }
-
-  private filterProfile() {
-
-  }
-  ngOnDestroy() { }
 }
