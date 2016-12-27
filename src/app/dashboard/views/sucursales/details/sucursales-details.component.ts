@@ -16,6 +16,7 @@ import { ActionTypes } from '../../../../actions/auth.actions';
 import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/appstate';
 import { SucursalState } from '../../../../models/sucursalstate';
+import { Pregunta } from '../../../../models/Pregunta';
 
 @Component({
   selector: 'sucursales-details',
@@ -49,6 +50,16 @@ export class SucursalesDetailsComponent implements OnInit {
 
     this.SaveCurrentSucursal();
     this.LoadQuestions();
+
+    this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('currentSucursal')
+      .pluck<Pregunta[]>('currentSucursal', 'questions')
+      .subscribe(qs => {
+        if (qs && qs.length) {
+          this.respuestas.getFromProfile(qs[0].idPregunta, this.CurrentProfile.OldProfileId, this.today.unix(), this.aWeekAgo.unix())
+          .subscribe(console.log.bind(console));
+        }
+      });
   }
 
   private LoadQuestions() {
