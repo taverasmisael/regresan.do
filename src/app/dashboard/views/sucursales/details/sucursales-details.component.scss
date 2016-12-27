@@ -36,7 +36,8 @@
     }
   }
 }
-.loading-holder {
+.loading-holder,
+.empty-holder {
   display: flex;
   align-items: center;
   justify-content: center;
