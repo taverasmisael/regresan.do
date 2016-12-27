@@ -26,13 +26,14 @@
 .charts-list {
   .chart {
     .chart-title {
-      background: #BDBDBD;
+      background: #EEEEEE;
       margin: 0;
       padding: 1em 0;
       text-align: center;
     }
     .chart-holder {
-      min-height: 12rem;
+      min-height: 15rem;
+      padding: 1.5em 0;
     }
   }
 }
