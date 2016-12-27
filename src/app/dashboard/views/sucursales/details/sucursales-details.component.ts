@@ -10,7 +10,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
-import { StopRequest, StartRequest, SaveInfo, SaveLoadedQuestions } from '../../../../actions/sucursal.actions';
+import { makePieChart } from '../../../../utilities/respuestas';
+
+import { StopRequest, StartRequest, SaveInfo,
+  SaveLoadedQuestions, SaveLoadedAnswers } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -25,8 +28,10 @@ import { Pregunta } from '../../../../models/Pregunta';
 })
 export class SucursalesDetailsComponent implements OnInit {
   private id$: Observable<number>;
-  private SucursalState: SucursalState;
+  public SucursalState: SucursalState;
   private CurrentProfile: UserProfile;
+
+  private chartColors = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
 
   private today = moment();
   private aWeekAgo = this.today.subtract(7, 'days');
@@ -67,10 +72,12 @@ export class SucursalesDetailsComponent implements OnInit {
 
   private loadAnswers(qs: Pregunta[]) {
     if (qs && qs.length) {
-      const qsIds = qs.map(q => q.idPregunta);
+      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta')
+      const qsIds = closedQs // Queremos las preguntas que NO son abiertas
+        .map(q => q.idPregunta);
 
       this.store.dispatch(new StopRequest({}));
-      this.store.dispatch(new SaveLoadedQuestions(qs));
+      this.store.dispatch(new SaveLoadedQuestions(closedQs));
       this.store.dispatch(new StartRequest('Cargando Respuestas...'));
 
       const answers$ = qsIds.reduce((prev, curr) => {
@@ -80,11 +87,26 @@ export class SucursalesDetailsComponent implements OnInit {
           start: this.aWeekAgo.unix().toString(),
           end: this.today.unix().toString()
         }
-        return [...prev, this.preguntas.getAllByProfile(query).map(val => val['Respuestas'])];
+        return [...prev, this.respuestas.getFromProfile(query)
+          .map(val => ({respuestas: val['Respuestas'], pregunta: curr.toString()}))
+        ];
       }, []);
 
       Observable.forkJoin(answers$)
-        .subscribe(console.log.bind(console));
+        .subscribe(((answers: Pregunta[][]) => {
+          this.store.dispatch(new StopRequest({}));
+          this.store.dispatch(new SaveLoadedAnswers(answers));
+          answers.forEach((resp: Pregunta[]) => {
+            let data = resp['respuestas'].reduce(makePieChart, []);
+            let currentQ = resp['pregunta'];
+            let element = `chart-${currentQ}`;
+            Morris.Donut({
+              element,
+              data,
+              colors: this.chartColors
+            })
+          })
+        }));
     }
 
   }
