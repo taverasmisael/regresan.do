@@ -30,7 +30,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private today = moment();
   private testChart: Subscription;
   private aWeekAgo = this.today.subtract(7, 'days');
-  private graphColors: string[] = ["#8BC34A", "#0D47A1", "#009688", "#F44336", "#FFEB3B", "#03A9F4"]
+  private graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
   ngOnInit() {
