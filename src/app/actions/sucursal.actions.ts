@@ -31,7 +31,7 @@ export class LoadAnswers implements Action {
 
   constructor(public payload) { }
 }
-export class SaveLoadAnswers implements Action {
+export class SaveLoadedAnswers implements Action {
   type = ActionTypes.SAVE_LOADED_ANSWERS;
 
   constructor(public payload) { }
