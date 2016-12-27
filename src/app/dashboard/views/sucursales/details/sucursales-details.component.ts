@@ -5,7 +5,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { StartRequest, SaveInfo} from '../../../../actions/sucursal.actions';
+import { RespuestasService } from '../../../../services/respuestas.service';
+
+import { StartRequest, SaveInfo } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -18,14 +20,13 @@ import { SucursalState } from '../../../../models/sucursalstate';
   styleUrls: ['./sucursales-details.component.scss'],
 })
 export class SucursalesDetailsComponent implements OnInit, OnDestroy {
-  id: number;
-  private sub$: Subscription;
-  private profileSub$: Subscription;
-  private currentProfile: UserProfile;
+  id$: Observable<number>;
   private SucursalState: SucursalState;
 
   @HostBinding('class.mdl-color--primary') true;
-  constructor(private route: ActivatedRoute, private store: Store<AppState>) { }
+  constructor(private route: ActivatedRoute,
+    private store: Store<AppState>,
+    private respuestas: RespuestasService) { }
 
   ngOnInit() {
     this.store.select<AppState>('MainStore')
@@ -33,20 +34,25 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       .pluck<SucursalState>('currentSucursal')
       .subscribe(store => this.SucursalState = store);
 
-    this.sub$ = this.route.params.distinctUntilChanged()
-      .subscribe(params => {
-      this.id = +params['id'];
-      this.profileSub$ = this.store.select<AppState>('MainStore')
+    this.id$ = this.route.params
+      .distinctUntilChanged()
+      .pluck<number>('id');
+
+    Observable.zip(
+      this.id$,
+      this.store.select<AppState>('MainStore')
         .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles')
-        .subscribe(profiles => {
-          let profile = profiles.find(prof => prof.OldProfileId === this.id);
-          this.store.dispatch(new SaveInfo(profile));
-        });
+    ).flatMap(zip => {
+      let profile = zip[1].find(prof => prof.OldProfileId === +zip[0]);
+      return Observable.of(profile);
+    })
+    .subscribe(profile => {
+      this.store.dispatch(new SaveInfo(profile));
     });
   }
 
-  ngOnDestroy() {
-    this.sub$.unsubscribe();
-    this.profileSub$.unsubscribe();
+  private filterProfile() {
+
   }
+  ngOnDestroy() { }
 }
