@@ -27,23 +27,21 @@ export class RespuestasService {
   private authHeader: Headers;
   constructor(private api: ApiService, store: Store<AppState>) {
     store.select<AppState>('MainStore')
-      .map(slice => slice.auth)
-      .subscribe(val => {
-        if (val.token) {
-          const {access_token: token, token_type: type} = val.token
-          this.authHeader = new Headers({'Authorization': `${type} ${token}`});
-        } else {
-          this.authHeader = undefined;
-        }
-      })
+      .distinctUntilKeyChanged('auth')
+      .pluck<JWT>('auth', 'token')
+      .subscribe(token => {
+        this.authHeader = new Headers({
+          'Authorization': `${token.token_type} ${token.access_token}`
+        });
+      });
   }
 
   getAll(start: string | number, end: string | number) {
-    let request = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
-    const THE_URL = `${request}?_startDate=${start}&_endDate=${end}`
+    let url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
 
-    return this.api.get(THE_URL, {
-      headers: this.authHeader
+    return this.api.get(url, {
+      headers: this.authHeader,
+      search: `_startDate=${start}&_endDate=${end}`
     });
   }
 }
