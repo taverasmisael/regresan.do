@@ -7,7 +7,8 @@ import {
   Headers,
   RequestOptions,
   RequestOptionsArgs,
-  Request
+  Request,
+  URLSearchParams
 } from '@angular/http';
 
 // RXJS Stuffs
@@ -46,9 +47,16 @@ export class RespuestasService {
 
 getFromProfile(query: APIRequestRespuesta) {
     const url = `${this.BASE_URL}/GetRespuestasByProfiles`;
+    const params = new URLSearchParams();
+
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
+    params.append('profileId', query.profile);
+    params.append('idPregunta', query.pregunta);
+
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `profileId=${query.profile}&idPregunta=${query.pregunta}&_startDate=${query.start}&_endDate=${query.end}`
+      search: params
     });
   }
 }

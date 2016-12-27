@@ -7,7 +7,8 @@ import {
   Headers,
   RequestOptions,
   RequestOptionsArgs,
-  Request
+  Request,
+  URLSearchParams
 } from '@angular/http';
 
 // RXJS Stuffs
@@ -44,20 +45,29 @@ export class PreguntasService {
   }
 
   getAll(query: APIRequestParams) {
-    let url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
+    const url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`;
+    const params = new URLSearchParams();
+
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
 
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `_startDate=${query.start}&_endDate=${query.end}`
+      search: params
     });
   }
 
   getAllByProfile(query: APIRequestUser) {
-    let url = `${this.BASE_URL}/GetPreguntasByProfile2`;
+    const url = `${this.BASE_URL}/GetPreguntasByProfile2`;
+    const params = new URLSearchParams();
+
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
+    params.append('profileId', query.profile);
 
     return this.api.get(url, {
       headers: this.authHeader,
-      search: `profileId=${query.profile}&_startDate=${query.start}&_endDate=${query.end}`
+      search: params
     });
   }
 }
