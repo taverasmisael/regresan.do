@@ -44,4 +44,13 @@ export class RespuestasService {
       search: `_startDate=${start}&_endDate=${end}`
     });
   }
+
+  getAllByProfile(profile: number, start: string | number, end: string | number) {
+    let url = `${this.BASE_URL}/GetPreguntasByProfile2`;
+
+    return this.api.get(url, {
+      headers: this.authHeader,
+      search: `profileId=${profile}&_startDate=${start}&_endDate=${end}`
+    });
+  }
 }
