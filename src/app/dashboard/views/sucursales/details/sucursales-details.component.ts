@@ -38,6 +38,11 @@ export class SucursalesDetailsComponent implements OnInit {
       .distinctUntilChanged()
       .pluck<number>('id');
 
+    this.SaveCurrentSucursal();
+
+  }
+
+  private SaveCurrentSucursal() {
     Observable.zip(
       this.id$,
       this.store.select<AppState>('MainStore')
@@ -46,8 +51,8 @@ export class SucursalesDetailsComponent implements OnInit {
       let profile = zip[1].find(prof => prof.OldProfileId === +zip[0]);
       return Observable.of(profile);
     })
-    .subscribe(profile => {
-      this.store.dispatch(new SaveInfo(profile));
-    });
+      .subscribe(profile => {
+        this.store.dispatch(new SaveInfo(profile));
+      });
   }
 }
