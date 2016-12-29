@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import * as moment from 'moment';
@@ -13,7 +13,7 @@ import { RespuestasService } from '../../../../services/respuestas.service';
 import { makePieChart } from '../../../../utilities/respuestas';
 
 import { StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers } from '../../../../actions/sucursal.actions';
+  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore} from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -26,7 +26,7 @@ import { Pregunta } from '../../../../models/Pregunta';
   templateUrl: './sucursales-details.component.html',
   styleUrls: ['./sucursales-details.component.scss'],
 })
-export class SucursalesDetailsComponent implements OnInit {
+export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
   public SucursalState: SucursalState;
   private CurrentProfile: UserProfile;
@@ -43,6 +43,10 @@ export class SucursalesDetailsComponent implements OnInit {
     private preguntas: PreguntasService,
     private respuestas: RespuestasService) { }
 
+  ngAfterViewInit() {
+    componentHandler.upgradeAllRegistered();
+  }
+
   ngOnInit() {
     this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
@@ -55,6 +59,10 @@ export class SucursalesDetailsComponent implements OnInit {
 
     this.SaveCurrentSucursal();
     this.LoadQuestions().subscribe(this.loadAnswers.bind(this), this.handleErrors.bind(this));
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new ResetStore());
   }
 
   private LoadQuestions() {
