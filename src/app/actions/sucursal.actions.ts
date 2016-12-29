@@ -11,7 +11,8 @@ export const ActionTypes = {
   FILTER_ANSWER: '[SUCURSALES] FILTER_ANSWER',
   SAVE_INFO: '[SUCURSALES] SAVE_INFO',
   SAVE_LAST: '[SUCURSALES] SAVE_LAST',
-  APPLY_FILTER: '[SUCURSALES] APPLY_FILTER'
+  APPLY_FILTER: '[SUCURSALES] APPLY_FILTER',
+  RESET: '[SUCURSALES]: RESET'
 };
 
 export class LoadQuestions implements Action {
@@ -79,3 +80,8 @@ export class ApplyFilter implements Action {
   constructor(public payload) { }
 }
 
+export class ResetStore implements Action {
+  type = ActionTypes.RESET;
+
+  constructor(public payload?) { }
+}

@@ -10,7 +10,7 @@ import { updateObject } from '../utilities/objects';
 
 const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
   SAVE_LOADED_ANSWERS, START_REQUEST, FILTER_DATE, FILTER_ANSWER,
-  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST } = ActionTypes;
+  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST, RESET } = ActionTypes;
 
 
 export const INITIAL_STATE = {
@@ -38,7 +38,8 @@ export function SucursalesCases() {
     [FILTER_ANSWER]: filterByAnswer,
     [SAVE_INFO]: saveSucursal,
     [SAVE_LAST]: saveLastRequest,
-    [APPLY_FILTER]: applyFilter
+    [APPLY_FILTER]: applyFilter,
+    [RESET]: () => INITIAL_STATE
   }
 }
 
