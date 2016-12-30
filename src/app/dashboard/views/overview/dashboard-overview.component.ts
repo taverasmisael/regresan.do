@@ -52,7 +52,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
         data => {
-          console.log(data);
           this.chartData = data[1];
           this.chartLabels = data[0];
         },
