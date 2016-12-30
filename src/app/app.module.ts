@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+// Charts
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+
 // Routes
 import { AppRoutes } from './app.routes';
 
@@ -57,7 +60,8 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
     ReactiveFormsModule,
     StoreModule.provideStore({MainStore: RootReducer}),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    EffectsModule.run(AuthEffects)
+    EffectsModule.run(AuthEffects),
+    ChartsModule
   ],
   providers: [
     ApiService,
