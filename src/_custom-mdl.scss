@@ -1,0 +1,71 @@
+$palette-regresando:
+
+"174, 255, 255"
+
+"98, 255, 254"
+
+"42, 255, 254"
+
+"0, 225, 224"
+
+"0, 195, 193"
+
+"0, 164, 163"
+
+"0, 133, 133"
+
+"0, 103, 102"
+
+"0, 72, 72"
+
+"0, 42, 41"
+
+"174, 255, 255"
+
+"98, 255, 254"
+
+"0, 195, 193"
+
+"0, 103, 102"
+
+;
+
+
+$palette-regresando-50: nth($palette-regresando, 1);
+
+$palette-regresando-100: nth($palette-regresando, 2);
+
+$palette-regresando-200: nth($palette-regresando, 3);
+
+$palette-regresando-300: nth($palette-regresando, 4);
+
+$palette-regresando-400: nth($palette-regresando, 5);
+
+$palette-regresando-500: nth($palette-regresando, 6);
+
+$palette-regresando-600: nth($palette-regresando, 7);
+
+$palette-regresando-700: nth($palette-regresando, 8);
+
+$palette-regresando-800: nth($palette-regresando, 9);
+
+$palette-regresando-900: nth($palette-regresando, 10);
+
+$palette-regresando-A100: nth($palette-regresando, 11);
+
+$palette-regresando-A200: nth($palette-regresando, 12);
+
+$palette-regresando-A400: nth($palette-regresando, 13);
+
+$palette-regresando-A700: nth($palette-regresando, 14);
+
+@import "~material-design-lite/src/color-definitions";
+
+$color-primary: $palette-regresando-500;
+$color-primary-dark: $palette-regresando-700;
+$color-accent: $palette-blue-A400;
+
+$color-primary-contrast: $color-dark-contrast;
+$color-accent-contrast: $color-light-contrast;
+
+@import "~material-design-lite/src/material-design-lite";
