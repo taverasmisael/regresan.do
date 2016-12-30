@@ -12,7 +12,7 @@ import { AuthState } from '../../../models/authstate';
 
 import * as moment from 'moment';
 import { PreguntasService} from '../../../services/preguntas.service';
-import { makeDonughtChart} from '../../../utilities/respuestas';
+import { mapPieChart } from '../../../utilities/respuestas';
 
 
 @Component({
@@ -27,6 +27,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private testChart: Subscription;
   private aWeekAgo = this.today.subtract(7, 'days');
 
+  public chartData: number[] = [];
+  public chartLabels: string[] = [];
   public graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
   public userProfiles: UserProfile[];
 
@@ -47,9 +49,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
       end: this.today.unix().toString(),
     }
     this.testChart = this.preguntas.getAll(query)
-      .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
+      .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
-        console.log.bind(console),
+        data => {
+          console.log(data);
+          this.chartData = data[1];
+          this.chartLabels = data[0];
+        },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
   }

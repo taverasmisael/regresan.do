@@ -12,7 +12,7 @@
       <h5 class="mdl-card__title-text">Encuestas por Sucursal</h5>
     </div>
     <div class="mdl-card__supporting-text">
-        <div id="chartSucursales" style="height: 250px;"></div>
+        <canvas baseChart chartType="pie" [labels]="chartLabels" [data]="chartData"></canvas>
     </div>
   </div>
 </div>
