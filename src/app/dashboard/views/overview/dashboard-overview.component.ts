@@ -38,7 +38,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public linearData: any[] = [];
   public donutData: number[] = [];
   public donutLabels: string[] = [];
-  public COLORS = mdlPalette('A700', true);
+  public COLORS = mdlPalette('A700', true).sort(() => 0.5 - Math.random());
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
