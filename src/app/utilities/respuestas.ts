@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export function makeDonughtChart(prev = [], curr) {
   return [...prev, Object.assign({}, prev, {value: curr.Total, label: curr.Sucursal})]
 }
@@ -28,7 +30,7 @@ export function TotalPorDiaLineal(entries: any[]) {
   }
   function reduceDataToArray(prev, curr) {
     const key = curr.row;
-    labels = labels.find(el => el === curr.row) ? labels : [...labels, curr.row];
+    labels = labels.find(el => el === moment(curr.row).format('D/M/YY')) ? labels : [...labels, moment(curr.row).format('D/M/YY')];
     prev[key] = prev[key] || [];
     const prevData = prev[key].data || [];
     return [...prev, {
