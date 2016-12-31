@@ -75,7 +75,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         data => {
           console.log(data);
           this.linearLabels = data[0];
-          this.linearData = data[1];
+          this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
