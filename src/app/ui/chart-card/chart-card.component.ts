@@ -31,4 +31,21 @@ export class ChartCardComponent implements OnInit {
     return type === 'line' || type === 'bar' || type === 'radar'
   }
 
+  toggleChart() {
+    switch (this.chartType ) {
+      case 'line':
+        this.chartType = 'bar';
+        break;
+      case 'bar':
+        this.chartType = 'line';
+        break;
+      case 'doughnut':
+        this.chartType = 'pie';
+        break;
+      case 'pie':
+        this.chartType = 'doughnut';
+        break;
+    }
+  }
+
 }

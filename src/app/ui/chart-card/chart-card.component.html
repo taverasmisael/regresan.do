@@ -3,6 +3,9 @@
     <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
       {{ chartTitle}}
     </h5>
+    <button id="graph-toggler" class="mdl-button mdl-js-button mdl-button--icon" (click)="toggleChart()">
+        <i class="material-icons">{{ useDataset(chartType) && 'show_chart' || 'pie_chart'}}</i>
+      </button>
   </div>
   <div class="mdl-card__supporting-text">
     <div *ngIf="useDataset(chartType)" class="chart-holder">
@@ -18,4 +21,7 @@
       </div>
     </div>
   </div>
+</div>
+<div class="mdl-tooltip" for="graph-toggler">
+  Cambiar Tipo de Gráfica
 </div>
