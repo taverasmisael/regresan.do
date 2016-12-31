@@ -9,6 +9,7 @@ export class ChartCardComponent implements OnInit {
 
   @Input() chartTitle: string;
   @Input() chartType: string;
+  @Input() lodingText: string;
   @Input() chartLabels: string[];
   @Input() chartData: any[];
 
