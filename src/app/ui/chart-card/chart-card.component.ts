@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { createPalette, ChartJsColor } from '../../utilities/charts';
+import { mdlPalette } from '../../utilities/colors';
+
 @Component({
   selector: 'app-chart-card',
   templateUrl: './chart-card.component.html',
@@ -13,9 +16,13 @@ export class ChartCardComponent implements OnInit {
   @Input() chartLabels: string[];
   @Input() chartData: any[];
 
+  private COLORS = mdlPalette('A700', true);
+  public chartColors: ChartJsColor[];
+
   constructor() { }
 
   ngOnInit() {
+    this.chartColors = createPalette(this.COLORS.sort(() => 0.5 - Math.random()));
   }
 
   useDataset(type: string) {
