@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -20,19 +20,23 @@ import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   private AuthState: Observable<AuthState>;
   private today = moment();
   private testChart: Subscription;
   private aWeekAgo = moment().subtract(7, 'days');
+  private dateQuery = {
+    start: this.aWeekAgo.unix().toString(),
+    end: this.today.unix().toString(),
+  };
 
   public userProfiles: UserProfile[];
 
   public linearLabels: string[] = [];
   public linearData: any[] = [];
-  public chartData: number[] = [];
-  public chartLabels: string[] = [];
+  public donutData: number[] = [];
+  public donutLabels: string[] = [];
   public graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4'];
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
@@ -47,20 +51,24 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    let query = {
-      start: this.aWeekAgo.unix().toString(),
-      end: this.today.unix().toString(),
-    }
-    this.testChart = this.preguntas.getAll(query)
+    this.loadDonutChart();
+    this.loadLineChart();
+  }
+
+  loadDonutChart() {
+   this.preguntas.getAll(this.dateQuery)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
         data => {
-          this.chartLabels = data[0];
-          this.chartData = data[1];
+          this.donutLabels = data[0];
+          this.donutData = data[1];
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
-    this.preguntas.getTotalPorDia(query)
+  }
+
+  loadLineChart() {
+    this.preguntas.getTotalPorDia(this.dateQuery)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
         data => {
@@ -70,11 +78,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
-  }
-
-  ngOnDestroy() {
-    // Clean Up Subscription
-    this.testChart.unsubscribe();
   }
 
 }
