@@ -1,11 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 import { createPalette, ChartJsColor, createCirularPalette } from '../../utilities/charts';
 
 @Component({
   selector: 'app-chart-card',
   templateUrl: './chart-card.component.html',
-  styleUrls: ['./chart-card.component.scss']
+  styleUrls: ['./chart-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartCardComponent implements OnInit {
 
