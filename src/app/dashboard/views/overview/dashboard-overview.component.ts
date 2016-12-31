@@ -12,7 +12,7 @@ import { AuthState } from '../../../models/authstate';
 
 import * as moment from 'moment';
 import { PreguntasService} from '../../../services/preguntas.service';
-import { mapPieChart } from '../../../utilities/respuestas';
+import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
 
 
 @Component({
@@ -27,10 +27,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private testChart: Subscription;
   private aWeekAgo = this.today.subtract(7, 'days');
 
+  public userProfiles: UserProfile[];
+
+  public linearLabels: string[] = [];
+  public linearData: any[] = [];
   public chartData: number[] = [];
   public chartLabels: string[] = [];
-  public graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
-  public userProfiles: UserProfile[];
+  public graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4'];
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
@@ -52,8 +55,22 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
         data => {
-          this.chartData = data[1];
           this.chartLabels = data[0];
+          this.chartData = data[1];
+        },
+        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+      );
+    query = {
+      start: '1481299008',
+      end: '1481864400'
+    }
+    this.preguntas.getTotalPorDia(query)
+      .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
+      .subscribe(
+        data => {
+          console.log(data);
+          this.linearLabels = data[0];
+          this.linearData = data[1];
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );

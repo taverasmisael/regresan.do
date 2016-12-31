@@ -3,8 +3,8 @@
     <div class="mdl-card__title">
       <h5 class="mdl-card__title-text">Otro Chart</h5>
     </div>
-    <div class="mdl-card__supporting-text">
-        <div id="otroChart" style="height: 250px;"></div>
+    <div class="mdl-card__supporting-text" style="height:250px" >
+        <canvas *ngIf="linearData.length" baseChart chartType="line" [labels]="linearLabels" [datasets]="linearData"></canvas>
     </div>
   </div>
   <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-shadow--3dp mdl-card">
