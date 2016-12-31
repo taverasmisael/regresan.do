@@ -6,6 +6,7 @@
     lodingText="Cargando Historico de Encuestas"
     [chartLabels]="linearLabels"
     [chartData]="linearData"
+    [chartColors]="COLORS"
     ></app-chart-card>
   <app-chart-card
     class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card"
@@ -14,10 +15,11 @@
     lodingText="Cargando Total de Sucursales"
     [chartLabels]="donutLabels"
     [chartData]="donutData"
+    [chartColors]="COLORS"
     >
   </app-chart-card>
 </div>
 <section class="section">
   <h2 class="section__title">Sucursales</h2>
-  <sucursales-list [sucursales]="userProfiles" [colors]="graphColors"></sucursales-list>
+  <sucursales-list [sucursales]="userProfiles" [colors]="COLORS"></sucursales-list>
 </section>

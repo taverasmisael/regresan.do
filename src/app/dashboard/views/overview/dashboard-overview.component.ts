@@ -13,6 +13,7 @@ import { AuthState } from '../../../models/authstate';
 import * as moment from 'moment';
 import { PreguntasService} from '../../../services/preguntas.service';
 import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
+import { mdlPalette } from '../../../utilities/colors';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public linearData: any[] = [];
   public donutData: number[] = [];
   public donutLabels: string[] = [];
-  public graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4'];
+  public COLORS = mdlPalette('A700', true);
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
