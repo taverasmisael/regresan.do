@@ -25,7 +25,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private AuthState: Observable<AuthState>;
   private today = moment();
   private testChart: Subscription;
-  private aWeekAgo = this.today.subtract(7, 'days');
+  private aWeekAgo = moment().subtract(7, 'days');
 
   public userProfiles: UserProfile[];
 
