@@ -60,10 +60,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
-    query = {
-      start: '1481299008',
-      end: '1481864400'
-    }
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
