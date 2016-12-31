@@ -108,11 +108,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
             let data = resp['respuestas'].reduce(makePieChart, []);
             let currentQ = resp['pregunta'];
             let element = `chart-${currentQ}`;
-            Morris.Donut({
-              element,
-              data,
-              colors: this.chartColors
-            })
           })
         }));
     }
