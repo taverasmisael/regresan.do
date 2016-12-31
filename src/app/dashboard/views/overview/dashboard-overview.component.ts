@@ -11,7 +11,7 @@ import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 
 import * as moment from 'moment';
-import { PreguntasService} from '../../../services/preguntas.service';
+import { PreguntasService } from '../../../services/preguntas.service';
 import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
 import { mdlPalette } from '../../../utilities/colors';
 
@@ -50,48 +50,50 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .pluck<AuthState>('auth');
 
     this.AuthState
-    .pluck<UserProfile[]>('currentUser', 'Profiles')
-    .subscribe(profiles => this.userProfiles = profiles);
+      .pluck<UserProfile[]>('currentUser', 'Profiles')
+      .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
     this.loadDonutChart();
-    this.loadLineChart();
+    this.loadLinearChart();
   }
 
   loadDonutChart() {
-   this.preguntas.getAll(this.dateQuery)
+    this.donutError = '';
+    this.preguntas.getAll(this.dateQuery)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
-        data => {
-          this.donutLabels = data[0];
-          this.donutData = data[1];
-        },
-        error => {
-          if (error.status === 401) {
-            this.store.dispatch({type: ActionTypes.LOGOUT_START});
-          } else {
-            this.donutError = 'Error Cargando Total de Sucursales';
-          }
+      data => {
+        this.donutLabels = data[0];
+        this.donutData = data[1];
+      },
+      error => {
+        if (error.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.donutError = 'Error Cargando Total de Sucursales';
         }
+      }
       );
   }
 
-  loadLineChart() {
+  loadLinearChart() {
+    this.linearError = '';
     this.preguntas.getTotalPorDia(this.dateQuery)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
-        data => {
-          console.log(data);
-          this.linearLabels = data[0];
-          this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-        },
-        error => {
-          if (error.status === 401) {
-            this.store.dispatch({type: ActionTypes.LOGOUT_START});
-          } else {
-            this.linearError = 'Error Cargando Historico de Encuestas';
-          }
+      data => {
+        console.log(data);
+        this.linearLabels = data[0];
+        this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+      },
+      error => {
+        if (error.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.linearError = 'Error Cargando Historico de Encuestas';
         }
+      }
       );
   }
 

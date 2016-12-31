@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { createPalette, ChartJsColor, createCirularPalette } from '../../utilities/charts';
 
@@ -16,6 +16,8 @@ export class ChartCardComponent implements OnInit {
   @Input() chartLabels: string[];
   @Input() chartData: any[];
   @Input() chartColors: string[];
+
+  @Output() failed = new EventEmitter();
 
   public ChartColors: any[];
 

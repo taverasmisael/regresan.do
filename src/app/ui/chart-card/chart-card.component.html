@@ -24,7 +24,9 @@
       <div class="content">
         <i class="material-icons error-icon">error</i>
         <h4 class="mdl-typography--text-center">{{ erorText }}</h4>
-        <button class="mdl-button mdl-js-button mdl-js-ripple"><i class="material-icons">refresh</i> Reintentar</button>
+        <button (click)="failed.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
+            <i class="material-icons">refresh</i> Reintentar
+        </button>
       </div>
     </div>
   </div>
