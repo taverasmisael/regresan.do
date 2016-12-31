@@ -1,20 +1,19 @@
 <div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card">
-    <div class="mdl-card__title">
-      <h5 class="mdl-card__title-text">Historico de Encuestas</h5>
-    </div>
-    <div class="mdl-card__supporting-text" style="min-height:250px" >
-        <canvas *ngIf="linearData.length" baseChart chartType="line" [labels]="linearLabels" [datasets]="linearData"></canvas>
-    </div>
-  </div>
-  <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card">
-    <div class="mdl-card__title">
-      <h5 class="mdl-card__title-text">Encuestas por Sucursal</h5>
-    </div>
-    <div class="mdl-card__supporting-text">
-        <canvas baseChart chartType="pie" [labels]="donutLabels" [data]="donutData"></canvas>
-    </div>
-  </div>
+  <app-chart-card
+    class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card"
+    chartTitle="Historico de Encuestas"
+    chartType="line"
+    [chartLabels]="linearLabels"
+    [chartData]="linearData"
+    ></app-chart-card>
+  <app-chart-card
+    class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card"
+    chartTitle="Encuestas por Sucursal"
+    chartType="pie"
+    [chartLabels]="donutLabels"
+    [chartData]="donutData"
+    >
+  </app-chart-card>
 </div>
 <section class="section">
   <h2 class="section__title">Sucursales</h2>
