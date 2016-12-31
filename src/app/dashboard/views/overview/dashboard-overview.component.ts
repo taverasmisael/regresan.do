@@ -34,6 +34,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
+  public donutError: string;
+  public linearError: string;
   public linearLabels: string[] = [];
   public linearData: any[] = [];
   public donutData: number[] = [];
@@ -64,7 +66,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
           this.donutLabels = data[0];
           this.donutData = data[1];
         },
-        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+        error => {
+          if (error.status === 401) {
+            this.store.dispatch({type: ActionTypes.LOGOUT_START});
+          } else {
+            this.donutError = 'Error Cargando Total de Sucursales';
+          }
+        }
       );
   }
 
@@ -77,7 +85,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
           this.linearLabels = data[0];
           this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
         },
-        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+        error => {
+          if (error.status === 401) {
+            this.store.dispatch({type: ActionTypes.LOGOUT_START});
+          } else {
+            this.linearError = 'Error Cargando Historico de Encuestas';
+          }
+        }
       );
   }
 
