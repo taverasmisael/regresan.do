@@ -1,6 +1,4 @@
-import 'morris.js/morris.min.js';
-
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -12,10 +10,10 @@ import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 
-import 'morris.js/morris.js';
 import * as moment from 'moment';
 import { PreguntasService} from '../../../services/preguntas.service';
-import { makeDonughtChart} from '../../../utilities/respuestas';
+import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
+import { mdlPalette } from '../../../utilities/colors';
 
 
 @Component({
@@ -23,14 +21,25 @@ import { makeDonughtChart} from '../../../utilities/respuestas';
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   private AuthState: Observable<AuthState>;
-  private userProfiles: UserProfile[];
   private today = moment();
   private testChart: Subscription;
-  private aWeekAgo = this.today.subtract(7, 'days');
-  private graphColors: string[] = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
+  private aWeekAgo = moment().subtract(7, 'days');
+  private dateQuery = {
+    start: this.aWeekAgo.unix().toString(),
+    end: this.today.unix().toString(),
+  };
+
+  public userProfiles: UserProfile[];
+
+  public linearLabels: string[] = [];
+  public linearData: any[] = [];
+  public donutData: number[] = [];
+  public donutLabels: string[] = [];
+  public COLORS = mdlPalette('A700', true).sort(() => 0.5 - Math.random());
+
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
   ngOnInit() {
@@ -43,26 +52,33 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    let query = {
-      start: this.aWeekAgo.unix().toString(),
-      end: this.today.unix().toString(),
-    }
-    this.testChart = this.preguntas.getAll(query)
-      .map(res => res['Preguntas'].reduce(makeDonughtChart, []))
-      .subscribe(data => {
-          Morris.Donut({
-            element: 'chartSucursales',
-            data,
-            colors: this.graphColors
-          })
+    this.loadDonutChart();
+    this.loadLineChart();
+  }
+
+  loadDonutChart() {
+   this.preguntas.getAll(this.dateQuery)
+      .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
+      .subscribe(
+        data => {
+          this.donutLabels = data[0];
+          this.donutData = data[1];
         },
         error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
       );
   }
 
-  ngOnDestroy() {
-    // Clean Up Subscription
-    this.testChart.unsubscribe();
+  loadLineChart() {
+    this.preguntas.getTotalPorDia(this.dateQuery)
+      .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
+      .subscribe(
+        data => {
+          console.log(data);
+          this.linearLabels = data[0];
+          this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+        },
+        error => error.status === 401 && this.store.dispatch({type: ActionTypes.LOGOUT_START})
+      );
   }
 
 }

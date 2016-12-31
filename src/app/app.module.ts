@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+// Charts
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+
 // Routes
 import { AppRoutes } from './app.routes';
 
@@ -36,6 +39,7 @@ import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component';
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
+import { ChartCardComponent } from './ui/chart-card/chart-card.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +51,8 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
     DashboardOverviewComponent,
     DashboardSucursalesComponent,
     SucursalesDetailsComponent,
-    SucursalesListComponent
+    SucursalesListComponent,
+    ChartCardComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +62,8 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
     ReactiveFormsModule,
     StoreModule.provideStore({MainStore: RootReducer}),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    EffectsModule.run(AuthEffects)
+    EffectsModule.run(AuthEffects),
+    ChartsModule
   ],
   providers: [
     ApiService,
