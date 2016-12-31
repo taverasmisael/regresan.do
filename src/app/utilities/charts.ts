@@ -20,6 +20,19 @@ export const createPalette = (colors: string[]): ChartJsColor[] => {
   }, []);
 }
 
+export const createCirularPalette = (colors: ChartJsColor[]) => {
+  return colors.reduce((prev, curr) => {
+    prev[0] = prev[0] || {backgroundColor: []};
+    let backgrounds = prev[0]['backgroundColor'];
+    prev[1] = prev[1] || {borderColor: []};
+    let borders = prev[1]['borderColor'];
+
+    prev[0]['backgroundColor'] = [...backgrounds, curr.backgroundColor];
+    prev[1]['borderColor'] = [...borders, curr.borderColor];
+
+    return prev;
+  }, [])
+}
 export interface ChartJsColor {
   backgroundColor: string,
   borderColor: string,
