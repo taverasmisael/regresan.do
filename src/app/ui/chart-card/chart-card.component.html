@@ -1,0 +1,13 @@
+<div class="mdl-card">
+  <div class="mdl-card__title">
+    <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
+      {{ chartTitle}}
+    </h5>
+  </div>
+  <div *ngIf="useDataset(chartType)" class="mdl-card__supporting-text chart-holder">
+    <canvas *ngIf="chartData.length" baseChart [chartType]="chartType" [labels]="chartLabels" [datasets]="chartData"></canvas>
+  </div>
+  <div *ngIf="!useDataset(chartType)" class="mdl-card__supporting-text chart-holder">
+    <canvas *ngIf="chartData.length" baseChart [chartType]="chartType" [labels]="chartLabels" [data]="chartData"></canvas>
+  </div>
+</div>
