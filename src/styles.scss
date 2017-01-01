@@ -95,6 +95,9 @@ a {
   }
 }
 
+.mdl-spinner:not(.is-upgraded).is-active:after {
+  content: 'Cargando...'
+}
 .section__title {
   padding: 0 1rem;
 }
