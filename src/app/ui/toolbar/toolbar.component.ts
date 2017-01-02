@@ -15,7 +15,8 @@ import {
   Validators
 } from '@angular/forms';
 
-import { UserProfile } from '../../models/userprofile'
+import { UserProfile } from '../../models/userprofile';
+import { DateValidator } from '../../utilities/validators/date.validator';
 
 @Component({
   selector: 'app-toolbar',
@@ -37,8 +38,8 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.filterSucursal = new FormControl('', [Validators.required]);
-    this.filterFechaInicio = new FormControl('', [Validators.required]);
-    this.filterFechaFin = new FormControl('', [Validators.required]);
+    this.filterFechaInicio = new FormControl('', [Validators.required, DateValidator.spanishDate]);
+    this.filterFechaFin = new FormControl('', [Validators.required, DateValidator.spanishDate]);
 
     this.filterForm = this.fb.group({
       sucursal: this.filterSucursal,
