@@ -1,7 +1,13 @@
 :host {
   display: block;
 }
-
+.filters { // esta es la columna derecha
+  border: none;
+  border-right: 1px solid rgba(0,0,0, 0.12); // esto es tomado de los .mdl-textfield
+  @media (max-width: 839px) and (min-width: 480px) { // Tamaño tablet
+    border: none;
+  }
+}
 .totals {
   .total {
     display: flex;
