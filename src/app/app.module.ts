@@ -40,6 +40,7 @@ import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashb
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
 import { ChartCardComponent } from './ui/chart-card/chart-card.component';
+import { ToolbarComponent } from './ui/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ChartCardComponent } from './ui/chart-card/chart-card.component';
     DashboardSucursalesComponent,
     SucursalesDetailsComponent,
     SucursalesListComponent,
-    ChartCardComponent
+    ChartCardComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
