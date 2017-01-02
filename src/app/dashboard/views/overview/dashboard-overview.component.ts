@@ -12,6 +12,8 @@ import { AuthState } from '../../../models/authstate';
 
 import * as moment from 'moment';
 import { PreguntasService } from '../../../services/preguntas.service';
+
+import { merge, sum } from '../../../utilities/arrays';
 import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
 import { mdlPalette } from '../../../utilities/colors';
 
@@ -34,6 +36,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
+  public totalGeneral: number;
   public donutError: string;
   public linearError: string;
   public linearLabels: string[] = [];
@@ -83,13 +86,18 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   loadLinearChart() {
     this.linearError = '';
+    this.totalGeneral = 0;
+
     this.preguntas.getTotalPorDia(this.dateQuery)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
       data => {
-        console.log(data);
         this.linearLabels = data[0];
         this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+        this.totalGeneral = data[1]
+          .map(ob => ob.data) // We only want the data array
+          .reduce(merge, []) // ... but in a single array
+          .reduce(sum, 0) // now we sum values
       },
       error => {
         if (error.status === 401) {

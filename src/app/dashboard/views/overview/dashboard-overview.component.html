@@ -1,4 +1,9 @@
-<app-toolbar [sucursales]="userProfiles" (applyFilters)="applyFilters($event)"></app-toolbar>
+<app-toolbar
+  (applyFilters)="applyFilters($event)"
+  [sucursales]="userProfiles"
+  [totalHoy]="15"
+  [totalGeneral]="totalGeneral"
+  ></app-toolbar>
 <div class="mdl-grid">
   <app-chart-card
     class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card"
