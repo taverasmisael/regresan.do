@@ -37,6 +37,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public userProfiles: UserProfile[];
 
   public totalGeneral: number;
+  public totalHoy: number;
   public donutError: string;
   public linearError: string;
   public linearLabels: string[] = [];
@@ -94,6 +95,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       data => {
         this.linearLabels = data[0];
         this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+        this.totalHoy = 35; // Este # es feik como el que manda la API
         this.totalGeneral = data[1]
           .map(ob => ob.data) // We only want the data array
           .reduce(merge, []) // ... but in a single array
