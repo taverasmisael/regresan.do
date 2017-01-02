@@ -28,6 +28,7 @@
     "chart.js": "^2.4.0",
     "core-js": "^2.4.1",
     "material-design-lite": "^1.2.1",
+    "mdl-select-component": "0.0.6",
     "moment": "^2.17.1",
     "ng2-charts": "^1.4.4",
     "ngrx-store-localstorage": "^0.1.5",
