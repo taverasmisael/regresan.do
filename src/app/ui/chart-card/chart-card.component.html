@@ -9,10 +9,19 @@
   </div>
   <div class="mdl-card__supporting-text">
     <div *ngIf="useDataset(chartType)" class="chart-holder">
-      <canvas *ngIf="chartData.length" baseChart [chartType]="chartType" [labels]="chartLabels" [datasets]="chartData" [colors]="ChartColors"></canvas>
+      <canvas *ngIf="chartData.length" baseChart
+        [chartType]="chartType"
+        [labels]="chartLabels"
+        [datasets]="chartData"
+        [colors]="ChartColors"></canvas>
     </div>
     <div *ngIf="!useDataset(chartType)" class="chart-holder">
-      <canvas *ngIf="chartData.length" baseChart [chartType]="chartType" [labels]="chartLabels" [data]="chartData" [colors]="ChartColors"></canvas>
+      <canvas *ngIf="chartData.length"
+        baseChart
+        [chartType]="chartType"
+        [labels]="chartLabels"
+        [data]="chartData"
+        [colors]="ChartColors"></canvas>
     </div>
     <div *ngIf="!chartData.length && !errorText" class="loading-holder">
       <div class="content">
@@ -23,7 +32,7 @@
     <div *ngIf="errorText" class="loading-holder">
       <div class="content">
         <i class="material-icons error-icon">error</i>
-        <h4 class="mdl-typography--text-center">{{ erorText }}</h4>
+        <h4 class="mdl-typography--text-center">{{ errorText }}</h4>
         <button (click)="failed.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
             <i class="material-icons">refresh</i> Reintentar
         </button>
