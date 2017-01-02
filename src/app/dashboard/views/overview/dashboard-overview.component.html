@@ -1,4 +1,4 @@
-<app-toolbar></app-toolbar>
+<app-toolbar [sucursales]="userProfiles" (applyFilters)="applyFilters($event)"></app-toolbar>
 <div class="mdl-grid">
   <app-chart-card
     class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card"

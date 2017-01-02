@@ -4,19 +4,14 @@
       <h6 class="mdl-cell cell__title mdl-typography--title">Filtros</h6>
     </div>
     <div class="cell__content">
-      <form class="filter-form mdl-grid">
+      <form (ngSubmit)="sendFilters()" class="filter-form mdl-grid">
         <div class="field mdl-cell">
           <span class="field__name">Sucursales Disponibles</span>
           <div class="mdl-selectfield mdl-js-selectfield">
             <select id="sucursales" name="sucursales" class="mdl-selectfield__select">
               <option value=""></option>
-              <option value="g">Ver Todas</option>
-              <option value="1">Sucursal 1</option>
-              <option value="2">Sucursal 2</option>
-              <option value="3">Sucursal 3</option>
-              <option value="4">Sucursal 4</option>
-              <option value="5">Sucursal 5</option>
-              <option value="6">Sucursal 6</option>
+              <option value="/">Ver Todas</option>
+              <option *ngFor="let sucursal of sucursales" value="sucursal.OldProfileId">{{ sucursal.Title  }}</option>
             </select>
             <label class="mdl-selectfield__label" for="sucursales">Seleccionar Sucursal</label>
           </div>

@@ -58,6 +58,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.loadLinearChart();
   }
 
+  applyFilters(event) {
+    console.log(event);
+  }
+
   loadDonutChart() {
     this.donutError = '';
     this.preguntas.getAll(this.dateQuery)
