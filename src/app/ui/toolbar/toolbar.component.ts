@@ -27,6 +27,8 @@ import { DateValidator } from '../../utilities/validators/date.validator';
 export class ToolbarComponent implements OnInit, AfterViewInit {
 
   @Input() sucursales: UserProfile[];
+  @Input() totalGeneral: number;
+  @Input() totalHoy: number;
   @Output() applyFilters = new EventEmitter();
 
   public filterForm: FormGroup;
