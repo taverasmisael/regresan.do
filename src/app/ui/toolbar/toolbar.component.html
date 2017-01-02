@@ -4,14 +4,14 @@
       <h6 class="mdl-cell cell__title mdl-typography--title">Filtros</h6>
     </div>
     <div class="cell__content">
-      <form (ngSubmit)="sendFilters()" class="filter-form mdl-grid">
+      <form [formGroup]="filterForm" novalidate (ngSubmit)="sendFilters()" class="filter-form mdl-grid">
         <div class="field mdl-cell">
           <span class="field__name">Sucursales Disponibles</span>
           <div class="mdl-selectfield mdl-js-selectfield">
-            <select id="sucursales" name="sucursales" class="mdl-selectfield__select">
+            <select [formControl]="filterSucursal" id="sucursales" class="mdl-selectfield__select" name="sucursales">
               <option value=""></option>
               <option value="/">Ver Todas</option>
-              <option *ngFor="let sucursal of sucursales" value="sucursal.OldProfileId">{{ sucursal.Title  }}</option>
+              <option *ngFor="let sucursal of sucursales" [value]="sucursal.OldProfileId">{{ sucursal.Title  }}</option>
             </select>
             <label class="mdl-selectfield__label" for="sucursales">Seleccionar Sucursal</label>
           </div>
@@ -19,19 +19,19 @@
         <div class="field mdl-cell">
           <span class="field__name">Fecha de Inicio</span>
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" id="finicio">
+            <input [formControl]="filterFechaInicio" id="finicio" class="mdl-textfield__input" type="text">
             <label class="mdl-textfield__label" for="finicio">Fecha Inicio</label>
           </div>
         </div>
         <div class="field mdl-cell">
           <span class="field__name">Fecha de Fin</span>
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" id="ffin">
+            <input [formControl]="filterFechaFin" id="ffin" class="mdl-textfield__input" type="text">
             <label class="mdl-textfield__label" for="ffin">Fecha Fin</label>
           </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col mdl-typography--text-right">
-          <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--primary-contrast">
+          <button [disabled]="!filterForm.valid"  type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--primary-contrast">
             Aplicar Filtros <i class="material-icons">filter_list</i>
           </button>
         </div>

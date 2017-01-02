@@ -8,6 +8,13 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
 import { UserProfile } from '../../models/userprofile'
 
 @Component({
@@ -21,9 +28,23 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   @Input() sucursales: UserProfile[];
   @Output() applyFilters = new EventEmitter();
 
-  constructor() { }
+  public filterForm: FormGroup;
+  public filterSucursal: FormControl;
+  public filterFechaInicio: FormControl;
+  public filterFechaFin: FormControl;
+
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.filterSucursal = new FormControl('', [Validators.required]);
+    this.filterFechaInicio = new FormControl('', [Validators.required]);
+    this.filterFechaFin = new FormControl('', [Validators.required]);
+
+    this.filterForm = this.fb.group({
+      sucursal: this.filterSucursal,
+      fechaInicio: this.filterFechaInicio,
+      fechaFin: this.filterFechaFin
+    });
   }
 
   ngAfterViewInit() {
@@ -31,7 +52,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   }
 
   sendFilters() {
-    this.applyFilters.emit('Prueba de filtros...')
+    this.applyFilters.emit(this.filterForm.value);
   }
 
 }
