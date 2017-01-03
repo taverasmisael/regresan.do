@@ -11,9 +11,12 @@ import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { makePieChart } from '../../../../utilities/respuestas';
+import { rating } from '../../../../utilities/colors';
 
-import { StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore} from '../../../../actions/sucursal.actions';
+import {
+  StopRequest, StartRequest, SaveInfo,
+  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore
+} from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -28,13 +31,17 @@ import { Pregunta } from '../../../../models/Pregunta';
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
-  public SucursalState: SucursalState;
-  private CurrentProfile: UserProfile;
-
-  private chartColors = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
-
   private today = moment();
-  private aWeekAgo = this.today.subtract(7, 'days');
+  private aWeekAgo = moment().subtract(7, 'days');
+
+  public SucursalState: SucursalState;
+  public CurrentProfile: UserProfile;
+
+  public userProfiles: UserProfile[];
+  public answers: any[];
+
+  public COLORS = rating(true);
+
 
 
   @HostBinding('class.mdl-color--primary') true;
@@ -48,6 +55,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit() {
+    this.store.select<AppState>('MainStore')
+      .pluck('auth')
+      .pluck<UserProfile[]>('currentUser', 'Profiles')
+      .subscribe(profiles => this.userProfiles = profiles);
+
     this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal')
@@ -96,27 +108,20 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           end: this.today.unix().toString()
         }
         return [...prev, this.respuestas.getFromProfile(query)
-          .map(val => ({respuestas: val['Respuestas'], pregunta: curr.toString()}))
+          .map(val => ({ respuestas: val['Respuestas'], pregunta: curr.toString() }))
         ];
       }, []);
 
       Observable.forkJoin(answers$)
-        .subscribe(((answers: Pregunta[][]) => {
-          this.store.dispatch(new StopRequest({}));
+        .subscribe((answers: Pregunta[][]) => {
           this.store.dispatch(new SaveLoadedAnswers(answers));
-          answers.forEach((resp: Pregunta[]) => {
-            let data = resp['respuestas'].reduce(makePieChart, []);
-            let currentQ = resp['pregunta'];
-            let element = `chart-${currentQ}`;
-            Morris.Donut({
-              element,
-              data,
-              colors: this.chartColors
-            })
-          })
-        }));
-    }
+          this.answers = answers.reduce((prev, curr) => {
+            return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
+          }, []);
+          this.store.dispatch(new StopRequest({}));
+        });
 
+    }
   }
 
 

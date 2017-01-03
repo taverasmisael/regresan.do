@@ -1,22 +1,35 @@
+<app-toolbar
+  (applyFilters)="applyFilters($event)"
+  [sucursales]="userProfiles"
+  [totalHoy]="totalHoy"
+  [totalGeneral]="totalGeneral"
+  ></app-toolbar>
 <div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-shadow--3dp mdl-card">
-    <div class="mdl-card__title">
-      <h5 class="mdl-card__title-text">Otro Chart</h5>
-    </div>
-    <div class="mdl-card__supporting-text">
-        <div id="otroChart" style="height: 250px;"></div>
-    </div>
-  </div>
-  <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-shadow--3dp mdl-card">
-    <div class="mdl-card__title">
-      <h5 class="mdl-card__title-text">Encuestas por Sucursal</h5>
-    </div>
-    <div class="mdl-card__supporting-text">
-        <div id="chartSucursales" style="height: 250px;"></div>
-    </div>
-  </div>
+  <app-chart-card
+    class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card"
+    chartTitle="Historico de Encuestas"
+    chartType="bar"
+    lodingText="Cargando Historico de Encuestas"
+    (failed)="loadLinearChart()"
+    [errorText]="linearError"
+    [chartLabels]="linearLabels"
+    [chartData]="linearData"
+    [chartColors]="COLORS"
+    ></app-chart-card>
+  <app-chart-card
+    class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card"
+    chartTitle="Encuestas por Sucursal"
+    chartType="pie"
+    lodingText="Cargando Total de Sucursales"
+    (failed)="loadDonutChart()"
+    [errorText]="donutError"
+    [chartLabels]="donutLabels"
+    [chartData]="donutData"
+    [chartColors]="COLORS"
+    >
+  </app-chart-card>
 </div>
 <section class="section">
   <h2 class="section__title">Sucursales</h2>
-  <sucursales-list [sucursales]="userProfiles" [colors]="graphColors"></sucursales-list>
+  <sucursales-list [sucursales]="userProfiles" [colors]="COLORS"></sucursales-list>
 </section>

@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+.filters { // esta es la columna derecha
+  border: none;
+  border-right: 1px solid rgba(0,0,0, 0.12); // esto es tomado de los .mdl-textfield
+  @media (max-width: 839px) and (min-width: 480px) { // Tamaño tablet
+    border: none;
+  }
+}
+.totals {
+  .total {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 1em;
+    &__holder {
+      flex: 1;
+    }
+    &__total {
+      padding: 0.5em;
+      width: 5ch;
+      border-radius: 0.2em;
+      text-align: center;
+    }
+  }
+}

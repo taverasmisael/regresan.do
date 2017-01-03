@@ -1,0 +1,28 @@
+.mdl-card {
+  background: #fff;
+  width: 100%;
+}
+.mdl-card__title {
+  background: #EEEEEE;
+  color: rgb(0, 103, 102);
+  display: flex;
+  justify-content: space-between;
+}
+.mdl-card__supporting-text {
+  width: 100%;
+  position: relative;
+}
+.chart-holder {
+  min-height: 17.8572rem;
+  padding: 1.5em 0;
+}
+.loading-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.6);
+  text-align: center;
+}
