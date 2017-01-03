@@ -1,69 +1,64 @@
-<a id="btn-back" [routerLink]="['../']"
-  class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-contrast">
-  <i class="material-icons">arrow_back</i>
-</a>
-<section class="section section--info">
-  <div class="info__header mdl-shadow--16dp">
-    <div class="headline">
-      <h3 class="title">Información Detallada</h3>
-      <button id="query-filter" class="mdl-button mdl-js-button mdl-button--raised mdl-color--primary-contrast mdl-color-text--primary mdl-js-ripple-effect">
-      Aplicar Filtro
-      <i class="material-icons">filter_list</i>
-    </button>
-    </div>
+<div class="info__header mdl-shadow--16dp">
+  <div class="headline">
+    <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-contrast">
+      <i class="material-icons">arrow_back</i>
+    </a>
+    <h3 class="title">{{ SucursalState.info.Title }}</h3>
   </div>
+</div>
+<section class="section section--info">
+  <app-toolbar (applyFilters)="applyFilters($event)" [sucursales]="userProfiles" [totalHoy]="'35'" [totalGeneral]="'420'"></app-toolbar>
   <div class="mdl-grid mdl-color--primary-contrast">
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
-      <h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">Actualmente tiene 2 filtros activos.</h5>
-      <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.questions.length">
-        <div class="mdl-cell mdl-shadow--2dp chart" *ngFor="let q of SucursalState.questions">
-          <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-            {{ q.pregunta }}
-          </h5>
-          <div id="chart-{{q.idPregunta}}" class="chart-holder"></div>
-        </div>
-      </div>
-      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading">
-        <div class="content">
-          <div class="mdl-spinner mdl-js-spinner is-active"></div>
-          <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
-        </div>
-      </div>
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length">
-        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-          <i class="material-icons">mood_bad</i><br />
-          NO HAY PREGUNTAS EN ESTE PERÍODO
-        </h4>
-      </div>
-    </div>
-    <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
-      <h4 style="margin-bottom: 0;">Pregunta Abierta</h4>
-      <h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">¿Desea agregar algún Comentario?</h5>
-      <div class="mdl-grid comments-list">
-        <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-          <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-        </div>
-        <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-          <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-        </div>
-        <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-          <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-        </div>
-        <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-          <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-        </div>
-        <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-          <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-        </div>
-      </div>
-    </div>
+<h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">Actualmente tiene 2 filtros activos.</h5>
+<div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.questions.length">
+  <div class="mdl-cell mdl-shadow--2dp chart" *ngFor="let q of SucursalState.questions">
+    <h5 class="mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
+      {{ q.pregunta }}
+    </h5>
+    <div id="chart-{{q.idPregunta}}" class="chart-holder"></div>
   </div>
+</div>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading">
+  <div class="content">
+    <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
+  </div>
+</div>
+<div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length">
+  <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+    <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
+  </h4>
+</div>
+</div>
+<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
+  <h4 style="margin-bottom: 0;">Pregunta Abierta</h4>
+<h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">¿Desea agregar algún Comentario?</h5>
+<div class="mdl-grid comments-list">
+  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
+    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
+    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  </div>
+  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
+    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
+    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  </div>
+  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
+    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
+    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  </div>
+  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
+    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
+    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  </div>
+  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
+    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
+    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  </div>
+</div>
+</div>
+</div>
 </section>
 
 <!-- tooltips, menu and hidden stuffs -->

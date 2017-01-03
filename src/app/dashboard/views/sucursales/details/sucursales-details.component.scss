@@ -2,12 +2,6 @@
   display: block;
   position: relative;
 }
-.back-btn {
-  position: relative;
-  left: 1rem;
-  margin-bottom: 1rem;
-  top: 1rem;
-}
 .info__header .headline{
   display: flex;
   align-items: center;
@@ -15,6 +9,7 @@
   .title {
     flex: 1 0;
     color: white;
+    margin-left: 1rem;
   }
 }
 

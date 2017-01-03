@@ -31,6 +31,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public SucursalState: SucursalState;
   private CurrentProfile: UserProfile;
 
+  public userProfiles: UserProfile[];
+
   private chartColors = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
 
   private today = moment();
@@ -48,6 +50,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit() {
+    this.store.select<AppState>('MainStore')
+      .pluck('auth')
+      .pluck<UserProfile[]>('currentUser', 'Profiles')
+      .subscribe(profiles => this.userProfiles = profiles);
+
     this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal')
