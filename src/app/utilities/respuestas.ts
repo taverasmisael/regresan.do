@@ -4,8 +4,8 @@ export function makeDonughtChart(prev = [], curr) {
   return [...prev, Object.assign({}, prev, {value: curr.Total, label: curr.Sucursal})]
 }
 
-export function makePieChart(prev = [], curr) {
-  return [...prev, Object.assign({}, prev, {value: curr.Porcentaje, label: curr.Respuesta})]
+export function makePieChart(prev = [[], []], curr) {
+  return [[...prev[0], curr.Respuesta], [...prev[1], curr.Total]];
 }
 
 export function mapPieChart(prev = [[], []], curr) {

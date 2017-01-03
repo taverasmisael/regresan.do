@@ -11,9 +11,12 @@ import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { makePieChart } from '../../../../utilities/respuestas';
+import { rating } from '../../../../utilities/colors';
 
-import { StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore} from '../../../../actions/sucursal.actions';
+import {
+  StopRequest, StartRequest, SaveInfo,
+  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore
+} from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 
 import { UserProfile } from '../../../../models/userprofile';
@@ -32,11 +35,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private CurrentProfile: UserProfile;
 
   public userProfiles: UserProfile[];
+  public answers: any[];
 
-  private chartColors = ['#8BC34A', '#0D47A1', '#009688', '#F44336', '#FFEB3B', '#03A9F4']
+  private COLORS = rating(true);
 
   private today = moment();
-  private aWeekAgo = this.today.subtract(7, 'days');
+  private aWeekAgo = moment().subtract(7, 'days');
 
 
   @HostBinding('class.mdl-color--primary') true;
@@ -103,22 +107,21 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           end: this.today.unix().toString()
         }
         return [...prev, this.respuestas.getFromProfile(query)
-          .map(val => ({respuestas: val['Respuestas'], pregunta: curr.toString()}))
+          .map(val => ({ respuestas: val['Respuestas'], pregunta: curr.toString() }))
         ];
       }, []);
 
       Observable.forkJoin(answers$)
-        .subscribe(((answers: Pregunta[][]) => {
-          this.store.dispatch(new StopRequest({}));
+        .subscribe((answers: Pregunta[][]) => {
           this.store.dispatch(new SaveLoadedAnswers(answers));
-          answers.forEach((resp: Pregunta[]) => {
-            let data = resp['respuestas'].reduce(makePieChart, []);
-            let currentQ = resp['pregunta'];
-            let element = `chart-${currentQ}`;
-          })
-        }));
-    }
+          this.answers = answers.reduce((prev, curr) => {
+            return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
+          }, []);
+          console.log(this.answers);
+          this.store.dispatch(new StopRequest({}));
+        });
 
+    }
   }
 
 
