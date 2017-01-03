@@ -31,16 +31,17 @@ import { Pregunta } from '../../../../models/Pregunta';
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
+  private today = moment();
+  private aWeekAgo = moment().subtract(7, 'days');
+
   public SucursalState: SucursalState;
-  private CurrentProfile: UserProfile;
+  public CurrentProfile: UserProfile;
 
   public userProfiles: UserProfile[];
   public answers: any[];
 
-  private COLORS = rating(true);
+  public COLORS = rating(true);
 
-  private today = moment();
-  private aWeekAgo = moment().subtract(7, 'days');
 
 
   @HostBinding('class.mdl-color--primary') true;
@@ -117,7 +118,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.answers = answers.reduce((prev, curr) => {
             return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
           }, []);
-          console.log(this.answers);
           this.store.dispatch(new StopRequest({}));
         });
 
