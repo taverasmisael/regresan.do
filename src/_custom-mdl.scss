@@ -67,6 +67,7 @@ $color-accent: $palette-blue-A400;
 
 $color-primary-contrast: $color-dark-contrast;
 $color-accent-contrast: $color-light-contrast;
+$performance_font: 'Roboto', 'Helvetica', 'Arial', sans-serif !default;
 
 @import "~material-design-lite/src/material-design-lite";
 @import "~mdl-select-component/mdl-selectfield.min";
