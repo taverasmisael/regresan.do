@@ -29,6 +29,9 @@ import { UserService} from './services/user.service';
 import { AuthGuardService} from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service';
 
+// Thirdparty Components
+import { FlatpickrComponent } from './thirdparty/flatpickr';
+
 // Components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -54,7 +57,8 @@ import { ToolbarComponent } from './ui/toolbar/toolbar.component';
     SucursalesDetailsComponent,
     SucursalesListComponent,
     ChartCardComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    FlatpickrComponent
   ],
   imports: [
     BrowserModule,
