@@ -71,3 +71,22 @@ $performance_font: 'Roboto', 'Helvetica', 'Arial', sans-serif !default;
 
 @import "~material-design-lite/src/material-design-lite";
 @import "~mdl-select-component/mdl-selectfield.min";
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #6f6f6f;
+    color:rgba(0, 0, 0, 0.26);
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:#6f6f6f;
+   color:rgba(0, 0, 0, 0.26);
+   opacity: 1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:#6f6f6f;
+   color:rgba(0, 0, 0, 0.26);
+   opacity: 1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:#6f6f6f;
+   color:rgba(0, 0, 0, 0.26);
+}
