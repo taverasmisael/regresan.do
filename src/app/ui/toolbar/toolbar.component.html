@@ -19,14 +19,14 @@
         <div class="field mdl-cell">
           <span class="field__name">Fecha de Inicio</span>
           <div class="mdl-textfield mdl-js-textfield">
-            <flatpickr id="finicio" [control]="filterFechaInicio" [options]="{dateFormat: 'd/m/Y'}"></flatpickr>
+            <flatpickr id="finicio" [control]="filterFechaInicio" placeholder="Fecha de Inicio" [options]="flatpickrOptions"></flatpickr>
             <label class="mdl-textfield__label" for="finicio">Fecha Inicio</label>
           </div>
         </div>
         <div class="field mdl-cell">
           <span class="field__name">Fecha de Fin</span>
           <div class="mdl-textfield mdl-js-textfield">
-            <flatpickr id="ffin" [control]="filterFechaFin" [options]="{dateFormat: 'd/m/Y'}"></flatpickr>
+            <flatpickr id="ffin" [control]="filterFechaFin" placeholder="Fecha de Fin" [options]="flatpickrOptions"></flatpickr>
             <label class="mdl-textfield__label" for="ffin">Fecha Fin</label>
           </div>
         </div>

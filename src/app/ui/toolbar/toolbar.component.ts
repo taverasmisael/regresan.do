@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 
 import { UserProfile } from '../../models/userprofile';
+import { FlatpickrOptions } from '../../thirdparty/flatpickr/models';
 import { DateValidator } from '../../utilities/validators/date.validator';
 
 @Component({
@@ -35,6 +36,7 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   public filterSucursal: FormControl;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
+  public flatpickrOptions: FlatpickrOptions = { dateFormat: 'd/m/Y' };
 
   constructor(private fb: FormBuilder) { }
 
