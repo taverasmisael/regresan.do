@@ -9,6 +9,7 @@ import { ActionTypes } from '../../../actions/auth.actions';
 import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
+import { APIRequestParams } from '../../../models/apiparams';
 
 import * as moment from 'moment';
 import { PreguntasService } from '../../../services/preguntas.service';
@@ -29,10 +30,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   private today = moment();
   private testChart: Subscription;
   private aWeekAgo = moment().subtract(7, 'days');
-  private dateQuery = {
-    start: this.aWeekAgo.unix().toString(),
-    end: this.today.unix().toString(),
-  };
 
   public userProfiles: UserProfile[];
 
@@ -58,17 +55,21 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    this.loadEncuestasSucursales();
-    this.loadHistoricoEncuestas();
+    let dateQuery = {
+      start: this.aWeekAgo.unix().toString(),
+      end: moment().unix().toString(),
+    };
+    this.loadEncuestasSucursales(dateQuery);
+    this.loadHistoricoEncuestas(dateQuery);
   }
 
   applyFilters(event) {
     console.log(event);
   }
 
-  loadEncuestasSucursales() {
+  loadEncuestasSucursales(query: APIRequestParams) {
     this.encuestasSucursalesError = '';
-    this.preguntas.getAll(this.dateQuery)
+    this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
@@ -85,11 +86,11 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       );
   }
 
-  loadHistoricoEncuestas() {
+  loadHistoricoEncuestas(query: APIRequestParams) {
     this.historicoEncuestasError = '';
     this.totalGeneral = 0;
 
-    this.preguntas.getTotalPorDia(this.dateQuery)
+    this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
       data => {
