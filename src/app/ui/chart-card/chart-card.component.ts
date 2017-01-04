@@ -24,6 +24,7 @@ export class ChartCardComponent implements OnInit {
   @Input() chartLabels: string[];
   @Input() chartData: any[];
   @Input() chartColors: string[];
+  @Input() loading: Boolean;
 
   @Output() failed = new EventEmitter();
 

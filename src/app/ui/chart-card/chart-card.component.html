@@ -23,7 +23,7 @@
         [data]="chartData"
         [colors]="ChartColors"></canvas>
     </div>
-    <div *ngIf="!chartData.length && !errorText" class="loading-holder">
+    <div *ngIf="(!chartData.length && !errorText) || loading" class="loading-holder">
       <div class="content">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
         <h4 class="mdl-typography--text-center">{{ lodingText }}</h4>
