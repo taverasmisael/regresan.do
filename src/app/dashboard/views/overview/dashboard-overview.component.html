@@ -10,10 +10,10 @@
     chartTitle="Historico de Encuestas"
     chartType="bar"
     lodingText="Cargando Historico de Encuestas"
-    (failed)="loadLinearChart()"
-    [errorText]="linearError"
-    [chartLabels]="linearLabels"
-    [chartData]="linearData"
+    (failed)="loadHistoricoEncuestas()"
+    [errorText]="historicoEncuestasError"
+    [chartLabels]="historicoEncuestasLabels"
+    [chartData]="historicoEncuestasData"
     [chartColors]="COLORS"
     ></app-chart-card>
   <app-chart-card
@@ -21,10 +21,10 @@
     chartTitle="Encuestas por Sucursal"
     chartType="pie"
     lodingText="Cargando Total de Sucursales"
-    (failed)="loadDonutChart()"
-    [errorText]="donutError"
-    [chartLabels]="donutLabels"
-    [chartData]="donutData"
+    (failed)="loadEncuestasSucursales()"
+    [errorText]="encuestasSucursalesError"
+    [chartLabels]="encuestasSucursalesLabels"
+    [chartData]="encuestasSucursalesData"
     [chartColors]="COLORS"
     >
   </app-chart-card>

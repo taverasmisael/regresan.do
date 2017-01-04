@@ -38,12 +38,12 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public totalGeneral: number;
   public totalHoy: number;
-  public donutError: string;
-  public linearError: string;
-  public linearLabels: string[] = [];
-  public linearData: any[] = [];
-  public donutData: number[] = [];
-  public donutLabels: string[] = [];
+  public encuestasSucursalesError: string;
+  public historicoEncuestasError: string;
+  public historicoEncuestasLabels: string[] = [];
+  public historicoEncuestasData: any[] = [];
+  public encuestasSucursalesData: number[] = [];
+  public encuestasSucursalesLabels: string[] = [];
   public COLORS = mdlPalette('A700', true).sort(() => 0.5 - Math.random());
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
@@ -58,43 +58,43 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    this.loadDonutChart();
-    this.loadLinearChart();
+    this.loadEncuestasSucursales();
+    this.loadHistoricoEncuestas();
   }
 
   applyFilters(event) {
     console.log(event);
   }
 
-  loadDonutChart() {
-    this.donutError = '';
+  loadEncuestasSucursales() {
+    this.encuestasSucursalesError = '';
     this.preguntas.getAll(this.dateQuery)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
-        this.donutLabels = data[0];
-        this.donutData = data[1];
+        this.encuestasSucursalesLabels = data[0];
+        this.encuestasSucursalesData = data[1];
       },
       error => {
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.donutError = 'Error Cargando Total de Sucursales';
+          this.encuestasSucursalesError = 'Error Cargando Total de Sucursales';
         }
       }
       );
   }
 
-  loadLinearChart() {
-    this.linearError = '';
+  loadHistoricoEncuestas() {
+    this.historicoEncuestasError = '';
     this.totalGeneral = 0;
 
     this.preguntas.getTotalPorDia(this.dateQuery)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
       .subscribe(
       data => {
-        this.linearLabels = data[0];
-        this.linearData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+        this.historicoEncuestasLabels = data[0];
+        this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
         this.totalHoy = 35; // Este # es feik como el que manda la API
         this.totalGeneral = data[1]
           .map(ob => ob.data) // We only want the data array
@@ -105,7 +105,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.linearError = 'Error Cargando Historico de Encuestas';
+          this.historicoEncuestasError = 'Error Cargando Historico de Encuestas';
         }
       }
       );
