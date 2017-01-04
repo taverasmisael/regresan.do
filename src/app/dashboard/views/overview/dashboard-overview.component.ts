@@ -10,6 +10,7 @@ import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 import { APIRequestParams } from '../../../models/apiparams';
+import { Filter } from '../../../models/toolbar-flters';
 
 import * as moment from 'moment';
 import { PreguntasService } from '../../../services/preguntas.service';
@@ -36,11 +37,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public totalGeneral: number;
   public totalHoy: number;
   public encuestasSucursalesError: string;
+  public encuestasSucursalesData: number[] = [];
+  public encuestasSucursalesLabels: string[] = [];
+  public encuestasSucursalesLoading: Boolean;
+  public historicoEncuestasLoading: Boolean;
   public historicoEncuestasError: string;
   public historicoEncuestasLabels: string[] = [];
   public historicoEncuestasData: any[] = [];
-  public encuestasSucursalesData: number[] = [];
-  public encuestasSucursalesLabels: string[] = [];
   public COLORS = mdlPalette('A700', true).sort(() => 0.5 - Math.random());
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
@@ -55,28 +58,36 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    let dateQuery = {
+    let query = {
       start: this.aWeekAgo.unix().toString(),
       end: moment().unix().toString(),
     };
-    this.loadEncuestasSucursales(dateQuery);
-    this.loadHistoricoEncuestas(dateQuery);
+    this.loadEncuestasSucursales(query);
+    this.loadHistoricoEncuestas(query);
   }
 
-  applyFilters(event) {
-    console.log(event);
+  applyFilters(filter: Filter) {
+    let query: APIRequestParams = {
+      start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
+      end: moment(filter.fechaFin, 'DD/MM/YYYY').unix().toString()
+    }
+
+    this.loadEncuestasSucursales(query);
+    this.loadHistoricoEncuestas(query);
   }
 
   loadEncuestasSucursales(query: APIRequestParams) {
-    this.encuestasSucursalesError = '';
+    this.encuestasSucursalesLoading = true;
     this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
         this.encuestasSucursalesLabels = data[0];
         this.encuestasSucursalesData = data[1];
+        this.encuestasSucursalesLoading = false;
       },
       error => {
+        this.encuestasSucursalesLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
@@ -87,8 +98,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   }
 
   loadHistoricoEncuestas(query: APIRequestParams) {
-    this.historicoEncuestasError = '';
-    this.totalGeneral = 0;
+    this.historicoEncuestasLoading = true;
 
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
@@ -101,8 +111,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
           .map(ob => ob.data) // We only want the data array
           .reduce(merge, []) // ... but in a single array
           .reduce(sum, 0) // now we sum values
+        this.historicoEncuestasLoading = false;
       },
       error => {
+        this.historicoEncuestasLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
@@ -111,5 +123,4 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       }
       );
   }
-
 }
