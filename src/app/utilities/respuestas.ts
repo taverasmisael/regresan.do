@@ -25,12 +25,12 @@ export function TotalPorDiaLineal(entries: any[]) {
     return {
       total: data['TOTAL_ENCUESTAS'],
       serie: data['Sucursal'],
-      row: data['Fecha']
+      row: moment(data['Fecha']).format('DD/MM/YYYY')
     };
   }
   function reduceDataToArray(prev, curr) {
     const key = curr.row;
-    labels = labels.find(el => el === moment(curr.row).format('D/M/YY')) ? labels : [...labels, moment(curr.row).format('D/M/YY')];
+    labels = labels.find(el => el === curr.row) ? labels : [...labels, curr.row];
     prev[key] = prev[key] || [];
     const prevData = prev[key].data || [];
     return [...prev, {
