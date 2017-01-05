@@ -1,4 +1,5 @@
 .card-sucursales {
+    min-height: auto;
    .mdl-card__title {
      align-items: flex-start;
      h4 {
@@ -13,6 +14,10 @@
   align-items: center;
   .material-icons {
     padding-right: 10px;
+    color: white;
+  }
+  .mdl-button {
+    color: white;
   }
  }
 }
