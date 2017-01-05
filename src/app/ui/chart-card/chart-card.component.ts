@@ -33,9 +33,9 @@ export class ChartCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.ChartColors = createPalette(this.chartColors)
+    this.ChartColors = createPalette(this.chartColors, 0.4)
     if (!this.useDataset(this.chartType)) {
-      this.ChartColors = createCirularPalette(this.ChartColors);
+      this.ChartColors = createCirularPalette(createPalette(this.chartColors));
     }
   }
 

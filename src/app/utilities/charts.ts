@@ -1,6 +1,6 @@
 import * as tinycolor from 'tinycolor2';
 
-export const createPalette = (colors: string[]): ChartJsColor[] => {
+export const createPalette = (colors: string[], alpha = 1): ChartJsColor[] => {
   const white = tinycolor('white');
 
   return colors.reduce((prev, curr) => {
@@ -8,7 +8,7 @@ export const createPalette = (colors: string[]): ChartJsColor[] => {
     const currentHover = currentColor.lighten();
 
     const newColor: ChartJsColor = {
-      backgroundColor: tinycolor(curr).setAlpha(0.4).toString(),
+      backgroundColor: tinycolor(curr).setAlpha(alpha).toString(),
       borderColor: currentColor.toString(),
       pointBorderColor: white.toString(),
       pointBackgroundColor: currentColor.toString(),
