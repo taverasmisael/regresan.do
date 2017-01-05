@@ -49,6 +49,20 @@ export const mdlPalette = (tone = '500', onlyValues = false) => {
   }
 }
 
+export const gamaRegresando = () => {
+  return [
+    '#67CDDC',
+    '#F18D05',
+    '#61AE24',
+    '#E54028',
+    '#D0D102',
+    '#D70060',
+    '#00A1CB',
+    '#113F8C',
+    '#32742C',
+    '#582788'
+  ]
+}
 
 export const rating = (name) => {
   const palette =  {

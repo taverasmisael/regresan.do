@@ -17,7 +17,7 @@ import { PreguntasService } from '../../../services/preguntas.service';
 
 import { merge, sum } from '../../../utilities/arrays';
 import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
-import { mdlPalette } from '../../../utilities/colors';
+import { gamaRegresando } from '../../../utilities/colors';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public historicoEncuestasError: string;
   public historicoEncuestasLabels: string[] = [];
   public historicoEncuestasData: any[] = [];
-  public COLORS = mdlPalette('A700', true).sort(() => 0.5 - Math.random());
+  public COLORS = gamaRegresando();
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
@@ -69,7 +69,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   applyFilters(filter: Filter) {
     let query: APIRequestParams = {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
-      end: moment(filter.fechaFin, 'DD/MM/YYYY').unix().toString()
+      end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     }
 
     this.loadEncuestasSucursales(query);
@@ -101,7 +101,11 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.historicoEncuestasLoading = true;
 
     this.preguntas.getTotalPorDia(query)
-      .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia']))
+      .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia'].sort((prev, curr) => {
+        let mp = moment(prev.Fecha);
+        let mc = moment(curr.Fecha);
+        return mp.isSameOrAfter(mc) ? 1 : -1;
+      })))
       .subscribe(
       data => {
         this.historicoEncuestasLabels = data[0];
