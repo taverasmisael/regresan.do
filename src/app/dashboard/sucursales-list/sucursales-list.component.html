@@ -3,12 +3,6 @@
     <div class="mdl-card__title mdl-card--expand">
       <h4>{{ sucursal.Title }}</h4>
     </div>
-    <div class="mdl-card__actions mdl-card--border">
-      <i class="material-icons">store</i>
-      <div class="mdl-layout-spacer"></div>
-      <a [routerLink]="['/dashboard/sucursales', sucursal.OldProfileId]" class="mdl-button mdl-js-button mdl-js-ripple-effect">
-        Ver Detalles
-      </a>
-  </div>
+    <a [routerLink]="['/dashboard/sucursales', sucursal.OldProfileId]" class="cover-link"></a>
   </div>
 </div>
