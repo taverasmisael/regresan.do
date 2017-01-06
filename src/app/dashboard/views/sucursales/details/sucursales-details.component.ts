@@ -45,6 +45,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public answers: any[];
 
   public COLORS = rating(true);
+  public chartError: string;
 
 
 
@@ -81,7 +82,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     }
     this.loadAllCharts(this.QuestionsQuery);
   }
-  private applyFilters(filter: Filter) {
+
+  public applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
@@ -140,7 +142,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
 
   private handleErrors(err) {
-    return err.status === 401 && this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+    if (err.status === 401) {
+      this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+    } else {
+      this.store.dispatch(new StopRequest({}));
+      this.chartError = 'Error obteniendo la informaacion del Servidor';
+    }
   }
 
   private SaveCurrentSucursal() {
