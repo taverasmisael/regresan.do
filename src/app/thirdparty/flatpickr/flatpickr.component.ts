@@ -52,7 +52,8 @@ export class FlatpickrComponent implements AfterViewInit, OnDestroy {
         onOpen: () => this.opened.emit(),
         onClose: () => this.closed.emit(),
         onChange: (selectedDates: Date[]) => this.onChange(selectedDates),
-        locale: spanish.es
+        locale: spanish.es,
+        maxDate: new Date()
     };
 
     private selectedDates;

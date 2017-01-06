@@ -33,7 +33,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   @Output() applyFilters = new EventEmitter();
 
   public filterForm: FormGroup;
-  public filterSucursal: FormControl;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
   public flatpickrOptions: FlatpickrOptions = { dateFormat: 'd/m/Y' };
@@ -41,12 +40,10 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.filterSucursal = new FormControl('', [Validators.required]);
     this.filterFechaInicio = new FormControl('', [Validators.required, DateValidator.spanishDate]);
     this.filterFechaFin = new FormControl('', [Validators.required, DateValidator.spanishDate]);
 
     this.filterForm = this.fb.group({
-      sucursal: this.filterSucursal,
       fechaInicio: this.filterFechaInicio,
       fechaFin: this.filterFechaFin
     });

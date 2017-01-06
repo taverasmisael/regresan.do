@@ -6,30 +6,31 @@
   ></app-toolbar>
 <div class="mdl-grid">
   <app-chart-card
-    class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card"
+    class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card mdl-shadow--2dp"
     chartTitle="Historico de Encuestas"
     chartType="bar"
     lodingText="Cargando Historico de Encuestas"
-    (failed)="loadLinearChart()"
-    [errorText]="linearError"
-    [chartLabels]="linearLabels"
-    [chartData]="linearData"
+    (failed)="loadHistoricoEncuestas(query)"
+    [loading]="historicoEncuestasLoading"
+    [errorText]="historicoEncuestasError"
+    [chartLabels]="historicoEncuestasLabels"
+    [chartData]="historicoEncuestasData"
     [chartColors]="COLORS"
     ></app-chart-card>
   <app-chart-card
-    class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card"
+    class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card mdl-shadow--4dp"
     chartTitle="Encuestas por Sucursal"
-    chartType="pie"
+    chartType="doughnut"
     lodingText="Cargando Total de Sucursales"
-    (failed)="loadDonutChart()"
-    [errorText]="donutError"
-    [chartLabels]="donutLabels"
-    [chartData]="donutData"
+    (failed)="loadEncuestasSucursales(query)"
+    [loading]="encuestasSucursalesLoading"
+    [errorText]="encuestasSucursalesError"
+    [chartLabels]="encuestasSucursalesLabels"
+    [chartData]="encuestasSucursalesData"
     [chartColors]="COLORS"
     >
   </app-chart-card>
 </div>
 <section class="section">
-  <h2 class="section__title">Sucursales</h2>
   <sucursales-list [sucursales]="userProfiles" [colors]="COLORS"></sucursales-list>
 </section>
