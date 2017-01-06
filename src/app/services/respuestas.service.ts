@@ -46,7 +46,7 @@ export class RespuestasService {
   }
 
 getFromProfile(query: APIRequestRespuesta) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfiles`;
+    const url = `${this.BASE_URL}/GetRespuestasByProfiles2`;
     const params = new URLSearchParams();
 
     params.append('_startDate', query.start);
