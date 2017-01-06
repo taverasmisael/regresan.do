@@ -15,9 +15,9 @@ const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
 
 export const INITIAL_STATE = {
   info: {},
-  questions: {},
-  openQuestions: {},
-  answers: {},
+  questions: [],
+  openQuestions: [],
+  answers: [],
   filters: {},
   dates: {},
   lastQuery: {},

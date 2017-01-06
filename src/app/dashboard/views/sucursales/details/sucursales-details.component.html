@@ -15,10 +15,10 @@
   <app-chart-card
     class="mdl-cell mdl-card"
     *ngFor="let q of SucursalState.questions; let i = index;"
-    [chartTitle]="q.pregunta"
     chartType="pie"
     lodingText="Cargando Pregunta: {{ q.pregunta }}"
-    [errorText]="chartsError"
+    [errorText]="chartError"
+    [chartTitle]="q.pregunta"
     [chartLabels]="answers[i][0]"
     [chartData]="answers[i][1]"
     [chartColors]="COLORS"
@@ -34,6 +34,11 @@
 <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length">
   <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
     <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
+  </h4>
+</div>
+<div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.questions.length && chartError">
+  <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+    <i class="material-icons">error</i><br /> {{ chartError }}
   </h4>
 </div>
 </div>

@@ -1,4 +1,4 @@
-export const updateObject = <T> (oldObject: T, newValues: any): T => Object.assign({}, oldObject, newValues);
+export const updateObject = <T, U> (oldObject: T, newValues: U): T & U => Object.assign({}, oldObject, newValues);
 
 export const updateItemInArray = <T> (array: T[], itemId: number, updateItemCallback: Function): Array<T> => {
   return array.map(item => (item['id'] !== itemId) ? item : updateItemCallback(item));
