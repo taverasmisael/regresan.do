@@ -34,6 +34,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
+  public query: APIRequestParams;
   public totalGeneral: number;
   public totalHoy: number;
   public encuestasSucursalesError: string;
@@ -58,26 +59,27 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(profiles => this.userProfiles = profiles);
   }
   ngAfterViewInit() {
-    let query = {
+    this.query = {
       start: this.aWeekAgo.unix().toString(),
       end: moment().unix().toString(),
     };
-    this.loadEncuestasSucursales(query);
-    this.loadHistoricoEncuestas(query);
+    this.loadEncuestasSucursales(this.query);
+    this.loadHistoricoEncuestas(this.query);
   }
 
   applyFilters(filter: Filter) {
-    let query: APIRequestParams = {
+    this.query = {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     }
 
-    this.loadEncuestasSucursales(query);
-    this.loadHistoricoEncuestas(query);
+    this.loadEncuestasSucursales(this.query);
+    this.loadHistoricoEncuestas(this.query);
   }
 
   loadEncuestasSucursales(query: APIRequestParams) {
     this.encuestasSucursalesLoading = true;
+    this.encuestasSucursalesError = '';
     this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
@@ -103,6 +105,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   loadHistoricoEncuestas(query: APIRequestParams) {
     this.historicoEncuestasLoading = true;
+    this.historicoEncuestasError  = '';
 
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia'].sort((prev, curr) => {
