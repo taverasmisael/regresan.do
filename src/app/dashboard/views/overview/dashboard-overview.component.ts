@@ -89,6 +89,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
           this.encuestasSucursalesData = data[1];
           this.encuestasSucursalesLoading = false;
         } else {
+          this.encuestasSucursalesLoading = false;
           this.encuestasSucursalesError = 'No se hay información en esa fecha';
         }
       },
@@ -125,6 +126,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
             .reduce(sum, 0) // now we sum values
           this.historicoEncuestasLoading = false;
         } else {
+          this.historicoEncuestasLoading = false;
           this.historicoEncuestasError = 'No se hay información en esa fecha';
         }
       },
