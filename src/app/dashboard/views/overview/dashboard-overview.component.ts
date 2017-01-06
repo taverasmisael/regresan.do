@@ -82,9 +82,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
-        this.encuestasSucursalesLabels = data[0];
-        this.encuestasSucursalesData = data[1];
-        this.encuestasSucursalesLoading = false;
+        if (data.length) {
+          this.encuestasSucursalesLabels = data[0];
+          this.encuestasSucursalesData = data[1];
+          this.encuestasSucursalesLoading = false;
+        } else {
+          this.encuestasSucursalesError = 'No se hay información en esa fecha';
+        }
       },
       error => {
         this.encuestasSucursalesLoading = false;
@@ -108,14 +112,18 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       })))
       .subscribe(
       data => {
-        this.historicoEncuestasLabels = data[0];
-        this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-        this.totalHoy = 35; // Este # es feik como el que manda la API
-        this.totalGeneral = data[1]
-          .map(ob => ob.data) // We only want the data array
-          .reduce(merge, []) // ... but in a single array
-          .reduce(sum, 0) // now we sum values
-        this.historicoEncuestasLoading = false;
+        if (data[0].length) {
+          this.historicoEncuestasLabels = data[0];
+          this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+          this.totalHoy = 35; // Este # es feik como el que manda la API
+          this.totalGeneral = data[1]
+            .map(ob => ob.data) // We only want the data array
+            .reduce(merge, []) // ... but in a single array
+            .reduce(sum, 0) // now we sum values
+          this.historicoEncuestasLoading = false;
+        } else {
+          this.historicoEncuestasError = 'No se hay información en esa fecha';
+        }
       },
       error => {
         this.historicoEncuestasLoading = false;
