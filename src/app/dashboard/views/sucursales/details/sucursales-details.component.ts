@@ -19,6 +19,7 @@ import {
   SaveLoadedQuestions, SaveLoadedAnswers, ResetStore
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
+import { Filter } from '../../../../models/toolbar-flters';
 
 import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/appstate';
@@ -78,15 +79,26 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       start: this.aWeekAgo.unix().toString(),
       end: this.today.unix().toString()
     }
-    this.LoadQuestions(this.QuestionsQuery)
-      .subscribe(
-        this.loadAnswers.bind(this),
-        this.handleErrors.bind(this)
-      );
+    this.loadAllCharts(this.QuestionsQuery);
+  }
+  private applyFilters(filter: Filter) {
+    this.QuestionsQuery = updateObject(this.QuestionsQuery, {
+      start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
+      end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
+    });
+    this.loadAllCharts(this.QuestionsQuery);
   }
 
   ngOnDestroy() {
     this.store.dispatch(new ResetStore());
+  }
+
+  private loadAllCharts(query: APIRequestUser) {
+    this.LoadQuestions(query)
+      .subscribe(
+        this.loadAnswers.bind(this),
+        this.handleErrors.bind(this)
+      );
   }
 
   private LoadQuestions(query: APIRequestUser) {
