@@ -105,7 +105,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private LoadQuestions(query: APIRequestUser) {
-    console.log('query', query);
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     return this.preguntas
       .getAllByProfile(query)
