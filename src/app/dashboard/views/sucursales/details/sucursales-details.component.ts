@@ -137,6 +137,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.store.dispatch(new StopRequest({}));
         });
 
+    } else {
+      this.store.dispatch(new StopRequest({}));
     }
   }
 
