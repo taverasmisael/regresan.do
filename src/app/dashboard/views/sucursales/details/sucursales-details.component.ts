@@ -11,6 +11,7 @@ import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { makePieChart } from '../../../../utilities/respuestas';
+import { updateObject } from '../../../../utilities/objects';
 import { rating } from '../../../../utilities/colors';
 
 import {
@@ -23,6 +24,7 @@ import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/appstate';
 import { SucursalState } from '../../../../models/sucursalstate';
 import { Pregunta } from '../../../../models/Pregunta';
+import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
 
 @Component({
   selector: 'sucursales-details',
@@ -33,6 +35,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private id$: Observable<number>;
   private today = moment();
   private aWeekAgo = moment().subtract(7, 'days');
+  private QuestionsQuery: APIRequestUser;
 
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
@@ -70,27 +73,31 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<number>('id');
 
     this.SaveCurrentSucursal();
-    this.LoadQuestions().subscribe(this.loadAnswers.bind(this), this.handleErrors.bind(this));
+    this.QuestionsQuery = {
+      profile: this.CurrentProfile.OldProfileId.toString(),
+      start: this.aWeekAgo.unix().toString(),
+      end: this.today.unix().toString()
+    }
+    this.LoadQuestions(this.QuestionsQuery)
+      .subscribe(
+        this.loadAnswers.bind(this),
+        this.handleErrors.bind(this)
+      );
   }
 
   ngOnDestroy() {
     this.store.dispatch(new ResetStore());
   }
 
-  private LoadQuestions() {
+  private LoadQuestions(query: APIRequestUser) {
+    console.log('query', query);
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
-    let profileId = this.CurrentProfile.OldProfileId;
-    let query = {
-      profile: profileId.toString(),
-      start: this.aWeekAgo.unix().toString(),
-      end: this.today.unix().toString()
-    };
     return this.preguntas
       .getAllByProfile(query)
-      .map<Pregunta[]>(res => res['Respuestas'])
+      .map<LoadAnswerParams>(res => ({preguntas: res['Respuestas'], query}))
   }
 
-  private loadAnswers(qs: Pregunta[]) {
+  private loadAnswers({preguntas: qs, query}: LoadAnswerParams) {
     if (qs && qs.length) {
       const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta')
       const qsIds = closedQs // Queremos las preguntas que NO son abiertas
@@ -101,14 +108,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.store.dispatch(new StartRequest('Cargando Respuestas...'));
 
       const answers$ = qsIds.reduce((prev, curr) => {
-        let query = {
-          pregunta: curr.toString(),
-          profile: this.CurrentProfile.OldProfileId.toString(),
-          start: this.aWeekAgo.unix().toString(),
-          end: this.today.unix().toString()
-        }
-        return [...prev, this.respuestas.getFromProfile(query)
-          .map(val => ({ respuestas: val['Respuestas'], pregunta: curr.toString() }))
+        let currentQuery = updateObject(query, { pregunta: curr.toString() });
+        return [...prev, this.respuestas.getFromProfile(currentQuery)
+          .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
         ];
       }, []);
 
@@ -144,3 +146,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       });
   }
 }
+
+
+interface LoadAnswerParams {
+  preguntas: Pregunta[], query: APIRequestUser
+};
