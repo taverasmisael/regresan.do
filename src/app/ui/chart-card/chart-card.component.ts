@@ -4,7 +4,9 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 
 import { createPalette, ChartJsColor, createCirularPalette } from '../../utilities/charts';
@@ -15,7 +17,7 @@ import { createPalette, ChartJsColor, createCirularPalette } from '../../utiliti
   styleUrls: ['./chart-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChartCardComponent implements OnInit {
+export class ChartCardComponent implements OnInit, OnChanges {
 
   @Input() chartTitle: string;
   @Input() chartType: string;
@@ -36,6 +38,16 @@ export class ChartCardComponent implements OnInit {
     this.ChartColors = createPalette(this.chartColors, 0.4)
     if (!this.useDataset(this.chartType)) {
       this.ChartColors = createCirularPalette(createPalette(this.chartColors));
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['loading'] && changes['loading'].currentValue === true) {
+      setTimeout(() => {
+        console.log('Llamando...')
+        componentHandler.upgradeDom();
+        componentHandler.upgradeAllRegistered();
+      }, 200)
     }
   }
 
