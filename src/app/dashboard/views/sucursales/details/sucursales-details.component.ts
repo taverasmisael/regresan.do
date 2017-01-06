@@ -96,6 +96,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private loadAllCharts(query: APIRequestUser) {
+    this.store.dispatch(new ResetStore());
     this.LoadQuestions(query)
       .subscribe(
         this.loadAnswers.bind(this),
