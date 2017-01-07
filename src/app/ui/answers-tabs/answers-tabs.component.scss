@@ -1,7 +1,9 @@
 
 .question__answers {
   max-height: 500px;
+  min-height: 500px;
   overflow-y: auto;
+  position: relative;
 }
 .answer {
   display: flex;
@@ -17,4 +19,14 @@
 .answer__sesion {
     flex: 1;
     font-weight: 700;
+}
+
+.loading-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.6);
 }

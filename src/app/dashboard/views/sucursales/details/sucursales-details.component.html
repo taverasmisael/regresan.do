@@ -45,6 +45,7 @@
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
       <app-answers-tabs
         title="Pregunta Abierta"
+        [loading]="SucursalState.loading"
         [questions]="SucursalState.openQuestions"
         [answers]="SucursalState.openAnswers"
       ></app-answers-tabs>
