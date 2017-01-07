@@ -31,7 +31,7 @@
           <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
         </div>
       </div> <!-- Questions Loading Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length">
+      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && !chartError">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
         </h4>
