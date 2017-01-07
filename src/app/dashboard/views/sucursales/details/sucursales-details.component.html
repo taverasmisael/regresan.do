@@ -19,8 +19,8 @@
     lodingText="Cargando Respuesta {{ i }}"
     [errorText]="chartError"
     [chartTitle]="q.pregunta"
-    [chartLabels]="answers ? answers[i][0] : []"
-    [chartData]="answers ? answers[i][1] : []"
+    [chartLabels]="closeAnswers ? closeAnswers[i][0] : []"
+    [chartData]="closeAnswers ? closeAnswers[i][1] : []"
     [chartColors]="COLORS"
     >
   </app-chart-card>
@@ -44,27 +44,16 @@
 </div>
 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
   <h4 style="margin-bottom: 0;">Pregunta Abierta</h4>
-<h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">¿Desea agregar algún Comentario?</h5>
+<h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">¿Algún comentario que desee agregar?</h5>
 <div class="mdl-grid comments-list">
-  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-  </div>
-  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-  </div>
-  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-  </div>
-  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
-  </div>
-  <div class="comment mdl-cell mdl-cell--12-col mdl-shadow--2dp mdl-typography--text-right">
-    <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, voluptas.</p>
-    <time class="mdl-typography--caption-color-contrast">20/12/2016</time>
+  <div class="comment mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-typography--text-right"
+  *ngFor="let a of openAnswers">
+    <p class="text">{{ a.respuesta }}</p>
+    <div class="meta">
+      <span class="author"><i class="material-icons">account_circle</i>{{ a.sesion || 'Anonimo' }}</span>
+      <span style="flex: 1;"></span>
+      <time class="mdl-typography--caption-color-contrast">{{ a.fecha }}</time>
+    </div>
   </div>
 </div>
 </div>
