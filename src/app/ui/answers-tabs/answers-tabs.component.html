@@ -1,12 +1,14 @@
-<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-  <div class="question" *ngFor="let q of questions;">
+<h4>{{ title }}</h4>
+<div class="question" *ngFor="let q of questions;">
+  <div class="question__headlin">
     <p class="question__name">{{ q.pregunta }}</p>
-    <div class="question__answers mdl-typography--text-left">
+  </div>
+  <div class="question__answers mdl-typography--text-left">
     <ul class="answer-list">
       <li class="answer" *ngFor="let a of getMyAnswers(q.idPregunta)">
         <span class="answer__meta">
           <span class="answer__sesion">{{ a.sesion || 'Anonimo'}}</span>
-          <time class="answer__date">{{ a.fecha }}</time>
+        <time class="answer__date">{{ a.fecha }}</time>
         </span>
         <span class="answer__content">
           {{ a.respuesta }}
@@ -14,7 +16,4 @@
       </li>
     </ul>
   </div>
-  </div>
-
-
 </div>

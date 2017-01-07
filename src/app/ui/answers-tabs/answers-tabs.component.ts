@@ -6,8 +6,10 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./answers-tabs.component.scss']
 })
 export class AnswersTabsComponent implements OnInit {
+  @Input() title: string;
   @Input() questions: any[];
   @Input() answers: any[];
+
   constructor() { }
 
   ngOnInit() {
