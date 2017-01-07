@@ -1,0 +1,31 @@
+<h4>{{ title }}</h4>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !questions.length">
+  <div class="content">
+    <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    <h4 class="mdl-typography--text-center">Cargando Preguntas Abiertas...</h4>
+  </div>
+</div>
+<div class="question" *ngFor="let q of questions;">
+  <div class="question__headlin">
+    <p class="question__name">{{ q.pregunta }}</p>
+  </div>
+  <div class="question__answers mdl-typography--text-left">
+    <ul class="answer-list">
+      <li class="answer" *ngFor="let a of getMyAnswers(q.idPregunta)">
+        <span class="answer__meta">
+          <span class="answer__sesion">{{ a.sesion || 'Anonimo'}}</span>
+        <time class="answer__date">{{ a.fecha }}</time>
+        </span>
+        <span class="answer__content">
+          {{ a.respuesta }}
+        </span>
+      </li>
+    </ul>
+    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading">
+      <div class="content">
+        <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        <h4 class="mdl-typography--text-center">Cargando Respuestas Abiertas...</h4>
+      </div>
+    </div>
+  </div>
+</div>

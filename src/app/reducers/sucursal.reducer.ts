@@ -8,31 +8,35 @@ import { ActionTypes } from '../actions/sucursal.actions';
 
 import { updateObject } from '../utilities/objects';
 
-const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
-  SAVE_LOADED_ANSWERS, START_REQUEST, FILTER_DATE, FILTER_ANSWER,
-  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST, RESET_SUCURSAL,
-  RESET_QA, RESET_ANSWERS, RESET_QUESTIONS } = ActionTypes;
+const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
+  SAVE_CLOSE_ANSWERS, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS,
+  START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST,
+  APPLY_FILTER, END_REQUEST, RESET_SUCURSAL, RESET_QA, RESET_ANSWERS,
+  RESET_QUESTIONS } = ActionTypes;
 
 
 export const INITIAL_STATE = {
   info: {},
-  questions: [],
+  closeQuestions: [],
   openQuestions: [],
-  answers: [],
-  filters: {},
-  dates: {},
-  lastQuery: {},
+  openAnswers: [],
+  closeAnswers: [],
+  filters: [],
+  dates: [],
+  lastQuery: '',
   lastResult: {},
-  currentAction: {},
+  currentAction: '',
   loading: false
 }
 
 export function SucursalesCases() {
   return {
     [LOAD_QUESTIONS]: requesting,
-    [SAVE_LOADED_QUESTIONS]: saveLoadedQuestions,
+    [SAVE_CLOSE_QUESTIONS]: saveCloseQuestions,
+    [SAVE_OPEN_QUESTIONS]: saveOpenQuestions,
     [LOAD_ANSWERS]: requesting,
-    [SAVE_LOADED_ANSWERS]: saveLoadedAnswers,
+    [SAVE_CLOSE_ANSWERS]: saveCloseAnswers,
+    [SAVE_OPEN_ANSWERS]: saveOpenAnswers,
     [START_REQUEST]: requesting,
     [END_REQUEST]: stopRequesting,
     [FILTER_DATE]: filterByDate,
@@ -57,14 +61,24 @@ function stopRequesting(state: SucursalState, action: Action): SucursalState {
   return updateObject(state, {loading: false, currentAction: ''});
 }
 
-function saveLoadedQuestions(state: SucursalState, action: Action): SucursalState {
+function saveCloseQuestions(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
-  return updateObject(state, {questions: payload});
+  return updateObject(state, {closeQuestions: payload});
 }
 
-function saveLoadedAnswers(state: SucursalState, action: Action): SucursalState {
+function saveOpenQuestions(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
-  return updateObject(state, {answers: payload});
+  return updateObject(state, {openQuestions: payload});
+}
+
+function saveCloseAnswers(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+  return updateObject(state, {closeAnswers: payload});
+}
+
+function saveOpenAnswers(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+  return updateObject(state, {openAnswers: payload});
 }
 
 function filterByDate(state: SucursalState, action: Action): SucursalState {
@@ -74,16 +88,16 @@ function filterByDate(state: SucursalState, action: Action): SucursalState {
   let startM = moment(start);
   let endM = moment(end);
 
-  let answersInRange = state.answers.filter(answer =>
+  let answersInRange = state.closeAnswers.filter(answer =>
    startM.isSameOrAfter(answer.fecha) || endM.isSameOrBefore(answer.fecha)
    );
 
-  return updateObject(state, {answers: answersInRange});
+  return updateObject(state, {closeAnswers: answersInRange});
 }
 
 function filterByAnswer(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
-  return updateObject(state, {answers: state.answers.filter(answer =>
+  return updateObject(state, {answers: state.closeAnswers.filter(answer =>
     answer.id === payload
   )});
 }
@@ -107,13 +121,13 @@ function applyFilter(state: SucursalState, action: Action): SucursalState {
 }
 
 function restoreQA(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {questions: [], openQuestions: [], answers: []})
+  return updateObject(state, {closeQuestions: [], openQuestions: [], closeAnswers: [], openAnswers: []})
 }
 
 function restoreQuestions(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {questions: [], openQuestions: []});
+  return updateObject(state, {closeQuestions: [], openQuestions: []});
 }
 
 function restoreAnswers(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {answers: []});
+  return updateObject(state, {closeAnswers: [], openAnswers: []});
 }

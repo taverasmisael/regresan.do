@@ -12,7 +12,9 @@
     margin-left: 1rem;
   }
 }
-
+.main-content {
+  min-height: 90vh;
+}
 .comments-list {
   .comment {
     padding: 1em;
@@ -45,12 +47,4 @@
 
 .qa-holder {
   position: relative;
-}
-.mdl-spinner {
-  width: 84px;
-  height: 84px;
-}
-
-.mdl-spinner__circle {
-  border-width: 9px;
 }

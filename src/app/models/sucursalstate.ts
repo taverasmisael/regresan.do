@@ -4,9 +4,10 @@ import * as moment from 'moment';
 
 export interface SucursalState {
   info: UserProfile,
-  questions: any[],
-  openQuestions: any[]
-  answers: Pregunta[],
+  closeQuestions: any[],
+  openQuestions: any[],
+  openAnswers: any[],
+  closeAnswers: Pregunta[],
   filters: any[],
   dates: moment.Moment[],
   lastQuery: string,

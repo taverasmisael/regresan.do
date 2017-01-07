@@ -16,7 +16,8 @@ import { rating } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers,
+  SaveOpenQuestions, SaveOpenAnswers,
+  SaveCloseQuestions, SaveCloseAnswers,
   ResetSucursal, ResetQA
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
@@ -35,6 +36,7 @@ import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparam
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
+  private CurrentSucursal: Observable<SucursalState>;
   private today = moment();
   private aWeekAgo = moment().subtract(7, 'days');
   private QuestionsQuery: APIRequestUser;
@@ -43,7 +45,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public CurrentProfile: UserProfile;
 
   public userProfiles: UserProfile[];
-  public answers: any[];
+  public closeAnswers: any[];
+  public openAnswers: any[];
 
   public COLORS = rating(true);
   public chartError: string;
@@ -61,27 +64,33 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit() {
-    this.store.select<AppState>('MainStore')
-      .pluck('auth')
-      .pluck<UserProfile[]>('currentUser', 'Profiles')
-      .subscribe(profiles => this.userProfiles = profiles);
-
-    this.store.select<AppState>('MainStore')
-      .distinctUntilKeyChanged('currentSucursal')
-      .pluck<SucursalState>('currentSucursal')
-      .subscribe(store => this.SucursalState = store);
-
     this.id$ = this.route.params
       .distinctUntilChanged()
       .pluck<number>('id');
-
     this.SaveCurrentSucursal();
+
+    this.CurrentSucursal = this.store.select<AppState>('MainStore')
+      .distinctUntilKeyChanged('currentSucursal')
+      .pluck<SucursalState>('currentSucursal');
+    this.CurrentSucursal.subscribe(store => this.SucursalState = store);
+
+    this.CurrentSucursal
+      .distinctUntilKeyChanged('closeAnswers')
+      .pluck<any[]>('closeAnswers')
+      .subscribe(answers =>  this.closeAnswers = this.transformAnswerToChart(answers));
+
     this.QuestionsQuery = {
       profile: this.CurrentProfile.OldProfileId.toString(),
       start: this.aWeekAgo.unix().toString(),
       end: this.today.unix().toString()
     }
     this.loadAllCharts(this.QuestionsQuery);
+
+    this.CurrentSucursal
+      .distinctUntilKeyChanged('loading')
+      .subscribe(() => {
+        setTimeout(() => componentHandler.upgradeAllRegistered(), 100);
+      })
   }
 
   public applyFilters(filter: Filter) {
@@ -100,44 +109,32 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-        this.loadAnswers.bind(this),
-        this.handleErrors.bind(this)
+      this.loadAnswers.bind(this),
+      this.handleErrors.bind(this)
       );
   }
 
   private LoadQuestions(query: APIRequestUser) {
-    this.store.dispatch(new StartRequest('Cargando Preguntas...'));
+    this.store.dispatch(new StartRequest('Cargando Preguntas Cerradas...'));
     return this.preguntas
       .getAllByProfile(query)
-      .map<LoadAnswerParams>(res => ({preguntas: res['Respuestas'], query}))
+      .map<LoadAnswerParams>(res => ({ preguntas: res['Respuestas'], query }))
   }
 
   private loadAnswers({preguntas: qs, query}: LoadAnswerParams) {
+    this.store.dispatch(new StopRequest());
+    const getIdPregunta = (q: Pregunta) => q.idPregunta;
+
     if (qs && qs.length) {
-      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta')
-      const qsIds = closedQs // Queremos las preguntas que NO son abiertas
-        .map(q => q.idPregunta);
-
-      this.store.dispatch(new StopRequest());
-      this.store.dispatch(new SaveLoadedQuestions(closedQs));
-      this.store.dispatch(new StartRequest('Cargando Respuestas...'));
-
-      const answers$ = qsIds.reduce((prev, curr) => {
-        let currentQuery = updateObject(query, { pregunta: curr.toString() });
-        return [...prev, this.respuestas.getFromProfile(currentQuery)
-          .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
-        ];
-      }, []);
-
-      Observable.forkJoin(answers$)
-        .subscribe((answers: Pregunta[][]) => {
-          this.store.dispatch(new SaveLoadedAnswers(answers));
-          console.log(answers$);
-          this.answers = answers.reduce((prev, curr) => {
-            return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
-          }, []);
-          this.store.dispatch(new StopRequest());
-        });
+      this.store.dispatch(new StartRequest('Cargando Respuestas Cerradas...'));
+      const openedQs = qs.filter(q => q.tipoPregunta === 'Abierta');
+      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
+      if (openedQs.length) {
+        this.store.dispatch(new SaveOpenQuestions(openedQs));
+        this.loadOpenAnswers(openedQs.map(getIdPregunta), query);
+      }
+      this.store.dispatch(new SaveCloseQuestions(closedQs));
+      this.loadClosedAnswers(closedQs.map(getIdPregunta), query);
 
     } else {
       this.store.dispatch(new StopRequest());
@@ -145,12 +142,54 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
+
+  private loadOpenAnswers(qsIds: number[], query: APIRequestUser) {
+    const answers$ = qsIds.reduce((prev, curr) => {
+      let currentQuery = updateObject(query, { pregunta: curr.toString() });
+      return [...prev, this.respuestas.getAbiertasFromProfile(currentQuery)
+        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
+      ];
+    }, []);
+
+    Observable.forkJoin(answers$)
+      .subscribe((answers: any[]) => {
+        this.openAnswers = answers.reduce((prev, curr) => {
+          return [...prev, curr.respuestas.map(a => ({
+                  respuesta: a.Respuesta,
+                  fecha: a.Fecha,
+                  sesion: a.sesion,
+                  pregunta: curr.pregunta,
+                  porcentaje: a.Porcentaje // UNUSED
+                }))
+          ]
+        }, []);
+        console.log(this.openAnswers);
+        this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
+        this.store.dispatch(new StopRequest());
+      });
+  }
+
+  private loadClosedAnswers(qsIds: number[], query: APIRequestUser) {
+    const answers$ = qsIds.reduce((prev, curr) => {
+      let currentQuery = updateObject(query, { pregunta: curr.toString() });
+      return [...prev, this.respuestas.getFromProfile(currentQuery)
+        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
+      ];
+    }, []);
+
+    Observable.forkJoin(answers$)
+      .subscribe((answers: Pregunta[][]) => {
+        this.store.dispatch(new SaveCloseAnswers(answers));
+        this.store.dispatch(new StopRequest());
+      });
+  }
+
   private handleErrors(err) {
     if (err.status === 401) {
       this.store.dispatch({ type: ActionTypes.LOGOUT_START });
     } else {
       this.store.dispatch(new StopRequest());
-      this.chartError = 'Error obteniendo la informaacion del Servidor';
+      this.chartError = 'Error obteniendo la informacion del Servidor';
     }
   }
 
@@ -167,6 +206,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         this.CurrentProfile = profile;
         this.store.dispatch(new SaveInfo(profile));
       });
+  }
+
+  private transformAnswerToChart(answers: any[]) {
+    return answers.reduce((prev, curr) => {
+      return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
+    }, []);
   }
 }
 

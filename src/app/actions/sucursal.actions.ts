@@ -2,9 +2,11 @@ import { Action } from '@ngrx/store';
 
 export const ActionTypes = {
   LOAD_QUESTIONS: '[SUCURSALES] LOAD_QUESTIONS',
-  SAVE_LOADED_QUESTIONS: '[SUCURSALES] SAVE_LOADED_QUESTIONS',
+  SAVE_CLOSE_QUESTIONS: '[SUCURSALES] SAVE_CLOSE_QUESTIONS',
+  SAVE_OPEN_QUESTIONS: '[SUCURSALES] SAVE_OPEN_QUESTIONS',
   LOAD_ANSWERS: '[SUCURSALES] LOAD_ANSWERS',
-  SAVE_LOADED_ANSWERS: '[SUCURSALES] SAVE_LOADED_ANSWERS',
+  SAVE_CLOSE_ANSWERS: '[SUCURSALES] SAVE_CLOSE_ANSWERS',
+  SAVE_OPEN_ANSWERS: '[SUCURSALES] SAVE_OPEN_ANSWERS',
   START_REQUEST: '[SUCURSALES] START_REQUEST',
   END_REQUEST: '[SUCURSALES] END_REQUEST',
   FILTER_DATE: '[SUCURSALES] FILTER_DATE',
@@ -24,8 +26,14 @@ export class LoadQuestions implements Action {
   constructor(public payload) { }
 }
 
-export class SaveLoadedQuestions implements Action {
-  type = ActionTypes.SAVE_LOADED_QUESTIONS;
+export class SaveCloseQuestions implements Action {
+  type = ActionTypes.SAVE_CLOSE_QUESTIONS;
+
+  constructor(public payload) { }
+}
+
+export class SaveOpenQuestions implements Action {
+  type = ActionTypes.SAVE_OPEN_QUESTIONS;
 
   constructor(public payload) { }
 }
@@ -35,8 +43,15 @@ export class LoadAnswers implements Action {
 
   constructor(public payload) { }
 }
-export class SaveLoadedAnswers implements Action {
-  type = ActionTypes.SAVE_LOADED_ANSWERS;
+
+export class SaveCloseAnswers implements Action {
+  type = ActionTypes.SAVE_CLOSE_ANSWERS;
+
+  constructor(public payload) { }
+}
+
+export class SaveOpenAnswers implements Action {
+  type = ActionTypes.SAVE_OPEN_ANSWERS;
 
   constructor(public payload) { }
 }

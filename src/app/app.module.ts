@@ -44,6 +44,7 @@ import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
 import { ChartCardComponent } from './ui/chart-card/chart-card.component';
 import { ToolbarComponent } from './ui/toolbar/toolbar.component';
+import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ToolbarComponent } from './ui/toolbar/toolbar.component';
     SucursalesListComponent,
     ChartCardComponent,
     ToolbarComponent,
-    FlatpickrComponent
+    FlatpickrComponent,
+    AnswersTabsComponent
   ],
   imports: [
     BrowserModule,
