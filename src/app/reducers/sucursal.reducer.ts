@@ -10,7 +10,8 @@ import { updateObject } from '../utilities/objects';
 
 const { LOAD_QUESTIONS, SAVE_LOADED_QUESTIONS, LOAD_ANSWERS,
   SAVE_LOADED_ANSWERS, START_REQUEST, FILTER_DATE, FILTER_ANSWER,
-  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST, RESET } = ActionTypes;
+  SAVE_INFO, SAVE_LAST, APPLY_FILTER, END_REQUEST, RESET_SUCURSAL,
+  RESET_QA, RESET_ANSWERS, RESET_QUESTIONS } = ActionTypes;
 
 
 export const INITIAL_STATE = {
@@ -39,7 +40,10 @@ export function SucursalesCases() {
     [SAVE_INFO]: saveSucursal,
     [SAVE_LAST]: saveLastRequest,
     [APPLY_FILTER]: applyFilter,
-    [RESET]: () => INITIAL_STATE
+    [RESET_SUCURSAL]: () => INITIAL_STATE,
+    [RESET_QA]: restoreQA,
+    [RESET_ANSWERS]: restoreAnswers,
+    [RESET_QUESTIONS]: restoreQuestions,
   }
 }
 
@@ -95,8 +99,21 @@ function saveLastRequest(state: SucursalState, action: Action): SucursalState {
 
   return updateObject(state, {lastQuery: payload.query, lastResult: payload.result});
 }
+
 function applyFilter(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
 
   return updateObject(state, {filters: [...state.filters, payload]});
+}
+
+function restoreQA(state: SucursalState, action: Action): SucursalState {
+  return updateObject(state, {questions: [], openQuestions: [], answers: []})
+}
+
+function restoreQuestions(state: SucursalState, action: Action): SucursalState {
+  return updateObject(state, {questions: [], openQuestions: []});
+}
+
+function restoreAnswers(state: SucursalState, action: Action): SucursalState {
+  return updateObject(state, {answers: []});
 }

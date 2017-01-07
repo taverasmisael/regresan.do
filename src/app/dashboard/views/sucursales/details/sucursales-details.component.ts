@@ -16,7 +16,8 @@ import { rating } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers, ResetStore
+  SaveLoadedQuestions, SaveLoadedAnswers,
+  ResetSucursal, ResetQA
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/toolbar-flters';
@@ -92,11 +93,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new ResetStore());
+    this.store.dispatch(new ResetSucursal());
   }
 
   private loadAllCharts(query: APIRequestUser) {
-    this.store.dispatch(new ResetStore());
+    this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
         this.loadAnswers.bind(this),
@@ -117,7 +118,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       const qsIds = closedQs // Queremos las preguntas que NO son abiertas
         .map(q => q.idPregunta);
 
-      this.store.dispatch(new StopRequest({}));
+      this.store.dispatch(new StopRequest());
       this.store.dispatch(new SaveLoadedQuestions(closedQs));
       this.store.dispatch(new StartRequest('Cargando Respuestas...'));
 
@@ -131,14 +132,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       Observable.forkJoin(answers$)
         .subscribe((answers: Pregunta[][]) => {
           this.store.dispatch(new SaveLoadedAnswers(answers));
+          console.log(answers$);
           this.answers = answers.reduce((prev, curr) => {
             return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
           }, []);
-          this.store.dispatch(new StopRequest({}));
+          this.store.dispatch(new StopRequest());
         });
 
     } else {
-      this.store.dispatch(new StopRequest({}));
+      this.store.dispatch(new StopRequest());
     }
   }
 
@@ -147,7 +149,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     if (err.status === 401) {
       this.store.dispatch({ type: ActionTypes.LOGOUT_START });
     } else {
-      this.store.dispatch(new StopRequest({}));
+      this.store.dispatch(new StopRequest());
       this.chartError = 'Error obteniendo la informaacion del Servidor';
     }
   }

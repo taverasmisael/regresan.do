@@ -12,7 +12,10 @@ export const ActionTypes = {
   SAVE_INFO: '[SUCURSALES] SAVE_INFO',
   SAVE_LAST: '[SUCURSALES] SAVE_LAST',
   APPLY_FILTER: '[SUCURSALES] APPLY_FILTER',
-  RESET: '[SUCURSALES]: RESET'
+  RESET_SUCURSAL: '[SUCURSALES]: RESET_SUCURSAL',
+  RESET_QUESTIONS: '[SUCURSALES]: RESET_QUESTIONS',
+  RESET_ANSWERS: '[SUCURSALES]: RESET_ANSWERS',
+  RESET_QA: '[SUCURSALES]: RESET_QA'
 };
 
 export class LoadQuestions implements Action {
@@ -47,7 +50,7 @@ export class StartRequest implements Action {
 export class StopRequest implements Action {
   type = ActionTypes.END_REQUEST;
 
-  constructor(public payload) { }
+  constructor(public payload?) { }
 }
 
 export class FilterDate implements Action {
@@ -80,8 +83,26 @@ export class ApplyFilter implements Action {
   constructor(public payload) { }
 }
 
-export class ResetStore implements Action {
-  type = ActionTypes.RESET;
+export class ResetSucursal implements Action {
+  type = ActionTypes.RESET_SUCURSAL;
+
+  constructor(public payload?) { }
+}
+
+export class ResetQuestions implements Action {
+  type = ActionTypes.RESET_QUESTIONS;
+
+  constructor(public payload?) { }
+}
+
+export class ResetAnswers implements Action {
+  type = ActionTypes.RESET_ANSWERS;
+
+  constructor(public payload?) { }
+}
+
+export class ResetQA implements Action {
+  type = ActionTypes.RESET_QA;
 
   constructor(public payload?) { }
 }
