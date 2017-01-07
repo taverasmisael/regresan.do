@@ -8,7 +8,7 @@
 </div>
 <section class="section section--info">
   <app-toolbar (applyFilters)="applyFilters($event)" [totalHoy]="'35'" [totalGeneral]="'420'"></app-toolbar>
-  <div class="mdl-grid mdl-color--primary-contrast">
+  <div class="mdl-grid mdl-color--primary-contrast main-content">
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">

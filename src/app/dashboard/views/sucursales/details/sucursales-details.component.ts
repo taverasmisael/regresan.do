@@ -85,6 +85,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: this.today.unix().toString()
     }
     this.loadAllCharts(this.QuestionsQuery);
+
+    this.CurrentSucursal
+      .distinctUntilKeyChanged('loading')
+      .subscribe(() => {
+        setTimeout(() => componentHandler.upgradeAllRegistered(), 100);
+      })
   }
 
   public applyFilters(filter: Filter) {
@@ -109,7 +115,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private LoadQuestions(query: APIRequestUser) {
-    this.store.dispatch(new StartRequest('Cargando Preguntas...'));
+    this.store.dispatch(new StartRequest('Cargando Preguntas Cerradas...'));
     return this.preguntas
       .getAllByProfile(query)
       .map<LoadAnswerParams>(res => ({ preguntas: res['Respuestas'], query }))
@@ -120,7 +126,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     const getIdPregunta = (q: Pregunta) => q.idPregunta;
 
     if (qs && qs.length) {
-      this.store.dispatch(new StartRequest('Cargando Respuestas...'));
+      this.store.dispatch(new StartRequest('Cargando Respuestas Cerradas...'));
       const openedQs = qs.filter(q => q.tipoPregunta === 'Abierta');
       const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
       if (openedQs.length) {
