@@ -1,4 +1,10 @@
 <h4>{{ title }}</h4>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !questions.length">
+  <div class="content">
+    <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    <h4 class="mdl-typography--text-center">Cargando Preguntas Abiertas...</h4>
+  </div>
+</div>
 <div class="question" *ngFor="let q of questions;">
   <div class="question__headlin">
     <p class="question__name">{{ q.pregunta }}</p>
