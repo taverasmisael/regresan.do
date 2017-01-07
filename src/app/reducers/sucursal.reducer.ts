@@ -20,7 +20,7 @@ export const INITIAL_STATE = {
   closeQuestions: [],
   openQuestions: [],
   openAnswers: [],
-  closeQnswers: [],
+  closeAnswers: [],
   filters: [],
   dates: [],
   lastQuery: '',
