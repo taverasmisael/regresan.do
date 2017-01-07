@@ -16,7 +16,8 @@ import { rating } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
-  SaveLoadedQuestions, SaveLoadedAnswers,
+  SaveOpenQuestions, SaveOpenAnswers,
+  SaveCloseQuestions, SaveCloseAnswers,
   ResetSucursal, ResetQA
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
@@ -122,10 +123,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       const openedQs = qs.filter(q => q.tipoPregunta === 'Abierta');
       const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
       if (openedQs.length) {
+        this.store.dispatch(new SaveOpenQuestions(openedQs));
         this.loadOpenAnswers(openedQs.map(getIdPregunta), query);
-        // TODO: Dispatch the save open
       }
-      this.store.dispatch(new SaveLoadedQuestions(closedQs));
+      this.store.dispatch(new SaveCloseQuestions(closedQs));
       this.loadClosedAnswers(closedQs.map(getIdPregunta), query);
 
     } else {
@@ -145,7 +146,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     Observable.forkJoin(answers$)
       .subscribe((answers: any[]) => {
-        // TODO: dispatch Save Open Answers
+        this.store.dispatch(new SaveOpenAnswers(answers));
         this.openAnswers = answers[0].respuestas.map(a => ({
           respuesta: a.Respuesta,
           fecha: a.Fecha,
@@ -165,7 +166,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     Observable.forkJoin(answers$)
       .subscribe((answers: Pregunta[][]) => {
-        this.store.dispatch(new SaveLoadedAnswers(answers));
+        this.store.dispatch(new SaveCloseAnswers(answers));
         this.closeAnswers = answers.reduce((prev, curr) => {
           return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
         }, []);
