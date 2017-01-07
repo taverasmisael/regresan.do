@@ -1,0 +1,20 @@
+
+.question__answers {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.answer {
+  display: flex;
+  flex-flow: column;
+  padding: 1em;
+  border-bottom: 2px solid #00a4a3;
+  margin-bottom: 1em;
+}
+.answer__meta {
+    display: flex;
+    margin-bottom: 1em;
+}
+.answer__sesion {
+    flex: 1;
+    font-weight: 700;
+}

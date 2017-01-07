@@ -13,4 +13,8 @@ export class AnswersTabsComponent implements OnInit {
   ngOnInit() {
   }
 
+  public getMyAnswers(id: number) {
+    return this.answers.find(block => block.find(answer => +answer.pregunta === id));
+  }
+
 }
