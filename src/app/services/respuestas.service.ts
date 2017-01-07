@@ -59,4 +59,19 @@ getFromProfile(query: APIRequestRespuesta) {
       search: params
     });
   }
+
+  getAbiertasFromProfile(query: APIRequestRespuesta) {
+    const url = `${this.BASE_URL}/GetRespuestasByProfilesAbierta2`;
+    const params = new URLSearchParams();
+
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
+    params.append('profileId', query.profile);
+    params.append('idPregunta', query.pregunta);
+
+    return this.api.get(url, {
+      headers: this.authHeader,
+      search: params
+    });
+  }
 }
