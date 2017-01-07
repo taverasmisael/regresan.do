@@ -16,7 +16,7 @@
           class="mdl-cell mdl-card"
           *ngFor="let q of SucursalState.closeQuestions; let i = index;"
           chartType="pie"
-          lodingText="Cargando Respuesta {{ i }}"
+          lodingText="Respuesta {{ i + 1 }}"
           [errorText]="chartError"
           [chartTitle]="q.pregunta"
           [chartLabels]="closeAnswers.length ? closeAnswers[i][0] : []"
