@@ -11,16 +11,16 @@
   <div class="mdl-grid mdl-color--primary-contrast">
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
-<div class="mdl-grid charts-list" *ngIf="!SucursalState.loading">
+<div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.questions.length">
   <app-chart-card
     class="mdl-cell mdl-card"
     *ngFor="let q of SucursalState.questions; let i = index;"
     chartType="pie"
-    lodingText="Cargando Pregunta: {{ q.pregunta }}"
+    lodingText="Cargando Respuesta {{ i }}"
     [errorText]="chartError"
     [chartTitle]="q.pregunta"
-    [chartLabels]="answers[i][0]"
-    [chartData]="answers[i][1]"
+    [chartLabels]="answers ? answers[i][0] : []"
+    [chartData]="answers ? answers[i][1] : []"
     [chartColors]="COLORS"
     >
   </app-chart-card>

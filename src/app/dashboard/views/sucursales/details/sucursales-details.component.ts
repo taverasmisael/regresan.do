@@ -114,7 +114,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private loadAnswers({preguntas: qs, query}: LoadAnswerParams) {
     if (qs && qs.length) {
-      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta')
+      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
       const qsIds = closedQs // Queremos las preguntas que NO son abiertas
         .map(q => q.idPregunta);
 
@@ -132,7 +132,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       Observable.forkJoin(answers$)
         .subscribe((answers: Pregunta[][]) => {
           this.store.dispatch(new SaveLoadedAnswers(answers));
-          console.log(answers$);
           this.answers = answers.reduce((prev, curr) => {
             return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
           }, []);
