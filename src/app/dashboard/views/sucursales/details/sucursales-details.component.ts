@@ -147,15 +147,18 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     Observable.forkJoin(answers$)
       .subscribe((answers: any[]) => {
-        this.store.dispatch(new SaveOpenAnswers(answers));
         this.openAnswers = answers.reduce((prev, curr) => {
           return [...prev, curr.respuestas.map(a => ({
                   respuesta: a.Respuesta,
                   fecha: a.Fecha,
-                  sesion: a.sesion
+                  sesion: a.sesion,
+                  pregunta: curr.pregunta,
+                  porcentaje: a.Porcentaje // UNUSED
                 }))
           ]
         }, []);
+        console.log(this.openAnswers);
+        this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
         this.store.dispatch(new StopRequest());
       });
   }
@@ -180,7 +183,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.store.dispatch({ type: ActionTypes.LOGOUT_START });
     } else {
       this.store.dispatch(new StopRequest());
-      this.chartError = 'Error obteniendo la informaacion del Servidor';
+      this.chartError = 'Error obteniendo la informacion del Servidor';
     }
   }
 
