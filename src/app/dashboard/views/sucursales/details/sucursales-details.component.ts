@@ -69,11 +69,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<number>('id');
     this.SaveCurrentSucursal();
 
-    this.store.select<AppState>('MainStore')
-      .pluck('auth')
-      .pluck<UserProfile[]>('currentUser', 'Profiles')
-      .subscribe(profiles => this.userProfiles = profiles);
-
     this.CurrentSucursal = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal');
