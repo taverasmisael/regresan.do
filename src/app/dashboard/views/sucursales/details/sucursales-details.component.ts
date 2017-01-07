@@ -36,6 +36,7 @@ import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparam
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
+  private CurrentSucursal: Observable<SucursalState>;
   private today = moment();
   private aWeekAgo = moment().subtract(7, 'days');
   private QuestionsQuery: APIRequestUser;
@@ -63,21 +64,26 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnInit() {
+    this.id$ = this.route.params
+      .distinctUntilChanged()
+      .pluck<number>('id');
+    this.SaveCurrentSucursal();
+
     this.store.select<AppState>('MainStore')
       .pluck('auth')
       .pluck<UserProfile[]>('currentUser', 'Profiles')
       .subscribe(profiles => this.userProfiles = profiles);
 
-    this.store.select<AppState>('MainStore')
+    this.CurrentSucursal = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
-      .pluck<SucursalState>('currentSucursal')
-      .subscribe(store => this.SucursalState = store);
+      .pluck<SucursalState>('currentSucursal');
+    this.CurrentSucursal.subscribe(store => this.SucursalState = store);
 
-    this.id$ = this.route.params
-      .distinctUntilChanged()
-      .pluck<number>('id');
+    this.CurrentSucursal
+      .distinctUntilKeyChanged('closeAnswers')
+      .pluck<any[]>('closeAnswers')
+      .subscribe(answers =>  this.closeAnswers = this.transformAnswerToChart(answers));
 
-    this.SaveCurrentSucursal();
     this.QuestionsQuery = {
       profile: this.CurrentProfile.OldProfileId.toString(),
       start: this.aWeekAgo.unix().toString(),
@@ -147,11 +153,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     Observable.forkJoin(answers$)
       .subscribe((answers: any[]) => {
         this.store.dispatch(new SaveOpenAnswers(answers));
-        this.openAnswers = answers[0].respuestas.map(a => ({
-          respuesta: a.Respuesta,
-          fecha: a.Fecha,
-          sesion: a.sesion
-        }));
+        this.openAnswers = answers.reduce((prev, curr) => {
+          return [...prev, curr.respuestas.map(a => ({
+                  respuesta: a.Respuesta,
+                  fecha: a.Fecha,
+                  sesion: a.sesion
+                }))
+          ]
+        }, []);
         this.store.dispatch(new StopRequest());
       });
   }
@@ -167,9 +176,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     Observable.forkJoin(answers$)
       .subscribe((answers: Pregunta[][]) => {
         this.store.dispatch(new SaveCloseAnswers(answers));
-        this.closeAnswers = answers.reduce((prev, curr) => {
-          return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
-        }, []);
         this.store.dispatch(new StopRequest());
       });
   }
@@ -196,6 +202,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         this.CurrentProfile = profile;
         this.store.dispatch(new SaveInfo(profile));
       });
+  }
+
+  private transformAnswerToChart(answers: any[]) {
+    return answers.reduce((prev, curr) => {
+      return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
+    }, []);
   }
 }
 

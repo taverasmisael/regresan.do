@@ -19,8 +19,8 @@
           lodingText="Cargando Respuesta {{ i }}"
           [errorText]="chartError"
           [chartTitle]="q.pregunta"
-          [chartLabels]="closeAnswers ? closeAnswers[i][0] : []"
-          [chartData]="closeAnswers ? closeAnswers[i][1] : []"
+          [chartLabels]="closeAnswers.length ? closeAnswers[i][0] : []"
+          [chartData]="closeAnswers.length ? closeAnswers[i][1] : []"
           [chartColors]="COLORS"
           >
         </app-chart-card>
@@ -45,9 +45,9 @@
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
       <h4 style="margin-bottom: 0;">Pregunta Abierta</h4>
       <h5 style="margin-top: 0;" class="mdl-typography--body-2-force-preferred-font-color-contrast">¿Algún comentario que desee agregar?</h5>
-      <div class="mdl-grid comments-list">
+      <div class="mdl-grid comments-list" *ngFor="let oa of openAnswers">
         <div class="comment mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-typography--text-right"
-        *ngFor="let a of openAnswers">
+        *ngFor="let a of oa">
           <p class="text">{{ a.respuesta }}</p>
           <div class="meta">
             <span class="author"><i class="material-icons">account_circle</i>{{ a.sesion || 'Anonimo' }}</span>
