@@ -43,7 +43,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public CurrentProfile: UserProfile;
 
   public userProfiles: UserProfile[];
-  public answers: any[];
+  public closeAnswers: any[];
+  public openAnswers: any[];
 
   public COLORS = rating(true);
   public chartError: string;
@@ -100,8 +101,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-        this.loadAnswers.bind(this),
-        this.handleErrors.bind(this)
+      this.loadAnswers.bind(this),
+      this.handleErrors.bind(this)
       );
   }
 
@@ -109,40 +110,68 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new StartRequest('Cargando Preguntas...'));
     return this.preguntas
       .getAllByProfile(query)
-      .map<LoadAnswerParams>(res => ({preguntas: res['Respuestas'], query}))
+      .map<LoadAnswerParams>(res => ({ preguntas: res['Respuestas'], query }))
   }
 
   private loadAnswers({preguntas: qs, query}: LoadAnswerParams) {
+    this.store.dispatch(new StopRequest());
+    const getIdPregunta = (q: Pregunta) => q.idPregunta;
+
     if (qs && qs.length) {
-      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
-      const qsIds = closedQs // Queremos las preguntas que NO son abiertas
-        .map(q => q.idPregunta);
-
-      this.store.dispatch(new StopRequest());
-      this.store.dispatch(new SaveLoadedQuestions(closedQs));
       this.store.dispatch(new StartRequest('Cargando Respuestas...'));
-
-      const answers$ = qsIds.reduce((prev, curr) => {
-        let currentQuery = updateObject(query, { pregunta: curr.toString() });
-        return [...prev, this.respuestas.getFromProfile(currentQuery)
-          .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
-        ];
-      }, []);
-
-      Observable.forkJoin(answers$)
-        .subscribe((answers: Pregunta[][]) => {
-          this.store.dispatch(new SaveLoadedAnswers(answers));
-          this.answers = answers.reduce((prev, curr) => {
-            return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
-          }, []);
-          this.store.dispatch(new StopRequest());
-        });
+      const openedQs = qs.filter(q => q.tipoPregunta === 'Abierta');
+      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
+      if (openedQs.length) {
+        this.loadOpenAnswers(openedQs.map(getIdPregunta), query);
+        // TODO: Dispatch the save open
+      }
+      this.store.dispatch(new SaveLoadedQuestions(closedQs));
+      this.loadClosedAnswers(closedQs.map(getIdPregunta), query);
 
     } else {
       this.store.dispatch(new StopRequest());
     }
   }
 
+
+
+  private loadOpenAnswers(qsIds: number[], query: APIRequestUser) {
+    const answers$ = qsIds.reduce((prev, curr) => {
+      let currentQuery = updateObject(query, { pregunta: curr.toString() });
+      return [...prev, this.respuestas.getAbiertasFromProfile(currentQuery)
+        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
+      ];
+    }, []);
+
+    Observable.forkJoin(answers$)
+      .subscribe((answers: any[]) => {
+        // TODO: dispatch Save Open Answers
+        this.openAnswers = answers[0].respuestas.map(a => ({
+          respuesta: a.Respuesta,
+          fecha: a.Fecha,
+          sesion: a.sesion
+        }));
+        this.store.dispatch(new StopRequest());
+      });
+  }
+
+  private loadClosedAnswers(qsIds: number[], query: APIRequestUser) {
+    const answers$ = qsIds.reduce((prev, curr) => {
+      let currentQuery = updateObject(query, { pregunta: curr.toString() });
+      return [...prev, this.respuestas.getFromProfile(currentQuery)
+        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
+      ];
+    }, []);
+
+    Observable.forkJoin(answers$)
+      .subscribe((answers: Pregunta[][]) => {
+        this.store.dispatch(new SaveLoadedAnswers(answers));
+        this.closeAnswers = answers.reduce((prev, curr) => {
+          return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
+        }, []);
+        this.store.dispatch(new StopRequest());
+      });
+  }
 
   private handleErrors(err) {
     if (err.status === 401) {
