@@ -172,7 +172,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           return [...prev, curr.respuestas.map(a => ({
             respuesta: a.Respuesta,
             fecha: a.Fecha,
-            sesion: a.sesion,
+            sesion: a.Sesion,
             pregunta: curr.pregunta,
             porcentaje: a.Porcentaje // UNUSED
           }))
