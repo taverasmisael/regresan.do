@@ -25,7 +25,7 @@
           >
         </app-chart-card>
       </div>
-      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading">
+      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading && !SucursalState.closeQuestions.length">
         <div class="content">
           <div class="mdl-spinner mdl-js-spinner is-active"></div>
           <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
