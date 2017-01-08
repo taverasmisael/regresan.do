@@ -15,7 +15,7 @@
         </span>
       </li>
     </ul>
-    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading">
+    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading || !getMyAnswers(q.idPregunta)">
       <div class="content">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
         <p class="mdl-typography--text-center">Cargando Respuestas Abiertas...</p>
