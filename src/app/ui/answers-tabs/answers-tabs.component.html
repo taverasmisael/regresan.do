@@ -1,10 +1,4 @@
 <h4>{{ title }}</h4>
-<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !questions.length">
-  <div class="content">
-    <div class="mdl-spinner mdl-js-spinner is-active"></div>
-    <h4 class="mdl-typography--text-center">Cargando Preguntas Abiertas...</h4>
-  </div>
-</div>
 <div class="question" *ngFor="let q of questions;">
   <div class="question__headlin">
     <p class="question__name">{{ q.pregunta }}</p>
@@ -24,8 +18,29 @@
     <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading">
       <div class="content">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
-        <h4 class="mdl-typography--text-center">Cargando Respuestas Abiertas...</h4>
+        <p class="mdl-typography--text-center">Cargando Respuestas Abiertas...</p>
       </div>
     </div>
+    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!loading && answersErrorText">
+      <div class="content">
+        <i class="material-icons">error</i><br />
+        <p class="mdl-typography--text-center">{{ answersErrorText }}</p>
+        <button (click)="failed.emit([q.idPregunta])" class="mdl-button mdl-js-button mdl-js-ripple">
+          <i class="material-icons">refresh</i> Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !questions.length">
+  <div class="content">
+    <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    <p class="mdl-typography--text-center">Cargando Preguntas Abiertas...</p>
+  </div>
+</div>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!loading && !questions.length && questionsErrorText">
+  <div class="content">
+    <i class="material-icons">error</i><br />
+    <p class="mdl-typography--text-center">{{ questionsErrorText }}</p>
   </div>
 </div>

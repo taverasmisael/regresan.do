@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -9,9 +9,12 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AnswersTabsComponent implements OnInit {
   @Input() title: string;
+  @Input() questionsErrorText: string;
+  @Input() answersErrorText: string;
   @Input() questions: any[];
   @Input() answers: any[];
   @Input() loading: boolean;
+  @Output() failed = new EventEmitter();
 
   constructor() { }
 

@@ -50,7 +50,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   public COLORS = rating(true);
   public chartErrors: string[];
-  public questionError: string
+  public questionError: string;
+  public openAnswersError: string;
 
   @HostBinding('class.mdl-color--primary') true;
   constructor(private route: ActivatedRoute,
@@ -112,7 +113,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.closeAnswers[i] = this.closeAnswers[i] || [[], []];
         }
         this.closeAnswers = Object.assign([], this.closeAnswers, { [index]: req$val });
-        console.log(this.closeAnswers);
       },
       err => this.handleAnswerError(err, index),
       () => this.store.dispatch(new StopRequest())
@@ -123,9 +123,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-        this.loadAnswers.bind(this),
-        this.handleErrors.bind(this),
-        () => this.store.dispatch(new StopRequest())
+      this.loadAnswers.bind(this),
+      this.handleErrors.bind(this),
+      () => this.store.dispatch(new StopRequest())
       );
   }
 
@@ -158,7 +158,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
 
 
-  private loadOpenAnswers(qsIds: number[], query: APIRequestUser) {
+  private loadOpenAnswers(qsIds: number[], query: APIRequestUser = this.QuestionsQuery) {
     const answers$ = qsIds.reduce((prev, curr) => {
       let currentQuery = updateObject(query, { pregunta: curr.toString() });
       return [...prev, this.respuestas.getAbiertasFromProfile(currentQuery)
@@ -168,6 +168,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     Observable.forkJoin(answers$)
       .subscribe((answers: any[]) => {
+        this.openAnswersError = '';
         this.openAnswers = answers.reduce((prev, curr) => {
           return [...prev, curr.respuestas.map(a => ({
             respuesta: a.Respuesta,
@@ -179,8 +180,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           ]
         }, []);
         this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
-        this.store.dispatch(new StopRequest());
-      });
+      },
+      err => {
+        if (err.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.openAnswersError = 'Error obteniendo respuestas abiertas';
+        }
+      },
+      () => this.store.dispatch(new StopRequest())
+      );
   }
 
   private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
