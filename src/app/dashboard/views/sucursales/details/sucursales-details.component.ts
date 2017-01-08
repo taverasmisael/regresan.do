@@ -94,7 +94,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
-  public applyFilters(filter: Filter) {
+  applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
