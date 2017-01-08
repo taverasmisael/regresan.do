@@ -83,8 +83,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     this.CurrentSucursal
       .distinctUntilKeyChanged('loading')
-      .subscribe(() => {
-        setTimeout(() => componentHandler.upgradeAllRegistered(), 100);
+      .pluck<Boolean>('loading')
+      .subscribe(isLoading => {
+        if (isLoading) {
+          setTimeout(() => componentHandler.upgradeAllRegistered(), 200);
+        }
       })
   }
   ngAfterViewInit() {
