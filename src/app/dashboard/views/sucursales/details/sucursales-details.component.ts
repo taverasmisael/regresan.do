@@ -94,7 +94,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
-  applyFilters(filter: Filter) {
+  public applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
@@ -108,15 +108,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.closeAnswers$[index].subscribe(
       val => {
         const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
-        this.closeAnswers[index] = req$val;
-      },
-      err => {
-        if (err.status === 401) {
-          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
-        } else {
-          this.chartErrors[index] = `Error cargando Respuesta #${index + 1}`;
+        for (let i = 0; i < index; i += 1) {
+          this.closeAnswers[i] = this.closeAnswers[i] || [[], []];
         }
+        this.closeAnswers = Object.assign([], this.closeAnswers, { [index]: req$val });
+        console.log(this.closeAnswers);
       },
+      err => this.handleAnswerError(err, index),
       () => this.store.dispatch(new StopRequest())
     )
   }
@@ -125,9 +123,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-      this.loadAnswers.bind(this),
-      this.handleErrors.bind(this),
-      () => this.store.dispatch(new StopRequest())
+        this.loadAnswers.bind(this),
+        this.handleErrors.bind(this),
+        () => this.store.dispatch(new StopRequest())
       );
   }
 
@@ -200,16 +198,18 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
         this.closeAnswers = [...this.closeAnswers, req$val];
       },
-        err => {
-          if (err.status === 401) {
-            this.store.dispatch({ type: ActionTypes.LOGOUT_START });
-          } else {
-            this.chartErrors[index] = `Error cargando Respuesta #${index + 1}`;
-          }
-        },
+        err => this.handleAnswerError(err, index),
         () => this.store.dispatch(new StopRequest())
       )
     });
+  }
+
+  private handleAnswerError(err: any, index: number) {
+    if (err.status === 401) {
+      this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+    } else {
+      this.chartErrors[index] = `Error cargando Respuesta #${index + 1}`;
+    }
   }
 
   private handleErrors(err) {
