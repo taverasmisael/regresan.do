@@ -40,17 +40,17 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private today = moment();
   private aWeekAgo = moment().subtract(7, 'days');
   private QuestionsQuery: APIRequestUser;
+  private closeAnswers$: Array<Observable<any>>;
 
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
 
-  public closeAnswers: any[];
+  public closeAnswers: any[] = [];
   public openAnswers: any[];
 
   public COLORS = rating(true);
-  public chartError: string;
-
-
+  public chartErrors: string[];
+  public questionError: string
 
   @HostBinding('class.mdl-color--primary') true;
   constructor(private route: ActivatedRoute,
@@ -68,11 +68,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal');
     this.CurrentSucursal.subscribe(store => this.SucursalState = store);
-
-    this.CurrentSucursal
-      .distinctUntilKeyChanged('closeAnswers')
-      .pluck<any[]>('closeAnswers')
-      .subscribe(answers => this.closeAnswers = this.transformAnswerToChart(answers));
 
     this.QuestionsQuery = {
       profile: this.CurrentProfile.OldProfileId.toString(),
@@ -107,12 +102,32 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.loadAllCharts(this.QuestionsQuery);
   }
 
+  loadCloseAnswer(index: number) {
+    this.chartErrors[index] = '';
+    this.store.dispatch(new StartRequest(`Cargando Respuesta #${index + 1}`));
+    this.closeAnswers$[index].subscribe(
+      val => {
+        const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
+        this.closeAnswers[index] = req$val;
+      },
+      err => {
+        if (err.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.chartErrors[index] = `Error cargando Respuesta #${index + 1}`;
+        }
+      },
+      () => this.store.dispatch(new StopRequest())
+    )
+  }
+
   private loadAllCharts(query: APIRequestUser) {
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
       this.loadAnswers.bind(this),
-      this.handleErrors.bind(this)
+      this.handleErrors.bind(this),
+      () => this.store.dispatch(new StopRequest())
       );
   }
 
@@ -129,14 +144,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     if (qs && qs.length) {
       this.store.dispatch(new StartRequest('Cargando Respuestas Cerradas...'));
-      const openedQs = qs.filter(q => q.tipoPregunta === 'Abierta');
-      const closedQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
-      if (openedQs.length) {
-        this.store.dispatch(new SaveOpenQuestions(openedQs));
-        this.loadOpenAnswers(openedQs.map(getIdPregunta), query);
+      const openQs = qs.filter(q => q.tipoPregunta === 'Abierta');
+      const closeQs = qs.filter(q => q.tipoPregunta !== 'Abierta');
+      if (openQs.length) {
+        this.store.dispatch(new SaveOpenQuestions(openQs));
+        this.loadOpenAnswers(openQs.map(getIdPregunta), query);
       }
-      this.store.dispatch(new SaveCloseQuestions(closedQs));
-      this.loadClosedAnswers(closedQs.map(getIdPregunta), query);
+      this.store.dispatch(new SaveCloseQuestions(closeQs));
+      this.loadCloseAnswers(closeQs.map(getIdPregunta), query);
 
     } else {
       this.store.dispatch(new StopRequest());
@@ -165,25 +180,36 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           }))
           ]
         }, []);
-        console.log(this.openAnswers);
         this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
         this.store.dispatch(new StopRequest());
       });
   }
 
-  private loadClosedAnswers(qsIds: number[], query: APIRequestUser) {
-    const answers$ = qsIds.reduce((prev, curr) => {
+  private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
+    this.closeAnswers$ = qsIds.reduce((prev, curr) => {
       let currentQuery = updateObject(query, { pregunta: curr.toString() });
       return [...prev, this.respuestas.getFromProfile(currentQuery)
         .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
       ];
     }, []);
 
-    Observable.forkJoin(answers$)
-      .subscribe((answers: Pregunta[][]) => {
-        this.store.dispatch(new SaveCloseAnswers(answers));
-        this.store.dispatch(new StopRequest());
-      });
+    this.chartErrors = new Array(this.closeAnswers$.length); // Prepare for errors
+    this.closeAnswers$.forEach((req$, index) => {
+      this.store.dispatch(new StartRequest(`Cargando Respuesta #${index + 1}`));
+      req$.subscribe(val => {
+        const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
+        this.closeAnswers = [...this.closeAnswers, req$val];
+      },
+        err => {
+          if (err.status === 401) {
+            this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+          } else {
+            this.chartErrors[index] = `Error cargando Respuesta #${index + 1}`;
+          }
+        },
+        () => this.store.dispatch(new StopRequest())
+      )
+    });
   }
 
   private handleErrors(err) {
@@ -191,7 +217,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.store.dispatch({ type: ActionTypes.LOGOUT_START });
     } else {
       this.store.dispatch(new StopRequest());
-      this.chartError = 'Error obteniendo la informacion del Servidor';
+      this.questionError = 'Error obteniendo la informacion del Servidor';
     }
   }
 
@@ -208,12 +234,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         this.CurrentProfile = profile;
         this.store.dispatch(new SaveInfo(profile));
       });
-  }
-
-  private transformAnswerToChart(answers: any[]) {
-    return answers.reduce((prev, curr) => {
-      return [...prev, curr['respuestas'].reduce(makePieChart, [[], []])];
-    }, []);
   }
 }
 

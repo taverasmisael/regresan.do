@@ -17,10 +17,11 @@
           *ngFor="let q of SucursalState.closeQuestions; let i = index;"
           chartType="pie"
           lodingText="Respuesta {{ i + 1 }}"
-          [errorText]="chartError"
+          (failed)="loadCloseAnswer(i)"
+          [errorText]="chartErrors[i]"
           [chartTitle]="q.pregunta"
-          [chartLabels]="closeAnswers.length ? closeAnswers[i][0] : []"
-          [chartData]="closeAnswers.length ? closeAnswers[i][1] : []"
+          [chartLabels]="closeAnswers.length >= (i + 1) ? closeAnswers[i][0] : []"
+          [chartData]="closeAnswers.length >= (i + 1) ? closeAnswers[i][1] : []"
           [chartColors]="COLORS"
           >
         </app-chart-card>
@@ -31,14 +32,14 @@
           <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
         </div>
       </div> <!-- Questions Loading Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && !chartError">
+      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && !questionError">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
         </h4>
       </div> <!-- Empty Response Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && chartError">
+      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && questionError">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-          <i class="material-icons">error</i><br /> {{ chartError }}
+          <i class="material-icons">error</i><br /> {{ questionError }}
         </h4>
       </div> <!-- Error Response Indicator -->
     </div>
