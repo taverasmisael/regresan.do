@@ -1,10 +1,12 @@
 .mdl-card {
   background: #fff;
   width: 100%;
+  font-size: 1em;
 }
 .mdl-card__title {
   color: rgb(0, 103, 102);
   display: flex;
+  font-size: 1em;
   justify-content: space-between;
   z-index: 3;
 }
@@ -28,6 +30,9 @@
   &.no--opacity {
     background: rgba(255,255,255,1);
   }
+}
+.mdl-card__title-text {
+  font-size: 1.1em;
 }
 .mdl-spinner {
   width: 56px;
