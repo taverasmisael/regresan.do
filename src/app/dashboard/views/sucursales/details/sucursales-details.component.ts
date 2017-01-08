@@ -95,7 +95,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
-  public applyFilters(filter: Filter) {
+  applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
@@ -117,6 +117,40 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       err => this.handleAnswerError(err, index),
       () => this.store.dispatch(new StopRequest())
     )
+  }
+
+  loadOpenAnswers(qsIds: number[], query: APIRequestUser = this.QuestionsQuery) {
+    const answers$ = qsIds.reduce((prev, curr) => {
+      let currentQuery = updateObject(query, { pregunta: curr.toString() });
+      return [...prev, this.respuestas.getAbiertasFromProfile(currentQuery)
+        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
+      ];
+    }, []);
+
+    Observable.forkJoin(answers$)
+      .subscribe((answers: any[]) => {
+        this.openAnswersError = '';
+        this.openAnswers = answers.reduce((prev, curr) => {
+          return [...prev, curr.respuestas.map(a => ({
+            respuesta: a.Respuesta,
+            fecha: a.Fecha,
+            sesion: a.Sesion,
+            pregunta: curr.pregunta,
+            porcentaje: a.Porcentaje // UNUSED
+          }))
+          ]
+        }, []);
+        this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
+      },
+      err => {
+        if (err.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.openAnswersError = 'Error obteniendo respuestas abiertas';
+        }
+      },
+      () => this.store.dispatch(new StopRequest())
+      );
   }
 
   private loadAllCharts(query: APIRequestUser) {
@@ -154,42 +188,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     } else {
       this.store.dispatch(new StopRequest());
     }
-  }
-
-
-
-  private loadOpenAnswers(qsIds: number[], query: APIRequestUser = this.QuestionsQuery) {
-    const answers$ = qsIds.reduce((prev, curr) => {
-      let currentQuery = updateObject(query, { pregunta: curr.toString() });
-      return [...prev, this.respuestas.getAbiertasFromProfile(currentQuery)
-        .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
-      ];
-    }, []);
-
-    Observable.forkJoin(answers$)
-      .subscribe((answers: any[]) => {
-        this.openAnswersError = '';
-        this.openAnswers = answers.reduce((prev, curr) => {
-          return [...prev, curr.respuestas.map(a => ({
-            respuesta: a.Respuesta,
-            fecha: a.Fecha,
-            sesion: a.Sesion,
-            pregunta: curr.pregunta,
-            porcentaje: a.Porcentaje // UNUSED
-          }))
-          ]
-        }, []);
-        this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
-      },
-      err => {
-        if (err.status === 401) {
-          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
-        } else {
-          this.openAnswersError = 'Error obteniendo respuestas abiertas';
-        }
-      },
-      () => this.store.dispatch(new StopRequest())
-      );
   }
 
   private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
