@@ -44,7 +44,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
 
-  public userProfiles: UserProfile[];
   public closeAnswers: any[];
   public openAnswers: any[];
 
@@ -58,10 +57,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     private store: Store<AppState>,
     private preguntas: PreguntasService,
     private respuestas: RespuestasService) { }
-
-  ngAfterViewInit() {
-    componentHandler.upgradeAllRegistered();
-  }
 
   ngOnInit() {
     this.id$ = this.route.params
@@ -77,7 +72,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.CurrentSucursal
       .distinctUntilKeyChanged('closeAnswers')
       .pluck<any[]>('closeAnswers')
-      .subscribe(answers =>  this.closeAnswers = this.transformAnswerToChart(answers));
+      .subscribe(answers => this.closeAnswers = this.transformAnswerToChart(answers));
 
     this.QuestionsQuery = {
       profile: this.CurrentProfile.OldProfileId.toString(),
@@ -92,6 +87,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         setTimeout(() => componentHandler.upgradeAllRegistered(), 100);
       })
   }
+  ngAfterViewInit() {
+    componentHandler.upgradeAllRegistered();
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new ResetSucursal());
+  }
+
 
   public applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
@@ -99,10 +102,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
     this.loadAllCharts(this.QuestionsQuery);
-  }
-
-  ngOnDestroy() {
-    this.store.dispatch(new ResetSucursal());
   }
 
   private loadAllCharts(query: APIRequestUser) {
@@ -155,12 +154,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .subscribe((answers: any[]) => {
         this.openAnswers = answers.reduce((prev, curr) => {
           return [...prev, curr.respuestas.map(a => ({
-                  respuesta: a.Respuesta,
-                  fecha: a.Fecha,
-                  sesion: a.sesion,
-                  pregunta: curr.pregunta,
-                  porcentaje: a.Porcentaje // UNUSED
-                }))
+            respuesta: a.Respuesta,
+            fecha: a.Fecha,
+            sesion: a.sesion,
+            pregunta: curr.pregunta,
+            porcentaje: a.Porcentaje // UNUSED
+          }))
           ]
         }, []);
         console.log(this.openAnswers);

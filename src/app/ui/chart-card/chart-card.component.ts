@@ -44,7 +44,6 @@ export class ChartCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['loading'] && changes['loading'].currentValue === true) {
       setTimeout(() => {
-        console.log('Llamando...')
         componentHandler.upgradeDom();
         componentHandler.upgradeAllRegistered();
       }, 200)

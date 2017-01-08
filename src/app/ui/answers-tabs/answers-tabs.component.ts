@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { Observable } from 'rxjs/Observable';
+
 @Component({
   selector: 'app-answers-tabs',
   templateUrl: './answers-tabs.component.html',
@@ -14,6 +16,9 @@ export class AnswersTabsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    Observable.of(this.loading)
+      .map(val => val === true)
+      .subscribe(() => componentHandler.upgradeAllRegistered());
   }
 
   public getMyAnswers(id: number) {

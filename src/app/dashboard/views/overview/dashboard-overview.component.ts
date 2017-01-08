@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 
 import { ActionTypes } from '../../../actions/auth.actions';
 
@@ -29,7 +28,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   private AuthState: Observable<AuthState>;
   private today = moment();
-  private testChart: Subscription;
   private aWeekAgo = moment().subtract(7, 'days');
 
   public userProfiles: UserProfile[];
