@@ -21,17 +21,18 @@ export const createPalette = (colors: string[], alpha = 1): ChartJsColor[] => {
 }
 
 export const createCirularPalette = (colors: ChartJsColor[]) => {
-  return colors.reduce((prev, curr) => {
+  let c = colors.reduce((prev, curr) => {
     prev[0] = prev[0] || {backgroundColor: []};
     let backgrounds = prev[0]['backgroundColor'];
     prev[1] = prev[1] || {borderColor: []};
     let borders = prev[1]['borderColor'];
 
     prev[0]['backgroundColor'] = [...backgrounds, curr.backgroundColor];
-    prev[1]['borderColor'] = [...borders, curr.borderColor];
+    prev[1]['borderColor'] = [...borders, curr.backgroundColor];
 
     return prev;
-  }, [])
+  }, []);
+  return [Object.assign({}, c[0], c[1])];
 }
 export interface ChartJsColor {
   backgroundColor: string,

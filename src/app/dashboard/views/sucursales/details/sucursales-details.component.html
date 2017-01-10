@@ -20,9 +20,9 @@
           (failed)="loadCloseAnswer(i)"
           [errorText]="chartErrors[i]"
           [chartTitle]="q.pregunta"
-          [chartLabels]="closeAnswers.length >= (i + 1) ? closeAnswers[i][0] : []"
-          [chartData]="closeAnswers.length >= (i + 1) ? closeAnswers[i][1] : []"
-          [chartColors]="COLORS"
+          [chartLabels]="closeAnswers[q.idPregunta][0]"
+          [chartData]="closeAnswers[q.idPregunta][1]"
+          [chartColors]="closeAnswers[q.idPregunta][2]"
           >
         </app-chart-card>
       </div>

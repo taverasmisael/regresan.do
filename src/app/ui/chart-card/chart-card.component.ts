@@ -48,6 +48,8 @@ export class ChartCardComponent implements OnInit, OnChanges {
         componentHandler.upgradeDom();
         componentHandler.upgradeAllRegistered();
       }, 200)
+    } else if (changes['chartColors']) {
+      this.ngOnInit();
     }
   }
 
