@@ -43,8 +43,8 @@ import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashb
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
 import { ChartCardComponent } from './ui/chart-card/chart-card.component';
-import { ToolbarComponent } from './ui/toolbar/toolbar.component';
 import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
+import { FilterComponent } from './ui/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -58,9 +58,9 @@ import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
     SucursalesDetailsComponent,
     SucursalesListComponent,
     ChartCardComponent,
-    ToolbarComponent,
     FlatpickrComponent,
-    AnswersTabsComponent
+    AnswersTabsComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

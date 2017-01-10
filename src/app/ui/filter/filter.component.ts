@@ -16,17 +16,17 @@ import {
 } from '@angular/forms';
 
 import { UserProfile } from '../../models/userprofile';
-import { Filter } from '../../models/toolbar-flters';
+import { Filter } from '../../models/filter';
 import { FlatpickrOptions } from '../../thirdparty/flatpickr/models';
 import { DateValidator } from '../../utilities/validators/date.validator';
 
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss'],
+  selector: 'app-filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToolbarComponent implements OnInit, AfterViewInit {
+export class FilterComponent implements OnInit, AfterViewInit {
 
   @Input() totalGeneral: number;
   @Input() totalHoy: number;
