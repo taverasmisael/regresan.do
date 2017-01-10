@@ -45,7 +45,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
 
-  public closeAnswers: any[] = [];
+  public closeAnswers: any = {};
   public openAnswers: any[];
 
   public COLORS = rating(true);
@@ -192,6 +192,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
     this.closeAnswers$ = qsIds.reduce((prev, curr) => {
+      this.closeAnswers = updateObject(this.closeAnswers, {
+        [curr.toString()]: [[], []]
+      });
       let currentQuery = updateObject(query, { pregunta: curr.toString() });
       return [...prev, this.respuestas.getFromProfile(currentQuery)
         .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
@@ -203,7 +206,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.store.dispatch(new StartRequest(`Cargando Respuesta #${index + 1}`));
       req$.subscribe(val => {
         const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
-        this.closeAnswers = [...this.closeAnswers, req$val];
+        this.closeAnswers = updateObject(this.closeAnswers, {
+          [val.pregunta]: req$val
+        });
       },
         err => this.handleAnswerError(err, index),
         () => this.store.dispatch(new StopRequest())
