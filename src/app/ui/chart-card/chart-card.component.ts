@@ -32,6 +32,15 @@ export class ChartCardComponent implements OnInit, OnChanges {
   @Output() failed = new EventEmitter();
 
   public ChartColors: any[];
+  public chartOptions = {
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+  }
 
   constructor() { }
 

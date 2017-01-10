@@ -10,6 +10,7 @@
   <div class="mdl-card__supporting-text">
     <div *ngIf="useDataset(chartType)" class="chart-holder">
       <canvas *ngIf="chartData.length" baseChart
+        [options]="chartOptions"
         [chartType]="chartType"
         [labels]="chartLabels"
         [datasets]="chartData"
