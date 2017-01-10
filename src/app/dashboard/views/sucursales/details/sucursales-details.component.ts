@@ -157,9 +157,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-      this.loadAnswers.bind(this),
-      this.handleErrors.bind(this),
-      () => this.store.dispatch(new StopRequest())
+        questions => this.loadAnswers(questions),
+        err => this.handleErrors(err),
+        () => this.store.dispatch(new StopRequest())
       );
   }
 
