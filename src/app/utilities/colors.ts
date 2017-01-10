@@ -79,13 +79,26 @@ export const gamaRegresando = () => {
   ]
 }
 
-export const rating = (name) => {
+export const ratingPalette = (asObject: boolean) => {
   const palette =  {
-    excelente: '#166499',
-    bueno: '#00A4A3',
-    regular: '#F8AA19',
-    malo: '#E54128'
+    'Excelente': '#166499',
+    'Si': '#166499',
+    'Bueno': '#00A4A3',
+    'Muy Bueno': '#00A4A3',
+    'Muy Buena': '#00A4A3',
+    'Regular': '#F8AA19',
+    'Deficiente': '#E54128',
+    'Malo': '#E54128',
+    'No': '#E54128'
   };
 
-  return (typeof name === 'boolean' && name === true) ? (<any>Object).values(palette) : palette[name];
+  const paletteArray = [
+    '#166499',
+    '#00A4A3',
+    '#F8AA19',
+    '#E54128',
+    '#002f41'
+  ];
+
+  return asObject ? palette : paletteArray;
 }

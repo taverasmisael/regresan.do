@@ -12,7 +12,7 @@ import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { makePieChart } from '../../../../utilities/respuestas';
 import { updateObject } from '../../../../utilities/objects';
-import { rating } from '../../../../utilities/colors';
+import { ratingPalette } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
@@ -41,6 +41,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private aWeekAgo = moment().subtract(7, 'days');
   private QuestionsQuery: APIRequestUser;
   private closeAnswers$: Array<Observable<any>>;
+  private rattingColors = ratingPalette(true);
+  private rattingColorsArray = ratingPalette(false);
 
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
@@ -48,7 +50,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public closeAnswers: any = {};
   public openAnswers: any[];
 
-  public COLORS = rating(true);
   public chartErrors: string[];
   public questionError: string;
   public openAnswersError: string;
@@ -101,6 +102,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
     this.loadAllCharts(this.QuestionsQuery);
+  }
+
+  giveMeMyColors(array: string[]) {
+    let colors = array.map((el, i) => this.rattingColors[el] || this.rattingColorsArray[i]);
+    return colors;
   }
 
   loadCloseAnswer(index: number) {
@@ -193,7 +199,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
     this.closeAnswers$ = qsIds.reduce((prev, curr) => {
       this.closeAnswers = updateObject(this.closeAnswers, {
-        [curr.toString()]: [[], []]
+        [curr.toString()]: [[], [], []]
       });
       let currentQuery = updateObject(query, { pregunta: curr.toString() });
       return [...prev, this.respuestas.getFromProfile(currentQuery)
@@ -207,7 +213,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       req$.subscribe(val => {
         const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
         this.closeAnswers = updateObject(this.closeAnswers, {
-          [val.pregunta]: req$val
+          [val.pregunta]: [...req$val, this.giveMeMyColors(req$val[0])]
         });
       },
         err => this.handleAnswerError(err, index),
