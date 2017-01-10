@@ -2,10 +2,13 @@ import {
   Component,
   OnInit,
   AfterViewInit,
+  ViewChild,
+  ElementRef,
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  HostBinding
 } from '@angular/core';
 
 import {
@@ -32,11 +35,14 @@ export class FilterComponent implements OnInit, AfterViewInit {
   @Input() totalHoy: number;
   @Output() applyFilters = new EventEmitter();
 
+  @ViewChild('filterDialog') filterDialog: ElementRef;
+
   public filterForm: FormGroup;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
   public flatpickrOptions: FlatpickrOptions = { dateFormat: 'd/m/Y' };
   public lastFilter: Filter;
+  @HostBinding('class.mdl-grid') true;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -51,6 +57,13 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     componentHandler.upgradeAllRegistered();
+    if (!this.filterDialog.nativeElement.showModal) {
+      dialogPolyfill.registerDialog(this.filterDialog.nativeElement);
+    }
+  }
+
+  showDialog() {
+    this.filterDialog.nativeElement.showModal();
   }
 
   sendFilters() {
