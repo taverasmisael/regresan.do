@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { UserProfile } from '../../../models/userprofile';
 import { AuthState } from '../../../models/authstate';
 import { AppState } from '../../../models/appstate';
+import { gamaRegresando } from '../../../utilities/colors';
 
 @Component({
   selector: 'app-dashboard-sucursales',
@@ -16,7 +17,7 @@ export class DashboardSucursalesComponent implements OnInit {
 
   private AuthState: Observable<AuthState>;
   private userProfiles: Observable<UserProfile[]>;
-  private graphColors: string[] = ["#8BC34A", "#0D47A1", "#009688", "#F44336", "#FFEB3B", "#03A9F4"]
+  public colores = gamaRegresando();
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
