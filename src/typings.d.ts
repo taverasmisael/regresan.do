@@ -6,3 +6,8 @@ declare var dialogPolyfill: {
   registerDialog: (HTMLElement) => void,
   DialogManager: () => HTMLElement,
 };
+
+declare module 'just-compare' {
+  const compare: (val1: any, val2: any) => boolean;
+  export default compare;
+}
