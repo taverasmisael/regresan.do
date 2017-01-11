@@ -1,4 +1,4 @@
-<app-filter (applyFilters)="applyFilters($event)"></app-filter>
+<app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
 <div class="mdl-grid">
   <app-chart-card
     class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card mdl-shadow--2dp"

@@ -32,6 +32,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
+  public currentFilters: Filter = {
+    fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+    fechaFin: this.today.format('DD/MM/YYYY')
+  };
   public query: APIRequestParams;
   public totalGeneral: number;
   public totalHoy: number;

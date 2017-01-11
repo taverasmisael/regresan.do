@@ -18,6 +18,8 @@ import {
   Validators
 } from '@angular/forms';
 
+import compare from 'just-compare';
+
 import { UserProfile } from '../../models/userprofile';
 import { Filter } from '../../models/filter';
 import { FlatpickrOptions } from '../../thirdparty/flatpickr/models';
@@ -30,6 +32,8 @@ import { DateValidator } from '../../utilities/validators/date.validator';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit {
+
+  @Input() filters: Filter;
   @Output() applyFilters = new EventEmitter();
 
   @ViewChild('filterDialog') filterDialog: ElementRef;
@@ -43,8 +47,11 @@ export class FilterComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.filterFechaInicio = new FormControl('', [Validators.required, DateValidator.spanishDate]);
-    this.filterFechaFin = new FormControl('', [Validators.required, DateValidator.spanishDate]);
+    let {fechaInicio: inicio, fechaFin: fin } = this.filters;
+    this.filterFechaInicio = new FormControl(inicio, [Validators.required, DateValidator.spanishDate]);
+    this.filterFechaFin = new FormControl(fin, [Validators.required, DateValidator.spanishDate]);
+
+    this.lastFilter = this.filters;
 
     this.filterForm = this.fb.group({
       fechaInicio: this.filterFechaInicio,
@@ -71,7 +78,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   }
 
   sendFilters() {
-    if (this.lastFilter !== this.filterForm.value) {
+    if (!compare(this.lastFilter, this.filterForm.value)) {
       this.lastFilter = this.filterForm.value;
       this.applyFilters.emit(this.filterForm.value);
     }
