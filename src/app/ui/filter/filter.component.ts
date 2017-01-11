@@ -60,10 +60,17 @@ export class FilterComponent implements OnInit, AfterViewInit {
     if (!this.filterDialog.nativeElement.showModal) {
       dialogPolyfill.registerDialog(this.filterDialog.nativeElement);
     }
+    Array.from(document.querySelectorAll('.flatpickr-calendar')).forEach(el => {
+      this.filterDialog.nativeElement.appendChild(el);
+    })
   }
 
   showDialog() {
     this.filterDialog.nativeElement.showModal();
+  }
+
+  closeDialog(clean?: boolean) {
+    this.filterDialog.nativeElement.close();
   }
 
   sendFilters() {
@@ -71,6 +78,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
       this.lastFilter = this.filterForm.value;
       this.applyFilters.emit(this.filterForm.value);
     }
+    this.closeDialog();
   }
 
 }
