@@ -9,7 +9,7 @@ import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 import { APIRequestParams } from '../../../models/apiparams';
-import { Filter } from '../../../models/toolbar-flters';
+import { Filter } from '../../../models/filter';
 
 import * as moment from 'moment';
 import { PreguntasService } from '../../../services/preguntas.service';
@@ -32,6 +32,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
+  public currentFilters: Filter = {
+    fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+    fechaFin: this.today.format('DD/MM/YYYY')
+  };
   public query: APIRequestParams;
   public totalGeneral: number;
   public totalHoy: number;

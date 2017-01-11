@@ -21,7 +21,7 @@ import {
   ResetSucursal, ResetQA
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
-import { Filter } from '../../../../models/toolbar-flters';
+import { Filter } from '../../../../models/filter';
 
 import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/appstate';
@@ -44,6 +44,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private rattingColors = ratingPalette(true);
   private rattingColorsArray = ratingPalette(false);
 
+  public currentFilters: Filter = {
+    fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+    fechaFin: this.today.format('DD/MM/YYYY')
+  };
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
 
@@ -85,7 +89,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         if (isLoading) {
           setTimeout(() => componentHandler.upgradeAllRegistered(), 200);
         }
-      })
+      });
   }
   ngAfterViewInit() {
     componentHandler.upgradeAllRegistered();
