@@ -30,9 +30,6 @@ import { DateValidator } from '../../utilities/validators/date.validator';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit {
-
-  @Input() totalGeneral: number;
-  @Input() totalHoy: number;
   @Output() applyFilters = new EventEmitter();
 
   @ViewChild('filterDialog') filterDialog: ElementRef;
