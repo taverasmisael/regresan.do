@@ -21,7 +21,7 @@ import {
   ResetSucursal, ResetQA
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
-import { Filter } from '../../../../models/toolbar-flters';
+import { Filter } from '../../../../models/filter';
 
 import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/appstate';

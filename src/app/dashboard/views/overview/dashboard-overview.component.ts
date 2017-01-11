@@ -9,7 +9,7 @@ import { UserProfile } from '../../../models/userprofile';
 import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 import { APIRequestParams } from '../../../models/apiparams';
-import { Filter } from '../../../models/toolbar-flters';
+import { Filter } from '../../../models/filter';
 
 import * as moment from 'moment';
 import { PreguntasService } from '../../../services/preguntas.service';
