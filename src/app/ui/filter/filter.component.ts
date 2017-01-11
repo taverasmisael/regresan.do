@@ -43,6 +43,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterFechaFin: FormControl;
   public flatpickrOptions: FlatpickrOptions = { dateFormat: 'd/m/Y' };
   public lastFilter: Filter;
+  public activeFilters: number;
+
   @HostBinding('class.mdl-grid') true;
   constructor(private fb: FormBuilder) { }
 
@@ -52,6 +54,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.filterFechaFin = new FormControl(fin, [Validators.required, DateValidator.spanishDate]);
 
     this.lastFilter = this.filters;
+    this.setActivesFilters();
 
     this.filterForm = this.fb.group({
       fechaInicio: this.filterFechaInicio,
@@ -83,6 +86,10 @@ export class FilterComponent implements OnInit, AfterViewInit {
       this.applyFilters.emit(this.filterForm.value);
     }
     this.closeDialog();
+  }
+
+  private setActivesFilters() {
+    this.activeFilters = Object.keys(this.lastFilter).length;
   }
 
 }
