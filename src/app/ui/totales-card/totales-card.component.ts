@@ -7,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TotalesCardComponent implements OnInit {
 
+  @Input() cardType: 'total' | 'indice' | 'hoy';
+
   constructor() { }
 
   ngOnInit() {
