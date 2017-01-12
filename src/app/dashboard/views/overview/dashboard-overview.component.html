@@ -3,7 +3,7 @@
   [total]="totalGeneral | async"
   [hoy]="totalHoy | async"
   [indice]="5"
-  [sucursales]="userProfiles.length"
+  [sucursales]="nuevosContactos | async"
 ></app-totales-container>
 <div class="mdl-grid">
   <app-chart-card
