@@ -1,9 +1,9 @@
 <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
 <app-totales-container
-  [total]="5000"
-  [hoy]="25"
+  [total]="totalGeneral"
+  [hoy]="totalHoy"
   [indice]="5"
-  [sucursales]="6"
+  [sucursales]="userProfiles.length"
 ></app-totales-container>
 <div class="mdl-grid">
   <app-chart-card

@@ -37,8 +37,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     fechaFin: this.today.format('DD/MM/YYYY')
   };
   public query: APIRequestParams;
-  public totalGeneral: number;
-  public totalHoy: number;
+  public totalGeneral = 0;
+  public totalHoy = 0;
   public encuestasSucursalesError: string;
   public encuestasSucursalesData: number[] = [];
   public encuestasSucursalesLabels: string[] = [];
