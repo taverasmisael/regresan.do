@@ -37,8 +37,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     fechaFin: this.today.format('DD/MM/YYYY')
   };
   public query: APIRequestParams;
-  public totalGeneral = 0;
-  public totalHoy = 0;
+  public totalGeneral: Observable<number>;
+  public totalHoy: Observable<number>;
   public encuestasSucursalesError: string;
   public encuestasSucursalesData: number[] = [];
   public encuestasSucursalesLabels: string[] = [];
@@ -67,6 +67,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     };
     this.loadEncuestasSucursales(this.query);
     this.loadHistoricoEncuestas(this.query);
+    this.loadResumen(this.query);
   }
 
   applyFilters(filter: Filter) {
@@ -77,6 +78,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
     this.loadEncuestasSucursales(this.query);
     this.loadHistoricoEncuestas(this.query);
+    this.loadResumen(this.query);
   }
 
   loadEncuestasSucursales(query: APIRequestParams) {
@@ -121,11 +123,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         if (data[0].length) {
           this.historicoEncuestasLabels = data[0];
           this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-          this.totalHoy = 35; // Este # es feik como el que manda la API
-          this.totalGeneral = data[1]
-            .map(ob => ob.data) // We only want the data array
-            .reduce(merge, []) // ... but in a single array
-            .reduce(sum, 0) // now we sum values
           this.historicoEncuestasLoading = false;
         } else {
           this.historicoEncuestasLoading = false;
@@ -141,5 +138,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
         }
       }
       );
+  }
+
+  loadResumen(query: APIRequestParams) {
+    const resumen$ = this.preguntas.getResumen(query)
+      .map(res => res['Cabecera']);
+
+    this.totalHoy = resumen$.map(res => res['TotalEncuestadosHoy']);
+    this.totalGeneral = resumen$.map(res => res['TotalEncuestas']);
   }
 }

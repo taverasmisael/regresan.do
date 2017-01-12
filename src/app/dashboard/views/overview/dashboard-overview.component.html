@@ -1,7 +1,7 @@
 <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
 <app-totales-container
-  [total]="totalGeneral"
-  [hoy]="totalHoy"
+  [total]="totalGeneral | async"
+  [hoy]="totalHoy | async"
   [indice]="5"
   [sucursales]="userProfiles.length"
 ></app-totales-container>
