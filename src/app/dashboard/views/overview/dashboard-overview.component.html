@@ -1,10 +1,10 @@
 <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
-<section class="section mdl-grid">
-  <app-totales-card class="mdl-cell mdl-cell--3-col" cardType="total" count="500" text="Total de Encuestas"></app-totales-card>
-  <app-totales-card class="mdl-cell mdl-cell--3-col" cardType="hoy" count="25" text="Total de Hoy"></app-totales-card>
-  <app-totales-card class="mdl-cell mdl-cell--3-col" cardType="indice" count="5" text="Indice de Sucursal"></app-totales-card>
-  <app-totales-card class="mdl-cell mdl-cell--3-col" count="6" text="Sucursales Activas"></app-totales-card>
-</section>
+<app-totales-container
+  [total]="5000"
+  [hoy]="25"
+  [indice]="5"
+  [sucursales]="6"
+></app-totales-container>
 <div class="mdl-grid">
   <app-chart-card
     class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card mdl-shadow--2dp"
