@@ -8,31 +8,11 @@
   padding: 0 2rem;
   .title {
     flex: 1 0;
-    color: white;
     margin-left: 1rem;
   }
 }
 .main-content {
   min-height: 90vh;
-}
-.comments-list {
-  .comment {
-    padding: 1em;
-  }
-}
-.charts-list {
-  .chart {
-    .chart-title {
-      background: #EEEEEE;
-      margin: 0;
-      padding: 1em 0;
-      text-align: center;
-    }
-    .chart-holder {
-      min-height: 15rem;
-      padding: 1.5em 0;
-    }
-  }
 }
 .loading-holder,
 .empty-holder {
