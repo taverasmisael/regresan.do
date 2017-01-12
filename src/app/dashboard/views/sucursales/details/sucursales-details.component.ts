@@ -58,7 +58,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public questionError: string;
   public openAnswersError: string;
 
-  @HostBinding('class.mdl-color--primary') true;
+  public totalGeneral: Observable<number>;
+  public totalHoy: Observable<number>;
+  public nuevosContactos: Observable<number>;
+
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,
     private preguntas: PreguntasService,
@@ -93,6 +96,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
   ngAfterViewInit() {
     componentHandler.upgradeAllRegistered();
+    this.loadResumen(this.QuestionsQuery);
   }
 
   ngOnDestroy() {
@@ -106,6 +110,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
     this.loadAllCharts(this.QuestionsQuery);
+    this.loadResumen(this.QuestionsQuery);
+  }
+
+  loadResumen(query: APIRequestUser) {
+    const resumen$ = this.preguntas.getResumenSucursal(query)
+      .map(res => res['Cabecera']);
+
+    this.totalHoy = resumen$.map(res => res['TotalEncuestadosHoy']);
+    this.totalGeneral = resumen$.map(res => res['TotalEncuestas']);
+    this.nuevosContactos = resumen$.map(res => res['NuevosContactos']);
   }
 
   giveMeMyColors(array: string[]) {

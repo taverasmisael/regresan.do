@@ -1,14 +1,20 @@
-<div class="info__header mdl-shadow--16dp">
+<app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
+<div class="info__header">
   <div class="headline">
-    <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-contrast">
-      <i class="material-icons">arrow_back</i>
+    <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-dark">
+      <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
-    <h3 class="title">{{ SucursalState.info.Title }}</h3>
+    <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
   </div>
+  <app-totales-container
+  [total]="totalGeneral | async"
+  [hoy]="totalHoy | async"
+  [indice]="5"
+  [sucursales]="nuevosContactos | async"
+></app-totales-container>
 </div>
 <section class="section section--info">
-  <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
-  <div class="mdl-grid mdl-color--primary-contrast main-content">
+  <div class="mdl-grid main-content">
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
