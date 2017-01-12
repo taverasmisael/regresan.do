@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserProfile } from '../../models/userprofile';
 
 @Component({
-  selector: 'sucursales-list',
+  selector: 'app-sucursales-list',
   templateUrl: './sucursales-list.component.html',
   styleUrls: ['./sucursales-list.component.scss']
 })
