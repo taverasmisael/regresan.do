@@ -3,6 +3,6 @@
   [class.mdl-color--green-A400]="cardType === 'indice'"
   [class.mdl-color--light-blue-A400]="cardType === 'hoy'"
 >
-  <p class="count mdl-typography--font-bold mdl-typography--display-3">{{count}}</p>
+  <p class="count mdl-typography--font-bold mdl-typography--display-3">{{count || 0}}</p>
   <p class="mdl-typography--subhead-color-contrast mdl-typography--font-thin text">{{text}}</p>
 </div>
