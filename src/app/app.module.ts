@@ -45,6 +45,7 @@ import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-
 import { ChartCardComponent } from './ui/chart-card/chart-card.component';
 import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
 import { FilterComponent } from './ui/filter/filter.component';
+import { TotalesCardComponent } from './ui/totales-card/totales-card.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { FilterComponent } from './ui/filter/filter.component';
     ChartCardComponent,
     FlatpickrComponent,
     AnswersTabsComponent,
-    FilterComponent
+    FilterComponent,
+    TotalesCardComponent
   ],
   imports: [
     BrowserModule,
