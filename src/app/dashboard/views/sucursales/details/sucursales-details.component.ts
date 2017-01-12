@@ -77,14 +77,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal');
     this.CurrentSucursal.subscribe(store => this.SucursalState = store);
+  }
 
+  ngAfterViewInit() {
+    componentHandler.upgradeAllRegistered();
     this.QuestionsQuery = {
       profile: this.CurrentProfile.OldProfileId.toString(),
       start: this.aWeekAgo.unix().toString(),
       end: this.today.unix().toString()
     }
-    this.loadAllCharts(this.QuestionsQuery);
-
     this.CurrentSucursal
       .distinctUntilKeyChanged('loading')
       .pluck<Boolean>('loading')
@@ -93,16 +94,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           setTimeout(() => componentHandler.upgradeAllRegistered(), 200);
         }
       });
-  }
-  ngAfterViewInit() {
-    componentHandler.upgradeAllRegistered();
+
+    this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
   }
 
   ngOnDestroy() {
     this.store.dispatch(new ResetSucursal());
   }
-
 
   applyFilters(filter: Filter) {
     this.QuestionsQuery = updateObject(this.QuestionsQuery, {
@@ -181,9 +180,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
       .subscribe(
-        questions => this.loadAnswers(questions),
-        err => this.handleErrors(err),
-        () => this.store.dispatch(new StopRequest())
+      questions => this.loadAnswers(questions),
+      err => this.handleErrors(err),
+      () => this.store.dispatch(new StopRequest())
       );
   }
 
