@@ -1,6 +1,6 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-  <header class="mdl-layout__header mdl-color--primary" dashboard-header (loginout)="logOut($event)" [user]="currentUser"></header>
-  <div class="mdl-layout__drawer mdl-color--primary-dark" dashboard-navbar></div>
+  <app-dashboard-header dashboard-header (loginout)="logOut($event)" [user]="currentUser"></app-dashboard-header>
+  <app-dashboard-navbar></app-dashboard-navbar>
   <main class="mdl-layout__content">
     <router-outlet class="page-content"></router-outlet>
   </main>
