@@ -16,7 +16,8 @@ import { gamaRegresando } from '../../../utilities/colors';
 export class DashboardSucursalesComponent implements OnInit {
 
   private AuthState: Observable<AuthState>;
-  private userProfiles: Observable<UserProfile[]>;
+
+  public userProfiles: Observable<UserProfile[]>;
   public colores = gamaRegresando();
   constructor(private store: Store<AppState>) { }
 

@@ -26,9 +26,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   loginForm: FormGroup;
   username: FormControl;
   password: FormControl;
-  private requesting: Boolean;
-  private loginError: any;
-  private AuthState: Observable<AuthState>;
+  public requesting: Boolean;
+  public loginError: any;
+  public AuthState: Observable<AuthState>;
 
   constructor(private fb: FormBuilder,
     private userService: UserService,

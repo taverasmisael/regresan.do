@@ -18,8 +18,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private userData: AuthState;
   private AuthState: Observable<AuthState>;
-  private currentUser: User;
   private userProfiles: UserProfile[];
+
+  public currentUser: User;
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
