@@ -18,13 +18,15 @@ export class DashboardSucursalesComponent implements OnInit {
   private AuthState: Observable<AuthState>;
 
   public userProfiles: Observable<UserProfile[]>;
-  public colores = gamaRegresando();
+  public colores: string[];
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
     this.AuthState = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('auth')
       .pluck<AuthState>('auth');
+
+    this.colores = gamaRegresando();
 
     this.userProfiles = this.AuthState.pluck<UserProfile[]>('currentUser', 'Profiles')
   }
