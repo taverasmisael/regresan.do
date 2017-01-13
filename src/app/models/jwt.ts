@@ -3,6 +3,6 @@ export interface JWT {
   token_type: string,
   expires_in: number,
   userName: string,
-  ".issued": Date,
-  ".expires": Date
+  '.issued': Date,
+  '.expires': Date
 }
