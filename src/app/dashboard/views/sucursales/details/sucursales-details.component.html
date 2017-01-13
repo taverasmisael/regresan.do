@@ -16,7 +16,7 @@
     class="mdl-cell mdl-cell--5-col"
     [total]="totalGeneral | async"
     [hoy]="totalHoy | async"
-    [indice]="0"
+    [indice]="indiceSucursal | async"
     [sucursales]="nuevosContactos | async"
     halfCards="true">
   </app-totales-container>

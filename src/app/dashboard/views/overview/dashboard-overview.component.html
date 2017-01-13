@@ -2,7 +2,7 @@
 <app-totales-container
   [total]="totalGeneral | async"
   [hoy]="totalHoy | async"
-  [indice]="0"
+  [indice]="indiceSucursal |async"
   [sucursales]="nuevosContactos | async"
 ></app-totales-container>
 <div class="mdl-grid">

@@ -37,6 +37,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public totalGeneral: Observable<number>;
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
+  public indiceSucursal: Observable<number>;
   public encuestasSucursalesError: string;
   public encuestasSucursalesData: number[] = [];
   public encuestasSucursalesLabels: string[] = [];
@@ -152,5 +153,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.totalHoy = resumen$.map(res => res['TotalEncuestadosHoy']);
     this.totalGeneral = resumen$.map(res => res['TotalEncuestas']);
     this.nuevosContactos = resumen$.map(res => res['NuevosContactos']);
+    this.indiceSucursal = resumen$.map(res => res['IndiceSucursal']);
   }
 }

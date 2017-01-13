@@ -59,6 +59,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public totalGeneral: Observable<number>;
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
+  public indiceSucursal: Observable<number>;
 
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,
@@ -128,6 +129,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.totalHoy = resumen$.map(res => res['TotalEncuestadosHoy']);
     this.totalGeneral = resumen$.map(res => res['TotalEncuestas']);
     this.nuevosContactos = resumen$.map(res => res['NuevosContactos']);
+    this.indiceSucursal = resumen$.map(res => res['IndiceSucursal']);
   }
 
   giveMeMyColors(array: string[]) {
