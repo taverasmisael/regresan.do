@@ -23,9 +23,10 @@ import {Observable} from 'rxjs/Rx';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-  loginForm: FormGroup;
-  username: FormControl;
-  password: FormControl;
+
+  public loginForm: FormGroup;
+  public username: FormControl;
+  public password: FormControl;
   public requesting: Boolean;
   public loginError: any;
   public AuthState: Observable<AuthState>;
