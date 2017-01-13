@@ -6,6 +6,12 @@
     </a>
     <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
   </div>
+  <div class="mdl-cell--12-col">
+    <div class="mdl-grid">
+      <h4 class="mdl-cell mdl-cell--5-col mdl-color-text--accent-contrast mini-title">Resumen General</h4>
+      <h4 class="mdl-cell mdl-cell--7-col mdl-color-text--accent-contrast mini-title">Ranking de Camareros</h4>
+    </div>
+  </div>
   <app-totales-container
     class="mdl-cell mdl-cell--5-col"
     [total]="totalGeneral | async"
@@ -14,16 +20,8 @@
     [sucursales]="nuevosContactos | async"
     halfCards="true">
   </app-totales-container>
-  <div class="mdl-cell mdl-cell--7-col mdl-card mdl-shadow--2dp">
-    <div class="mdl-layout__header mdl-layout__header--transparent">
-      <div class="mdl-layout__header-row">
-        <h4 class="mdl-color-text--accent-contrast">Ranking De Encustas</h4>
-        <span style="flex: 1;"></span>
-        <i class="material-icons mdl-color-text--accent">star</i>
-      </div>
-    </div>
+  <div class="mdl-cell mdl-cell--7-col mdl-card mdl-shadow--2dp rating-container">
     <table *ngIf="(rankingCamareros$ | async)?.length" class="mdl-data-table mdl-js-data-table">
-      {{rankingCamareros | async }}
       <thead>
         <tr>
           <th class="mdl-data-table__cell--non-numeric">Nombre</th>
@@ -37,6 +35,12 @@
         </tr>
       </tbody>
     </table>
+    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!((rankingCamareros$ | async)?.length)">
+        <div class="content">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          <h4 class="mdl-typography--text-center">Cargando Ranking de Camareros</h4>
+        </div>
+      </div>
   </div>
 </div>
 <section class="section section--info">

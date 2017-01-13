@@ -25,7 +25,8 @@
   background: rgba(255,255,255,0.6);
 }
 
-.qa-holder {
+.qa-holder,
+.rating-container {
   position: relative;
 }
 .mdl-layout__header {
@@ -37,4 +38,11 @@
 .mdl-data-table {
   width: 100%;
   border: none;
+}
+.rating-container {
+  max-height: 330px;
+  overflow-y: auto;
+}
+.mini-title {
+  padding-left: 1rem;
 }
