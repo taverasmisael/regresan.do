@@ -37,17 +37,14 @@ import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparam
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private id$: Observable<number>;
   private CurrentSucursal: Observable<SucursalState>;
-  private today = moment();
-  private aWeekAgo = moment().subtract(7, 'days');
+  private today: moment.Moment;
+  private aWeekAgo: moment.Moment;
   private QuestionsQuery: APIRequestUser;
   private closeAnswers$: Array<Observable<any>>;
-  private rattingColors = ratingPalette(true);
-  private rattingColorsArray = ratingPalette(false);
+  private rattingColors: any;
+  private rattingColorsArray: string[];
 
-  public currentFilters: Filter = {
-    fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
-    fechaFin: this.today.format('DD/MM/YYYY')
-  };
+  public currentFilters: Filter;
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
 
@@ -77,6 +74,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal');
     this.CurrentSucursal.subscribe(store => this.SucursalState = store);
+
+    this.today = moment();
+    this.aWeekAgo = moment().subtract(7, 'days');
+    this.rattingColorsArray = ratingPalette(false);
+    this.rattingColors = ratingPalette(true);
+    this.currentFilters = {
+      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+      fechaFin: this.today.format('DD/MM/YYYY')
+    };
   }
 
   ngAfterViewInit() {
