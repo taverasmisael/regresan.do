@@ -14,7 +14,7 @@ export class LocalStorageService {
     } else {
       try {
         item = JSON.stringify(value);
-      } catch(e) {
+      } catch (e) {
         item = value.toString() || value;
       }
     }

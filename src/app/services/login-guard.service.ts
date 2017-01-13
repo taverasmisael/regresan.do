@@ -14,7 +14,7 @@ export class LoginGuardService implements CanActivate {
   canActivate() {
     return this.userService.isLoggedIn()
       .map(val => {
-        if(val) {
+        if (val) {
           this.router.navigate(['dashboard']);
         }
 

@@ -24,13 +24,13 @@ export class ApiService {
   private COMMON_HEADERS = new Headers([{'Content-Type': 'application/x-www-form-urlencoded'}]);
   constructor(private http: Http) { }
 
-  get(path: string | Request, options?: RequestOptionsArgs):Observable<{}> {
+  get(path: string | Request, options?: RequestOptionsArgs): Observable<{}> {
     return this.http.get(`${this.BASE_URL}/${path}`, options)
       .map(this.HandleResponse)
       .catch(this.HandleErrors);
   }
 
-  post(path: string | Request, body: any, options?: RequestOptionsArgs):Observable<{}> {
+  post(path: string | Request, body: any, options?: RequestOptionsArgs): Observable<{}> {
     // This Line Ensure All 'FormRequest' are sended with the right content-type
     const innerOptions = updateObject({headers: this.COMMON_HEADERS}, options);
     return this.http.post(`${this.BASE_URL}/${path}`, body, innerOptions)
@@ -38,7 +38,7 @@ export class ApiService {
       .catch(this.HandleErrors);
   }
 
-  delete(path: string | Request, options?: RequestOptionsArgs):Observable<{}> {
+  delete(path: string | Request, options?: RequestOptionsArgs): Observable<{}> {
     // This Line Ensure All 'FormRequest' are sended with the right content-type
     const innerOptions = updateObject({headers: this.COMMON_HEADERS}, options);
     return this.http.delete(`${this.BASE_URL}/${path}`, innerOptions)
@@ -46,7 +46,7 @@ export class ApiService {
     .catch(this.HandleErrors);
   }
 
-  put(path: string | Request, body: any, options?: RequestOptionsArgs):Observable<{}> {
+  put(path: string | Request, body: any, options?: RequestOptionsArgs): Observable<{}> {
     // This Line Ensure All 'FormRequest' are sended with the right content-type
     const innerOptions = updateObject({headers: this.COMMON_HEADERS}, options);
     return this.http.put(`${this.BASE_URL}/${path}`, body, innerOptions)
