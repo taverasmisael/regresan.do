@@ -79,7 +79,7 @@ export const gamaRegresando = () => {
   ]
 }
 
-export const ratingPalette = (asObject: boolean) => {
+export const ratingPalette = (asObject: boolean): any | string[] => {
   const palette =  {
     'Excelente': '#166499',
     'Si': '#166499',
