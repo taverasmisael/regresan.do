@@ -250,7 +250,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private loadRankingCamareros(query: APIRequestUser) {
     this.rankingCamareros$ = this.preguntas.getRankingCamareros(query)
-      .map(res => res['RankingCamareros']);
+      .map(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
   }
 
   private handleAnswerError(err: any, index: number) {
