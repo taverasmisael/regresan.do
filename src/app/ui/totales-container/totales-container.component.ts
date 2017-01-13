@@ -12,6 +12,7 @@ export class TotalesContainerComponent implements OnInit {
   @Input() hoy: number;
   @Input() indice: number;
   @Input() sucursales: number;
+  @Input() halfCards: boolean;
 
   constructor() { }
 

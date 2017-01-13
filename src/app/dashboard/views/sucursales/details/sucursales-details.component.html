@@ -1,35 +1,55 @@
 <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
-<div class="info__header">
-  <div class="headline">
+<div class="info__header mdl-grid">
+  <div class="headline mdl-cell mdl-cell--12-col">
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-dark">
       <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
     <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
   </div>
+  <div class="mdl-cell--12-col">
+    <div class="mdl-grid">
+      <h4 class="mdl-cell mdl-cell--5-col mdl-color-text--accent-contrast mini-title">Resumen General</h4>
+      <h4 class="mdl-cell mdl-cell--7-col mdl-color-text--accent-contrast mini-title">Ranking de Camareros</h4>
+    </div>
+  </div>
   <app-totales-container
-  [total]="totalGeneral | async"
-  [hoy]="totalHoy | async"
-  [indice]="0"
-  [sucursales]="nuevosContactos | async"
-></app-totales-container>
+    class="mdl-cell mdl-cell--5-col"
+    [total]="totalGeneral | async"
+    [hoy]="totalHoy | async"
+    [indice]="0"
+    [sucursales]="nuevosContactos | async"
+    halfCards="true">
+  </app-totales-container>
+  <div class="mdl-cell mdl-cell--7-col mdl-card mdl-shadow--2dp rating-container">
+    <table *ngIf="(rankingCamareros$ | async)?.length" class="mdl-data-table mdl-js-data-table">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Nombre</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rk of rankingCamareros$ | async; trackBy: rk?.$id">
+          <td class="mdl-data-table__cell--non-numeric">{{ rk.Nombre || 'Anonimo' }}</td>
+          <td>{{ rk.Total }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!((rankingCamareros$ | async)?.length)">
+        <div class="content">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          <h4 class="mdl-typography--text-center">Cargando Ranking de Camareros</h4>
+        </div>
+      </div>
+  </div>
 </div>
 <section class="section section--info">
   <div class="mdl-grid main-content">
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
-        <app-chart-card
-          class="mdl-cell mdl-card"
-          *ngFor="let q of SucursalState.closeQuestions; let i = index;"
-          chartType="pie"
-          lodingText="Respuesta {{ i + 1 }}"
-          (failed)="loadCloseAnswer(i)"
-          [errorText]="chartErrors[i]"
-          [chartTitle]="q.pregunta"
-          [chartLabels]="closeAnswers[q.idPregunta][0]"
-          [chartData]="closeAnswers[q.idPregunta][1]"
-          [chartColors]="closeAnswers[q.idPregunta][2]"
-          >
+        <app-chart-card class="mdl-cell mdl-card" *ngFor="let q of SucursalState.closeQuestions; let i = index;" chartType="pie" lodingText="Respuesta {{ i + 1 }}" (failed)="loadCloseAnswer(i)" [errorText]="chartErrors[i]" [chartTitle]="q.pregunta" [chartLabels]="closeAnswers[q.idPregunta][0]"
+          [chartData]="closeAnswers[q.idPregunta][1]" [chartColors]="closeAnswers[q.idPregunta][2]">
         </app-chart-card>
       </div>
       <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading && !SucursalState.closeQuestions.length">
@@ -37,28 +57,23 @@
           <div class="mdl-spinner mdl-js-spinner is-active"></div>
           <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
         </div>
-      </div> <!-- Questions Loading Indicator -->
+      </div>
+      <!-- Questions Loading Indicator -->
       <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && !questionError">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
         </h4>
-      </div> <!-- Empty Response Indicator -->
+      </div>
+      <!-- Empty Response Indicator -->
       <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && questionError">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <i class="material-icons">error</i><br /> {{ questionError }}
         </h4>
-      </div> <!-- Error Response Indicator -->
+      </div>
+      <!-- Error Response Indicator -->
     </div>
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
-      <app-answers-tabs
-        title="Pregunta Abierta"
-        (failed)="loadOpenAnswers($event)"
-        [questionsErrorText]="questionError"
-        [answersErrorText]="openAnswersError"
-        [loading]="SucursalState.loading"
-        [questions]="SucursalState.openQuestions"
-        [answers]="SucursalState.openAnswers"
-      ></app-answers-tabs>
+      <app-answers-tabs title="Pregunta Abierta" (failed)="loadOpenAnswers($event)" [questionsErrorText]="questionError" [answersErrorText]="openAnswersError" [loading]="SucursalState.loading" [questions]="SucursalState.openQuestions" [answers]="SucursalState.openAnswers"></app-answers-tabs>
     </div>
   </div>
 </section>

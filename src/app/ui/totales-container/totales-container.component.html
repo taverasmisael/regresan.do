@@ -1,25 +1,33 @@
 <section class="section mdl-grid">
   <app-totales-card
-    class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
     cardType="total"
     [count]="total"
     text="Total de Encuestas">
   </app-totales-card>
   <app-totales-card
-    class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
     cardType="hoy"
     [count]="hoy"
     text="Total de Hoy">
   </app-totales-card>
   <app-totales-card
-    class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone"
-    style="opacity: 0.6; pointer-events: none;"
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
+    style="pointer-events: none;"
     cardType="indice"
     [count]="indice"
-    text="(Pronto): Indice de Sucursal">
+    text="Indice de Sucursal">
   </app-totales-card>
   <app-totales-card
-    class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
     [count]="sucursales"
     text="Nuevos Contactos">
   </app-totales-card>

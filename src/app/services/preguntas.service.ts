@@ -107,4 +107,17 @@ export class PreguntasService {
       search: params
     });
   }
+
+  getRankingCamareros(query: APIRequestUser) {
+    const url = `${this.BASE_URL}/GetRankingCamareros`;
+    const params = new URLSearchParams();
+    params.append('_startDate', query.start);
+    params.append('_endDate', query.end);
+    params.append('profileId', query.profile);
+
+    return this.api.get(url, {
+      headers: this.authHeader,
+      search: params
+    });
+  }
 }
