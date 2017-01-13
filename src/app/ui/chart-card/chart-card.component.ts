@@ -46,10 +46,7 @@ export class ChartCardComponent implements OnInit, OnChanges {
         }]
       }
     }
-    this.ChartColors = createPalette(this.chartColors, 0.4)
-    if (!this.useDataset(this.chartType)) {
-      this.ChartColors = createCirularPalette(createPalette(this.chartColors));
-    }
+    this.updatePalette();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,7 +56,7 @@ export class ChartCardComponent implements OnInit, OnChanges {
         componentHandler.upgradeAllRegistered();
       }, 200)
     } else if (changes['chartColors']) {
-      this.ngOnInit();
+      this.updatePalette();
     }
   }
 
@@ -84,4 +81,10 @@ export class ChartCardComponent implements OnInit, OnChanges {
     }
   }
 
+  private updatePalette() {
+    this.ChartColors = createPalette(this.chartColors, 0.4)
+    if (!this.useDataset(this.chartType)) {
+      this.ChartColors = createCirularPalette(createPalette(this.chartColors));
+    }
+  }
 }
