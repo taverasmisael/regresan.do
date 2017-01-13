@@ -1,12 +1,50 @@
 <app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
-<div class="info__header">
-  <div class="headline">
+<div class="info__header mdl-grid">
+  <div class="headline mdl-cell mdl-cell--12-col">
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-dark">
       <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
     <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
   </div>
-  <app-totales-container class="mdl-cell mdl-cell--5-col" [total]="totalGeneral | async" [hoy]="totalHoy | async" [indice]="0" [sucursales]="nuevosContactos | async" halfCards="true"></app-totales-container>
+  <app-totales-container
+    class="mdl-cell mdl-cell--5-col"
+    [total]="totalGeneral | async"
+    [hoy]="totalHoy | async"
+    [indice]="0"
+    [sucursales]="nuevosContactos | async"
+    halfCards="true">
+  </app-totales-container>
+  <div class="mdl-cell mdl-cell--7-col mdl-card mdl-shadow--2dp">
+    <div class="mdl-layout__header mdl-layout__header--transparent">
+      <div class="mdl-layout__header-row">
+        <h4 class="mdl-color-text--accent-contrast">Ranking De Encustas</h4>
+        <span style="flex: 1;"></span>
+        <i class="material-icons mdl-color-text--accent">star</i>
+      </div>
+    </div>
+    <table class="mdl-data-table mdl-js-data-table">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Nombre</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
+          <td>25</td>
+        </tr>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+          <td>50</td>
+        </tr>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
+          <td>10</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <section class="section section--info">
   <div class="mdl-grid main-content">

@@ -28,3 +28,13 @@
 .qa-holder {
   position: relative;
 }
+.mdl-layout__header {
+  padding: 0 1rem;
+  &-row {
+    padding: 0;
+  }
+}
+.mdl-data-table {
+  width: 100%;
+  border: none;
+}
