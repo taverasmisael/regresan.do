@@ -23,7 +23,6 @@ import { AuthEffects } from './effects/auth.effects';
 import { ApiService} from './services/api.service';
 import { PreguntasService } from './services/preguntas.service';
 import { RespuestasService } from './services/respuestas.service';
-import { LocalStorageService } from './services/localstorage.service';
 import { UserService} from './services/user.service';
 // Security Services
 import { AuthGuardService} from './services/auth-guard.service'
@@ -81,7 +80,6 @@ import { TotalesContainerComponent } from './ui/totales-container/totales-contai
     ApiService,
     AuthGuardService,
     LoginGuardService,
-    LocalStorageService,
     UserService,
     RespuestasService,
     PreguntasService
