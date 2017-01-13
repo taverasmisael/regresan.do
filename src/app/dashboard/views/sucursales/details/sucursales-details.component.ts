@@ -41,6 +41,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private aWeekAgo: moment.Moment;
   private QuestionsQuery: APIRequestUser;
   private closeAnswers$: Array<Observable<any>>;
+  private rankingCamareros$: Observable<any[]>;
   private rattingColors: any;
   private rattingColorsArray: string[];
 
@@ -103,6 +104,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
+    this.loadRankingCamareros(this.QuestionsQuery);
   }
 
   ngOnDestroy() {
@@ -116,6 +118,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     });
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
+    this.loadRankingCamareros(this.QuestionsQuery);
   }
 
   loadResumen(query: APIRequestUser) {
@@ -243,6 +246,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         () => this.store.dispatch(new StopRequest())
       )
     });
+  }
+
+  private loadRankingCamareros(query: APIRequestUser) {
+    this.rankingCamareros$ = this.preguntas.getRankingCamareros(query)
+      .map(res => res['RankingCamareros']);
   }
 
   private handleAnswerError(err: any, index: number) {
