@@ -32,19 +32,20 @@ export class ChartCardComponent implements OnInit, OnChanges {
   @Output() failed = new EventEmitter();
 
   public ChartColors: any[];
-  public chartOptions = {
-    scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-    }
-  }
+  public chartOptions: any;
 
   constructor() { }
 
   ngOnInit() {
+    this.chartOptions = {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
     this.ChartColors = createPalette(this.chartColors, 0.4)
     if (!this.useDataset(this.chartType)) {
       this.ChartColors = createCirularPalette(createPalette(this.chartColors));
@@ -67,7 +68,7 @@ export class ChartCardComponent implements OnInit, OnChanges {
   }
 
   toggleChart() {
-    switch (this.chartType ) {
+    switch (this.chartType) {
       case 'line':
         this.chartType = 'bar';
         break;
