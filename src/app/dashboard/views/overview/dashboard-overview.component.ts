@@ -147,12 +147,14 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   }
 
   loadResumen(query: APIRequestParams) {
-    const resumen$ = this.preguntas.getResumen(query)
-      .map(res => res['Cabecera']);
-
-    this.totalHoy = resumen$.map(res => res['TotalEncuestadosHoy']);
-    this.totalGeneral = resumen$.map(res => res['TotalEncuestas']);
-    this.nuevosContactos = resumen$.map(res => res['NuevosContactos']);
-    this.indiceSucursal = resumen$.map(res => res['IndiceSucursal']);
+    this.preguntas.getResumen(query)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        console.log(res);
+        this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
+        this.totalGeneral = Observable.of(res['TotalEncuestas']);
+        this.nuevosContactos = Observable.of(res['NuevosContactos']);
+        this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+      });
   }
 }
