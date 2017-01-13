@@ -17,10 +17,6 @@ import { UserService } from '../services/user.service';
 // RXJS Stuffs
 import {Observable} from 'rxjs/Rx';
 
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
