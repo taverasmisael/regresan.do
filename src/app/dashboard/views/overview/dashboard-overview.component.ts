@@ -20,7 +20,7 @@ import { gamaRegresando } from '../../../utilities/colors';
 
 
 @Component({
-  selector: 'dashboard-overview',
+  selector: 'app-dashboard-overview',
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })

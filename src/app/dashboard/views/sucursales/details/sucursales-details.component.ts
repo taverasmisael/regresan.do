@@ -30,7 +30,7 @@ import { Pregunta } from '../../../../models/Pregunta';
 import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
 
 @Component({
-  selector: 'sucursales-details',
+  selector: 'app-sucursales-details',
   templateUrl: './sucursales-details.component.html',
   styleUrls: ['./sucursales-details.component.scss'],
 })
