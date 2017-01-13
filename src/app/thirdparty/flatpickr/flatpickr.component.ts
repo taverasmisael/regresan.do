@@ -5,7 +5,7 @@ import { Flatpickr, FlatpickrOptions } from './models';
 const flatpickr = require('flatpickr');
 const spanish = require('flatpickr/dist/l10n/es');
 @Component({
-    selector: 'flatpickr',
+    selector: 'app-flatpickr',
     templateUrl: './flatpickr.component.html',
     styleUrls: ['./flatpickr.component.css']
 })
