@@ -27,15 +27,12 @@ import { gamaRegresando } from '../../../utilities/colors';
 export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   private AuthState: Observable<AuthState>;
-  private today = moment();
-  private aWeekAgo = moment().subtract(7, 'days');
+  private today: moment.Moment;
+  private aWeekAgo: moment.Moment;
 
   public userProfiles: UserProfile[];
 
-  public currentFilters: Filter = {
-    fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
-    fechaFin: this.today.format('DD/MM/YYYY')
-  };
+  public currentFilters: Filter;
   public query: APIRequestParams;
   public totalGeneral: Observable<number>;
   public totalHoy: Observable<number>;
@@ -60,12 +57,19 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.AuthState
       .pluck<UserProfile[]>('currentUser', 'Profiles')
       .subscribe(profiles => this.userProfiles = profiles);
-  }
-  ngAfterViewInit() {
+
+    this.today = moment();
+    this.aWeekAgo = moment().subtract(7, 'days');
+    this.currentFilters = {
+      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+      fechaFin: this.today.format('DD/MM/YYYY')
+    };
     this.query = {
       start: this.aWeekAgo.unix().toString(),
       end: moment().unix().toString(),
     };
+  }
+  ngAfterViewInit() {
     this.loadEncuestasSucursales(this.query);
     this.loadHistoricoEncuestas(this.query);
     this.loadResumen(this.query);
@@ -111,7 +115,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   loadHistoricoEncuestas(query: APIRequestParams) {
     this.historicoEncuestasLoading = true;
-    this.historicoEncuestasError  = '';
+    this.historicoEncuestasError = '';
 
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia'].sort((prev, curr) => {
