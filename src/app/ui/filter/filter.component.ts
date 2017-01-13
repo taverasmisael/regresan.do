@@ -41,7 +41,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterForm: FormGroup;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
-  public flatpickrOptions: FlatpickrOptions = { dateFormat: 'd/m/Y' };
+  public flatpickrOptions: FlatpickrOptions;
   public lastFilter: Filter;
   public activeFilters: number;
 
@@ -49,6 +49,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.flatpickrOptions = { dateFormat: 'd/m/Y' };
     let {fechaInicio: inicio, fechaFin: fin } = this.filters;
     this.filterFechaInicio = new FormControl(inicio, [Validators.required, DateValidator.spanishDate]);
     this.filterFechaFin = new FormControl(fin, [Validators.required, DateValidator.spanishDate]);
