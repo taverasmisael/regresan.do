@@ -16,7 +16,8 @@ export class SucursalState {
     data: any[],
     colors: string[],
     loading: boolean
-  }
+  };
+  staffRanking: any;
   filters: any[];
   dates: moment.Moment[];
   lastQuery: string;
@@ -40,6 +41,7 @@ export class SucursalState {
       colors: [],
       loading: false
     };
+    this.staffRanking = {};
   }
 };
 
