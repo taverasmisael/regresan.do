@@ -47,6 +47,7 @@ import { FilterComponent } from './ui/filter/filter.component';
 import { TotalesCardComponent } from './ui/totales-card/totales-card.component';
 import { TotalesContainerComponent } from './ui/totales-container/totales-container.component';
 import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-card.component';
+import { CardComponent } from './ui/card/card.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-ca
     FilterComponent,
     TotalesCardComponent,
     TotalesContainerComponent,
-    StafRankingCardComponent
+    StafRankingCardComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
