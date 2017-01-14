@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       .pluck<any>('error')
       .subscribe(error => {
         switch (error) {
-          case (undefined):
+          case (undefined || ''):
             this.loginError = '';
             break;
           case ('invalid_grant'):
