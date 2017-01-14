@@ -126,7 +126,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.preguntas.getResumenSucursal(query)
       .map(res => res['Cabecera'])
       .subscribe(res => {
-        console.log(res);
         this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
         this.totalGeneral = Observable.of(res['TotalEncuestas']);
         this.nuevosContactos = Observable.of(res['NuevosContactos']);
