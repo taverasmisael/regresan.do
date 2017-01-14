@@ -1,12 +1,13 @@
 import { UserProfile } from '../userprofile';
 import { Pregunta } from '../pregunta';
+import { RespuestaAbierta } from '../respuesta-abierta';
 import * as moment from 'moment';
 
 export class SucursalState {
   info: UserProfile;
-  closeQuestions: any[];
-  openQuestions: any[];
-  openAnswers: any[];
+  closeQuestions: Pregunta[];
+  openQuestions: Pregunta[];
+  openAnswers: RespuestaAbierta[];
   closeAnswers: Pregunta[];
   filters: any[];
   dates: moment.Moment[];
