@@ -5,14 +5,10 @@ import {
   Headers,
   RequestOptions,
   RequestOptionsArgs,
-  Request } from '@angular/http';
+  Request
+} from '@angular/http';
 
-// RXJS Stuffs
 import {Observable} from 'rxjs/Rx';
-
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../models/states/appstate';

@@ -11,12 +11,8 @@ import {
   URLSearchParams
 } from '@angular/http';
 
-// RXJS Stuffs
-import { Observable } from 'rxjs/Rx';
 
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs/Rx';
 
 // Auth Stuffs
 import { Store } from '@ngrx/store';
