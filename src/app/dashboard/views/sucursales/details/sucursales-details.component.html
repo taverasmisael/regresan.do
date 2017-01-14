@@ -48,8 +48,16 @@
     <div class="mdl-cell mdl-cell--8-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
-        <app-chart-card class="mdl-cell mdl-card" *ngFor="let q of SucursalState.closeQuestions; let i = index;" chartType="pie" lodingText="Respuesta {{ i + 1 }}" (failed)="loadCloseAnswer(i)" [errorText]="chartErrors[i]" [chartTitle]="q.pregunta" [chartLabels]="closeAnswers[q.idPregunta][0]"
-          [chartData]="closeAnswers[q.idPregunta][1]" [chartColors]="closeAnswers[q.idPregunta][2]">
+        <app-chart-card
+          class="mdl-cell mdl-card"
+          *ngFor="let q of SucursalState.closeQuestions; let i = index;"
+          chartType="pie"
+          lodingText="Respuesta {{ i + 1 }}"
+          (failed)="loadCloseAnswer(i)"
+          [errorText]="chartErrors[i]"
+          [chartTitle]="q.pregunta"
+          [chartLabels]="SucursalState.answerCharts[q.idPregunta][0]"
+          [chartData]="SucursalState.answerCharts[q.idPregunta][1]" [chartColors]="SucursalState.answerCharts[q.idPregunta][2]">
         </app-chart-card>
       </div>
       <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading && !SucursalState.closeQuestions.length">
