@@ -9,12 +9,7 @@ const { LOGIN, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE,
 
 import { updateObject } from '../utilities/objects';
 
-export const INITIAL_STATE: AuthState = {
-  token: undefined,
-  currentUser: undefined,
-  error: undefined,
-  loading: false
-};
+export const INITIAL_STATE = new AuthState();
 
 export function AuthReducer() {
   return {

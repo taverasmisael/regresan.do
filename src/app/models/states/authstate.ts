@@ -14,4 +14,11 @@ export class AuthState {
   token: JWT;
   error: string;
   loading: boolean;
+
+  constructor(cu?, token?, error?, loading?) {
+    this.currentUser = cu || {};
+    this.token = token || '';
+    this.error = error || '';
+    this.loading = loading || false;
+  }
 }
