@@ -46,6 +46,7 @@ import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
 import { FilterComponent } from './ui/filter/filter.component';
 import { TotalesCardComponent } from './ui/totales-card/totales-card.component';
 import { TotalesContainerComponent } from './ui/totales-container/totales-container.component';
+import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-card.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { TotalesContainerComponent } from './ui/totales-container/totales-contai
     AnswersTabsComponent,
     FilterComponent,
     TotalesCardComponent,
-    TotalesContainerComponent
+    TotalesContainerComponent,
+    StafRankingCardComponent
   ],
   imports: [
     BrowserModule,
