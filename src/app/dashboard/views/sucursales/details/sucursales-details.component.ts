@@ -67,7 +67,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnInit() {
     this.id$ = this.route.params
-      .distinctUntilChanged()
+      .distinctUntilKeyChanged('id')
       .pluck<number>('id');
     this.SaveCurrentSucursal();
 
@@ -75,7 +75,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentSucursal')
       .pluck<SucursalState>('currentSucursal');
     this.CurrentSucursal.subscribe(store => this.SucursalState = store);
-
+    this.CurrentSucursal
+      .distinctUntilKeyChanged('info')
+      .pluck<UserProfile>('info')
+      .subscribe(userProfile => this.CurrentProfile = userProfile);
     this.today = moment();
     this.aWeekAgo = moment().subtract(7, 'days');
     this.rattingColorsArray = ratingPalette(false);
@@ -261,18 +264,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private SaveCurrentSucursal() {
-    Observable.zip(
-      this.id$,
+    this.id$
+    .switchMap(id =>
       this.store.select<AppState>('MainStore')
+        .distinctUntilKeyChanged('auth')
         .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles')
-    ).flatMap(zip => {
-      let profile = zip[1].find(prof => prof.OldProfileId === +zip[0]);
-      return Observable.of(profile);
-    })
-      .subscribe(profile => {
-        this.CurrentProfile = profile;
-        this.store.dispatch(new SaveInfo(profile));
-      });
+        .map(profile => profile.find(prof => prof.OldProfileId === +id))
+    ).subscribe(profile => {
+      this.store.dispatch(new SaveInfo(profile));
+    });
   }
 }
 
