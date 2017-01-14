@@ -1,5 +1,5 @@
-import { UserProfile } from './userprofile';
-import { Pregunta } from './pregunta';
+import { UserProfile } from '../userprofile';
+import { Pregunta } from '../pregunta';
 import * as moment from 'moment';
 
 export class SucursalState {

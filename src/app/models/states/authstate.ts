@@ -1,6 +1,6 @@
-import {JWT} from './jwt';
-import { User } from './user';
-import { UserProfile } from './userprofile';
+import {JWT} from '../jwt';
+import { User } from '../user';
+import { UserProfile } from '../userprofile';
 
 export class AuthState {
   currentUser: {
