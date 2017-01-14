@@ -10,9 +10,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
-import { makePieChart } from '../../../../utilities/respuestas';
+import { makePieChart, TotalPorDiaLineal } from '../../../../utilities/respuestas';
 import { updateObject } from '../../../../utilities/objects';
-import { ratingPalette } from '../../../../utilities/colors';
+import { ratingPalette, gamaRegresando } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
@@ -27,7 +27,7 @@ import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/states/appstate';
 import { SucursalState } from '../../../../models/states/sucursalstate';
 import { Pregunta } from '../../../../models/Pregunta';
-import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
+import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
 
 @Component({
   selector: 'app-sucursales-details',
@@ -49,6 +49,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
   public indiceSucursal: Observable<number>;
+
+  public historicoEncuestasLoading: boolean;
+  public historicoEncuestasError: string;
+  public historicoEncuestasLabels: string[];
+  public historicoEncuestasData: any[];
+  public historicoEncuestasColors: string[]
 
   private id$: Observable<number>;
   private CurrentSucursal: Observable<SucursalState>;
@@ -79,6 +85,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('info')
       .pluck<UserProfile>('info')
       .subscribe(userProfile => this.CurrentProfile = userProfile);
+
+    this.historicoEncuestasColors = gamaRegresando();
+    this.historicoEncuestasLabels = [];
+    this.historicoEncuestasData = [];
     this.today = moment();
     this.aWeekAgo = moment().subtract(7, 'days');
     this.rattingColorsArray = ratingPalette(false);
@@ -118,6 +128,39 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
     this.loadAllComponents(this.QuestionsQuery);
+  }
+
+  loadHistoricoEncuestas(query: APIRequestParams) {
+    this.historicoEncuestasLoading = true;
+    this.historicoEncuestasError = '';
+
+    this.preguntas.getTotalPorDia(query)
+      .map(res =>
+        res['Encuestas']['TotalesxSucursalxDia']
+          .filter(el => el.ProfileId === this.CurrentProfile.OldProfileId)
+          .sort((prev, curr) => moment(prev.Fecha).isSameOrAfter(moment(curr.Fecha)) ? 1 : -1)
+      )
+      .map(historial => TotalPorDiaLineal(historial))
+      .subscribe(
+      data => {
+        if (data[0].length) {
+          this.historicoEncuestasLabels = data[0];
+          this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+          this.historicoEncuestasLoading = false;
+        } else {
+          this.historicoEncuestasLoading = false;
+          this.historicoEncuestasError = 'No se hay información en esa fecha';
+        }
+      },
+      error => {
+        this.historicoEncuestasLoading = false;
+        if (error.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.historicoEncuestasError = 'Error Cargando Historico de Encuestas';
+        }
+      }
+      );
   }
 
   loadResumen(query: APIRequestUser) {
@@ -190,6 +233,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
     this.loadRankingCamareros(this.QuestionsQuery);
+    this.loadHistoricoEncuestas(this.QuestionsQuery);
   }
   private loadAllCharts(query: APIRequestUser) {
     this.store.dispatch(new ResetQA());
