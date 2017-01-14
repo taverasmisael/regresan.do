@@ -28,9 +28,21 @@
     fullCards="true">
   </app-totales-container>
 </div>
-<section class="section section--info">
+<section class="section section--staff-kpi">
+  <div class="mdl-grid">
+    <app-staf-ranking-card
+      class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col"
+      (failed)="loadRankingCamareros(QuestionsQuery)"
+      [errorText]="questionError"
+      [loading]="false"
+      [staffData]="SucursalState.staffRanking"
+    ></app-staf-ranking-card>
+    <div class="mdl-cell mdl-cell--8-col"></div>
+  </div>
+</section>
+<section class="section section--charts">
   <div class="mdl-grid main-content">
-    <div class="mdl-cell mdl-cell--8-col qa-holder">
+    <div class="mdl-cell mdl-cell--12-col qa-holder">
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
         <app-chart-card
@@ -65,9 +77,13 @@
       </div>
       <!-- Error Response Indicator -->
     </div>
-    <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-typography--text-center">
-      <app-answers-tabs title="Pregunta Abierta" (failed)="loadOpenAnswers($event)" [questionsErrorText]="questionError" [answersErrorText]="openAnswersError" [loading]="SucursalState.loading" [questions]="SucursalState.openQuestions" [answers]="SucursalState.openAnswers"></app-answers-tabs>
-    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+    <app-answers-tabs title="Pregunta Abierta" (failed)="loadOpenAnswers($event)" [questionsErrorText]="questionError" [answersErrorText]="openAnswersError" [loading]="SucursalState.loading" [questions]="SucursalState.openQuestions" [answers]="SucursalState.openAnswers"></app-answers-tabs>
+  </div>
   </div>
 </section>
 
