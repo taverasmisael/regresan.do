@@ -18,7 +18,7 @@ import {
   StopRequest, StartRequest, SaveInfo,
   SaveOpenQuestions, SaveOpenAnswers,
   SaveCloseQuestions, SaveCloseAnswer, SaveAnswerChart,
-  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric
+  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric, SaveStaffRanking
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
@@ -56,7 +56,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private aWeekAgo: moment.Moment;
   private QuestionsQuery: APIRequestUser;
   private closeAnswers$: Array<Observable<any>>;
-  private rankingCamareros$: Observable<any[]>;
   private rattingColors: any;
   private rattingColorsArray: string[];
 
@@ -229,6 +228,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       );
   }
 
+  loadRankingCamareros(query: APIRequestUser) {
+    this.preguntas.getRankingCamareros(query)
+      .map(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
+      .subscribe(
+        ranking => this.store.dispatch(new SaveStaffRanking(ranking)),
+        error => this.handleErrors(error));
+  }
+
   private loadAllComponents(query: APIRequestUser) {
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
@@ -283,11 +290,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     this.chartErrors = new Array(this.closeAnswers$.length); // Prepare for errors
     this.closeAnswers$.forEach((req$, index) => this.loadCloseAnswer(index));
-  }
-
-  private loadRankingCamareros(query: APIRequestUser) {
-    this.rankingCamareros$ = this.preguntas.getRankingCamareros(query)
-      .map(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
   }
 
   private handleAnswerError(err: any, index: number) {

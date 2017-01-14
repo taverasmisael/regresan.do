@@ -1,0 +1,63 @@
+.mdl-card {
+  background: #fff;
+  width: 100%;
+  font-size: 1em;
+}
+.mdl-card__title {
+  color: rgb(0, 103, 102);
+  display: flex;
+  font-size: 1em;
+  justify-content: space-between;
+  z-index: 3;
+}
+.mdl-card__supporting-text,
+.staff-holder {
+  width: 100%;
+  position: relative;
+  min-height: 17.8572rem;
+}
+.staff-holder {
+  padding: 1.5em 0;
+}
+.loading-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.6);
+  text-align: center;
+  &.no--opacity {
+    background: rgba(255,255,255,1);
+  }
+}
+.mdl-card__title-text {
+  font-size: 1.1em;
+}
+.mdl-spinner {
+  width: 56px;
+  height: 56px;
+}
+
+.mdl-spinner__circle {
+  border-width: 6px;
+}
+
+.mdl-progress,
+.mdl-progress > * {
+  display: block;
+  height: 1.5rem;
+}
+.mdl-progress > .progressbar {
+  background: #002f41;
+}
+.staff {
+  margin-bottom: 1.5em;
+}
+.title {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.2em;
+  color: #002f41
+}
