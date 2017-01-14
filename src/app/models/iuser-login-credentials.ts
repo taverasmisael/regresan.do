@@ -1,5 +1,5 @@
-export interface IUserLoginCredentials {
-  username: string,
-  password: string,
-  grant_type?: string
+export class IUserLoginCredentials {
+  username: string;
+  password: string;
+  grant_type?: string;
 }

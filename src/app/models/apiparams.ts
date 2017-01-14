@@ -1,13 +1,13 @@
-export interface APIRequestParams {
-  start: string,
+export class APIRequestParams {
+  start: string;
   end: string
 };
 
-export interface APIRequestUser extends APIRequestParams {
+export class APIRequestUser extends APIRequestParams {
   profile: string
 };
 
-export interface APIRequestRespuesta extends APIRequestUser {
+export class APIRequestRespuesta extends APIRequestUser {
   pregunta: string
 };
 

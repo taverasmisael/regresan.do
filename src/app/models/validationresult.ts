@@ -1,3 +1,3 @@
-export interface ValidationResult {
+export class ValidationResult {
    [key: string]: boolean;
 }

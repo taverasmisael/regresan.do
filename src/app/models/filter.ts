@@ -1,4 +1,4 @@
-export interface Filter {
-  fechaInicio: string,
-  fechaFin: string
+export class Filter {
+  fechaInicio: string;
+  fechaFin: string;
 };

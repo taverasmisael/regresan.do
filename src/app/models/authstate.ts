@@ -2,7 +2,7 @@ import {JWT} from './jwt';
 import { User } from './user';
 import { UserProfile } from './userprofile';
 
-export interface AuthState {
+export class AuthState {
   currentUser: {
     $id: string,
     Code: number,
@@ -10,8 +10,8 @@ export interface AuthState {
     Message: string,
     User: User,
     Profiles: UserProfile[]
-  }
-  token: JWT,
-  error: string,
-  loading: boolean
+  };
+  token: JWT;
+  error: string;
+  loading: boolean;
 }
