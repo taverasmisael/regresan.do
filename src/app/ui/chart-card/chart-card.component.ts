@@ -29,23 +29,24 @@ export class ChartCardComponent implements OnInit, OnChanges {
   @Input() chartColors: string[];
   @Input() loading: Boolean;
   @Input() headerShadow: Boolean;
+  @Input() chartOptions: any;
 
   @Output() failed = new EventEmitter();
 
   public ChartColors: any[];
-  public linearChartOptions: any;
-  public circularChartOptions: any;
+  public ChartOptions: any;
 
   private baseChartOptions: any;
 
   constructor() { }
 
   ngOnInit() {
-    let circularOptions = {};
     let linearOptions = { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } };
-    this.baseChartOptions = { responsive: true, maintainAspectRatio: false };
-    this.linearChartOptions = updateObject(this.baseChartOptions, linearOptions);
-    this.circularChartOptions = updateObject(this.baseChartOptions, circularOptions);
+    if (this.useDataset(this.chartType)) {
+      this.ChartOptions = updateObject(linearOptions, this.chartOptions);
+    } else {
+      this.ChartOptions = updateObject({}, this.chartOptions);
+    }
     this.updatePalette();
   }
 
