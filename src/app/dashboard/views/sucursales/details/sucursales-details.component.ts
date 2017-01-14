@@ -102,9 +102,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
       });
 
-    this.loadAllCharts(this.QuestionsQuery);
-    this.loadResumen(this.QuestionsQuery);
-    this.loadRankingCamareros(this.QuestionsQuery);
+    this.loadAllComponents(this.QuestionsQuery);
   }
 
   ngOnDestroy() {
@@ -116,9 +114,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
-    this.loadAllCharts(this.QuestionsQuery);
-    this.loadResumen(this.QuestionsQuery);
-    this.loadRankingCamareros(this.QuestionsQuery);
+    this.loadAllComponents(this.QuestionsQuery);
   }
 
   loadResumen(query: APIRequestUser) {
@@ -187,6 +183,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       );
   }
 
+  private loadAllComponents(query: APIRequestUser) {
+    this.loadAllCharts(this.QuestionsQuery);
+    this.loadResumen(this.QuestionsQuery);
+    this.loadRankingCamareros(this.QuestionsQuery);
+  }
   private loadAllCharts(query: APIRequestUser) {
     this.store.dispatch(new ResetQA());
     this.LoadQuestions(query)
