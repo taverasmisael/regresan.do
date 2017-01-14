@@ -2,9 +2,9 @@
   title="Personal"
   loadingText="Cargando Información del Personal"
   (retry)="failed.emit($event)"
-  [loading]="loading"
+  [loading]="loading && !staffData.length"
   [errorText]="errorText">
-  <div *ngIf="staffData.length">
+  <div *ngIf="staffData.length" class="staff-holder">
     <p *ngFor="let staff of staffData" class="staff">
     <span class="title">{{staff.Nombre || 'Anonimo'}} · {{ staff.Total + ' Encuesta' +( (staff.total > 1) || 's')}}</span>
     <span class="mdl-progress is-upgraded">
