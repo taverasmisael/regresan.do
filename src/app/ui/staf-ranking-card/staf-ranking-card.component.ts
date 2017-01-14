@@ -14,8 +14,8 @@ import {
 })
 export class StafRankingCardComponent implements OnInit {
   @Input() staffData: any[];
-  @Input() errorText: string[];
-  @Input() loading: string[];
+  @Input() errorText: string;
+  @Input() loading: boolean;
 
   @Output() failed = new EventEmitter();
 
