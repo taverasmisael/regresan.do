@@ -10,4 +10,7 @@
 .card {
   padding: 1.2rem;
   background: rgb(69,90,100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
