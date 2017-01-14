@@ -10,6 +10,13 @@ export class SucursalState {
   openAnswers: RespuestaAbierta[];
   answerCharts: {[key: string]: any[][]};
   closeAnswers: Pregunta[];
+  historicoEncuestas: {
+    errorText?: string,
+    labels: string[],
+    data: any[],
+    colors: string[],
+    loading: boolean
+  }
   filters: any[];
   dates: moment.Moment[];
   lastQuery: string;
@@ -26,6 +33,13 @@ export class SucursalState {
     this.filters = filters || [];
     this.loading = loading || false;
     this.answerCharts = {};
+    this.historicoEncuestas = {
+      errorText: '',
+      labels: [],
+      data: [],
+      colors: [],
+      loading: false
+    };
   }
 };
 

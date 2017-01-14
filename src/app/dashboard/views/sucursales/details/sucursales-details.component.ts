@@ -10,15 +10,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
 
-import { makePieChart } from '../../../../utilities/respuestas';
+import { makePieChart, TotalPorDiaLineal } from '../../../../utilities/respuestas';
 import { updateObject } from '../../../../utilities/objects';
-import { ratingPalette } from '../../../../utilities/colors';
+import { ratingPalette, gamaRegresando } from '../../../../utilities/colors';
 
 import {
   StopRequest, StartRequest, SaveInfo,
   SaveOpenQuestions, SaveOpenAnswers,
   SaveCloseQuestions, SaveCloseAnswer, SaveAnswerChart,
-  ResetSucursal, ResetQA, UpdateAnswerChart
+  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
@@ -27,7 +27,7 @@ import { UserProfile } from '../../../../models/userprofile';
 import { AppState } from '../../../../models/states/appstate';
 import { SucursalState } from '../../../../models/states/sucursalstate';
 import { Pregunta } from '../../../../models/Pregunta';
-import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
+import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
 
 @Component({
   selector: 'app-sucursales-details',
@@ -79,6 +79,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('info')
       .pluck<UserProfile>('info')
       .subscribe(userProfile => this.CurrentProfile = userProfile);
+
+    this.store.dispatch(new SaveHistoric({colors: [gamaRegresando()[3]]}));
     this.today = moment();
     this.aWeekAgo = moment().subtract(7, 'days');
     this.rattingColorsArray = ratingPalette(false);
@@ -118,6 +120,48 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
     });
     this.loadAllComponents(this.QuestionsQuery);
+  }
+
+  loadHistoricoEncuestas(query: APIRequestParams) {
+    this.store.dispatch(new SaveHistoric({
+      loading: true,
+      errorText: ''
+    }));
+
+    this.preguntas.getTotalPorDia(query)
+      .map(res =>
+        res['Encuestas']['TotalesxSucursalxDia']
+          .filter(el => el.ProfileId === this.CurrentProfile.OldProfileId)
+          .sort((prev, curr) => moment(prev.Fecha).isSameOrAfter(moment(curr.Fecha)) ? 1 : -1)
+      )
+      .map(historial => TotalPorDiaLineal(historial))
+      .subscribe(
+      data => {
+        if (data[0].length) {
+          const historic = {
+            labels: data[0],
+            data: data[1].sort((prev, curr) => prev.label > curr.label),
+            loading: false
+          };
+          this.store.dispatch(new SaveHistoric(historic));
+        } else {
+          this.store.dispatch(new SaveHistoric({
+            errorText: 'No se hay información en esa fecha',
+            data: [],
+            labels: [],
+            loding: false
+          }))
+        }
+      },
+      error => {
+        this.store.dispatch(new SaveHistoric({loading: false}))
+        if (error.status === 401) {
+          this.store.dispatch({ type: ActionTypes.LOGOUT_START });
+        } else {
+          this.store.dispatch(new SaveHistoric({errorText: 'Error Cargando Historico de Encuestas'}));
+        }
+      }
+      );
   }
 
   loadResumen(query: APIRequestUser) {
@@ -190,6 +234,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
     this.loadRankingCamareros(this.QuestionsQuery);
+    this.loadHistoricoEncuestas(this.QuestionsQuery);
   }
   private loadAllCharts(query: APIRequestUser) {
     this.store.dispatch(new ResetQA());

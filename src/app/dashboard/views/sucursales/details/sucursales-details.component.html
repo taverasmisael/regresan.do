@@ -6,42 +6,27 @@
     </a>
     <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
   </div>
-  <div class="mdl-cell--12-col">
-    <div class="mdl-grid">
-      <h4 class="mdl-cell mdl-cell--5-col mdl-color-text--accent-contrast mini-title">Resumen General</h4>
-      <h4 class="mdl-cell mdl-cell--7-col mdl-color-text--accent-contrast mini-title">Ranking de Camareros</h4>
-    </div>
-  </div>
+  <app-chart-card
+    class="mdl-cell mdl-cell--9-col mdl-card mdl-shadow--2dp"
+    style="font-size: 1.5rem;"
+    chartType="line"
+    chartTitle="Historico de Encuestas"
+    lodingText="Cargando Historial de Encuestas"
+    (failed)="loadHistoricoEncuestas(QuestionsQuery)"
+    [loading]="SucursalState.historicoEncuestas.loading"
+    [errorText]="SucursalState.historicoEncuestas.errorText"
+    [chartLabels]="SucursalState.historicoEncuestas.labels"
+    [chartData]="SucursalState.historicoEncuestas.data"
+    [chartColors]="SucursalState.historicoEncuestas.colors">
+  </app-chart-card>
   <app-totales-container
-    class="mdl-cell mdl-cell--5-col"
+    class="mdl-cell mdl-cell--3-col"
     [total]="totalGeneral | async"
     [hoy]="totalHoy | async"
     [indice]="indiceSucursal | async"
     [contactos]="nuevosContactos | async"
     halfCards="true">
   </app-totales-container>
-  <div class="mdl-cell mdl-cell--7-col mdl-card mdl-shadow--2dp rating-container">
-    <table *ngIf="(rankingCamareros$ | async)?.length" class="mdl-data-table mdl-js-data-table">
-      <thead>
-        <tr>
-          <th class="mdl-data-table__cell--non-numeric">Nombre</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let rk of rankingCamareros$ | async; trackBy: rk?.$id">
-          <td class="mdl-data-table__cell--non-numeric">{{ rk.Nombre || 'Anonimo' }}</td>
-          <td>{{ rk.Total }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!((rankingCamareros$ | async)?.length)">
-        <div class="content">
-          <div class="mdl-spinner mdl-js-spinner is-active"></div>
-          <h4 class="mdl-typography--text-center">Cargando Ranking de Camareros</h4>
-        </div>
-      </div>
-  </div>
 </div>
 <section class="section section--info">
   <div class="mdl-grid main-content">

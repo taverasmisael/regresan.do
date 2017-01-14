@@ -12,7 +12,7 @@ const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
   SAVE_CLOSE_ANSWER, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS, SAVE_CLOSE_ANSWER_CHART,
   START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST, UPDATE_CLOSE_ANSWER_CHART,
   APPLY_FILTER, END_REQUEST, RESET_SUCURSAL, RESET_QA, RESET_ANSWERS,
-  RESET_QUESTIONS } = ActionTypes;
+  RESET_QUESTIONS, SAVE_HISTORIC} = ActionTypes;
 
 
 export const INITIAL_STATE = new SucursalState();
@@ -32,6 +32,7 @@ export function SucursalesCases() {
     [FILTER_DATE]: filterByDate,
     [FILTER_ANSWER]: filterByAnswer,
     [SAVE_INFO]: saveSucursal,
+    [SAVE_HISTORIC]: saveHistoric,
     [SAVE_LAST]: saveLastRequest,
     [APPLY_FILTER]: applyFilter,
     [RESET_SUCURSAL]: () => INITIAL_STATE,
@@ -107,6 +108,12 @@ function saveSucursal(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
 
   return updateObject(state, {info: payload});
+}
+
+function saveHistoric(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+
+  return updateObject(state, {historicoEncuestas: updateObject(state.historicoEncuestas, payload)});
 }
 
 function saveLastRequest(state: SucursalState, action: Action): SucursalState {
