@@ -20,7 +20,7 @@ import 'rxjs/add/operator/catch';
 
 // Auth Stuffs
 import { Store } from '@ngrx/store';
-import { AppState } from '../models/appstate';
+import { AppState } from '../models/states/appstate';
 import { JWT } from '../models/jwt';
 
 import { ApiService } from './api.service';

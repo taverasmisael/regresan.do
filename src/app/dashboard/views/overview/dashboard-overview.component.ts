@@ -9,8 +9,8 @@ import { PreguntasService } from '../../../services/preguntas.service';
 import { ActionTypes } from '../../../actions/auth.actions';
 
 import { UserProfile } from '../../../models/userprofile';
-import { AppState } from '../../../models/appstate';
-import { AuthState } from '../../../models/authstate';
+import { AppState } from '../../../models/states/appstate';
+import { AuthState } from '../../../models/states/authstate';
 import { APIRequestParams } from '../../../models/apiparams';
 import { Filter } from '../../../models/filter';
 

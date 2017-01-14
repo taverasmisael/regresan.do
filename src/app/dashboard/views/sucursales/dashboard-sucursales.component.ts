@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { UserProfile } from '../../../models/userprofile';
-import { AuthState } from '../../../models/authstate';
-import { AppState } from '../../../models/appstate';
+import { AuthState } from '../../../models/states/authstate';
+import { AppState } from '../../../models/states/appstate';
 import { gamaRegresando } from '../../../utilities/colors';
 
 @Component({

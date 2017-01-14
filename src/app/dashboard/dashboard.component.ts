@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { ActionTypes } from '../actions/auth.actions';
-import { AppState } from '../models/appstate';
-import { AuthState } from '../models/authstate';
+import { AppState } from '../models/states/appstate';
+import { AuthState } from '../models/states/authstate';
 import { User } from '../models/user';
 import { UserProfile } from '../models/userprofile';
 

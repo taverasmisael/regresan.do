@@ -15,8 +15,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../models/appstate';
-import { AuthState } from '../models/authstate';
+import { AppState } from '../models/states/appstate';
+import { AuthState } from '../models/states/authstate';
 
 import { IUserLoginCredentials } from '../models/iuser-login-credentials';
 import { JWT } from '../models/jwt';

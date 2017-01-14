@@ -7,8 +7,8 @@ import {
 } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../models/appstate';
-import { AuthState } from '../models/authstate';
+import { AppState } from '../models/states/appstate';
+import { AuthState } from '../models/states/authstate';
 import { Login, LoginFailure, LoginSuccess } from '../actions/auth.actions';
 
 import { UserService } from '../services/user.service';

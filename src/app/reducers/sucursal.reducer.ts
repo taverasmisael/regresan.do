@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 import * as moment from 'moment';
 
-import { SucursalState } from '../models/sucursalstate';
+import { SucursalState } from '../models/states/sucursalstate';
 
 import { ActionTypes } from '../actions/sucursal.actions';
 

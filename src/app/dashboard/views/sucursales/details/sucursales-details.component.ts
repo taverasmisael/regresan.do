@@ -24,8 +24,8 @@ import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
 
 import { UserProfile } from '../../../../models/userprofile';
-import { AppState } from '../../../../models/appstate';
-import { SucursalState } from '../../../../models/sucursalstate';
+import { AppState } from '../../../../models/states/appstate';
+import { SucursalState } from '../../../../models/states/sucursalstate';
 import { Pregunta } from '../../../../models/Pregunta';
 import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
 

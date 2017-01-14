@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { AuthState } from '../models/authstate';
+import { AuthState } from '../models/states/authstate';
 
 import { ActionTypes } from '../actions/auth.actions';
 
