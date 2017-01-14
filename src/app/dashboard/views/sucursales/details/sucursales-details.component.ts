@@ -131,10 +131,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.preguntas.getTotalPorDia(query)
       .map(res =>
         res['Encuestas']['TotalesxSucursalxDia']
-          .filter(el => el.ProfileId === this.CurrentProfile.OldProfileId)
           .sort((prev, curr) => moment(prev.Fecha).isSameOrAfter(moment(curr.Fecha)) ? 1 : -1)
       )
-      .map(historial => TotalPorDiaLineal(historial))
+      .map(historial => TotalPorDiaLineal(historial, this.CurrentProfile.Title))
       .subscribe(
       data => {
         if (data[0].length) {
