@@ -18,7 +18,7 @@ import {
   StopRequest, StartRequest, SaveInfo,
   SaveOpenQuestions, SaveOpenAnswers,
   SaveCloseQuestions, SaveCloseAnswer, SaveAnswerChart,
-  ResetSucursal, ResetQA, UpdateAnswerChart
+  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
@@ -50,12 +50,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public nuevosContactos: Observable<number>;
   public indiceSucursal: Observable<number>;
 
-  public historicoEncuestasLoading: boolean;
-  public historicoEncuestasError: string;
-  public historicoEncuestasLabels: string[];
-  public historicoEncuestasData: any[];
-  public historicoEncuestasColors: string[]
-
   private id$: Observable<number>;
   private CurrentSucursal: Observable<SucursalState>;
   private today: moment.Moment;
@@ -86,9 +80,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<UserProfile>('info')
       .subscribe(userProfile => this.CurrentProfile = userProfile);
 
-    this.historicoEncuestasColors = gamaRegresando();
-    this.historicoEncuestasLabels = [];
-    this.historicoEncuestasData = [];
+    this.store.dispatch(new SaveHistoric({colors: [gamaRegresando()[3]]}));
     this.today = moment();
     this.aWeekAgo = moment().subtract(7, 'days');
     this.rattingColorsArray = ratingPalette(false);
@@ -131,8 +123,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   loadHistoricoEncuestas(query: APIRequestParams) {
-    this.historicoEncuestasLoading = true;
-    this.historicoEncuestasError = '';
+    this.store.dispatch(new SaveHistoric({
+      loading: true,
+      errorText: ''
+    }));
 
     this.preguntas.getTotalPorDia(query)
       .map(res =>
@@ -144,20 +138,27 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .subscribe(
       data => {
         if (data[0].length) {
-          this.historicoEncuestasLabels = data[0];
-          this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-          this.historicoEncuestasLoading = false;
+          const historic = {
+            labels: data[0],
+            data: data[1].sort((prev, curr) => prev.label > curr.label),
+            loading: false
+          };
+          this.store.dispatch(new SaveHistoric(historic));
         } else {
-          this.historicoEncuestasLoading = false;
-          this.historicoEncuestasError = 'No se hay información en esa fecha';
+          this.store.dispatch(new SaveHistoric({
+            errorText: 'No se hay información en esa fecha',
+            data: [],
+            labels: [],
+            loding: false
+          }))
         }
       },
       error => {
-        this.historicoEncuestasLoading = false;
+        this.store.dispatch(new SaveHistoric({loading: false}))
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.historicoEncuestasError = 'Error Cargando Historico de Encuestas';
+          this.store.dispatch(new SaveHistoric({errorText: 'Error Cargando Historico de Encuestas'}));
         }
       }
       );

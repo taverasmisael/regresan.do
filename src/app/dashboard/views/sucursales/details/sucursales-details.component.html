@@ -12,12 +12,12 @@
     chartType="line"
     chartTitle="Historico de Encuestas"
     lodingText="Cargando Historial de Encuestas"
-    (failed)="loadHistoricoEncuestas"
-    [loading]="historicoEncuestasLoading"
-    [errorText]="historicoEncuestasError"
-    [chartLabels]="historicoEncuestasLabels"
-    [chartData]="historicoEncuestasData"
-    [chartColors]="historicoEncuestasColors">
+    (failed)="loadHistoricoEncuestas(QuestionsQuery)"
+    [loading]="SucursalState.historicoEncuestas.loading"
+    [errorText]="SucursalState.historicoEncuestas.errorText"
+    [chartLabels]="SucursalState.historicoEncuestas.labels"
+    [chartData]="SucursalState.historicoEncuestas.data"
+    [chartColors]="SucursalState.historicoEncuestas.colors">
   </app-chart-card>
   <app-totales-container
     class="mdl-cell mdl-cell--3-col"
