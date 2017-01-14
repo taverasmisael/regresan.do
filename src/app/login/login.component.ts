@@ -15,7 +15,7 @@ import { UserService } from '../services/user.service';
 
 
 // RXJS Stuffs
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-login',
@@ -35,36 +35,32 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private store: Store<AppState>) { }
 
-  ngAfterViewInit() {
-    componentHandler.upgradeAllRegistered();
-  }
   ngOnInit() {
-    this.username = new FormControl('', [ Validators.required ]);
-    this.password = new  FormControl('', [ Validators.required ]);
+    this.username = new FormControl('', [Validators.required]);
+    this.password = new FormControl('', [Validators.required]);
     this.loginForm = this.fb.group({
       username: this.username,
       password: this.password
     });
-
     this.AuthState = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('auth')
       .pluck<AuthState>('auth');
 
     this.AuthState
-    .pluck<boolean>('loading')
-    .subscribe(value => this.requesting = value);
+      .pluck<boolean>('loading')
+      .subscribe(value => this.requesting = value);
 
     this.AuthState
       .pluck<any>('error')
       .subscribe(error => {
         switch (error) {
-          case(undefined):
+          case (undefined):
             this.loginError = '';
             break;
-          case('invalid_grant'):
+          case ('invalid_grant'):
             this.loginError = 'El usuario o contraseña son incorrectos';
             break;
-          case('unsupported_grant_type'):
+          case ('unsupported_grant_type'):
             this.loginError = 'Error Procesando la solicitud, intenta de nuevo.';
             break;
           default:
@@ -72,6 +68,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
             break;
         }
       });
+  }
+
+  ngAfterViewInit() {
+    componentHandler.upgradeAllRegistered();
   }
 
   logUser() {

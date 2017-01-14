@@ -35,16 +35,6 @@ import { APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparam
   styleUrls: ['./sucursales-details.component.scss'],
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  private id$: Observable<number>;
-  private CurrentSucursal: Observable<SucursalState>;
-  private today: moment.Moment;
-  private aWeekAgo: moment.Moment;
-  private QuestionsQuery: APIRequestUser;
-  private closeAnswers$: Array<Observable<any>>;
-  private rankingCamareros$: Observable<any[]>;
-  private rattingColors: any;
-  private rattingColorsArray: string[];
-
   public currentFilters: Filter;
   public SucursalState: SucursalState;
   public CurrentProfile: UserProfile;
@@ -60,6 +50,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
   public indiceSucursal: Observable<number>;
+
+  private id$: Observable<number>;
+  private CurrentSucursal: Observable<SucursalState>;
+  private today: moment.Moment;
+  private aWeekAgo: moment.Moment;
+  private QuestionsQuery: APIRequestUser;
+  private closeAnswers$: Array<Observable<any>>;
+  private rankingCamareros$: Observable<any[]>;
+  private rattingColors: any;
+  private rattingColorsArray: string[];
 
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,

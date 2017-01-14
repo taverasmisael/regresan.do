@@ -2,6 +2,9 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
+
+import { PreguntasService } from '../../../services/preguntas.service';
 
 import { ActionTypes } from '../../../actions/auth.actions';
 
@@ -10,9 +13,6 @@ import { AppState } from '../../../models/appstate';
 import { AuthState } from '../../../models/authstate';
 import { APIRequestParams } from '../../../models/apiparams';
 import { Filter } from '../../../models/filter';
-
-import * as moment from 'moment';
-import { PreguntasService } from '../../../services/preguntas.service';
 
 import { merge, sum } from '../../../utilities/arrays';
 import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
@@ -26,18 +26,14 @@ import { gamaRegresando } from '../../../utilities/colors';
 })
 export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
-  private AuthState: Observable<AuthState>;
-  private today: moment.Moment;
-  private aWeekAgo: moment.Moment;
-
   public userProfiles: UserProfile[];
 
-  public currentFilters: Filter;
-  public query: APIRequestParams;
   public totalGeneral: Observable<number>;
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
   public indiceSucursal: Observable<number>;
+  public currentFilters: Filter;
+  public query: APIRequestParams;
   public encuestasSucursalesError: string;
   public encuestasSucursalesData: number[] = [];
   public encuestasSucursalesLabels: string[] = [];
@@ -46,7 +42,11 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public historicoEncuestasError: string;
   public historicoEncuestasLabels: string[] = [];
   public historicoEncuestasData: any[] = [];
-  public COLORS = gamaRegresando();
+  public COLORS: any;
+
+  private AuthState: Observable<AuthState>;
+  private today: moment.Moment;
+  private aWeekAgo: moment.Moment;
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
@@ -69,6 +69,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       start: this.aWeekAgo.unix().toString(),
       end: moment().unix().toString(),
     };
+
+    this.COLORS = gamaRegresando();
   }
   ngAfterViewInit() {
     this.loadEncuestasSucursales(this.query);

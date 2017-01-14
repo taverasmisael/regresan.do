@@ -15,10 +15,11 @@ import { gamaRegresando } from '../../../utilities/colors';
 })
 export class DashboardSucursalesComponent implements OnInit {
 
-  private AuthState: Observable<AuthState>;
-
   public userProfiles: Observable<UserProfile[]>;
   public colores: string[];
+
+  private AuthState: Observable<AuthState>;
+
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
