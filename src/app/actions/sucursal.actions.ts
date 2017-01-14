@@ -13,6 +13,7 @@ export const ActionTypes = {
   END_REQUEST: '[SUCURSALES] END_REQUEST',
   FILTER_DATE: '[SUCURSALES] FILTER_DATE',
   FILTER_ANSWER: '[SUCURSALES] FILTER_ANSWER',
+  SAVE_HISTORIC: '[SUCURSALES] SAVE_HISTORIC',
   SAVE_INFO: '[SUCURSALES] SAVE_INFO',
   SAVE_LAST: '[SUCURSALES] SAVE_LAST',
   APPLY_FILTER: '[SUCURSALES] APPLY_FILTER',
@@ -97,6 +98,12 @@ export class FilterAnswer implements Action {
 
 export class SaveInfo implements Action {
   type = ActionTypes.SAVE_INFO;
+
+  constructor(public payload) { }
+}
+
+export class SaveHistoric implements Action {
+  type = ActionTypes.SAVE_HISTORIC;
 
   constructor(public payload) { }
 }
