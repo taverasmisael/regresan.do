@@ -1,3 +1,33 @@
-<p>
-  card works!
-</p>
+<div class="mdl-card">
+  <div class="mdl-card__title">
+    <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
+      {{ title }}
+    </h5>
+    <button *ngIf="action" [id]="actionId" class="mdl-button mdl-js-button mdl-button--icon" (click)="primaryAction.emit($event)">
+        <i class="material-icons">{{ action.icon }}</i>
+      </button>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <div *ngIf="!loading && !errorText" class="content-holder">
+      <ng-content></ng-content>
+    </div>
+    <div *ngIf="!errorText && loading" class="loading-holder">
+      <div class="content">
+        <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        <p class="mdl-typography--text-center">{{ loadingText }}</p>
+      </div>
+    </div>
+    <div *ngIf="errorText" class="loading-holder no--opacity">
+      <div class="content">
+        <i class="material-icons error-icon">error</i>
+        <p class="mdl-typography--text-center">{{ errorText }}</p>
+        <button (click)="retry.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
+            <i class="material-icons">refresh</i> Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="action" class="mdl-tooltip" [for]="actionId">
+  {{ action.text }}
+</div>

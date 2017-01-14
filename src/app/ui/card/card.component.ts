@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -7,6 +14,18 @@ import { Component, OnInit, Input, Output, ChangeDetectionStrategy } from '@angu
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardComponent implements OnInit {
+
+  @Input() action: {
+    icon: string,
+    text: string
+  };
+  @Input() title: string;
+  @Input() loadingText: string;
+  @Input() loading: boolean;
+  @Input() errorText: string;
+
+  @Output() primaryAction = new EventEmitter();
+  @Output() retry = new EventEmitter();
 
   constructor() { }
 
