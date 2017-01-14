@@ -6,28 +6,16 @@ import { SucursalState } from '../models/states/sucursalstate';
 
 import { ActionTypes } from '../actions/sucursal.actions';
 
-import { updateObject } from '../utilities/objects';
+import { updateObject, updateItemInArray } from '../utilities/objects';
 
 const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
-  SAVE_CLOSE_ANSWERS, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS,
-  START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST,
+  SAVE_CLOSE_ANSWER, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS, SAVE_CLOSE_ANSWER_CHART,
+  START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST, UPDATE_CLOSE_ANSWER_CHART,
   APPLY_FILTER, END_REQUEST, RESET_SUCURSAL, RESET_QA, RESET_ANSWERS,
   RESET_QUESTIONS } = ActionTypes;
 
 
-export const INITIAL_STATE = {
-  info: {},
-  closeQuestions: [],
-  openQuestions: [],
-  openAnswers: [],
-  closeAnswers: [],
-  filters: [],
-  dates: [],
-  lastQuery: '',
-  lastResult: {},
-  currentAction: '',
-  loading: false
-}
+export const INITIAL_STATE = new SucursalState();
 
 export function SucursalesCases() {
   return {
@@ -35,7 +23,9 @@ export function SucursalesCases() {
     [SAVE_CLOSE_QUESTIONS]: saveCloseQuestions,
     [SAVE_OPEN_QUESTIONS]: saveOpenQuestions,
     [LOAD_ANSWERS]: requesting,
-    [SAVE_CLOSE_ANSWERS]: saveCloseAnswers,
+    [SAVE_CLOSE_ANSWER]: saveCloseAnswer,
+    [SAVE_CLOSE_ANSWER_CHART]: saveAnswerChart,
+    [UPDATE_CLOSE_ANSWER_CHART]: updateAnswerChart,
     [SAVE_OPEN_ANSWERS]: saveOpenAnswers,
     [START_REQUEST]: requesting,
     [END_REQUEST]: stopRequesting,
@@ -71,9 +61,20 @@ function saveOpenQuestions(state: SucursalState, action: Action): SucursalState 
   return updateObject(state, {openQuestions: payload});
 }
 
-function saveCloseAnswers(state: SucursalState, action: Action): SucursalState {
+function saveCloseAnswer(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
-  return updateObject(state, {closeAnswers: payload});
+  return updateObject(state, {closeAnswers: [...state.closeAnswers, payload]});
+}
+
+function saveAnswerChart(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+  return updateObject(state, {answerCharts: updateObject(state.answerCharts,  payload)});
+}
+
+function updateAnswerChart(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+  const { id, newChart } = payload;
+  return updateObject(state, {answerCharts: updateObject(state.answerCharts, {[id]: newChart})});
 }
 
 function saveOpenAnswers(state: SucursalState, action: Action): SucursalState {

@@ -5,7 +5,9 @@ export const ActionTypes = {
   SAVE_CLOSE_QUESTIONS: '[SUCURSALES] SAVE_CLOSE_QUESTIONS',
   SAVE_OPEN_QUESTIONS: '[SUCURSALES] SAVE_OPEN_QUESTIONS',
   LOAD_ANSWERS: '[SUCURSALES] LOAD_ANSWERS',
-  SAVE_CLOSE_ANSWERS: '[SUCURSALES] SAVE_CLOSE_ANSWERS',
+  SAVE_CLOSE_ANSWER: '[SUCURSALES] SAVE_CLOSE_ANSWER',
+  SAVE_CLOSE_ANSWER_CHART: '[SUCURSALES] SAVE_CLOSE_ANSWER_CHART',
+  UPDATE_CLOSE_ANSWER_CHART: '[SUCURSALES] UPDATE_CLOSE_ANSWER_CHART',
   SAVE_OPEN_ANSWERS: '[SUCURSALES] SAVE_OPEN_ANSWERS',
   START_REQUEST: '[SUCURSALES] START_REQUEST',
   END_REQUEST: '[SUCURSALES] END_REQUEST',
@@ -44,8 +46,21 @@ export class LoadAnswers implements Action {
   constructor(public payload) { }
 }
 
-export class SaveCloseAnswers implements Action {
-  type = ActionTypes.SAVE_CLOSE_ANSWERS;
+export class SaveCloseAnswer implements Action {
+  type = ActionTypes.SAVE_CLOSE_ANSWER;
+
+  constructor(public payload) { }
+}
+
+export class SaveAnswerChart implements Action {
+  type = ActionTypes.SAVE_CLOSE_ANSWER_CHART;
+
+  constructor(public payload) { }
+}
+
+export class UpdateAnswerChart implements Action {
+  type = ActionTypes.UPDATE_CLOSE_ANSWER_CHART
+;
 
   constructor(public payload) { }
 }
