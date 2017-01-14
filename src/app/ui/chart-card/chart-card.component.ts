@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 
 import { createPalette, ChartJsColor, createCirularPalette } from '../../utilities/charts';
+import { updateObject } from '../../utilities/objects';
 
 @Component({
   selector: 'app-chart-card',
@@ -32,20 +33,19 @@ export class ChartCardComponent implements OnInit, OnChanges {
   @Output() failed = new EventEmitter();
 
   public ChartColors: any[];
-  public chartOptions: any;
+  public linearChartOptions: any;
+  public circularChartOptions: any;
+
+  private baseChartOptions: any;
 
   constructor() { }
 
   ngOnInit() {
-    this.chartOptions = {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
+    let circularOptions = {};
+    let linearOptions = { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } };
+    this.baseChartOptions = { responsive: true, maintainAspectRatio: false };
+    this.linearChartOptions = updateObject(this.baseChartOptions, linearOptions);
+    this.circularChartOptions = updateObject(this.baseChartOptions, circularOptions);
     this.updatePalette();
   }
 
