@@ -3,6 +3,7 @@
     class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
     [class.mdl-cell--3-col]="!halfCards"
     [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
     cardType="total"
     [count]="total"
     text="Total de Encuestas">
@@ -11,6 +12,7 @@
     class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
     [class.mdl-cell--3-col]="!halfCards"
     [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
     cardType="hoy"
     [count]="hoy"
     text="Total de Hoy">
@@ -19,6 +21,7 @@
     class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
     [class.mdl-cell--3-col]="!halfCards"
     [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
     style="pointer-events: none;"
     cardType="indice"
     [count]="indice"
@@ -28,6 +31,7 @@
     class="mdl-cell mdl-cell--4-col-tablet mdl-cell--2-col-phone"
     [class.mdl-cell--3-col]="!halfCards"
     [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
     [count]="contactos"
     text="Nuevos Contactos">
   </app-totales-card>
