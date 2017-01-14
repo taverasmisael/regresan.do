@@ -27,7 +27,7 @@
     <div *ngIf="(!chartData.length && !errorText) || loading" class="loading-holder">
       <div class="content">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
-        <p class="mdl-typography--text-center">{{ lodingText }}</p>
+        <p class="mdl-typography--text-center">{{ loadingText }}</p>
       </div>
     </div>
     <div *ngIf="errorText" class="loading-holder no--opacity">

@@ -22,7 +22,7 @@ export class ChartCardComponent implements OnInit, OnChanges {
   @Input() chartTitle: string;
   @Input() chartType: string;
   @Input() errorText: string;
-  @Input() lodingText: string;
+  @Input() loadingText: string;
   @Input() chartLabels: string[];
   @Input() chartData: any[];
   @Input() chartColors: string[];
