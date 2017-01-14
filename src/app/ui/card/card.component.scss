@@ -11,14 +11,13 @@
   z-index: 3;
 }
 .mdl-card__supporting-text,
-.staff-holder {
+.content-holder {
   width: 100%;
   position: relative;
   min-height: 17.8572rem;
 }
-.staff-holder {
+.content-holder {
   padding: 1.5em 0;
-  overflow: hidden;
 }
 .loading-holder {
   display: flex;
@@ -43,22 +42,4 @@
 
 .mdl-spinner__circle {
   border-width: 6px;
-}
-
-.mdl-progress,
-.mdl-progress > * {
-  display: block;
-  height: 1.5rem;
-}
-.mdl-progress > .progressbar {
-  background: #002f41;
-}
-.staff {
-  margin-bottom: 1.5em;
-}
-.title {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 1.2em;
-  color: #002f41
 }
