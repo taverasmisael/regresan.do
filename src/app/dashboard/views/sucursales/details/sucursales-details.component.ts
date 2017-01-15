@@ -49,6 +49,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public totalHoy: Observable<number>;
   public nuevosContactos: Observable<number>;
   public indiceSucursal: Observable<number>;
+  public profiles$: Observable<UserProfile[]>;
 
   private id$: Observable<number>;
   private CurrentSucursal: Observable<SucursalState>;
@@ -65,6 +66,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     private respuestas: RespuestasService) { }
 
   ngOnInit() {
+    this.today = moment();
+    this.aWeekAgo = moment().subtract(7, 'days');
+    this.store.dispatch(new SaveHistoric({ colors: [gamaRegresando()[3]] }));
+    this.rattingColorsArray = ratingPalette(false);
+    this.rattingColors = ratingPalette(true);
+    this.currentFilters = {
+      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
+      fechaFin: this.today.format('DD/MM/YYYY')
+    };
     this.id$ = this.route.params
       .distinctUntilKeyChanged('id')
       .pluck<number>('id');
@@ -77,17 +87,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.CurrentSucursal
       .distinctUntilKeyChanged('info')
       .pluck<UserProfile>('info')
-      .subscribe(userProfile => this.CurrentProfile = userProfile);
-
-    this.store.dispatch(new SaveHistoric({colors: [gamaRegresando()[3]]}));
-    this.today = moment();
-    this.aWeekAgo = moment().subtract(7, 'days');
-    this.rattingColorsArray = ratingPalette(false);
-    this.rattingColors = ratingPalette(true);
-    this.currentFilters = {
-      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
-      fechaFin: this.today.format('DD/MM/YYYY')
-    };
+      .subscribe(userProfile => {
+        this.CurrentProfile = userProfile;
+        setTimeout(() => this.ngAfterViewInit(), 250)
+      });
   }
 
   ngAfterViewInit() {
@@ -110,6 +113,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngOnDestroy() {
+    console.log('Destruyendo...');
     this.store.dispatch(new ResetSucursal());
   }
 
@@ -152,11 +156,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
       },
       error => {
-        this.store.dispatch(new SaveHistoric({loading: false}))
+        this.store.dispatch(new SaveHistoric({ loading: false }))
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.store.dispatch(new SaveHistoric({errorText: 'Error Cargando Historico de Encuestas'}));
+          this.store.dispatch(new SaveHistoric({ errorText: 'Error Cargando Historico de Encuestas' }));
         }
       }
       );
@@ -187,7 +191,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       val => {
         const req$val = val['respuestas'].reduce(makePieChart, [[], []]);
         const currentChart = [...req$val, this.giveMeMyColors(req$val[0])];
-        this.store.dispatch(new UpdateAnswerChart({id: val.pregunta, newChart: currentChart}));
+        this.store.dispatch(new UpdateAnswerChart({ id: val.pregunta, newChart: currentChart }));
       },
       err => this.handleAnswerError(err, index),
       () => this.store.dispatch(new StopRequest())
@@ -232,8 +236,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.preguntas.getRankingCamareros(query)
       .map(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
       .subscribe(
-        ranking => this.store.dispatch(new SaveStaffRanking(ranking)),
-        error => this.handleErrors(error));
+      ranking => this.store.dispatch(new SaveStaffRanking(ranking)),
+      error => this.handleErrors(error));
   }
 
   private loadAllComponents(query: APIRequestUser) {
@@ -281,7 +285,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private loadCloseAnswers(qsIds: number[], query: APIRequestUser) {
     this.closeAnswers$ = qsIds.reduce((prev, curr) => {
-      this.store.dispatch(new SaveAnswerChart({[curr.toString()]: [[], [], []]}));
+      this.store.dispatch(new SaveAnswerChart({ [curr.toString()]: [[], [], []] }));
       let currentQuery = updateObject(query, { pregunta: curr.toString() });
       return [...prev, this.respuestas.getFromProfile(currentQuery)
         .map(val => ({ respuestas: val['RespuestasPreguntas'], pregunta: curr.toString() }))
@@ -310,15 +314,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private SaveCurrentSucursal() {
+    this.profiles$ = this.store.select<AppState>('MainStore')
+          .distinctUntilKeyChanged('auth')
+          .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles')
     this.id$
-    .switchMap(id =>
-      this.store.select<AppState>('MainStore')
-        .distinctUntilKeyChanged('auth')
-        .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles')
-        .map(profile => profile.find(prof => prof.OldProfileId === +id))
-    ).subscribe(profile => {
-      this.store.dispatch(new SaveInfo(profile));
-    });
+      .switchMap(id =>
+          this.profiles$
+          .map(profile => profile.find(prof => prof.OldProfileId === +id))
+      ).subscribe(profile => {
+        this.store.dispatch(new SaveInfo(profile));
+      });
   }
 }
 

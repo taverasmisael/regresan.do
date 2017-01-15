@@ -9,6 +9,10 @@
   .title {
     flex: 1 0;
     margin-left: 1rem;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
   }
 }
 .main-content {

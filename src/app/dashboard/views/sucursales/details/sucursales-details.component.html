@@ -4,7 +4,9 @@
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary-dark">
       <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
-    <h3 class="title mdl-color-text--primary">{{ SucursalState.info.Title }}</h3>
+    <h3 id="sucursales-list" class="title mdl-color-text--primary">{{ SucursalState.info.Title }}
+      <i class="material-icons" style="font-size: 1em;">arrow_drop_down</i>
+    </h3>
   </div>
   <app-chart-card
     class="mdl-cell mdl-cell--9-col mdl-card mdl-shadow--2dp"
@@ -90,3 +92,9 @@
 
 <!-- tooltips, menu and hidden stuffs -->
 <div class="mdl-tooltip mdl-tooltip--right" for="btn-back"> Volver a la lista de sucursales </div>
+<div class="mdl-tooltip mdl-tooltip--left" for="sucursales-list"> Lista de Sucursales </div>
+<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="sucursales-list">
+  <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " [routerLink]="['../', prof.OldProfileId]">
+    {{ prof.Title }}
+  </a>
+</ul>
