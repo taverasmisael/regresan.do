@@ -47,7 +47,7 @@
       <h4 style="margin-bottom: 0;">Gráficas y estadisticas</h4>
       <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
         <app-chart-card
-          class="mdl-cell mdl-card"
+          class="mdl-cell mdl-cell--3-col-desktop mdl-card"
           *ngFor="let q of SucursalState.closeQuestions; let i = index;"
           chartType="pie"
           loadingText="Respuesta {{ i + 1 }}"
