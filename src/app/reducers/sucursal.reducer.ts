@@ -136,7 +136,7 @@ function applyFilter(state: SucursalState, action: Action): SucursalState {
 }
 
 function restoreQA(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {closeQuestions: [], openQuestions: [], closeAnswers: [], openAnswers: []})
+  return updateObject(state, {closeQuestions: [], openQuestions: [], closeAnswers: [], openAnswers: [], answerCharts: {}})
 }
 
 function restoreQuestions(state: SucursalState, action: Action): SucursalState {
