@@ -1,17 +1,33 @@
 <table class="mdl-data-table" *ngIf="answers.length">
   <thead>
     <tr>
-      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Fecha</th>
-      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Pregunta</th>
-      <th rowspan="1" colspan="2" class="mdl-data-table__cell--non-numeric">Respuesta</th>
-      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Camarero</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
+        (click)="sortBy('fecha')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'fecha' && order === 'asc'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === 'fecha' && order === 'desc'"
+      >Fecha</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
+        (click)="sortBy('pregunta')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'pregunta' && order === 'asc'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === 'pregunta' && order === 'desc'"
+      >Pregunta</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
+        (click)="sortBy('respuesta')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'respuesta' && order === 'asc'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === 'respuesta' && order === 'desc'"
+      >Respuesta</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
+        (click)="sortBy('sesion')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'sesion' && order === 'asc'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === 'sesion' && order === 'desc'"
+      >Camarero</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let a of answers;">
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.fecha }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.pregunta }}</td>
-      <td rowspan="1" colspan="2" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.sesion || "Anonimo"}}</td>
     </tr>
   </tbody>

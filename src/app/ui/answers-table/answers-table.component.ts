@@ -13,6 +13,10 @@ export class AnswersTableComponent implements OnInit {
   @Input() answers: any[];
   @Input() loading: boolean;
   @Output() failed = new EventEmitter();
+  @Output() sort = new EventEmitter();
+
+  public order: 'asc' | 'desc';
+  public sorting: string;
 
   constructor() { }
 
@@ -22,4 +26,10 @@ export class AnswersTableComponent implements OnInit {
       .subscribe(() => componentHandler.upgradeAllRegistered());
   }
 
+
+  sortBy(field: string) {
+    this.order = field === this.sorting && this.order === 'asc' ? 'desc' : 'asc';
+    this.sorting = field;
+    this.sort.emit({field, order: this.order});
+  }
 }
