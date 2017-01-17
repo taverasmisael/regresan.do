@@ -41,11 +41,11 @@ export class ChartCardComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    let linearOptions = { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } };
+    let linearOptions = updateObject(this.baseChartOptions, { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } });
     if (this.useDataset(this.chartType)) {
       this.ChartOptions = updateObject(linearOptions, this.chartOptions);
     } else {
-      this.ChartOptions = updateObject({}, this.chartOptions);
+      this.ChartOptions = updateObject({legend: {position: 'bottom'}}, this.chartOptions);
     }
     this.updatePalette();
   }
