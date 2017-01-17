@@ -49,6 +49,7 @@ import { TotalesContainerComponent } from './ui/totales-container/totales-contai
 import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-card.component';
 import { CardComponent } from './ui/card/card.component';
 import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
+import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
     TotalesContainerComponent,
     StafRankingCardComponent,
     CardComponent,
-    KpiCardComponent
+    KpiCardComponent,
+    OrderByPipe
   ],
   imports: [
     BrowserModule,
