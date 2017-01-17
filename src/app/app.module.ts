@@ -42,7 +42,7 @@ import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashb
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component';
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component';
 import { ChartCardComponent } from './ui/chart-card/chart-card.component';
-import { AnswersTabsComponent } from './ui/answers-tabs/answers-tabs.component';
+import { AnswersTableComponent } from './ui/answers-table/answers-table.component';
 import { FilterComponent } from './ui/filter/filter.component';
 import { TotalesCardComponent } from './ui/totales-card/totales-card.component';
 import { TotalesContainerComponent } from './ui/totales-container/totales-container.component';
@@ -63,7 +63,7 @@ import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
     SucursalesListComponent,
     ChartCardComponent,
     FlatpickrComponent,
-    AnswersTabsComponent,
+    AnswersTableComponent,
     FilterComponent,
     TotalesCardComponent,
     TotalesContainerComponent,

@@ -3,11 +3,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-answers-tabs',
-  templateUrl: './answers-tabs.component.html',
-  styleUrls: ['./answers-tabs.component.scss']
+  selector: 'app-answers-table',
+  templateUrl: './answers-table.component.html',
+  styleUrls: ['./answers-table.component.scss']
 })
-export class AnswersTabsComponent implements OnInit {
+export class AnswersTableComponent implements OnInit {
   @Input() title: string;
   @Input() questionsErrorText: string;
   @Input() answersErrorText: string;
