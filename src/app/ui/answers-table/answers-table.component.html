@@ -3,28 +3,28 @@
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('fecha')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'fecha' && order === 'asc'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === 'fecha' && order === 'desc'"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'fecha'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-fecha'"
       >Fecha</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('pregunta')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'pregunta' && order === 'asc'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === 'pregunta' && order === 'desc'"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'pregunta'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-pregunta'"
       >Pregunta</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('respuesta')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'respuesta' && order === 'asc'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === 'respuesta' && order === 'desc'"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'respuesta'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-respuesta'"
       >Respuesta</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('sesion')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'sesion' && order === 'asc'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === 'sesion' && order === 'desc'"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'sesion'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-sesion'"
       >Camarero</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let a of answers;">
+    <tr *ngFor="let a of answers | orderBy: [sorting];">
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.fecha }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.pregunta }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
