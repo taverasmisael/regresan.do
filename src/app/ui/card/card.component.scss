@@ -1,12 +1,10 @@
 .mdl-card {
   background: #fff;
   width: 100%;
-  font-size: 1em;
 }
 .mdl-card__title {
   color: #00A4A3;
   display: flex;
-  font-size: 1em;
   justify-content: space-between;
   z-index: 3;
 }
@@ -17,7 +15,7 @@
   min-height: 17.8572rem;
 }
 .content-holder {
-  padding: 1.5em 0;
+  padding: 1.5em;
 }
 .loading-holder {
   display: flex;
