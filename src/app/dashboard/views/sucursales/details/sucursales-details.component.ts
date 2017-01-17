@@ -215,7 +215,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
             respuesta: a.Respuesta,
             fecha: a.Fecha,
             sesion: a.Sesion,
-            pregunta: curr.pregunta,
+            pregunta: a.Pregunta,
             porcentaje: a.Porcentaje // UNUSED
           }))
           ]
