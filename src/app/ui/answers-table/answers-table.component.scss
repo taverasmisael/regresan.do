@@ -20,8 +20,8 @@
   width: 100%; height: 100%;
   background: rgba(255,255,255,0.6);
 }
-
-.mdl-data-table td:last-of-type, .mdl-data-table th:last-of-type {
+.mdl-data-table th:last-of-type.mdl-data-table__header--sorted-ascending,
+.mdl-data-table th:last-of-type.mdl-data-table__header--sorted-descending {
   padding-left: 0;
   padding-right: 0;
 }
