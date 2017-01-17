@@ -12,6 +12,7 @@ import { RespuestasService } from '../../../../services/respuestas.service';
 
 import { makePieChart, TotalPorDiaLineal } from '../../../../utilities/respuestas';
 import { updateObject } from '../../../../utilities/objects';
+import { merge } from '../../../../utilities/arrays';
 import { ratingPalette, gamaRegresando } from '../../../../utilities/colors';
 
 import {
@@ -219,7 +220,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           }))
           ]
         }, []);
-        this.store.dispatch(new SaveOpenAnswers(this.openAnswers));
+        this.store.dispatch(new SaveOpenAnswers(this.openAnswers.reduce(merge)));
       },
       err => {
         if (err.status === 401) {

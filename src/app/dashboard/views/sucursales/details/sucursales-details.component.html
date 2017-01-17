@@ -84,7 +84,13 @@
 <section class="section">
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-    <app-answers-table title="Pregunta Abierta" (failed)="loadOpenAnswers($event)" [questionsErrorText]="questionError" [answersErrorText]="openAnswersError" [loading]="SucursalState.loading" [questions]="SucursalState.openQuestions" [answers]="SucursalState.openAnswers"></app-answers-table>
+    <app-answers-table
+      (failed)="loadOpenAnswers($event)"
+      [questionsErrorText]="questionError"
+      [answersErrorText]="openAnswersError"
+      [loading]="SucursalState.loading"
+      [answers]="SucursalState.openAnswers">
+    </app-answers-table>
   </div>
   </div>
 </section>

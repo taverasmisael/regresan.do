@@ -8,10 +8,8 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./answers-table.component.scss']
 })
 export class AnswersTableComponent implements OnInit {
-  @Input() title: string;
   @Input() questionsErrorText: string;
   @Input() answersErrorText: string;
-  @Input() questions: any[];
   @Input() answers: any[];
   @Input() loading: boolean;
   @Output() failed = new EventEmitter();
@@ -22,10 +20,6 @@ export class AnswersTableComponent implements OnInit {
     Observable.of(this.loading)
       .map(val => val === true)
       .subscribe(() => componentHandler.upgradeAllRegistered());
-  }
-
-  public getMyAnswers(id: number) {
-    return this.answers.find(block => block.find(answer => +answer.pregunta === id));
   }
 
 }

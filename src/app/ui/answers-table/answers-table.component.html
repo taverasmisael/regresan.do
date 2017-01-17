@@ -1,43 +1,28 @@
-<div class="question mdl-color--primary-contrast" *ngFor="let q of questions;">
-  <div class="question__headlin">
-    <p class="question__name">{{ q.pregunta }}</p>
-  </div>
-  <div class="question__answers mdl-typography--text-left">
-    <ul class="answer-list">
-      <li class="answer" *ngFor="let a of getMyAnswers(q.idPregunta)">
-        <span class="answer__meta">
-          <span class="answer__sesion">{{ a.sesion || 'Anonimo'}}</span>
-        <time class="answer__date">{{ a.fecha }}</time>
-        </span>
-        <span class="answer__content">
-          {{ a.respuesta }}
-        </span>
-      </li>
-    </ul>
-    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading || !getMyAnswers(q.idPregunta)">
-      <div class="content">
-        <div class="mdl-spinner mdl-js-spinner is-active"></div>
-        <p class="mdl-typography--text-center">Cargando Respuestas Abiertas...</p>
-      </div>
-    </div>
-    <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!loading && answersErrorText">
-      <div class="content">
-        <i class="material-icons">error</i><br />
-        <p class="mdl-typography--text-center">{{ answersErrorText }}</p>
-        <button (click)="failed.emit([q.idPregunta])" class="mdl-button mdl-js-button mdl-js-ripple">
-          <i class="material-icons">refresh</i> Reintentar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !questions.length">
+<table class="mdl-data-table" *ngIf="answers.length">
+  <thead>
+    <tr>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Fecha</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Pregunta</th>
+      <th rowspan="1" colspan="2" class="mdl-data-table__cell--non-numeric">Respuesta</th>
+      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">Camarero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of answers;">
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.fecha }}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.pregunta }}</td>
+      <td rowspan="1" colspan="2" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.sesion || "Anonimo"}}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="loading && !answers.length">
   <div class="content">
     <div class="mdl-spinner mdl-js-spinner is-active"></div>
     <p class="mdl-typography--text-center">Cargando Preguntas Abiertas...</p>
   </div>
 </div>
-<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!loading && !questions.length && questionsErrorText">
+<div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="!loading && !answers.length && answersErrorText">
   <div class="content">
     <i class="material-icons">error</i><br />
     <p class="mdl-typography--text-center">{{ questionsErrorText }}</p>
