@@ -41,3 +41,13 @@
 .mdl-spinner__circle {
   border-width: 6px;
 }
+
+.mdl-card.is--data-table {
+  .mdl-card__supporting-text,
+  .content-holder {
+    padding: 0;
+  }
+  .mdl-card__title {
+    color: rgba(0,0,0,0.87);
+  }
+}

@@ -1,4 +1,4 @@
-<table class="mdl-data-table" *ngIf="answers.length">
+<table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="answers.length">
   <thead>
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"

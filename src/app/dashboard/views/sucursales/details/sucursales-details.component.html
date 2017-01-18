@@ -87,10 +87,12 @@
       class="mdl-cell mdl-typography--text-center"
       *ngFor="let q of SucursalState.openQuestions"
       loadingText="Cargando Preguntas Abiertas"
+      [isDataTable]="true"
       [title]="q.pregunta "
       [loading]="SucursalState.loading">
       <app-answers-table
       (failed)="loadOpenAnswers($event)"
+      [withinCard]="true"
       [questionsErrorText]="questionError"
       [answersErrorText]="openAnswersError"
       [loading]="SucursalState.loading"

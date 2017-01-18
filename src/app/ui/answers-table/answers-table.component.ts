@@ -12,6 +12,7 @@ export class AnswersTableComponent implements OnInit {
   @Input() answersErrorText: string;
   @Input() answers: any[];
   @Input() loading: boolean;
+  @Input() withinCard: boolean;
   @Output() failed = new EventEmitter();
 
   public order: 'asc' | 'desc';
