@@ -29,6 +29,7 @@ import { AppState } from '../../../../models/states/appstate';
 import { SucursalState } from '../../../../models/states/sucursalstate';
 import { Pregunta } from '../../../../models/Pregunta';
 import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '../../../../models/apiparams';
+import { RespuestaAbierta } from '../../../../models/respuesta-abierta';
 
 @Component({
   selector: 'app-sucursales-details',
@@ -171,10 +172,17 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.preguntas.getResumenSucursal(query)
       .map(res => res['Cabecera'])
       .subscribe(res => {
-        this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
-        this.totalGeneral = Observable.of(res['TotalEncuestas']);
-        this.nuevosContactos = Observable.of(res['NuevosContactos']);
-        this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+        if (res) {
+          this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
+          this.totalGeneral = Observable.of(res['TotalEncuestas']);
+          this.nuevosContactos = Observable.of(res['NuevosContactos']);
+          this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+        } else {
+           this.totalHoy = Observable.of(0);
+          this.totalGeneral = Observable.of(0);
+          this.nuevosContactos = Observable.of(0);
+          this.indiceSucursal = Observable.of(0);
+        }
 
       });
 
@@ -184,6 +192,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     let colors = array.map((el, i) => this.rattingColors[el] || this.rattingColorsArray[i]);
     return colors;
   }
+
+   getMyAnswers(id: number) {
+     return this.SucursalState.openAnswers.filter(answer => +answer.Pregunta === id);
+   }
 
   loadCloseAnswer(index: number) {
     this.chartErrors[index] = '';
@@ -215,7 +227,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
             respuesta: a.Respuesta,
             fecha: a.Fecha,
             sesion: a.Sesion,
-            pregunta: a.Pregunta,
+            Pregunta: curr.pregunta,
             porcentaje: a.Porcentaje // UNUSED
           }))
           ]
