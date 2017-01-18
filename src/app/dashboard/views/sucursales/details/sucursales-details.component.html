@@ -83,16 +83,20 @@
 </section>
 <section class="section">
   <div class="mdl-grid">
-    <div *ngFor="let q of SucursalState.openQuestions" class="mdl-cellmdl-typography--text-center">
-      <h4>{{ q.pregunta }}</h4>
-    <app-answers-table
+    <app-card
+      class="mdl-cellmdl-typography--text-center"
+      *ngFor="let q of SucursalState.openQuestions"
+      loadingText="Cargando Preguntas Abiertas"
+      [title]="q.pregunta "
+      [loading]="SucursalState.loading">
+      <app-answers-table
       (failed)="loadOpenAnswers($event)"
       [questionsErrorText]="questionError"
       [answersErrorText]="openAnswersError"
       [loading]="SucursalState.loading"
       [answers]="getMyAnswers(q.idPregunta)">
     </app-answers-table>
-  </div>
+    </app-card>
   </div>
 </section>
 
