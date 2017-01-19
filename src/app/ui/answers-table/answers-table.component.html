@@ -1,4 +1,4 @@
-<table class="mdl-data-table" *ngIf="answers.length">
+<table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="answers.length">
   <thead>
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
@@ -6,11 +6,6 @@
         [class.mdl-data-table__header--sorted-ascending]="sorting === 'fecha'"
         [class.mdl-data-table__header--sorted-descending]="sorting === '-fecha'"
       >Fecha</th>
-      <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
-        (click)="sortBy('pregunta')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'pregunta'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === '-pregunta'"
-      >Pregunta</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('respuesta')"
         [class.mdl-data-table__header--sorted-ascending]="sorting === 'respuesta'"
@@ -26,7 +21,6 @@
   <tbody>
     <tr *ngFor="let a of answers | orderBy: [sorting];">
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.fecha }}</td>
-      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.pregunta }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.sesion || "Anonimo"}}</td>
     </tr>

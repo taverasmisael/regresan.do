@@ -22,6 +22,7 @@ export class CardComponent implements OnInit {
   @Input() title: string;
   @Input() loadingText: string;
   @Input() loading: boolean;
+  @Input() isDataTable: boolean;
   @Input() errorText: string;
 
   @Output() primaryAction = new EventEmitter();

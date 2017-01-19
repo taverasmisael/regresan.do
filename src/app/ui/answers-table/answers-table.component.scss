@@ -7,6 +7,9 @@
 .mdl-data-table {
   white-space: pre-line;
   width: 100%;
+  &.is--in-card {
+    border: none;
+  }
 }
 .clickable {
   cursor: pointer;

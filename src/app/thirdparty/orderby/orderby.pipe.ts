@@ -14,8 +14,8 @@ export class OrderByPipe implements PipeTransform {
 
   static _orderByComparator(a: any, b: any): number {
 
-    if (a === null || typeof a === 'undefined') { a = 0 }
-    if (b === null || typeof b === 'undefined') { b = 0 }
+    if (a === null || typeof a === 'undefined') { return 0; }
+    if (b === null || typeof b === 'undefined') { return 0; }
 
     if ((isNaN(parseFloat(a)) || !isFinite(a)) || (isNaN(parseFloat(b)) || !isFinite(b))) {
       // Isn't a number so lowercase the string to properly compare

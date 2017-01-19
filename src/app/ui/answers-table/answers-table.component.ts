@@ -12,6 +12,7 @@ export class AnswersTableComponent implements OnInit {
   @Input() answersErrorText: string;
   @Input() answers: any[];
   @Input() loading: boolean;
+  @Input() withinCard: boolean;
   @Output() failed = new EventEmitter();
 
   public order: 'asc' | 'desc';
@@ -30,8 +31,6 @@ export class AnswersTableComponent implements OnInit {
 
 
   sortBy(field: string) {
-    console.log(this.sorting);
-    console.log(this.sorting === `-${this.sorting}`);
     if (this.sort !== field) {
       this.sort = field;
       this.sorting = field;
