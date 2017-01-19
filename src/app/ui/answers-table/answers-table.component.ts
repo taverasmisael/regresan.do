@@ -31,8 +31,6 @@ export class AnswersTableComponent implements OnInit {
 
 
   sortBy(field: string) {
-    console.log(this.sorting);
-    console.log(this.sorting === `-${this.sorting}`);
     if (this.sort !== field) {
       this.sort = field;
       this.sorting = field;
