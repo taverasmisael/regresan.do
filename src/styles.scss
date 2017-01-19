@@ -77,6 +77,9 @@ main {
 .mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link.mdl-navigation__link--active {
   background: rgba(50, 50, 50, 0.36);
 }
+.mdl-data-table td, .mdl-data-table td .mdl-data-table__select {
+  color: rgba(0,0,0,0.87);
+}
 .mdl-badge[data-badge]:after {
   // TODO hay que cambiar esto cada vez que se cambie la paleta de colores para que se ajuste
   background: #00A4A3;
