@@ -96,13 +96,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
-        if (data.length) {
+        if (data[1].length) {
           this.encuestasSucursalesLabels = data[0];
           this.encuestasSucursalesData = data[1];
           this.encuestasSucursalesLoading = false;
         } else {
           this.encuestasSucursalesLoading = false;
-          this.encuestasSucursalesError = 'No se hay información en esa fecha';
+          this.encuestasSucursalesError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
@@ -128,13 +128,13 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       })))
       .subscribe(
       data => {
-        if (data[0].length) {
+        if (data[1].length) {
           this.historicoEncuestasLabels = data[0];
           this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
           this.historicoEncuestasLoading = false;
         } else {
           this.historicoEncuestasLoading = false;
-          this.historicoEncuestasError = 'No se hay información en esa fecha';
+          this.historicoEncuestasError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
@@ -152,10 +152,17 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.preguntas.getResumen(query)
       .map(res => res['Cabecera'])
       .subscribe(res => {
-        this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
-        this.totalGeneral = Observable.of(res['TotalEncuestas']);
-        this.nuevosContactos = Observable.of(res['NuevosContactos']);
-        this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+        if (res) {
+          this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
+          this.totalGeneral = Observable.of(res['TotalEncuestas']);
+          this.nuevosContactos = Observable.of(res['NuevosContactos']);
+          this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+        } else {
+           this.totalHoy = Observable.of(0);
+          this.totalGeneral = Observable.of(0);
+          this.nuevosContactos = Observable.of(0);
+          this.indiceSucursal = Observable.of(0);
+        }
       });
   }
 }

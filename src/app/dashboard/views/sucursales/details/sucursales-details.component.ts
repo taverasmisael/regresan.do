@@ -141,7 +141,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .map(historial => TotalPorDiaLineal(historial, this.CurrentProfile.Title))
       .subscribe(
       data => {
-        if (data[0].length) {
+        if (data[1].length) {
           const historic = {
             labels: data[0],
             data: data[1].sort((prev, curr) => prev.label > curr.label),
@@ -150,7 +150,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.store.dispatch(new SaveHistoric(historic));
         } else {
           this.store.dispatch(new SaveHistoric({
-            errorText: 'No se hay información en esa fecha',
+            errorText: 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo',
             data: [],
             labels: [],
             loding: false
