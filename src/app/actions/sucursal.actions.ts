@@ -21,7 +21,9 @@ export const ActionTypes = {
   RESET_SUCURSAL: '[SUCURSALES]: RESET_SUCURSAL',
   RESET_QUESTIONS: '[SUCURSALES]: RESET_QUESTIONS',
   RESET_ANSWERS: '[SUCURSALES]: RESET_ANSWERS',
-  RESET_QA: '[SUCURSALES]: RESET_QA'
+  RESET_QA: '[SUCURSALES]: RESET_QA',
+  SAVE_KPIS: '[SUCURSALES]: SAVE_KPIS',
+  RESET_KPIS: '[SUCURSALES]: RESET_KPIS',
 };
 
 export class LoadQuestions implements Action {
@@ -148,6 +150,18 @@ export class ResetAnswers implements Action {
 
 export class ResetQA implements Action {
   type = ActionTypes.RESET_QA;
+
+  constructor(public payload?) { }
+}
+
+export class SaveKPIS implements Action {
+  type = ActionTypes.SAVE_KPIS;
+
+  constructor(public payload) { }
+}
+
+export class ResetKPIS implements Action {
+  type = ActionTypes.RESET_KPIS;
 
   constructor(public payload?) { }
 }

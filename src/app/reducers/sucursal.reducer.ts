@@ -12,7 +12,7 @@ const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
   SAVE_CLOSE_ANSWER, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS, SAVE_CLOSE_ANSWER_CHART,
   START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST, UPDATE_CLOSE_ANSWER_CHART,
   APPLY_FILTER, END_REQUEST, RESET_SUCURSAL, RESET_QA, RESET_ANSWERS,
-  RESET_QUESTIONS, SAVE_HISTORIC, SAVE_STAFF_RANKING} = ActionTypes;
+  RESET_QUESTIONS, SAVE_HISTORIC, SAVE_STAFF_RANKING, SAVE_KPIS, RESET_KPIS} = ActionTypes;
 
 
 export const INITIAL_STATE = new SucursalState();
@@ -40,6 +40,8 @@ export function SucursalesCases() {
     [RESET_QA]: restoreQA,
     [RESET_ANSWERS]: restoreAnswers,
     [RESET_QUESTIONS]: restoreQuestions,
+    [SAVE_KPIS]: saveKPIS,
+    [RESET_KPIS]: restoreKPIS,
   }
 }
 
@@ -117,6 +119,17 @@ function saveStaffRanking(state: SucursalState, action: Action): SucursalState {
   return updateObject(state, {staffRanking: payload});
 }
 
+function saveKPIS(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+
+  return updateObject(state, {kpis: payload});
+}
+
+function restoreKPIS(state: SucursalState, action: Action): SucursalState {
+  const { payload } = action;
+
+  return updateObject(state, {kpis: []});
+}
 function saveHistoric(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
 
