@@ -24,6 +24,7 @@ import { ApiService} from './services/api.service';
 import { PreguntasService } from './services/preguntas.service';
 import { RespuestasService } from './services/respuestas.service';
 import { UserService} from './services/user.service';
+import { KpisService } from './services/kpis.service';
 // Security Services
 import { AuthGuardService} from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service';
@@ -90,7 +91,8 @@ import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
     LoginGuardService,
     UserService,
     RespuestasService,
-    PreguntasService
+    PreguntasService,
+    KpisService
   ],
   bootstrap: [AppComponent]
 })
