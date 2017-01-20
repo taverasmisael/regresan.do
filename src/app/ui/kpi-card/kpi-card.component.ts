@@ -38,6 +38,5 @@ export class KpiCardComponent implements OnInit, OnChanges {
   spliceKPIS(kpis: any[]) {
     this.mainKPI = this.kpis.slice(0, 1)[0];
     this.secondariesKPI = this.kpis.slice(1);
-    console.log(this.mainKPI, this.secondariesKPI)
   }
 }

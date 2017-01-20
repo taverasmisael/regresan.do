@@ -1,8 +1,9 @@
 <app-card
   class="mdl-shadow--2dp"
   style="font-size: 1.5rem;"
-  [loading]="loading && !kpis.length"
-  title="KPIs">
+  title="KPIs"
+  loadingText="Cargando KPIS..."
+  [loading]="loading && !kpis.length">
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--8-col-tablet mdl-cell--4-col-phone">
       <canvas *ngIf="kpis.length" baseChart
