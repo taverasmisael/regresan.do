@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-kpi-card',
@@ -7,6 +7,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class KpiCardComponent implements OnInit {
+
+  @Input() kpis: any[];
+  @Input() errorText: string;
+  @Input() loading: boolean;
 
   constructor() { }
 
