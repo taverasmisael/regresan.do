@@ -262,6 +262,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   loadKPIS(query: APIRequestUser) {
     this.kpis.getFromProfile(query)
       .map(res => res['Kpis'])
+      .map(res => res.map(kpi => ({
+        $id: kpi.$id,
+        name: kpi.Nombre,
+        value: kpi.Indice
+      })))
       .subscribe(
         data => this.store.dispatch(new SaveKPIS(data)),
         error => this.handleErrors(error),
