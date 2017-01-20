@@ -48,7 +48,7 @@ export class KpisService {
 
     params.append('_startDate', query.start);
     params.append('_endDate', query.end);
-    params.append('profileId', query.profile);
+    params.append('_profileId', query.profile);
 
     return this.api.get(url, {
       headers: this.authHeader,
