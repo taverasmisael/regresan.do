@@ -14,5 +14,10 @@
     </span>
   </p>
   </div>
+  <div class="mdl-grid empty-holder" *ngIf="!staffData.length && !loading">
+    <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+      <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
+    </h4>
+  </div>
 </app-card>
 

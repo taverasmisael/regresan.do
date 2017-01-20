@@ -46,6 +46,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public chartErrors: string[];
   public questionError: string;
   public openAnswersError: string;
+  public loadingRC: boolean;
 
   public totalGeneral: Observable<number>;
   public totalHoy: Observable<number>;
@@ -150,7 +151,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.store.dispatch(new SaveHistoric(historic));
         } else {
           this.store.dispatch(new SaveHistoric({
-            errorText: 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo',
+            errorText: 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo  ',
             data: [],
             labels: [],
             loding: false
@@ -246,11 +247,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   loadRankingCamareros(query: APIRequestUser) {
+    this.loadingRC = true;
     this.preguntas.getRankingCamareros(query)
       .map(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
       .subscribe(
       ranking => this.store.dispatch(new SaveStaffRanking(ranking)),
-      error => this.handleErrors(error));
+      error => this.handleErrors(error),
+      () => this.loadingRC = false);
   }
 
   private loadAllComponents(query: APIRequestUser) {
