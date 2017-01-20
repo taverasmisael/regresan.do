@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { PreguntasService } from '../../../../services/preguntas.service';
 import { RespuestasService } from '../../../../services/respuestas.service';
+import { KpisService } from '../../../../services/kpis.service';
 
 import { makePieChart, TotalPorDiaLineal } from '../../../../utilities/respuestas';
 import { updateObject } from '../../../../utilities/objects';
@@ -66,7 +67,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,
     private preguntas: PreguntasService,
-    private respuestas: RespuestasService) { }
+    private respuestas: RespuestasService,
+    private kpis: KpisService) { }
 
   ngOnInit() {
     this.today = moment();
@@ -256,11 +258,22 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       () => this.loadingRC = false);
   }
 
+  loadKPIS(query: APIRequestUser) {
+    this.kpis.getFromProfile(query)
+      .map(res => res['Kpis'])
+      .subscribe(
+        data => console.log(data),
+        error => this.handleErrors(error),
+        () => console.log('done')
+      )
+  }
+
   private loadAllComponents(query: APIRequestUser) {
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
     this.loadRankingCamareros(this.QuestionsQuery);
     this.loadHistoricoEncuestas(this.QuestionsQuery);
+    this.loadKPIS(this.QuestionsQuery);
   }
   private loadAllCharts(query: APIRequestUser) {
     this.store.dispatch(new ResetQA());
