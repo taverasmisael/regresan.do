@@ -97,7 +97,7 @@
     border-bottom-color: rgba(72, 72, 72, .1)
 }
 .flatpickr-calendar.arrowTop:after {
-    border-bottom-color: rgba(#00BCD4, 1)
+    border-bottom-color: rgba(#651fff, 1)
 }
 .flatpickr-calendar.arrowBottom:after,
 .flatpickr-calendar.arrowBottom:before {
@@ -107,11 +107,11 @@
     border-top-color: rgba(72, 72, 72, .1)
 }
 .flatpickr-calendar.arrowBottom:after {
-    border-top-color: rgba(#00BCD4, 1)
+    border-top-color: rgba(#651fff, 1)
 }
 .flatpickr-month {
     border-radius: 5px 5px 0 0;
-    background: rgba(#00BCD4, 1);
+    background: rgba(#651fff, 1);
     color: #fff;
     fill: #fff;
     height: 28px;
@@ -287,7 +287,7 @@
     pointer-events: none
 }
 .flatpickr-weekdays {
-    background: rgba(#00BCD4, 1);
+    background: rgba(#651fff, 1);
     text-align: center;
     overflow: hidden
 }
@@ -370,9 +370,9 @@
 .flatpickr-day.startRange.prevMonthDay,
 .flatpickr-day.startRange:focus,
 .flatpickr-day.startRange:hover {
-    background: rgba(#00BCD4, 1);
+    background: rgba(#651fff, 1);
     color: #fff;
-    border-color: rgba(#00BCD4, 1)
+    border-color: rgba(#651fff, 1)
 }
 .flatpickr-day.endRange.startRange,
 .flatpickr-day.selected.startRange,
@@ -407,10 +407,10 @@
 span.flatpickr-weekday {
     cursor: default;
     font-size: 90%;
-    color: rgba(0, 0, 0, .54);
+    color: rgba(255, 255, 255, .54);
     height: 27.166666666666668px;
     line-height: 24px;
-    background: rgba(#00BCD4, 1);
+    background: rgba(#651fff, 1);
     text-align: center;
     display: block;
     float: left;
