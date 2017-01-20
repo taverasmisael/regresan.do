@@ -20,7 +20,8 @@ import {
   StopRequest, StartRequest, SaveInfo,
   SaveOpenQuestions, SaveOpenAnswers,
   SaveCloseQuestions, SaveCloseAnswer, SaveAnswerChart,
-  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric, SaveStaffRanking
+  ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric, SaveStaffRanking,
+  SaveKPIS
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
@@ -262,7 +263,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.kpis.getFromProfile(query)
       .map(res => res['Kpis'])
       .subscribe(
-        data => console.log(data),
+        data => this.store.dispatch(new SaveKPIS(data)),
         error => this.handleErrors(error),
         () => console.log('done')
       )
