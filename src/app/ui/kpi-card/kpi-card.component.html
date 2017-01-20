@@ -1,6 +1,24 @@
 <app-card
   class="mdl-shadow--2dp"
   style="font-size: 1.5rem;"
+  [loading]="loading && !kpis.length"
   title="KPIs">
-  {{ kpis | json }}
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+      <canvas *ngIf="kpis.length" baseChart
+        [chartType]="'doughnut'"
+        [labels]="[mainKPI.name]"
+        [data]="[mainKPI.value]"></canvas>
+    </div>
+    <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--12-col">
+      <div class="mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell" *ngFor="let kpi of secondariesKPI;">
+          <canvas baseChart
+            [chartType]="'doughnut'"
+            [labels]="[kpi.name]"
+            [data]="[kpi.value]"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </app-card>
