@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 
 // Charts
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { GaugeModule } from 'ng2-kw-gauge';
 
 // Routes
 import { AppRoutes } from './app.routes';
@@ -83,7 +84,8 @@ import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
     StoreModule.provideStore({MainStore: RootReducer}),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     EffectsModule.run(AuthEffects),
-    ChartsModule
+    ChartsModule,
+    GaugeModule
   ],
   providers: [
     ApiService,
