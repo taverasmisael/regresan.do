@@ -30,14 +30,14 @@ export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
       text: data.text,
       x: 0,
       y: 30,
-      fontSize: '1.6em'
+      fontSize: '1em'
     }),
     new GaugeLabel({
       color: textColor.toString(),
       text: data.value + '%',
       x: 0,
       y: 0,
-      fontSize: '1.3em'
+      fontSize: '1.5em'
     })
   ];
 
