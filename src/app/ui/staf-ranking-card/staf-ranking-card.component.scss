@@ -19,6 +19,11 @@
 .staff-holder {
   padding: 1.5em 0;
   overflow: hidden;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 100%;
 }
 .loading-holder {
   display: flex;
