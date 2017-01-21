@@ -33,7 +33,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
   public mainKPI: GaugeOptions;
   public secondariesKPI: GaugeOptions[];
 
-  private COLORS = gamaRegresando();
+  private COLORS = gamaRegresando().reverse();
 
   constructor() { }
 
