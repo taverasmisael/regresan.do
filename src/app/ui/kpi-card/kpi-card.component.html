@@ -3,21 +3,24 @@
   style="font-size: 1.5rem;"
   title="KPIs"
   loadingText="Cargando KPIS..."
+  [contentPadding]="false"
   [errorText]="errorText"
   [loading]="loading && !kpis.length">
-  <div class="mdl-grid" *ngIf="mainKPI && secondariesKPI">
-    <div class="mdl-cell mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+  <div class="mdl-grid mdl-grid--no-spacing" *ngIf="mainKPI && secondariesKPI">
+    <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone">
       <ng2-kw-gauge
+        [rounded]="mainKPI.rounded"
         [bgRadius]="mainKPI.bgRadius"
         [bgColor]="mainKPI.bgColor"
         [labels]="mainKPI.labels"
         [segments]="mainKPI.segments">
       </ng2-kw-gauge>
     </div>
-    <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--12-col">
+    <div class="mdl-cell mdl-cell--8-col">
       <div class="mdl-grid">
         <div class="mdl-cell" *ngFor="let kpi of secondariesKPI;">
           <ng2-kw-gauge
+            [rounded]="kpi.rounded"
             [bgRadius]="kpi.bgRadius"
             [bgColor]="kpi.bgColor"
             [labels]="kpi.labels"
