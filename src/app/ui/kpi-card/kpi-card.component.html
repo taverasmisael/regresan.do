@@ -1,7 +1,30 @@
 <app-card
   class="mdl-shadow--2dp"
   style="font-size: 1.5rem;"
-  title="KPIs">
-  <img src="assets/images/kpi-holder.jpg" alt="KPIs" class="feat-placeholder">
-  <h2 class="feat-headline">Aquí verás tus KPIs</h2>
+  title="KPIs"
+  loadingText="Cargando KPIS..."
+  [errorText]="errorText"
+  [loading]="loading && !kpis.length">
+  <div class="mdl-grid" *ngIf="mainKPI && secondariesKPI">
+    <div class="mdl-cell mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+      <ng2-kw-gauge
+        [bgRadius]="mainKPI.bgRadius"
+        [bgColor]="mainKPI.bgColor"
+        [labels]="mainKPI.labels"
+        [segments]="mainKPI.segments">
+      </ng2-kw-gauge>
+    </div>
+    <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--12-col">
+      <div class="mdl-grid">
+        <div class="mdl-cell" *ngFor="let kpi of secondariesKPI;">
+          <ng2-kw-gauge
+            [bgRadius]="kpi.bgRadius"
+            [bgColor]="kpi.bgColor"
+            [labels]="kpi.labels"
+            [segments]="kpi.segments">
+          </ng2-kw-gauge>
+        </div>
+      </div>
+    </div>
+  </div>
 </app-card>

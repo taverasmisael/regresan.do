@@ -24,6 +24,7 @@ export class SucursalState {
   lastResult: SucursalState;
   currentAction: string;
   loading: boolean;
+  kpis: any[]
 
   constructor(info?, cq?, oq?, ca?, oa?, filters?, loading?) {
     this.info = info || new UserProfile();
@@ -42,6 +43,7 @@ export class SucursalState {
       loading: false
     };
     this.staffRanking = {};
+    this.kpis = [];
   }
 };
 

@@ -40,7 +40,7 @@
       [loading]="loadingRC"
       [staffData]="SucursalState.staffRanking"
     ></app-staf-ranking-card>
-    <app-kpi-card class="mdl-cell mdl-cell--8-col"></app-kpi-card>
+    <app-kpi-card [kpis]="SucursalState.kpis" [loading]="SucursalState.loading" [errorText]="questionError" class="mdl-cell mdl-cell--8-col"></app-kpi-card>
   </div>
 </section>
 <section class="section section--charts">
