@@ -1,54 +1,68 @@
-.mdl-card {
-  background: #fff;
-  width: 100%;
-}
-.mdl-card__title {
-  color: #00A4A3;
-  display: flex;
-  justify-content: space-between;
-  z-index: 3;
-}
-.mdl-card__supporting-text,
-.content-holder {
-  width: 100%;
-  position: relative;
-  min-height: 17.8572rem;
-}
-.content-holder {
-  padding: 1.5em;
-}
-.loading-holder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  width: 100%; height: 100%;
-  background: rgba(255,255,255,0.6);
-  text-align: center;
-  &.no--opacity {
-    background: rgba(255,255,255,1);
+   :host {
+    display: block;
+    height: 100%;
   }
-}
-.mdl-card__title-text {
-  font-size: 1.1em;
-}
-.mdl-spinner {
-  width: 56px;
-  height: 56px;
-}
 
-.mdl-spinner__circle {
-  border-width: 6px;
-}
-
-.mdl-card.is--data-table {
-  .mdl-card__supporting-text,
-  .content-holder {
-    padding: 0;
+  .mdl-card {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    &.is--data-table {
+      .mdl-card__supporting-text,
+      .content-holder {
+        padding: 0;
+      }
+      .mdl-card__title {
+        color: rgba(0, 0, 0, 0.87);
+        margin-bottom: 1em;
+      }
+    }
+    &.no--content-padding {
+      .content-holder {
+        padding: 0;
+      }
+    }
+    .mdl-card__title {
+      color: #00A4A3;
+      display: flex;
+      justify-content: space-between;
+      z-index: 3;
+    }
+    .mdl-card__supporting-text,
+    .content-holder {
+      width: 100%;
+      position: relative;
+      min-height: 17.8572rem;
+      height: 100%;
+    }
+    .content-holder {
+      padding: 1.5em;
+    }
+    .loading-holder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      &.no--opacity {
+        background: rgba(255, 255, 255, 1);
+      }
+    }
+    .mdl-card__title-text {
+      font-size: 1.1em;
+    }
+    .mdl-spinner {
+      width: 56px;
+      height: 56px;
+    }
+    .mdl-spinner__circle {
+      border-width: 6px;
+    }
   }
-  .mdl-card__title {
-    color: rgba(0,0,0,0.87);
-    margin-bottom: 1em;
-  }
-}
