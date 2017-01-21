@@ -1,8 +1,9 @@
 .mdl-navigation__link.mdl-navigation__link.mdl-navigation__link {
   padding: 1.2rem 0;
   text-align: center;
-  color: rgb(0, 103, 102);
+  color: #00a4a3;
   &.mdl-navigation__link--active {
-    background: rgba(0,0,0,0.2);
+    background: #00a4a3;
+    color: #fff;
   }
 }
