@@ -6,7 +6,7 @@
   [contentPadding]="false"
   [errorText]="errorText"
   [loading]="loading && !kpis.length">
-  <div class="mdl-grid mdl-grid--no-spacing" *ngIf="mainKPI && secondariesKPI">
+  <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;  " *ngIf="mainKPI && secondariesKPI">
     <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone">
       <ng2-kw-gauge
         [rounded]="mainKPI.rounded"
