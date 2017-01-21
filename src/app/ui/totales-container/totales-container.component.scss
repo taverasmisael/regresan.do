@@ -1,3 +1,14 @@
 :host {
   display: block;
 }
+.section.is--column {
+  height: 100%;
+  @media (min-width: 840px) {
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    padding: 0;
+    & > .mdl-cell {
+      margin: 0 8px;
+    }
+  }
+}
