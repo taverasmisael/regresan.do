@@ -2,6 +2,7 @@
   title="Personal"
   loadingText="Cargando Información del Personal"
   (retry)="failed.emit($event)"
+  [contentPadding]="false"
   [loading]="loading && !staffData.length"
   [errorText]="errorText">
   <div *ngIf="staffData.length" class="staff-holder">
