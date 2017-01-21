@@ -45,7 +45,8 @@ export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
     new GaugeSegment({
       value: data.value,
       color: currentColor.toString(),
-      borderWidth: 20
+      borderWidth: 20,
+      rounded: true
     }),
     new GaugeSegment({
       value: 100,
