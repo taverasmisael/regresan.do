@@ -33,14 +33,19 @@
 <section class="section section--staff-kpi">
   <div class="mdl-grid">
     <app-staf-ranking-card
-      class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col"
+      class="mdl-cell mdl-cell--3-col-desktop mdl-cell--8-col"
       style="font-size: 1.5rem;"
       (failed)="loadRankingCamareros(QuestionsQuery)"
       [errorText]="questionError"
       [loading]="loadingRC"
       [staffData]="SucursalState.staffRanking"
     ></app-staf-ranking-card>
-    <app-kpi-card [kpis]="SucursalState.kpis" [loading]="SucursalState.loading" [errorText]="questionError" class="mdl-cell mdl-cell--8-col"></app-kpi-card>
+    <app-kpi-card
+      class="mdl-cell mdl-cell--9-col"
+      [kpis]="SucursalState.kpis"
+      [loading]="SucursalState.loading"
+      [errorText]="questionError"
+    ></app-kpi-card>
   </div>
 </section>
 <section class="section section--charts">
