@@ -3,21 +3,26 @@
   style="font-size: 1.5rem;"
   title="KPIs"
   loadingText="Cargando KPIS..."
+  [errorText]="errorText"
   [loading]="loading && !kpis.length">
-  <div class="mdl-grid">
+  <div class="mdl-grid" *ngIf="mainKPI && secondariesKPI">
     <div class="mdl-cell mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-      <canvas *ngIf="kpis.length" baseChart
-        [chartType]="'doughnut'"
-        [labels]="[mainKPI.name]"
-        [data]="[mainKPI.value]"></canvas>
+      <ng2-kw-gauge
+        [bgRadius]="mainKPI.bgRadius"
+        [bgColor]="mainKPI.bgColor"
+        [labels]="mainKPI.labels"
+        [segments]="mainKPI.segments">
+      </ng2-kw-gauge>
     </div>
     <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--12-col">
-      <div class="mdl-grid mdl-grid--no-spacing">
+      <div class="mdl-grid">
         <div class="mdl-cell" *ngFor="let kpi of secondariesKPI;">
-          <canvas baseChart
-            [chartType]="'doughnut'"
-            [labels]="[kpi.name]"
-            [data]="[kpi.value]"></canvas>
+          <ng2-kw-gauge
+            [bgRadius]="kpi.bgRadius"
+            [bgColor]="kpi.bgColor"
+            [labels]="kpi.labels"
+            [segments]="kpi.segments">
+          </ng2-kw-gauge>
         </div>
       </div>
     </div>
