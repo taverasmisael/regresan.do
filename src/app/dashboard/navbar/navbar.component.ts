@@ -8,7 +8,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 export class DashboardNavbarComponent implements OnInit {
 
   @HostBinding('class.mdl-layout__drawer') isDrawer = true;
-  @HostBinding('class.mdl-color--primary-dark') isColored = true;
+  @HostBinding('class.mdl-color--primary') isColored = false;
   constructor() { }
 
   ngOnInit() {
