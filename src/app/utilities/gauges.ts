@@ -5,9 +5,9 @@ import { updateObject } from './objects';
 import { GaugeOptions } from '../models/gauge-options'
 
 const basicOptions = {
-  bgRadius: 75,
+  bgRadius: 65,
   bgColor: 'transparent',
-  rounded: true,
+  rounded: false,
   reverse: false,
   animationSecs: 1,
   labels: [],
@@ -18,27 +18,38 @@ const whiteColor = '#FFF';
 
 export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
   const localOptions: GaugeOptions = updateObject(basicOptions, options);
-  localOptions.bgColor = whiteColor;
+
+  const currentColor = tinycolor(data.color);
+  const textColor = currentColor.clone().darken(15);
+
+  localOptions.bgColor = 'transparent';
+
   localOptions.labels = [
     new GaugeLabel({
-      color: tinycolor(data.color).toHexString(),
+      color: textColor.toString(),
       text: data.text,
       x: 0,
-      y: 20,
-      fontSize: '1em'
+      y: 30,
+      fontSize: '1.6em'
     }),
     new GaugeLabel({
-      color: tinycolor(data.color).toHexString(),
+      color: textColor.toString(),
       text: data.value + '%',
       x: 0,
-      y: 0
+      y: 0,
+      fontSize: '1.3em'
     })
   ];
 
   localOptions.segments = [
     new GaugeSegment({
       value: data.value,
-      color: tinycolor(data.color).toHexString(),
+      color: currentColor.toString(),
+      borderWidth: 20
+    }),
+    new GaugeSegment({
+      value: 100,
+      color: currentColor.clone().setAlpha(0.38).toString(),
       borderWidth: 20
     })
   ]
