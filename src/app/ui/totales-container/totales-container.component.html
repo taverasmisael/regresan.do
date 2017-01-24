@@ -24,7 +24,7 @@
     [class.mdl-cell--12-col]="fullCards"
     style="pointer-events: none;"
     cardType="indice"
-    [count]="indice"
+    [count]="(indice || 0) + '%'"
     text="Indice de Sucursal">
   </app-totales-card>
   <app-totales-card
