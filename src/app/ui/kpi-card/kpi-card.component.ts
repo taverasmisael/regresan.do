@@ -34,7 +34,8 @@ export class KpiCardComponent implements OnInit, OnChanges {
   public KPIS: GaugeOptions[];
   public IndiceSucursal: GaugeOptions;
 
-  private COLORS = gamaRegresando().reverse();
+  private colors = gamaRegresando().reverse();
+  private COLORS = [...this.colors].sort(() => 0.5 - Math.random());
 
   constructor() { }
 
@@ -46,7 +47,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
     if (cKpis && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
       this.KPIS = this.formatKPIS(<KPI[]>cKpis.currentValue);
     } else if (cIndice && cIndice.currentValue && cIndice.previousValue !== cIndice.currentValue) {
-      this.IndiceSucursal = createGauge({text: 'Indice Sucursal', value: +cIndice.currentValue, color: this.COLORS[8]});
+      this.IndiceSucursal = createGauge({text: 'Indice Sucursal', value: +cIndice.currentValue, color: this.colors[4]});
     }
   }
 
