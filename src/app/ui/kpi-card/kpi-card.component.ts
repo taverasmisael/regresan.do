@@ -43,7 +43,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     let cKpis = changes['kpis'];
-    let cIndice = changes['indiceSucursal'];
+    let cIndice = changes['indiceSatisfaccion'];
     if (cKpis && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
       this.KPIS = this.formatKPIS(<KPI[]>cKpis.currentValue);
     } else if (cIndice && cIndice.currentValue && cIndice.previousValue !== cIndice.currentValue) {
