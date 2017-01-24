@@ -2,7 +2,9 @@
 @import "custom-mdl";
 @import "flatapickr-custom-theme";
 @import "~dialog-polyfill/dialog-polyfill";
-
+._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay {
+  z-index: initial !important;
+}
 * {
   box-sizing: border-box;
 }

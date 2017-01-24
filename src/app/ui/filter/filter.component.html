@@ -30,12 +30,12 @@
       </div>
     </div>
     <div class="mdl-dialog__actions mdl-cell mdl-cell--12-col">
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" [disabled]="!filterForm.valid" type="submit">
+      <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" [disabled]="!filterForm.valid" type="submit">
        Aplicar Filtros
       </button>
-      <a class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="closeDialog(  )">
+      <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="closeDialog()">
        Cancelar
-      </a>
+      </button>
     </div>
   </form>
 </dialog>
