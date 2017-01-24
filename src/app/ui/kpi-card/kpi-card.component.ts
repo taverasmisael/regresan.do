@@ -27,12 +27,12 @@ import { gamaRegresando } from '../../utilities/colors';
 export class KpiCardComponent implements OnInit, OnChanges {
 
   @Input() kpis: KPI[];
-  @Input() indiceSucursal: number;
+  @Input() indiceSatisfaccion: number;
   @Input() errorText: string;
   @Input() loading: boolean;
 
   public KPIS: GaugeOptions[];
-  public IndiceSucursal: GaugeOptions;
+  public IndiceSatisfaccion: GaugeOptions;
 
   private colors = gamaRegresando().reverse();
   private COLORS = [...this.colors].sort(() => 0.5 - Math.random());
@@ -47,7 +47,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
     if (cKpis && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
       this.KPIS = this.formatKPIS(<KPI[]>cKpis.currentValue);
     } else if (cIndice && cIndice.currentValue && cIndice.previousValue !== cIndice.currentValue) {
-      this.IndiceSucursal = createGauge({text: 'Indice Sucursal', value: +cIndice.currentValue, color: this.colors[4]});
+      this.IndiceSatisfaccion = createGauge({text: 'Indice de Satisfacción', value: +cIndice.currentValue, color: this.colors[4]});
     }
   }
 

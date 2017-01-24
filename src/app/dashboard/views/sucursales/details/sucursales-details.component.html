@@ -27,6 +27,7 @@
     [hoy]="totalHoy | async"
     [indice]="indiceSucursal | async"
     [contactos]="nuevosContactos | async"
+    tipoIndice="de Sucursal"
     fullCards="true">
   </app-totales-container>
 </div>
@@ -42,7 +43,7 @@
     ></app-staf-ranking-card>
     <app-kpi-card
       class="mdl-cell mdl-cell--8-col"
-      [indiceSucursal]="indiceSucursal | async"
+      [indiceSatisfaccion]="indiceSucursal | async"
       [kpis]="SucursalState.kpis"
       [loading]="SucursalState.loading"
       [errorText]="questionError"

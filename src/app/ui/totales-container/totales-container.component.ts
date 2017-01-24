@@ -14,6 +14,7 @@ export class TotalesContainerComponent implements OnInit {
   @Input() contactos: number;
   @Input() halfCards: boolean;
   @Input() fullCards: boolean;
+  @Input() tipoIndice: string;
 
   constructor() { }
 
