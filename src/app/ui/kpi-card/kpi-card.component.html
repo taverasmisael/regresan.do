@@ -6,19 +6,19 @@
   [contentPadding]="false"
   [errorText]="errorText"
   [loading]="loading && !kpis.length">
-  <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;  " *ngIf="mainKPI && secondariesKPI">
+  <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;  " *ngIf="IndiceSucursal && KPIS">
     <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone">
       <ng2-kw-gauge
-        [rounded]="mainKPI.rounded"
-        [bgRadius]="mainKPI.bgRadius"
-        [bgColor]="mainKPI.bgColor"
-        [labels]="mainKPI.labels"
-        [segments]="mainKPI.segments">
+        [rounded]="IndiceSucursal.rounded"
+        [bgRadius]="IndiceSucursal.bgRadius"
+        [bgColor]="IndiceSucursal.bgColor"
+        [labels]="IndiceSucursal.labels"
+        [segments]="IndiceSucursal.segments">
       </ng2-kw-gauge>
     </div>
     <div class="mdl-cell mdl-cell--8-col">
       <div class="mdl-grid">
-        <div class="mdl-cell" *ngFor="let kpi of secondariesKPI;">
+        <div class="mdl-cell" *ngFor="let kpi of KPIS;">
           <ng2-kw-gauge
             [rounded]="kpi.rounded"
             [bgRadius]="kpi.bgRadius"

@@ -42,6 +42,7 @@
     ></app-staf-ranking-card>
     <app-kpi-card
       class="mdl-cell mdl-cell--8-col"
+      [indiceSucursal]="indiceSucursal | async"
       [kpis]="SucursalState.kpis"
       [loading]="SucursalState.loading"
       [errorText]="questionError"

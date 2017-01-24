@@ -27,11 +27,12 @@ import { gamaRegresando } from '../../utilities/colors';
 export class KpiCardComponent implements OnInit, OnChanges {
 
   @Input() kpis: KPI[];
+  @Input() indiceSucursal: number;
   @Input() errorText: string;
   @Input() loading: boolean;
 
-  public mainKPI: GaugeOptions;
-  public secondariesKPI: GaugeOptions[];
+  public KPIS: GaugeOptions[];
+  public IndiceSucursal: GaugeOptions;
 
   private COLORS = gamaRegresando().reverse();
 
@@ -40,15 +41,13 @@ export class KpiCardComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['kpis'] && changes['kpis'].currentValue.length && !compare(changes['kpis'].previousValue, changes['kpis'].currentValue)) {
-      let gauges = this.formatKPIS(<KPI[]>changes['kpis'].currentValue);
-      this.spliceKPIS(gauges);
+    let cKpis = changes['kpis'];
+    let cIndice = changes['indiceSucursal'];
+    if (cKpis && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
+      this.KPIS = this.formatKPIS(<KPI[]>cKpis.currentValue);
+    } else if (cIndice && cIndice.currentValue && cIndice.previousValue !== cIndice.currentValue) {
+      this.IndiceSucursal = createGauge({text: 'Indice Sucursal', value: +cIndice.currentValue, color: this.COLORS[8]});
     }
-  }
-
-  spliceKPIS(kpis: GaugeOptions[]) {
-    this.mainKPI = kpis.slice(0, 1)[0];
-    this.secondariesKPI = kpis.slice(1);
   }
 
   formatKPIS(kpis: KPI[]) {
