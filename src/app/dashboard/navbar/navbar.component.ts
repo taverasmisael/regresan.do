@@ -14,4 +14,7 @@ export class DashboardNavbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  disabledLink(event) {
+    event.preventDefault();
+  }
 }
