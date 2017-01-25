@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import * as moment from 'moment';
 
 import { PreguntasService } from '../../../services/preguntas.service';
@@ -28,10 +30,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
 
-  public totalGeneral: Observable<number>;
-  public totalHoy: Observable<number>;
-  public nuevosContactos: Observable<number>;
-  public indiceSucursal: Observable<number>;
+  public totalGeneral = new BehaviorSubject(0);
+  public totalHoy = new BehaviorSubject(0);
+  public nuevosContactos = new BehaviorSubject(0);
+  public indiceSucursal = new BehaviorSubject(0);
   public currentFilters: Filter;
   public query: APIRequestParams;
   public encuestasSucursalesError: string;
@@ -153,15 +155,15 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .map(res => res['Cabecera'])
       .subscribe(res => {
         if (res) {
-          this.totalHoy = Observable.of(res['TotalEncuestadosHoy']);
-          this.totalGeneral = Observable.of(res['TotalEncuestas']);
-          this.nuevosContactos = Observable.of(res['NuevosContactos']);
-          this.indiceSucursal = Observable.of(res['IndiceSucursal']);
+          this.totalHoy.next(res['TotalEncuestadosHoy']);
+          this.totalGeneral.next(res['TotalEncuestas']);
+          this.nuevosContactos.next(res['NuevosContactos']);
+          this.indiceSucursal.next(res['IndiceSucursal']);
         } else {
-           this.totalHoy = Observable.of(0);
-          this.totalGeneral = Observable.of(0);
-          this.nuevosContactos = Observable.of(0);
-          this.indiceSucursal = Observable.of(0);
+           this.totalHoy.next(0);
+          this.totalGeneral.next(0);
+          this.nuevosContactos.next(0);
+          this.indiceSucursal.next(0);
         }
       });
   }
