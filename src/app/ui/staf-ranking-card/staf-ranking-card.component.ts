@@ -37,7 +37,7 @@ export class StafRankingCardComponent implements OnInit {
   }
 
   onPrimaryAction(event) {
-    console.log(this.indiceCamareros.showDialog());
+    this.indiceCamareros.showDialog();
   }
 
 }
