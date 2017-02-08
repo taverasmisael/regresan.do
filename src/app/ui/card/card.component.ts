@@ -16,6 +16,7 @@ import {
 export class CardComponent implements OnInit {
 
   @Input() action: {
+    id: string,
     icon: string,
     text: string
   };

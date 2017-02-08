@@ -3,7 +3,7 @@
     <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
       {{ title }}
     </h5>
-    <button *ngIf="action" [id]="actionId" class="mdl-button mdl-js-button mdl-button--icon" (click)="primaryAction.emit($event)">
+    <button *ngIf="action" [id]="action.id" class="mdl-button mdl-js-button mdl-button--icon" (click)="primaryAction.emit($event)">
         <i class="material-icons">{{ action.icon }}</i>
       </button>
   </div>
@@ -28,6 +28,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="action" class="mdl-tooltip" [attr.for]="actionId">
+<div *ngIf="action" class="mdl-tooltip" [attr.for]="action.id">
   {{ action.text }}
 </div>
