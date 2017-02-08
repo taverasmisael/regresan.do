@@ -9,7 +9,7 @@ import {
 
 import { StaffService } from '../services/staff.service';
 
-import { Filter } from '../models/filter';
+import { APIRequestUser } from '../models/apiparams';
 
 @Component({
   selector: 'app-indice-camareros',
@@ -18,10 +18,10 @@ import { Filter } from '../models/filter';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IndiceCamarerosComponent implements OnInit {
-  @Input() filter: Filter;
+  @Input() filter: APIRequestUser;
   @ViewChild('indiceCamarerosDialog') indiceCamarerosDialog: ElementRef;
 
-  constructor(service: StaffService) { }
+  constructor(private service: StaffService) { }
 
   ngOnInit() {
     if (!this.indiceCamarerosDialog.nativeElement.showModal) {
@@ -30,7 +30,11 @@ export class IndiceCamarerosComponent implements OnInit {
   }
 
   showDialog() {
+    console.log(this.filter);
     this.indiceCamarerosDialog.nativeElement.showModal();
+    this.service.getKpisCamareros(this.filter)
+      .map(res => res['Camareros'])
+      .subscribe(res => console.log(res));
   }
 
   closeDialog(clean?: boolean) {
