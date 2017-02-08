@@ -31,4 +31,8 @@ export class IndiceCamarerosComponent implements OnInit {
     this.indiceCamarerosDialog.nativeElement.showModal();
   }
 
+  closeDialog(clean?: boolean) {
+    this.indiceCamarerosDialog.nativeElement.close();
+  }
+
 }
