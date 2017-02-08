@@ -9,7 +9,9 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { IndiceCamarerosComponent } from '../../indice-camareros/indice-camareros.component'
+import { IndiceCamarerosComponent } from '../../indice-camareros/indice-camareros.component';
+
+import { Filter } from '../../models/filter'
 
 @Component({
   selector: 'app-staf-ranking-card',
@@ -20,6 +22,7 @@ export class StafRankingCardComponent implements OnInit {
   @Input() staffData: any[];
   @Input() errorText: string;
   @Input() loading: boolean;
+  @Input() currentFilter: Filter;
 
   @ViewChild('indiceCamareros') indiceCamareros: IndiceCamarerosComponent;
 
