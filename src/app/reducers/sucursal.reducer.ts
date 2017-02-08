@@ -145,7 +145,7 @@ function saveLastRequest(state: SucursalState, action: Action): SucursalState {
 function applyFilter(state: SucursalState, action: Action): SucursalState {
   const { payload } = action;
 
-  return updateObject(state, {filters: [...state.filters, payload]});
+  return updateObject(state, {filters: payload});
 }
 
 function restoreQA(state: SucursalState, action: Action): SucursalState {
