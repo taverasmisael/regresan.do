@@ -7,7 +7,9 @@ import {
   ElementRef
 } from '@angular/core';
 
-import { Filter } from '../models/filter'
+import { StaffService } from '../services/staff.service';
+
+import { Filter } from '../models/filter';
 
 @Component({
   selector: 'app-indice-camareros',
@@ -19,7 +21,7 @@ export class IndiceCamarerosComponent implements OnInit {
   @Input() filter: Filter;
   @ViewChild('indiceCamarerosDialog') indiceCamarerosDialog: ElementRef;
 
-  constructor() { }
+  constructor(service: StaffService) { }
 
   ngOnInit() {
     if (!this.indiceCamarerosDialog.nativeElement.showModal) {

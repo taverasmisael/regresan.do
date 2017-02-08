@@ -1,7 +1,26 @@
 <dialog #indiceCamarerosDialog class="mdl-dialog mdl-cell--9-col mdl-cell--8-col-tablet cell">
   <h4 class="mdl-dialog__title">Indice de Camareros</h4>
   <div class="mdl-dialog__content mdl-grid">
-    content
+    <div class="mdl-cell--12-col chart-holder">
+      <div *ngIf="!loading && !errorText" class="content-holder">
+        <ng-content></ng-content>
+      </div>
+      <div *ngIf="!errorText && loading" class="loading-holder">
+        <div class="content">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          <p class="mdl-typography--text-center">Cargando indice de Camareros...</p>
+        </div>
+      </div>
+      <div *ngIf="errorText" class="loading-holder no--opacity">
+        <div class="content">
+          <i class="material-icons error-icon">error</i>
+          <p class="mdl-typography--text-center">{{ errorText }}</p>
+          <button (click)="retry()" class="mdl-button mdl-js-button mdl-js-ripple">
+            <i class="material-icons">refresh</i> Reintentar
+        </button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="mdl-dialog__actions mdl-cell mdl-cell--12-col">
     <button type=button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" (click)="closeDialog()">
