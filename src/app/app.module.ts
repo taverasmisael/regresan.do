@@ -26,6 +26,8 @@ import { PreguntasService } from './services/preguntas.service';
 import { RespuestasService } from './services/respuestas.service';
 import { UserService} from './services/user.service';
 import { KpisService } from './services/kpis.service';
+import { StaffService } from './services/staff.service';
+
 // Security Services
 import { AuthGuardService} from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service';
@@ -96,7 +98,8 @@ import { IndiceCamarerosComponent } from './indice-camareros/indice-camareros.co
     UserService,
     RespuestasService,
     PreguntasService,
-    KpisService
+    KpisService,
+    StaffService
   ],
   bootstrap: [AppComponent]
 })
