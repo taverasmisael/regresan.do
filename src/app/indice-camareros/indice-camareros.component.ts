@@ -7,6 +7,8 @@ import {
   ElementRef
 } from '@angular/core';
 
+import { Filter } from '../models/filter'
+
 @Component({
   selector: 'app-indice-camareros',
   templateUrl: './indice-camareros.component.html',
@@ -14,7 +16,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IndiceCamarerosComponent implements OnInit {
-
+  @Input() filter: Filter;
   @ViewChild('indiceCamarerosDialog') indiceCamarerosDialog: ElementRef;
 
   constructor() { }
