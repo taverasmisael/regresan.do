@@ -5,7 +5,7 @@ export const createLinearCamareroKpi = (data: CamarerosKpi[]) => {
   const mapped = data.map((entry, index) => {
     const mappedKpis = entry.Kpis.map(kpi => ({
       nombre: kpi.Nombre,
-      indice: kpi.Indice
+      value: kpi.Indice
     }));
     labels = [...mappedKpis]
       .reduce((prev, curr) =>
@@ -13,7 +13,7 @@ export const createLinearCamareroKpi = (data: CamarerosKpi[]) => {
       )
     return {
       label: entry.Session || `Anonimo ${index}`,
-      data: mappedKpis.map(kpi => kpi.indice),
+      data: mappedKpis.map(kpi => kpi.value),
     }
   });
 
