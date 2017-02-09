@@ -3,6 +3,8 @@
   title="Personal"
   loadingText="Cargando Información del Personal"
   (retry)="failed.emit($event)"
+  (primaryAction)="onPrimaryAction($event)"
+  [action]="cardAction"
   [contentPadding]="false"
   [loading]="loading && !staffData.length"
   [errorText]="errorText">
@@ -22,4 +24,5 @@
     </h4>
   </div>
 </app-card>
+<app-indice-camareros #indiceCamareros [filter]="currentFilter"></app-indice-camareros>
 

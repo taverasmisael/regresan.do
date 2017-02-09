@@ -26,6 +26,8 @@ import { PreguntasService } from './services/preguntas.service';
 import { RespuestasService } from './services/respuestas.service';
 import { UserService} from './services/user.service';
 import { KpisService } from './services/kpis.service';
+import { StaffService } from './services/staff.service';
+
 // Security Services
 import { AuthGuardService} from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service';
@@ -52,6 +54,7 @@ import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-ca
 import { CardComponent } from './ui/card/card.component';
 import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
 import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
+import { IndiceCamarerosComponent } from './indice-camareros/indice-camareros.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +76,8 @@ import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
     StafRankingCardComponent,
     CardComponent,
     KpiCardComponent,
-    OrderByPipe
+    OrderByPipe,
+    IndiceCamarerosComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,7 +98,8 @@ import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
     UserService,
     RespuestasService,
     PreguntasService,
-    KpisService
+    KpisService,
+    StaffService
   ],
   bootstrap: [AppComponent]
 })

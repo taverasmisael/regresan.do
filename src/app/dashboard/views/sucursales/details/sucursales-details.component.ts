@@ -22,7 +22,7 @@ import {
   SaveOpenQuestions, SaveOpenAnswers,
   SaveCloseQuestions, SaveCloseAnswer, SaveAnswerChart,
   ResetSucursal, ResetQA, UpdateAnswerChart, SaveHistoric, SaveStaffRanking,
-  SaveKPIS
+  SaveKPIS, ApplyFilter
 } from '../../../../actions/sucursal.actions';
 import { ActionTypes } from '../../../../actions/auth.actions';
 import { Filter } from '../../../../models/filter';
@@ -276,6 +276,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private loadAllComponents(query: APIRequestUser) {
+    this.store.dispatch(new ApplyFilter(this.QuestionsQuery));
     this.loadAllCharts(this.QuestionsQuery);
     this.loadResumen(this.QuestionsQuery);
     this.loadRankingCamareros(this.QuestionsQuery);

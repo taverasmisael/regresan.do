@@ -2,10 +2,16 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
+  ViewChild,
+  ElementRef,
   Input,
   Output,
   EventEmitter
 } from '@angular/core';
+
+import { IndiceCamarerosComponent } from '../../indice-camareros/indice-camareros.component';
+
+import { Filter } from '../../models/filter'
 
 @Component({
   selector: 'app-staf-ranking-card',
@@ -16,12 +22,22 @@ export class StafRankingCardComponent implements OnInit {
   @Input() staffData: any[];
   @Input() errorText: string;
   @Input() loading: boolean;
+  @Input() currentFilter: Filter;
+
+  @ViewChild('indiceCamareros') indiceCamareros: IndiceCamarerosComponent;
+
+  public cardAction: any;
 
   @Output() failed = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+    this.cardAction = { icon: 'info_outline', text: 'Ver Más Detalles', id: 'staff-ranking-card__action' };
+  }
+
+  onPrimaryAction(event) {
+    this.indiceCamareros.showDialog();
   }
 
 }
