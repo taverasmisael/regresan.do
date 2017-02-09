@@ -33,7 +33,7 @@ export class StafRankingCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.cardAction = { icon: 'add', text: 'Ver Más Detalles', id: 'staff-ranking-card__action' };
+    this.cardAction = { icon: 'info_outline', text: 'Ver Más Detalles', id: 'staff-ranking-card__action' };
   }
 
   onPrimaryAction(event) {
