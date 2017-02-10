@@ -24,7 +24,6 @@ import { gamaRegresando } from '../utilities/colors';
   styleUrls: ['./indice-camareros.component.scss']
 })
 export class IndiceCamarerosComponent implements OnInit, OnChanges {
-  private colors: string[];
   private COLORS: string[];
   private needsToRequest: Boolean;
 
@@ -44,8 +43,7 @@ export class IndiceCamarerosComponent implements OnInit, OnChanges {
       dialogPolyfill.registerDialog(this.indiceCamarerosDialog.nativeElement);
     }
     this.chartOptions = {};
-    this.colors = gamaRegresando().reverse();
-    this.COLORS = [...this.colors].sort(() => 0.5 - Math.random());
+    this.COLORS = gamaRegresando().reverse();
     this.chartColor = createPalette(this.COLORS, 0);
   }
 
