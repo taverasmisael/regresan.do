@@ -19,16 +19,16 @@ import { createPalette, ChartJsColor } from '../utilities/charts';
 import { gamaRegresando } from '../utilities/colors';
 
 @Component({
-  selector: 'app-indice-camareros',
-  templateUrl: './indice-camareros.component.html',
-  styleUrls: ['./indice-camareros.component.scss']
+  selector: 'app-staff-index',
+  templateUrl: './staff-index.component.html',
+  styleUrls: ['./staff-index.component.scss']
 })
-export class IndiceCamarerosComponent implements OnInit, OnChanges {
+export class StaffIndexComponent implements OnInit, OnChanges {
   private COLORS: string[];
   private needsToRequest: Boolean;
 
   @Input() filter: APIRequestUser;
-  @ViewChild('indiceCamarerosDialog') indiceCamarerosDialog: ElementRef;
+  @ViewChild('staffIndexDialog') staffIndexDialog: ElementRef;
 
   public loading: Boolean;
   public errorText: string;
@@ -39,8 +39,8 @@ export class IndiceCamarerosComponent implements OnInit, OnChanges {
   constructor(private service: StaffService) { }
 
   ngOnInit() {
-    if (!this.indiceCamarerosDialog.nativeElement.showModal) {
-      dialogPolyfill.registerDialog(this.indiceCamarerosDialog.nativeElement);
+    if (!this.staffIndexDialog.nativeElement.showModal) {
+      dialogPolyfill.registerDialog(this.staffIndexDialog.nativeElement);
     }
     this.chartOptions = {};
     this.COLORS = gamaRegresando().reverse();
@@ -54,7 +54,7 @@ export class IndiceCamarerosComponent implements OnInit, OnChanges {
   }
 
   showDialog() {
-    this.indiceCamarerosDialog.nativeElement.showModal();
+    this.staffIndexDialog.nativeElement.showModal();
     if (this.needsToRequest) {
       this.loading = true;
       this.service.getKpisCamareros(this.filter)
@@ -79,7 +79,7 @@ export class IndiceCamarerosComponent implements OnInit, OnChanges {
   }
 
   closeDialog(clean?: boolean) {
-    this.indiceCamarerosDialog.nativeElement.close();
+    this.staffIndexDialog.nativeElement.close();
   }
 
 }

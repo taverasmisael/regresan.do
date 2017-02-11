@@ -9,7 +9,7 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { IndiceCamarerosComponent } from '../../indice-camareros/indice-camareros.component';
+import { StaffIndexComponent } from '../../staff-index/staff-index.component';
 
 import { Filter } from '../../models/filter'
 
@@ -24,7 +24,7 @@ export class StafRankingCardComponent implements OnInit {
   @Input() loading: boolean;
   @Input() currentFilter: Filter;
 
-  @ViewChild('indiceCamareros') indiceCamareros: IndiceCamarerosComponent;
+  @ViewChild('staffIndex') staffIndex: StaffIndexComponent;
 
   public cardAction: any;
 
@@ -37,7 +37,7 @@ export class StafRankingCardComponent implements OnInit {
   }
 
   onPrimaryAction(event) {
-    this.indiceCamareros.showDialog();
+    this.staffIndex.showDialog();
   }
 
 }

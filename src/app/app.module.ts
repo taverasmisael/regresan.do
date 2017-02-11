@@ -54,7 +54,7 @@ import { StafRankingCardComponent } from './ui/staf-ranking-card/staf-ranking-ca
 import { CardComponent } from './ui/card/card.component';
 import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
 import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
-import { IndiceCamarerosComponent } from './indice-camareros/indice-camareros.component';
+import { StaffIndexComponent } from './staff-index/staff-index.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import { IndiceCamarerosComponent } from './indice-camareros/indice-camareros.co
     CardComponent,
     KpiCardComponent,
     OrderByPipe,
-    IndiceCamarerosComponent,
+    StaffIndexComponent,
   ],
   imports: [
     BrowserModule,
