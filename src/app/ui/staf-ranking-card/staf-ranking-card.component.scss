@@ -60,6 +60,10 @@
 }
 .staff {
   margin-bottom: 1.5em;
+  width: 100%;
+  .mdl-progress  {
+    width: 100%;
+  }
 }
 .title {
   display: block;
