@@ -8,9 +8,7 @@ export const createLinearCamareroKpi = (data: CamarerosKpi[]) => {
       value: kpi.Indice
     }));
     labels = [...mappedKpis]
-      .reduce((prev, curr) =>
-        (labels.findIndex(el => el === curr.nombre) !== -1) ? prev : [...prev, curr.nombre], []
-      )
+      .reduce((prev, {nombre}) => prev.find(el => el === nombre) ? prev : [...prev, nombre], []);
     return {
       label: entry.Session || `Anonimo ${index}`,
       data: mappedKpis.map(kpi => kpi.value),
