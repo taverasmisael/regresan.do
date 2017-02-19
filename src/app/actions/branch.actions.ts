@@ -81,6 +81,25 @@ export class SuccessCloseAnswer implements Action {
   constructor(public payload: Pregunta[]) { }
 }
 
+// Resets
+export class ResetAll implements Action {
+  public type = ACTIONS.BRANCH_RESET_ALL;
+
+  constructor(public payload?: any) { }
+}
+
+export class ResetQA implements Action {
+  public type = ACTIONS.BRANCH_RESET_QA;
+
+  constructor(public payload?: any) { }
+}
+
+export class ResetKPIS implements Action {
+  public type = ACTIONS.BRANCH_RESET_KPIS;
+
+  constructor(public payload?: any) { }
+}
+
 export interface Requesting {
   text: string
 };
