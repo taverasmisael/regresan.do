@@ -53,7 +53,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
 
   formatKPIS(kpis: KPI[]) {
     return kpis.map((kpi, index) => {
-      return createGauge({text: kpi.name, value: kpi.value, color: this.COLORS[index]})
+      return createGauge({text: kpi.Nombre, value: kpi.Indice, color: this.COLORS[index]})
     })
   }
 }
