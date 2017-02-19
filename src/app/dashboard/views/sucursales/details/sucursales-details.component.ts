@@ -18,10 +18,12 @@ import { merge } from '@utilities/arrays';
 import { ratingPalette, gamaRegresando } from '@utilities/colors';
 
 import { AppState } from '@models/states/appstate';
-import { SucursalState } from '@models/states/sucursalstate';
+import { BranchState } from '@models/states/branch';
 import { Pregunta } from '@models/pregunta';
 import { APIRequestUser, APIRequestRespuesta } from '@models/apiparams';
 import { UserProfile } from '@models/userprofile';
+
+import { SaveInfo } from '@actions/branch.actions';
 
 @Component({
   selector: 'app-sucursales-details',
@@ -30,7 +32,7 @@ import { UserProfile } from '@models/userprofile';
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public ActiveBranch: SucursalState;
+  public ActiveBranch: BranchState;
 
   constructor(private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -40,7 +42,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       // This update the ActiveBranch on each StoreAction
       this.Store.select('MainStore')
         .distinctUntilKeyChanged('currentSucursal')
-        .pluck<SucursalState>('currentSucursal').subscribe((branch) => {
+        .pluck<BranchState>('currentSucursal').subscribe((branch) => {
           this.ActiveBranch = branch;
         });
 
@@ -53,7 +55,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
            profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
             profiles.find(prof => prof.OldProfileId === +params['id']))
       ).subscribe(
-        (res) =>  console.log(res),
+        (res) =>  {
+          if (res) {
+            this.Store.dispatch(new SaveInfo(res));
+          }
+        },
         (error) => console.log(error)
       );
 
