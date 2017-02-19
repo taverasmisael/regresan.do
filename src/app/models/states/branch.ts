@@ -3,7 +3,7 @@ import { Pregunta } from '../pregunta';
 import { RespuestaAbierta } from '../respuesta-abierta';
 import * as moment from 'moment';
 
-export class SucursalState {
+export class BranchState {
   info: UserProfile;
   closeQuestions: Pregunta[];
   openQuestions: Pregunta[];
@@ -21,7 +21,7 @@ export class SucursalState {
   filters: any[];
   dates: moment.Moment[];
   lastQuery: string;
-  lastResult: SucursalState;
+  lastResult: BranchState;
   currentAction: string;
   loading: boolean;
   kpis: any[]

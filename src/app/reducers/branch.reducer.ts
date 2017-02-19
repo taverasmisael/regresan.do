@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 import * as moment from 'moment';
 
-import { SucursalState } from '../models/states/sucursalstate';
+import { BranchState } from '../models/states/branch';
 
 import { ActionTypes } from '../actions/sucursal.actions';
 
@@ -15,9 +15,9 @@ const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
   RESET_QUESTIONS, SAVE_HISTORIC, SAVE_STAFF_RANKING, SAVE_KPIS, RESET_KPIS} = ActionTypes;
 
 
-export const INITIAL_STATE = new SucursalState();
+export const INITIAL_STATE = new BranchState();
 
-export function SucursalesCases() {
+export function BranchCases() {
   return {
     [LOAD_QUESTIONS]: requesting,
     [SAVE_CLOSE_QUESTIONS]: saveCloseQuestions,

@@ -6,10 +6,10 @@ import { createReducer } from '../utilities/reducers';
 import { updateObject } from '../utilities/objects';
 import { AppState } from '../models/states/appstate';
 import { AuthReducer, INITIAL_STATE as StateAuth } from './auth.reducer';
-import { SucursalesCases, INITIAL_STATE as StateSucursal } from './sucursal.reducer';
+import { BranchCases, INITIAL_STATE as BranchState } from './branch.reducer';
 
 const authReducer = createReducer(StateAuth, AuthReducer());
-const sucursalesReducer = createReducer(StateSucursal, SucursalesCases());
+const sucursalesReducer = createReducer(BranchState, BranchCases());
 
 const RootReducer = compose(
   localStorageSync(['auth'], true),
