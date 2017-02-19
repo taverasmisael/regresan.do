@@ -2,160 +2,126 @@ import { Action } from '@ngrx/store';
 
 import * as moment from 'moment';
 
-import { BranchState } from '../models/states/branch';
+import { BranchState } from '@models/states/branch';
+import { StateRequest } from '@models/states/state-request';
 
-import { ActionTypes } from '../actions/sucursal.actions';
+import { updateObject, updateItemInArray } from '@utilities/objects';
 
-import { updateObject, updateItemInArray } from '../utilities/objects';
-
-const { LOAD_QUESTIONS, SAVE_CLOSE_QUESTIONS, LOAD_ANSWERS,
-  SAVE_CLOSE_ANSWER, SAVE_OPEN_ANSWERS, SAVE_OPEN_QUESTIONS, SAVE_CLOSE_ANSWER_CHART,
-  START_REQUEST, FILTER_DATE, FILTER_ANSWER, SAVE_INFO, SAVE_LAST, UPDATE_CLOSE_ANSWER_CHART,
-  APPLY_FILTER, END_REQUEST, RESET_SUCURSAL, RESET_QA, RESET_ANSWERS,
-  RESET_QUESTIONS, SAVE_HISTORIC, SAVE_STAFF_RANKING, SAVE_KPIS, RESET_KPIS} = ActionTypes;
-
+import {
+  BRANCH_REQ_QOPEN_R, BRANCH_REQ_QOPEN_S, BRANCH_REQ_QOPEN_E,
+  BRANCH_REQ_QCLOSE_R, BRANCH_REQ_QCLOSE_S, BRANCH_REQ_QCLOSE_E,
+  BRANCH_REQ_AOPEN_R, BRANCH_REQ_AOPEN_S, BRANCH_REQ_AOPEN_E,
+  BRANCH_REQ_ACLOSE_R, BRANCH_REQ_ACLOSE_S, BRANCH_REQ_ACLOSE_E,
+  BRANCH_REQ_KPI_R, BRANCH_REQ_KPI_S, BRANCH_REQ_KPI_E,
+  BRANCH_REQ_STAFF_RANKING_R, BRANCH_REQ_STAFF_RANKING_S, BRANCH_REQ_STAFF_RANKING_E,
+  BRANCH_REQ_HISTORIC_R, BRANCH_REQ_HISTORIC_S, BRANCH_REQ_HISTORIC_E,
+  BRANCH_CHARTS_OPEN_SAVE, BRANCH_CHARTS_CLOSE_SAVE, BRANCH_CHARTS_KPIS_SAVE,
+  BRANCH_CHARTS_HISTORIC_SAVE, BRANCH_RESET_ALL, BRANCH_RESET_BUT_INFO, BRANCH_INFO_SAVE
+} from '@actions/branch.types';
 
 export const INITIAL_STATE = new BranchState();
 
 export function BranchCases() {
   return {
-    [LOAD_QUESTIONS]: requesting,
-    [SAVE_CLOSE_QUESTIONS]: saveCloseQuestions,
-    [SAVE_OPEN_QUESTIONS]: saveOpenQuestions,
-    [LOAD_ANSWERS]: requesting,
-    [SAVE_CLOSE_ANSWER]: saveCloseAnswer,
-    [SAVE_CLOSE_ANSWER_CHART]: saveAnswerChart,
-    [UPDATE_CLOSE_ANSWER_CHART]: updateAnswerChart,
-    [SAVE_OPEN_ANSWERS]: saveOpenAnswers,
-    [START_REQUEST]: requesting,
-    [END_REQUEST]: stopRequesting,
-    [FILTER_DATE]: filterByDate,
-    [FILTER_ANSWER]: filterByAnswer,
-    [SAVE_INFO]: saveSucursal,
-    [SAVE_STAFF_RANKING]: saveStaffRanking,
-    [SAVE_HISTORIC]: saveHistoric,
-    [SAVE_LAST]: saveLastRequest,
-    [APPLY_FILTER]: applyFilter,
-    [RESET_SUCURSAL]: () => INITIAL_STATE,
-    [RESET_QA]: restoreQA,
-    [RESET_ANSWERS]: restoreAnswers,
-    [RESET_QUESTIONS]: restoreQuestions,
-    [SAVE_KPIS]: saveKPIS,
-    [RESET_KPIS]: restoreKPIS,
+    // Resets and Saves
+    [BRANCH_INFO_SAVE]: saveInfo,
+    [BRANCH_RESET_ALL]: resetStore,
+    [BRANCH_RESET_BUT_INFO]: resetDate,
+    [BRANCH_REQ_QOPEN_R]: requesting,
+    [BRANCH_REQ_QCLOSE_R]: requesting,
+    [BRANCH_REQ_AOPEN_R]: requesting,
+    [BRANCH_REQ_ACLOSE_R]: requesting,
+    [BRANCH_REQ_KPI_R]: requesting,
+    [BRANCH_REQ_STAFF_RANKING_R]: requesting,
+    [BRANCH_REQ_HISTORIC_R]: requesting,
+    [BRANCH_REQ_QOPEN_E]: requestError,
+    [BRANCH_REQ_QCLOSE_E]: requestError,
+    [BRANCH_REQ_AOPEN_E]: requestError,
+    [BRANCH_REQ_ACLOSE_E]: requestError,
+    [BRANCH_REQ_KPI_E]: requestError,
+    [BRANCH_REQ_STAFF_RANKING_E]: requestError,
+    [BRANCH_REQ_HISTORIC_E]: requestError,
+    [BRANCH_REQ_QOPEN_S]: saveQOpen,
+    [BRANCH_REQ_QCLOSE_S]: saveQClose,
+    [BRANCH_REQ_AOPEN_S]: saveAOpen,
+    [BRANCH_REQ_ACLOSE_S]: saveAClose,
+    [BRANCH_REQ_KPI_S]: saveKPI,
+    [BRANCH_REQ_STAFF_RANKING_S]: saveStaffRanking,
+    [BRANCH_REQ_HISTORIC_S]: saveHistoric
   }
 }
 
-function requesting(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {loading: true, currentAction: payload});
-}
-
-function stopRequesting(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {loading: false, currentAction: ''});
-}
-
-function saveCloseQuestions(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {closeQuestions: payload});
-}
-
-function saveOpenQuestions(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {openQuestions: payload});
-}
-
-function saveCloseAnswer(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {closeAnswers: [...state.closeAnswers, payload]});
-}
-
-function saveAnswerChart(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {answerCharts: updateObject(state.answerCharts,  payload)});
-}
-
-function updateAnswerChart(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  const { id, newChart } = payload;
-  return updateObject(state, {answerCharts: updateObject(state.answerCharts, {[id]: newChart})});
-}
-
-function saveOpenAnswers(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {openAnswers: payload});
-}
-
-function filterByDate(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  const { start, end } = payload;
-
-  let startM = moment(start);
-  let endM = moment(end);
-
-  let answersInRange = state.closeAnswers.filter(answer =>
-   startM.isSameOrAfter(answer.fecha) || endM.isSameOrBefore(answer.fecha)
-   );
-
-  return updateObject(state, {closeAnswers: answersInRange});
-}
-
-function filterByAnswer(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-  return updateObject(state, {answers: state.closeAnswers.filter(answer =>
-    answer.id === payload
-  )});
-}
-
-function saveSucursal(state: SucursalState, action: Action): SucursalState {
+function saveInfo(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
   return updateObject(state, {info: payload});
 }
 
-function saveStaffRanking(state: SucursalState, action: Action): SucursalState {
+function resetStore(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, INITIAL_STATE);
+}
+
+function resetDate(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return Object.assign(state, INITIAL_STATE, {info: state.info});
+}
+
+function requesting(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  const req = action.type.split('_')[1]; // Get the part your are requesting
+
+  return updateObject(state, {requests: {[req]: new StateRequest(undefined, true, payload)}})
+}
+
+function requestError(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  const req = action.type.split('_')[1]; // Get the part your are requesting
+
+  return updateObject(state, {requests: {[req]: new StateRequest(payload, false, '')}})
+}
+
+function saveQOpen(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, {openQuestions: payload});
+}
+
+function saveQClose(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, {closeQuestions: payload});
+}
+
+function saveAOpen(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, {openAnswers: payload});
+}
+
+function saveAClose(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, {closeAnswers: payload});
+}
+
+function saveKPI(state: BranchState, action: Action): BranchState {
+  const { payload } = action;
+
+  return updateObject(state, {kpi: payload});
+}
+
+function saveStaffRanking(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
   return updateObject(state, {staffRanking: payload});
 }
-
-function saveKPIS(state: SucursalState, action: Action): SucursalState {
+function saveHistoric(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {kpis: payload});
-}
-
-function restoreKPIS(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-
-  return updateObject(state, {kpis: []});
-}
-function saveHistoric(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-
-  return updateObject(state, {historicoEncuestas: updateObject(state.historicoEncuestas, payload)});
-}
-
-function saveLastRequest(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-
-  return updateObject(state, {lastQuery: payload.query, lastResult: payload.result});
-}
-
-function applyFilter(state: SucursalState, action: Action): SucursalState {
-  const { payload } = action;
-
-  return updateObject(state, {filters: payload});
-}
-
-function restoreQA(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {closeQuestions: [], openQuestions: [], closeAnswers: [], openAnswers: [], answerCharts: {}})
-}
-
-function restoreQuestions(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {closeQuestions: [], openQuestions: []});
-}
-
-function restoreAnswers(state: SucursalState, action: Action): SucursalState {
-  return updateObject(state, {closeAnswers: [], openAnswers: []});
+  return updateObject(state, {staffRanking: payload});
 }
