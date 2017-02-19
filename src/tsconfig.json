@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": ".",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -9,6 +9,12 @@
     "module": "es6",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
+    "paths": {
+      "@models/*": ["app/models/*"],
+      "@services/*": ["app/services/*"],
+      "@utilities/*": ["app/utilities/*"],
+      "@app/*": ["app/*"]
+    },
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
