@@ -1,30 +1,34 @@
-import { UserProfile } from '../userprofile';
-import { Pregunta } from '../pregunta';
-import { RespuestaAbierta } from '../respuesta-abierta';
+import { UserProfile } from '@models/userprofile';
+import { Pregunta } from '@models/pregunta';
+import { KPI } from '@models/kpi';
+import { Filter } from '@models/filter';
+import { HistoricEntry } from '@models/historic-entry';
+import { StaffRanking } from '@models/staff-ranking';
+import { RespuestaAbierta } from '@models/respuesta-abierta';
+import { StateRequest } from '@models/states/state-request';
+
 import * as moment from 'moment';
 
 export class BranchState {
-  info: UserProfile;
-  closeQuestions: Pregunta[];
-  openQuestions: Pregunta[];
-  openAnswers: RespuestaAbierta[];
-  answerCharts: {[key: string]: any[][]};
-  closeAnswers: Pregunta[];
-  historicoEncuestas: {
-    errorText?: string,
-    labels: string[],
-    data: any[],
-    colors: string[],
-    loading: boolean
-  };
-  staffRanking: any;
-  filters: any[];
-  dates: moment.Moment[];
-  lastQuery: string;
-  lastResult: BranchState;
-  currentAction: string;
-  loading: boolean;
-  kpis: any[]
+  info: UserProfile
+  openQuestions: Pregunta[]
+  closeQuestions: Pregunta[]
+  openAnswers: RespuestaAbierta[]
+  closeAnswers: Pregunta[]
+  kpis: KPI[]
+  staffRanking: StaffRanking[]
+  historic: HistoricEntry[]
+  requests: {
+    ACLOSE: StateRequest,
+    AOPEN: StateRequest,
+    QCLOSE: StateRequest,
+    QOPEN: StateRequest,
+    KPI: StateRequest,
+    STAFF_RANKING: StateRequest,
+    HISTORIC: StateRequest
+  }
+  answerCharts: {[key: string]: any[][]}
+  filters: Filter;
 
   constructor(info?, cq?, oq?, ca?, oa?, filters?, loading?) {
     this.info = info || new UserProfile();
@@ -33,17 +37,9 @@ export class BranchState {
     this.closeAnswers = ca || [];
     this.openAnswers = oa || [];
     this.filters = filters || [];
-    this.loading = loading || false;
     this.answerCharts = {};
-    this.historicoEncuestas = {
-      errorText: '',
-      labels: [],
-      data: [],
-      colors: [],
-      loading: false
-    };
-    this.staffRanking = {};
+    this.historic = []
+    this.staffRanking = [];
     this.kpis = [];
   }
 };
-
