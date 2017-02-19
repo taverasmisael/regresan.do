@@ -4,6 +4,9 @@ import * as ACTIONS from './branch.types';
 import { RequestError } from '../models/request-error';
 import { Pregunta } from '../models/pregunta';
 import { OpenAnswer } from '../models/answer.open';
+import { KPI } from '../models/kpi';
+import { StaffRanking } from '../models/staff-ranking';
+import { HistoricEntry } from '../models/historic-entry';
 
 // Requests
 export class RequestOpenQuestion implements Action {
@@ -26,6 +29,24 @@ export class RequestOpenAnswer implements Action {
 
 export class RequestCloseAnswer implements Action {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_R;
+
+  constructor(public payload: Requesting) { }
+}
+
+export class RequestKPI implements Action {
+  public type = ACTIONS.BRANCH_REQ_KPI_R;
+
+  constructor(public payload: Requesting) { }
+}
+
+export class RequestStaffRanking implements Action {
+  public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_R;
+
+  constructor(public payload: Requesting) { }
+}
+
+export class RequestHistoric implements Action {
+  public type = ACTIONS.BRANCH_REQ_HISTORIC_R;
 
   constructor(public payload: Requesting) { }
 }
@@ -55,6 +76,24 @@ export class ErrorCloseAnswer implements Action {
   constructor(public payload: RequestError) { }
 }
 
+export class ErrorKPI implements Action {
+  public type = ACTIONS.BRANCH_REQ_KPI_E;
+
+  constructor(public payload: RequestError) { }
+}
+
+export class ErrorStaffRanking implements Action {
+  public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_E;
+
+  constructor(public payload: RequestError) { }
+}
+
+export class ErrorHistoric implements Action {
+  public type = ACTIONS.BRANCH_REQ_HISTORIC_E;
+
+  constructor(public payload: RequestError) { }
+}
+
 
 // Success
 export class SuccessOpenQuestion implements Action {
@@ -80,6 +119,25 @@ export class SuccessCloseAnswer implements Action {
 
   constructor(public payload: Pregunta[]) { }
 }
+
+export class SuccessKPI implements Action {
+  public type = ACTIONS.BRANCH_REQ_KPI_S;
+
+  constructor(public payload: KPI[]) { }
+}
+
+export class SuccessStaffRanking implements Action {
+  public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_S;
+
+  constructor(public payload: StaffRanking[]) { }
+}
+
+export class SuccessHistoric implements Action {
+  public type = ACTIONS.BRANCH_REQ_HISTORIC_S;
+
+  constructor(public payload: HistoricEntry[]) { }
+}
+
 
 // Resets
 export class ResetAll implements Action {

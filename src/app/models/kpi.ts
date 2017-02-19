@@ -1,11 +1,13 @@
 export class KPI {
   $id: string;
-  name: string;
-  value: number;
+  Indice: number;
+  Nombre: string;
+  TotalEncuesta: number;
 
-  constructor(kpi: KPI) {
-    this.$id = kpi.$id;
-    this.name = kpi.name;
-    this.value = kpi.value;
+  constructor(id: string, indice: number, nombre: string, encuestas: number) {
+    this.$id = id;
+    this.Indice = indice;
+    this.Nombre = nombre;
+    this.TotalEncuesta = encuestas;
   }
 }
