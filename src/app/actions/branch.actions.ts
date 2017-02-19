@@ -12,43 +12,43 @@ import { HistoricEntry } from '@models/historic-entry';
 export class RequestOpenQuestion implements Action {
   public type = ACTIONS.BRANCH_REQ_QOPEN_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestCloseQuestion implements Action {
   public type = ACTIONS.BRANCH_REQ_QCLOSE_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestOpenAnswer implements Action {
   public type = ACTIONS.BRANCH_REQ_AOPEN_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestCloseAnswer implements Action {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestKPI implements Action {
   public type = ACTIONS.BRANCH_REQ_KPI_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestStaffRanking implements Action {
   public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 export class RequestHistoric implements Action {
   public type = ACTIONS.BRANCH_REQ_HISTORIC_R;
 
-  constructor(public payload: Requesting) { }
+  constructor(public payload: string) { }
 }
 
 // Errors
@@ -152,36 +152,8 @@ export class ResetButInfo implements Action {
   constructor(public payload?: any) { }
 }
 
-export class ResetQA implements Action {
-  public type = ACTIONS.BRANCH_RESET_QA;
-
-  constructor(public payload?: any) { }
-}
-
-export class ResetKPIS implements Action {
-  public type = ACTIONS.BRANCH_RESET_KPIS;
-
-  constructor(public payload?: any) { }
-}
-
-export class ResetStaffRanking implements Action {
-  public type = ACTIONS.BRANCH_RESET_STAFF_RANKING;
-
-  constructor(public payload?: any) { }
-}
-
-export class ResetHistoric implements Action {
-  public type = ACTIONS.BRANCH_RESET_HISTORIC;
-
-  constructor(public payload?: any) { }
-}
-
 export class SaveInfo implements Action {
   public type = ACTIONS.BRANCH_INFO_SAVE;
 
   constructor(public payload: UserProfile) { }
 }
-
-export interface Requesting {
-  text: string
-};
