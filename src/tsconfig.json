@@ -10,10 +10,11 @@
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
     "paths": {
+      "@app/*": ["app/*"],
+      "@actions/*": ["app/actions/*"],
       "@models/*": ["app/models/*"],
       "@services/*": ["app/services/*"],
-      "@utilities/*": ["app/utilities/*"],
-      "@app/*": ["app/*"]
+      "@utilities/*": ["app/utilities/*"]
     },
     "sourceMap": true,
     "target": "es5",
