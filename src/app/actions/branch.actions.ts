@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 import * as ACTIONS from './branch.types';
-
-import { RequestError } from '../models/request-error';
-import { Pregunta } from '../models/pregunta';
-import { OpenAnswer } from '../models/answer.open';
-import { KPI } from '../models/kpi';
-import { StaffRanking } from '../models/staff-ranking';
-import { HistoricEntry } from '../models/historic-entry';
+import { UserProfile} from '@models/userprofile';
+import { RequestError } from '@models/request-error';
+import { Pregunta } from '@models/pregunta';
+import { OpenAnswer } from '@models/answer.open';
+import { KPI } from '@models/kpi';
+import { StaffRanking } from '@models/staff-ranking';
+import { HistoricEntry } from '@models/historic-entry';
 
 // Requests
 export class RequestOpenQuestion implements Action {
@@ -139,9 +139,15 @@ export class SuccessHistoric implements Action {
 }
 
 
-// Resets
+// Resets & Saves
 export class ResetAll implements Action {
   public type = ACTIONS.BRANCH_RESET_ALL;
+
+  constructor(public payload?: any) { }
+}
+
+export class ResetButInfo implements Action {
+  public type = ACTIONS.BRANCH_RESET_BUT_INFO;
 
   constructor(public payload?: any) { }
 }
@@ -156,6 +162,24 @@ export class ResetKPIS implements Action {
   public type = ACTIONS.BRANCH_RESET_KPIS;
 
   constructor(public payload?: any) { }
+}
+
+export class ResetStaffRanking implements Action {
+  public type = ACTIONS.BRANCH_RESET_STAFF_RANKING;
+
+  constructor(public payload?: any) { }
+}
+
+export class ResetHistoric implements Action {
+  public type = ACTIONS.BRANCH_RESET_HISTORIC;
+
+  constructor(public payload?: any) { }
+}
+
+export class SaveInfo implements Action {
+  public type = ACTIONS.BRANCH_INFO_SAVE;
+
+  constructor(public payload: UserProfile) { }
 }
 
 export interface Requesting {
