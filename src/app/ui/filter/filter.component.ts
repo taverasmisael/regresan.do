@@ -20,10 +20,10 @@ import {
 
 import compare from 'just-compare';
 
-import { UserProfile } from '../../models/userprofile';
-import { Filter } from '../../models/filter';
-import { FlatpickrOptions } from '../../thirdparty/flatpickr/models';
-import { DateValidator } from '../../utilities/validators/date.validator';
+import { UserProfile } from '@models/userprofile';
+import { DateFilter } from '@models/filter-date';
+import { FlatpickrOptions } from '@thirdparty/flatpickr/models';
+import { DateValidator } from '@utilities/validators/date.validator';
 
 @Component({
   selector: 'app-filter',
@@ -33,7 +33,7 @@ import { DateValidator } from '../../utilities/validators/date.validator';
 })
 export class FilterComponent implements OnInit, AfterViewInit {
 
-  @Input() filters: Filter;
+  @Input() filters: DateFilter;
   @Output() applyFilters = new EventEmitter();
 
   @ViewChild('filterDialog') filterDialog: ElementRef;
@@ -42,7 +42,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
   public flatpickrOptions: FlatpickrOptions;
-  public lastFilter: Filter;
+  public lastFilter: DateFilter;
   public activeFilters: number;
 
   @HostBinding('class.mdl-grid') isGrid = true;
@@ -51,9 +51,9 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.flatpickrOptions = { dateFormat: 'd/m/Y' };
-    let {fechaInicio: inicio, fechaFin: fin } = this.filters;
-    this.filterFechaInicio = new FormControl(inicio, [Validators.required, DateValidator.spanishDate]);
-    this.filterFechaFin = new FormControl(fin, [Validators.required, DateValidator.spanishDate]);
+    let { start, end } = this.filters;
+    this.filterFechaInicio = new FormControl(start, [Validators.required, DateValidator.spanishDate]);
+    this.filterFechaFin = new FormControl(end, [Validators.required, DateValidator.spanishDate]);
 
     this.lastFilter = this.filters;
     this.setActivesFilters();

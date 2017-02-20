@@ -6,19 +6,19 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import * as moment from 'moment';
 
-import { PreguntasService } from '../../../services/preguntas.service';
+import { PreguntasService } from '@services/preguntas.service';
 
-import { ActionTypes } from '../../../actions/auth.actions';
+import { ActionTypes } from '@actions/auth.actions';
 
-import { UserProfile } from '../../../models/userprofile';
-import { AppState } from '../../../models/states/appstate';
-import { AuthState } from '../../../models/states/authstate';
-import { APIRequestParams } from '../../../models/apiparams';
-import { Filter } from '../../../models/filter';
+import { UserProfile } from '@models/userprofile';
+import { AppState } from '@models/states/appstate';
+import { AuthState } from '@models/states/authstate';
+import { APIRequestParams } from '@models/apiparams';
+import { DateFilter } from '@models/filter-date';
 
-import { merge, sum } from '../../../utilities/arrays';
-import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
-import { gamaRegresando } from '../../../utilities/colors';
+import { merge, sum } from '@utilities/arrays';
+import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas';
+import { gamaRegresando } from '@utilities/colors';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public totalHoy = new BehaviorSubject(0);
   public nuevosContactos = new BehaviorSubject(0);
   public indiceSucursal = new BehaviorSubject(0);
-  public currentFilters: Filter;
+  public currentFilters: DateFilter;
   public query: APIRequestParams;
   public encuestasSucursalesError: string;
   public encuestasSucursalesData: number[] = [];
@@ -64,8 +64,8 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.today = moment();
     this.aWeekAgo = moment().subtract(7, 'days');
     this.currentFilters = {
-      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
-      fechaFin: this.today.format('DD/MM/YYYY')
+      start: this.aWeekAgo.format('DD/MM/YYYY').toString(),
+      end: this.today.format('DD/MM/YYYY').toString()
     };
     this.query = {
       start: this.aWeekAgo.unix().toString(),
@@ -80,10 +80,10 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.loadResumen(this.query);
   }
 
-  applyFilters(filter: Filter) {
+  applyFilters(filter: DateFilter) {
     this.query = {
-      start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
-      end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
+      start: moment(filter.start, 'DD/MM/YYYY').unix().toString(),
+      end: moment(filter.end, 'DD/MM/YYYY').hours(18).unix().toString()
     }
 
     this.loadEncuestasSucursales(this.query);
