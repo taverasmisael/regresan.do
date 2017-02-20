@@ -14,7 +14,8 @@
       "@actions/*": ["app/actions/*"],
       "@models/*": ["app/models/*"],
       "@services/*": ["app/services/*"],
-      "@utilities/*": ["app/utilities/*"]
+      "@utilities/*": ["app/utilities/*"],
+      "@thirdparty/*": ["app/thirdparty/*"]
     },
     "sourceMap": true,
     "target": "es5",
