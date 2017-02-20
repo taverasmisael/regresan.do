@@ -88,7 +88,9 @@ function requestError(state: BranchState, action: Action): BranchState {
 
   const req = getSectionName(action.type);
 
-  return updateObject(state, { requests: { [req]: new StateRequest(payload, false, '') } })
+  return updateObject(state, {
+    requests: updateObject(state.requests, { [req]: new StateRequest(payload, false, '') })
+  });
 }
 
 function saveQOpen(state: BranchState, action: Action): BranchState {
