@@ -19,6 +19,8 @@ import {
   BRANCH_CHARTS_HISTORIC_SAVE, BRANCH_RESET_ALL, BRANCH_RESET_BUT_INFO, BRANCH_INFO_SAVE
 } from '@actions/branch.types';
 
+const getSectionName = (type: string) => type.split('_')[1];
+
 export const INITIAL_STATE = new BranchState();
 
 export function BranchCases() {
@@ -54,7 +56,7 @@ export function BranchCases() {
 function saveInfo(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {info: payload});
+  return updateObject(state, { info: payload });
 }
 
 function resetStore(state: BranchState, action: Action): BranchState {
@@ -66,64 +68,101 @@ function resetStore(state: BranchState, action: Action): BranchState {
 function resetDate(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return Object.assign(state, INITIAL_STATE, {info: state.info});
+  return Object.assign(state, INITIAL_STATE, { info: state.info });
 }
 
 function requesting(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  const req = action.type.split('_')[1]; // Get the part your are requesting
+  const req = getSectionName(action.type); // Get the part your are requesting
 
   return updateObject(state, {
-    requests: updateObject(state.requests, {[req]: new StateRequest(undefined, true, payload)})
+    requests: updateObject(state.requests, { [req]: new StateRequest(undefined, true, payload) })
   });
 }
 
 function requestError(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  const req = action.type.split('_')[1]; // Get the part your are requesting
+  // Get the part your are requesting
 
-  return updateObject(state, {requests: {[req]: new StateRequest(payload, false, '')}})
+  const req = getSectionName(action.type);
+
+  return updateObject(state, { requests: { [req]: new StateRequest(payload, false, '') } })
 }
 
 function saveQOpen(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {openQuestions: payload});
+  const req = getSectionName(action.type);
+
+  return updateObject(state, {
+    openQuestions: payload,
+    requests: updateObject(state.requests, {
+      [req]: new StateRequest(undefined, false, '')
+    })
+  });
 }
 
 function saveQClose(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {closeQuestions: payload});
+  const req = getSectionName(action.type);
+
+  return updateObject(state, {
+    closeQuestions: payload,
+    requests: updateObject(state.requests, {
+      [req]: new StateRequest(undefined, false, '')
+    })
+  });
 }
 
 function saveAOpen(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {openAnswers: payload});
+  const req = getSectionName(action.type);
+
+  return updateObject(state, {
+    openAnswers: payload,
+    requests: updateObject(state.requests, {
+      [req]: new StateRequest(undefined, false, '')
+    })
+  });
 }
 
 function saveAClose(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {closeAnswers: payload});
+  const req = getSectionName(action.type);
+
+  return updateObject(state, {
+    closeAnswers: payload,
+    requests: updateObject(state.requests, {
+      [req]: new StateRequest(undefined, false, '')
+    })
+  });
 }
 
 function saveKPI(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {kpi: payload});
+  const req = getSectionName(action.type);
+
+  return updateObject(state, {
+    kpi: payload,
+    requests: updateObject(state.requests, {
+      [req]: new StateRequest(undefined, false, '')
+    })
+  });
 }
 
 function saveStaffRanking(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {staffRanking: payload});
+  return updateObject(state, { staffRanking: payload });
 }
 function saveHistoric(state: BranchState, action: Action): BranchState {
   const { payload } = action;
 
-  return updateObject(state, {staffRanking: payload});
+  return updateObject(state, { staffRanking: payload });
 }
