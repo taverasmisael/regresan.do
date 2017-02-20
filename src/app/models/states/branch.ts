@@ -41,5 +41,14 @@ export class BranchState {
     this.historic = []
     this.staffRanking = [];
     this.kpis = [];
+    this.requests = {
+      ACLOSE: new StateRequest(undefined, false, ''),
+      AOPEN: new StateRequest(undefined, false, ''),
+      QCLOSE: new StateRequest(undefined, false, ''),
+      QOPEN: new StateRequest(undefined, false, ''),
+      KPI: new StateRequest(undefined, false, ''),
+      STAFF_RANKING: new StateRequest(undefined, false, ''),
+      HISTORIC: new StateRequest(undefined, false, '')
+    }
   }
 };

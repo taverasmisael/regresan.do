@@ -74,7 +74,9 @@ function requesting(state: BranchState, action: Action): BranchState {
 
   const req = action.type.split('_')[1]; // Get the part your are requesting
 
-  return updateObject(state, {requests: {[req]: new StateRequest(undefined, true, payload)}})
+  return updateObject(state, {
+    requests: updateObject(state.requests, {[req]: new StateRequest(undefined, true, payload)})
+  });
 }
 
 function requestError(state: BranchState, action: Action): BranchState {
