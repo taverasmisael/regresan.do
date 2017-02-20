@@ -1,4 +1,7 @@
+import { DateFilter } from '@models/filter-date';
+import { QuestionFilter } from '@models/filter-question';
+
 export class Filter {
-  fechaInicio: string;
-  fechaFin: string;
+  date: DateFilter;
+  question: QuestionFilter;
 };
