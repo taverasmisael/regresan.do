@@ -22,7 +22,9 @@ import { ratingPalette, gamaRegresando } from '@utilities/colors';
 import { AppState } from '@models/states/appstate';
 import { BranchState } from '@models/states/branch';
 import { Pregunta } from '@models/pregunta';
+import { OpenAnswer } from '@models/answer.open';
 import { APIRequestUser, APIRequestRespuesta } from '@models/apiparams';
+import { QuestionFilter } from '@models/filter-question';
 import { UserProfile } from '@models/userprofile';
 
 import {
@@ -43,122 +45,140 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private FetchInformation: EventEmitter<any>;
   private LoadCases: any;
+  private MockQuery: QuestionFilter;
 
   constructor(private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
     private Store: Store<AppState>, private Route: ActivatedRoute) { }
 
-    // Angular Lifecycle Hooks
-    ngOnInit() {
-      this.LoadCases = {
-        ALL: 'ALL',
-        OPEN: 'OPEN',
-        CLOSE: 'CLOSE',
-        KPIS: 'KPIS',
-        STAFF: 'STAFF',
-        HISTORIC: 'HISTORIC'
-      };
-      this.FetchInformation = new EventEmitter();
-      this.FetchInformation.subscribe(($event) => this.onFetchInformation($event));
+  // Angular Lifecycle Hooks
+  ngOnInit() {
+    this.LoadCases = {
+      ALL: 'ALL',
+      OPEN: 'OPEN',
+      CLOSE: 'CLOSE',
+      KPIS: 'KPIS',
+      STAFF: 'STAFF',
+      HISTORIC: 'HISTORIC'
+    };
+    this.MockQuery = {
+      start: moment().subtract(7, 'days').unix().toString(),
+      end: moment().unix().toString(),
+      profile: 'MOCK'
+    };
+    this.FetchInformation = new EventEmitter();
+    this.FetchInformation.subscribe(($event) => this.OnFetchInformation($event));
 
-      // This update the ActiveBranch on each StoreAction
-      this.Store.select('MainStore')
-        .distinctUntilKeyChanged('currentSucursal')
-        .pluck<BranchState>('currentSucursal').subscribe((branch) => {
-          this.ActiveBranch = branch;
-        });
+    // This update the ActiveBranch on each StoreAction
+    this.Store.select('MainStore')
+      .distinctUntilKeyChanged('currentSucursal')
+      .pluck<BranchState>('currentSucursal').subscribe((branch) => {
+        this.ActiveBranch = branch;
+      });
 
 
-      const profiles$ = this.Store.select('MainStore')
-        .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
+    const profiles$ = this.Store.select('MainStore')
+      .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
 
-      // Get the Route Params
-      this.Route.params.distinctUntilKeyChanged('id')
+    // Get the Route Params
+    this.Route.params.distinctUntilKeyChanged('id')
       .switchMap(
-        (params: Params) =>
-           profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
-            profiles.find(prof => prof.OldProfileId === +params['id']))
+      (params: Params) =>
+        profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
+          profiles.find(prof => prof.OldProfileId === +params['id']))
       ).subscribe(
-        (res) =>  {
-          if (!compare(res, this.ActiveBranch.info)) { // Security Measures Prevents Infinite Loop
-            this.Store.dispatch(new SaveInfo(res));
-            this.FetchInformation.emit(this.LoadCases.OPEN);
-          }
-        },
-        (error) => console.log(error)
+      (res) => {
+        if (!compare(res, this.ActiveBranch.info)) { // Security Measures Prevents Infinite Loop
+          this.Store.dispatch(new SaveInfo(res));
+          this.FetchInformation.emit(this.LoadCases.OPEN);
+        }
+      },
+      (error) => console.log(error)
       );
 
-      // Get the Route query
-      this.Route.queryParams.subscribe(
-        (res) =>  console.log(res),
-        (err) => console.error(err),
-        () => console.log('Done!')
-      );
+    // Get the Route query
+    this.Route.queryParams.subscribe(
+      (res) => console.log(res),
+      (err) => console.error(err),
+      () => console.log('Done!')
+    );
+  }
+
+  ngAfterViewInit() {
+    console.log('AfterViewInit...');
+  }
+
+  ngOnDestroy() {
+    console.log('Destroying...');
+  }
+
+  // Public Methods
+  public requestOpenAnswer(id: string) {
+    // TODO: use `this.ActiveBranch.filters.question` instead of MockQuery
+    const query = updateObject(this.MockQuery, { pregunta: id });
+    return this.Respuestas.getAbiertasFromProfile(query)
+      .map<OpenAnswer[]>(res => res['RespuestasPreguntas']).toPromise();
+  }
+
+
+  // Private Methods
+  private LoadQuestions(query: APIRequestUser) {
+    this.Store.dispatch(new RequestOpenQuestion('Cargando Preguntas Abiertas...'));
+    this.Store.dispatch(new RequestCloseQuestion('Cargando Preguntas Cerradas...'));
+
+    return this.Preguntas.getAllByProfile(query)
+      .map<Pregunta[]>(res => res['Respuestas']).toPromise();
+  }
+
+  private LoadOpenAnswers(questions: Pregunta[]) {
+    const answersArray = questions.map((question) =>
+      this.requestOpenAnswer(question.idPregunta.toString())
+    );
+    Promise.all(answersArray)
+      .then((answers: OpenAnswer[][]) => {
+        console.log(answers);
+        this.Store.dispatch(new SuccessOpenAnswer(answers.reduce(merge)));
+      });
+  }
+  private OnFetchInformation(event) {
+    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
+    switch (event) {
+      case this.LoadCases.OPEN:
+        this.LoadQuestions(this.MockQuery)
+          .then((questions) => {
+            this.SaveQuestions(questions)
+            this.LoadOpenAnswers(this.ActiveBranch.openQuestions);
+          })
+          .catch((err) => {
+            this.Store.dispatch(new ErrorOpenQuestion(err));
+            this.Store.dispatch(new ErrorCloseQuestion(err));
+          });
+        break;
+      case this.LoadCases.CLOSE:
+        console.log('Calling Close Data...'); // TODO: Implement
+        break;
+      case this.LoadCases.KPIS:
+        console.log('Calling KPIS...'); // TODO: Implement
+        break;
+      case this.LoadCases.STAFF:
+        console.log('Calling STAFF...'); // TODO: Implement
+        break;
+      case this.LoadCases.HISTORIC:
+        console.log('Calling Historic...'); // TODO: Implement
+        break;
+      default:
+        this.Store.dispatch(new ResetButInfo());
+        console.log('Calling All'); // Todo: Implmenet
+        break;
     }
+  }
 
-    ngAfterViewInit() {
-      console.log('AfterViewInit...');
-    }
+  private SaveQuestions(questions: Pregunta[]) {
+    const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
+    const open = questions.filter(q => q.tipoPregunta === 'Abierta');
 
-    ngOnDestroy() {
-      console.log('Destroying...');
-    }
-
-    // Public Methods
-
-
-    // Private Methods
-    private LoadQuestions(query: APIRequestUser) {
-      this.Store.dispatch(new RequestOpenQuestion('Cargando Preguntas Abiertas...'));
-      this.Store.dispatch(new RequestCloseQuestion('Cargando Preguntas Cerradas...'));
-
-      return this.Preguntas.getAllByProfile(query)
-      .map<Pregunta[]>(res => res['Respuestas']).toPromise()
-        .then(questions => {
-          const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
-          const open = questions.filter(q => q.tipoPregunta === 'Abierta');
-
-          this.Store.dispatch(new SuccessOpenQuestion(open));
-          this.Store.dispatch(new SuccessCloseQuestion(close));
-          return questions;
-        })
-        .catch((err) => {
-          this.Store.dispatch(new ErrorOpenQuestion(err));
-          this.Store.dispatch(new ErrorCloseQuestion(err));
-        });
-    }
-
-    private LoadOpenAnswers(questions: Pregunta[]) {
-      console.log(questions);
-    }
-    private onFetchInformation(event) {
-      const mockQuery = {
-        start: moment().subtract(7, 'days').unix().toString(),
-        end: moment().unix().toString(),
-        profile: this.ActiveBranch.info.OldProfileId.toString()
-      };
-      switch (event) {
-        case this.LoadCases.OPEN:
-          console.log('Calling Open Data...');
-          this.LoadQuestions(mockQuery)
-            .then(this.LoadOpenAnswers);
-          break;
-        case this.LoadCases.CLOSE:
-          console.log('Calling Close Data...'); // TODO: Implement
-          break;
-        case this.LoadCases.KPIS:
-          console.log('Calling KPIS...'); // TODO: Implement
-          break;
-        case this.LoadCases.STAFF:
-          console.log('Calling STAFF...'); // TODO: Implement
-          break;
-        case this.LoadCases.HISTORIC:
-          console.log('Calling Historic...'); // TODO: Implement
-          break;
-        default:
-          this.Store.dispatch(new ResetButInfo());
-          console.log('Calling All'); // Todo: Implmenet
-          break;
-      }
-    }
+    this.Store.dispatch(new SuccessOpenQuestion(open));
+    this.Store.dispatch(new SuccessCloseQuestion(close));
+    return questions;
+  }
 }
