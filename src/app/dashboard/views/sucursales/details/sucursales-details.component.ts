@@ -10,6 +10,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { ActionTypes as AuthActions } from '@actions/auth.actions';
+
 import { PreguntasService } from '@services/preguntas.service';
 import { RespuestasService } from '@services/respuestas.service';
 import { KpisService } from '@services/kpis.service';
@@ -131,13 +133,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private LoadOpenAnswers(questions: Pregunta[]) {
+    this.Store.dispatch(new RequestOpenAnswer('Cargando Respuestas Abiertas...'))
     const answersArray = questions.map((question) =>
       this.requestOpenAnswer(question.idPregunta.toString())
     );
-    Promise.all(answersArray)
+    return Promise.all(answersArray)
       .then((answers: OpenAnswer[][]) => {
-        console.log(answers);
-        this.Store.dispatch(new SuccessOpenAnswer(answers.reduce(merge)));
+        return this.Store.dispatch(new SuccessOpenAnswer(answers.reduce(merge)));
       });
   }
   private OnFetchInformation(event) {
@@ -147,12 +149,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         this.LoadQuestions(this.MockQuery)
           .then((questions) => {
             this.SaveQuestions(questions)
-            this.LoadOpenAnswers(this.ActiveBranch.openQuestions);
+            this.LoadOpenAnswers(this.ActiveBranch.openQuestions)
+            .catch((err) => this.HandleRequestError('OPENANSWER', err));
           })
-          .catch((err) => {
-            this.Store.dispatch(new ErrorOpenQuestion(err));
-            this.Store.dispatch(new ErrorCloseQuestion(err));
-          });
+          .catch((err) => this.HandleRequestError('QUESTIONS', err));
         break;
       case this.LoadCases.CLOSE:
         console.log('Calling Close Data...'); // TODO: Implement
@@ -181,4 +181,33 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.Store.dispatch(new SuccessCloseQuestion(close));
     return questions;
   }
+
+  private HandleRequestError(type: ErrorTypes, error?: any) {
+    let response: (err: any) => void;
+    if (error.status === '401') {
+      this.Store.dispatch({ type: AuthActions.LOGOUT_START });
+      response = () => false;
+    } else {
+      switch (type) {
+        case 'QUESTIONS':
+          response = (err) => {
+            this.Store.dispatch(new ErrorCloseQuestion(err));
+            this.Store.dispatch(new ErrorOpenQuestion(err));
+          }
+          break;
+        case 'OPENANSWER':
+          response = (err) => this.Store.dispatch(new ErrorOpenAnswer(err));
+          break;
+        case 'CLOSEANSWER':
+          response = (err) => this.Store.dispatch(new ErrorCloseAnswer(err));
+          break;
+        default:
+          response = () => false;
+          break;
+      }
+    }
+    return response;
+  }
 }
+
+type ErrorTypes = 'QUESTIONS' | 'OPENANSWER' | 'CLOSEANSWER';
