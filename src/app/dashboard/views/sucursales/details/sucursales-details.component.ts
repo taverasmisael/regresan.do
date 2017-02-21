@@ -183,30 +183,26 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private HandleRequestError(type: ErrorTypes, error?: any) {
-    let response: (err: any) => void;
-    if (error.status === '401') {
+    if (error.status === 401) {
       this.Store.dispatch({ type: AuthActions.LOGOUT_START });
-      response = () => false;
+      return;
     } else {
       switch (type) {
         case 'QUESTIONS':
-          response = (err) => {
-            this.Store.dispatch(new ErrorCloseQuestion(err));
-            this.Store.dispatch(new ErrorOpenQuestion(err));
-          }
+            this.Store.dispatch(new ErrorCloseQuestion(error));
+            this.Store.dispatch(new ErrorOpenQuestion(error));
           break;
         case 'OPENANSWER':
-          response = (err) => this.Store.dispatch(new ErrorOpenAnswer(err));
+          this.Store.dispatch(new ErrorOpenAnswer(error));
           break;
         case 'CLOSEANSWER':
-          response = (err) => this.Store.dispatch(new ErrorCloseAnswer(err));
+          this.Store.dispatch(new ErrorCloseAnswer(error));
           break;
         default:
-          response = () => false;
           break;
       }
     }
-    return response;
+    return;
   }
 }
 
