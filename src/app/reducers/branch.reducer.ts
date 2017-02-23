@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { ActionEnhanced } from '@models/action.enhanced';
 
 import * as moment from 'moment';
 
@@ -8,8 +8,7 @@ import { StateRequest } from '@models/states/state-request';
 import { updateObject, updateItemInArray } from '@utilities/objects';
 
 import {
-  BRANCH_REQ_QOPEN_R, BRANCH_REQ_QOPEN_S, BRANCH_REQ_QOPEN_E,
-  BRANCH_REQ_QCLOSE_R, BRANCH_REQ_QCLOSE_S, BRANCH_REQ_QCLOSE_E,
+  BRANCH_REQ_QUESTIONS_R, BRANCH_REQ_QUESTIONS_S, BRANCH_REQ_QUESTIONS_E,
   BRANCH_REQ_AOPEN_R, BRANCH_REQ_AOPEN_S, BRANCH_REQ_AOPEN_E,
   BRANCH_REQ_ACLOSE_R, BRANCH_REQ_ACLOSE_S, BRANCH_REQ_ACLOSE_E,
   BRANCH_REQ_KPI_R, BRANCH_REQ_KPI_S, BRANCH_REQ_KPI_E,
@@ -17,8 +16,6 @@ import {
   BRANCH_REQ_HISTORIC_R, BRANCH_REQ_HISTORIC_S, BRANCH_REQ_HISTORIC_E,
   BRANCH_RESET_ALL, BRANCH_RESET_BUT_INFO, BRANCH_INFO_SAVE
 } from '@actions/branch.types';
-
-const getSectionName = (type: string) => type.split('_')[1];
 
 export const INITIAL_STATE = new BranchState();
 
@@ -28,22 +25,19 @@ export function BranchCases() {
     [BRANCH_INFO_SAVE]: saveInfo,
     [BRANCH_RESET_ALL]: resetStore,
     [BRANCH_RESET_BUT_INFO]: resetDate,
-    [BRANCH_REQ_QOPEN_R]: requesting,
-    [BRANCH_REQ_QCLOSE_R]: requesting,
+    [BRANCH_REQ_QUESTIONS_R]: requesting,
     [BRANCH_REQ_AOPEN_R]: requesting,
     [BRANCH_REQ_ACLOSE_R]: requesting,
     [BRANCH_REQ_KPI_R]: requesting,
     [BRANCH_REQ_STAFF_RANKING_R]: requesting,
     [BRANCH_REQ_HISTORIC_R]: requesting,
-    [BRANCH_REQ_QOPEN_E]: requestError,
-    [BRANCH_REQ_QCLOSE_E]: requestError,
+    [BRANCH_REQ_QUESTIONS_E]: requestError,
     [BRANCH_REQ_AOPEN_E]: requestError,
     [BRANCH_REQ_ACLOSE_E]: requestError,
     [BRANCH_REQ_KPI_E]: requestError,
     [BRANCH_REQ_STAFF_RANKING_E]: requestError,
     [BRANCH_REQ_HISTORIC_E]: requestError,
-    [BRANCH_REQ_QOPEN_S]: saveQOpen,
-    [BRANCH_REQ_QCLOSE_S]: saveQClose,
+    [BRANCH_REQ_QUESTIONS_S]: saveQOpen,
     [BRANCH_REQ_AOPEN_S]: saveAOpen,
     [BRANCH_REQ_ACLOSE_S]: saveAClose,
     [BRANCH_REQ_KPI_S]: saveKPI,
@@ -52,117 +46,101 @@ export function BranchCases() {
   }
 }
 
-function saveInfo(state: BranchState, action: Action): BranchState {
+function saveInfo(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload } = action;
 
   return updateObject(state, { info: payload });
 }
 
-function resetStore(state: BranchState, action: Action): BranchState {
+function resetStore(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload } = action;
 
   return updateObject(state, INITIAL_STATE);
 }
 
-function resetDate(state: BranchState, action: Action): BranchState {
+function resetDate(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload } = action;
 
   return Object.assign(state, INITIAL_STATE, { info: state.info });
 }
 
-function requesting(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type); // Get the part your are requesting
+function requesting(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, message, section } = action;
 
   return updateObject(state, {
-    requests: updateObject(state.requests, { [req]: new StateRequest(undefined, true, payload) })
+    requests: updateObject(state.requests, { [section]: new StateRequest(undefined, true, message) })
   });
 }
 
-function requestError(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  // Get the part your are requesting
-
-  const req = getSectionName(action.type);
+function requestError(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, error, section } = action;
 
   return updateObject(state, {
-    requests: updateObject(state.requests, { [req]: new StateRequest(payload, false, '') })
+    requests: updateObject(state.requests, { [section]: new StateRequest(error, false, '') })
   });
 }
 
-function saveQOpen(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type);
+function saveQOpen(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
 
   return updateObject(state, {
     openQuestions: payload,
     requests: updateObject(state.requests, {
-      [req]: new StateRequest(undefined, false, '')
+      [section]: new StateRequest(undefined, false, '')
     })
   });
 }
 
-function saveQClose(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type);
+function saveQClose(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
 
   return updateObject(state, {
     closeQuestions: payload,
     requests: updateObject(state.requests, {
-      [req]: new StateRequest(undefined, false, '')
+      [section]: new StateRequest(undefined, false, '')
     })
   });
 }
 
-function saveAOpen(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type);
+function saveAOpen(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
 
   return updateObject(state, {
     openAnswers: payload,
     requests: updateObject(state.requests, {
-      [req]: new StateRequest(undefined, false, '')
+      [section]: new StateRequest(undefined, false, '')
     })
   });
 }
 
-function saveAClose(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type);
+function saveAClose(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
 
   return updateObject(state, {
     closeAnswers: payload,
     requests: updateObject(state.requests, {
-      [req]: new StateRequest(undefined, false, '')
+      [section]: new StateRequest(undefined, false, '')
     })
   });
 }
 
-function saveKPI(state: BranchState, action: Action): BranchState {
-  const { payload } = action;
-
-  const req = getSectionName(action.type);
+function saveKPI(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
 
   return updateObject(state, {
     kpi: payload,
     requests: updateObject(state.requests, {
-      [req]: new StateRequest(undefined, false, '')
+      [section]: new StateRequest(undefined, false, '')
     })
   });
 }
 
-function saveStaffRanking(state: BranchState, action: Action): BranchState {
+function saveStaffRanking(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload } = action;
 
   return updateObject(state, { staffRanking: payload });
 }
-function saveHistoric(state: BranchState, action: Action): BranchState {
+function saveHistoric(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload } = action;
 
   return updateObject(state, { staffRanking: payload });
