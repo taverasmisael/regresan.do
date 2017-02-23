@@ -101,38 +101,44 @@ export class ErrorHistoric implements ActionEnhanced {
 
 
 // Success
-export class SuccessQuestions implements Action {
+export class SuccessQuestions implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_QUESTIONS_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: {close: Pregunta[], open: Pregunta[]}) { }
 }
 
-export class SuccessOpenAnswer implements Action {
+export class SuccessOpenAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_AOPEN_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: OpenAnswer[]) { }
 }
 
-export class SuccessCloseAnswer implements Action {
+export class SuccessCloseAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: Pregunta[]) { }
 }
 
-export class SuccessKPI implements Action {
+export class SuccessKPI implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_KPI_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: KPI[]) { }
 }
 
-export class SuccessStaffRanking implements Action {
+export class SuccessStaffRanking implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: StaffRanking[]) { }
 }
 
-export class SuccessHistoric implements Action {
+export class SuccessHistoric implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_HISTORIC_S;
+  public section = getSectionName(this.type);
 
   constructor(public payload: HistoricEntry[]) { }
 }
