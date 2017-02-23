@@ -19,6 +19,7 @@ import { RootReducer } from './reducers';
 // Redux Side Effects
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './effects/auth.effects';
+import { BranchEffects } from './effects/branch.effects';
 
 // Services
 import { ApiService} from './services/api.service';
@@ -88,6 +89,7 @@ import { StaffIndexComponent } from './staff-index/staff-index.component';
     StoreModule.provideStore({MainStore: RootReducer}),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     EffectsModule.run(AuthEffects),
+    EffectsModule.run(BranchEffects),
     ChartsModule,
     GaugeModule
   ],
