@@ -34,6 +34,9 @@ import {
   RequestOpenAnswer, RequestQuestions, RequestStaffRanking, ApplyCurrentQuery
 } from '@actions/branch.actions';
 
+const start = moment().subtract(1, 'week').unix().toString();
+const end = moment().unix().toString();
+
 @Component({
   selector: 'app-sucursales-details',
   templateUrl: './sucursales-details.component.html',
@@ -43,10 +46,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   public ActiveBranch: BranchState;
 
-  private FetchQuestions: EventEmitter<any>;
-  private FetchKPIs: EventEmitter<any>;
-  private FetchStaffRanking: EventEmitter<any>;
-  private FetchHistoric: EventEmitter<any>;
   private LoadCases: any;
   private store$: Observable<BranchState>;
 
@@ -56,15 +55,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Angular Lifecycle Hooks
   ngOnInit() {
-    this.FetchQuestions = new EventEmitter();
-    this.FetchKPIs = new EventEmitter();
-    this.FetchStaffRanking = new EventEmitter();
-    this.FetchHistoric = new EventEmitter();
-    this.FetchQuestions.subscribe(($event) => this.OnFetchQuestions($event));
-    this.FetchKPIs.subscribe(($event) => this.OnFetchKPIs($event));
-    this.FetchStaffRanking.subscribe(($event) => this.OnFetchStaffRanking($event));
-    this.FetchHistoric.subscribe(($event) => this.OnFetchHistoric($event));
-
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store.select('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
@@ -95,29 +85,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     // Get the Route Params
     this.Route.params.distinctUntilKeyChanged('id')
       .switchMap(
-      (params: Params) =>
+      (params) =>
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
           profiles.find(prof => prof.OldProfileId === +params['id']))
       )
       .filter(info => info && !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
-      .do(info => this.Store.dispatch(new SaveInfo(info)))
-      .switchMap(val => {
-        return this.Route.queryParams;
-      })
-      .subscribe(
-      (info) => {
-        if (compare(info, {})) {
-          const query = {
-            start: moment().subtract(1, 'week').unix().toString(),
-            end: moment().unix().toString(),
-          }
-          this.Store.dispatch(new ApplyCurrentQuery(query));
-          this.router.navigate([], {
-            queryParams: query
-          });
-        }
-      }
-      );
+      .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
+      .switchMap(val => this.Route.queryParams) // ... We add readibility to our code
+      .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
 
     // Get the Route query
   }
@@ -145,21 +120,32 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
 
   // Private Methods
-  private OnFetchQuestions(event) {
+  private FetchQuestions(event) {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
-  private OnFetchKPIs(event) {
+  private FetchKPIs(event) {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'));
   }
-  private OnFetchStaffRanking(event) {
+  private FetchStaffRanking(event) {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestStaffRanking(currentQuery, 'Cargando Ranking de Personal...'));
   }
-  private OnFetchHistoric(event) {
+  private FetchHistoric(event) {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
+  }
+
+  // Private Helpers
+  private ApplyQueryParams(params: Params) {
+    if (compare(params, {})) {
+      const query = { start, end };
+      this.Store.dispatch(new ApplyCurrentQuery(query));
+      this.router.navigate([], {
+        queryParams: query
+      });
+    }
   }
 }
 
