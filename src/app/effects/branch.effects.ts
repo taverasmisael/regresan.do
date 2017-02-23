@@ -30,7 +30,7 @@ export class BranchEffects {
   @Effect() requestCA$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_ACLOSE_R)
     .map(action => action.payload)
-    .switchMap(payload => {
+    .mergeMap(payload => {
       return this.respuestasService.getFromProfile(payload)
         .map<Pregunta[]>(res => res['RespuestasPreguntas']) // return only the real data
         .map(answers => new SuccessCloseAnswer(answers))
@@ -60,7 +60,7 @@ export class BranchEffects {
   @Effect() requestOA$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_AOPEN_R)
     .map(action => action.payload)
-    .switchMap(payload => {
+    .mergeMap(payload => {
       return this.respuestasService.getAbiertasFromProfile(payload)
         .map<OpenAnswer[]>(res => res['RespuestasPreguntas'])
         .map(answers => new SuccessOpenAnswer(answers))
@@ -70,18 +70,15 @@ export class BranchEffects {
   @Effect() requestQS$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_QUESTIONS_R)
     .map(action => action.payload)
-    .mergeMap(payload => { // Trying Some Different RXJS operator
-      return [
-        new ResetButInfo(),
-        this.preguntasService.getAllByProfile(payload)
+    .switchMap(payload => { // Trying Some Different RXJS operator
+      return this.preguntasService.getAllByProfile(payload)
           .map<Pregunta[]>(res => res['Respuestas']) // return only the real data
           .map(questions => {
             const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
             const open = questions.filter(q => q.tipoPregunta === 'Abierta');
             return new SuccessQuestions({ close, open })
           })
-          .catch(err => this.HandleError(err, ErrorQuestions))
-      ];
+          .catch(err => this.HandleError(err, ErrorQuestions));
     });
 
   @Effect() requestStaff$ = this.actions$
