@@ -37,7 +37,7 @@ export function BranchCases() {
     [BRANCH_REQ_KPI_E]: requestError,
     [BRANCH_REQ_STAFF_RANKING_E]: requestError,
     [BRANCH_REQ_HISTORIC_E]: requestError,
-    [BRANCH_REQ_QUESTIONS_S]: saveQOpen,
+    [BRANCH_REQ_QUESTIONS_S]: saveQuestions,
     [BRANCH_REQ_AOPEN_S]: saveAOpen,
     [BRANCH_REQ_ACLOSE_S]: saveAClose,
     [BRANCH_REQ_KPI_S]: saveKPI,
@@ -80,11 +80,12 @@ function requestError(state: BranchState, action: ActionEnhanced): BranchState {
   });
 }
 
-function saveQOpen(state: BranchState, action: ActionEnhanced): BranchState {
+function saveQuestions(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
 
   return updateObject(state, {
-    openQuestions: payload,
+    openQuestions: payload.open,
+    closeQuestions: payload.close,
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })
@@ -106,7 +107,7 @@ function saveAOpen(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
 
   return updateObject(state, {
-    openAnswers: payload,
+    openAnswers: [...state.openAnswers, payload],
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })
@@ -117,7 +118,7 @@ function saveAClose(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
 
   return updateObject(state, {
-    closeAnswers: payload,
+    closeAnswers: [...state.closeAnswers, payload],
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })
