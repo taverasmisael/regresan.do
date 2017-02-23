@@ -21,8 +21,7 @@ export class BranchState {
   requests: {
     ACLOSE: StateRequest,
     AOPEN: StateRequest,
-    QCLOSE: StateRequest,
-    QOPEN: StateRequest,
+    QUESTIONS: StateRequest,
     KPI: StateRequest,
     STAFF_RANKING: StateRequest,
     HISTORIC: StateRequest
@@ -42,8 +41,7 @@ export class BranchState {
     this.requests = {
       ACLOSE: new StateRequest(undefined, false, ''),
       AOPEN: new StateRequest(undefined, false, ''),
-      QCLOSE: new StateRequest(undefined, false, ''),
-      QOPEN: new StateRequest(undefined, false, ''),
+      QUESTIONS: new StateRequest(undefined, false, ''),
       KPI: new StateRequest(undefined, false, ''),
       STAFF_RANKING: new StateRequest(undefined, false, ''),
       HISTORIC: new StateRequest(undefined, false, '')

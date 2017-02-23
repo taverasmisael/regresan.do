@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
 import * as ACTIONS from './branch.types';
+
+import { ActionEnhanced } from '@models/action.enhanced';
 import { UserProfile} from '@models/userprofile';
 import { RequestError } from '@models/request-error';
 import { Pregunta } from '@models/pregunta';
@@ -7,105 +9,102 @@ import { OpenAnswer } from '@models/answer.open';
 import { KPI } from '@models/kpi';
 import { StaffRanking } from '@models/staff-ranking';
 import { HistoricEntry } from '@models/historic-entry';
+import { APIRequestParams, APIRequestUser, APIRequestRespuesta } from '@models/apiparams';
+
+const getSectionName = (type: string) => type.split('_')[1];
 
 // Requests
-export class RequestOpenQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QOPEN_R;
+export class RequestQuestions implements ActionEnhanced {
+  public type = ACTIONS.BRANCH_REQ_QUESTIONS_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestUser, public message: string) { }
 }
 
-export class RequestCloseQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QCLOSE_R;
-
-  constructor(public payload: string) { }
-}
-
-export class RequestOpenAnswer implements Action {
+export class RequestOpenAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_AOPEN_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestRespuesta, message: string) { }
 }
 
-export class RequestCloseAnswer implements Action {
+export class RequestCloseAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestRespuesta, message: string) { }
 }
 
-export class RequestKPI implements Action {
+export class RequestKPI implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_KPI_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestUser, message: string) { }
 }
 
-export class RequestStaffRanking implements Action {
+export class RequestStaffRanking implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestUser, message: string) { }
 }
 
-export class RequestHistoric implements Action {
+export class RequestHistoric implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_HISTORIC_R;
+  public section = getSectionName(this.type);
 
-  constructor(public payload: string) { }
+  constructor(public payload: APIRequestParams, message: string) { }
 }
 
 // Errors
-export class ErrorOpenQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QOPEN_E;
-
-  constructor(public payload: RequestError) { }
-}
-
-export class ErrorCloseQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QCLOSE_E;
+export class ErrorQuestions implements ActionEnhanced {
+  public type = ACTIONS.BRANCH_REQ_QUESTIONS_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
 export class ErrorOpenAnswer implements Action {
   public type = ACTIONS.BRANCH_REQ_AOPEN_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
-export class ErrorCloseAnswer implements Action {
+export class ErrorCloseAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
-export class ErrorKPI implements Action {
+export class ErrorKPI implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_KPI_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
-export class ErrorStaffRanking implements Action {
+export class ErrorStaffRanking implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
-export class ErrorHistoric implements Action {
+export class ErrorHistoric implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_HISTORIC_E;
+  public section = getSectionName(this.type);
 
   constructor(public payload: RequestError) { }
 }
 
 
 // Success
-export class SuccessOpenQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QOPEN_S;
+export class SuccessQuestions implements Action {
+  public type = ACTIONS.BRANCH_REQ_QUESTIONS_S;
 
-  constructor(public payload: Pregunta[]) { }
-}
-
-export class SuccessCloseQuestion implements Action {
-  public type = ACTIONS.BRANCH_REQ_QCLOSE_S;
-
-  constructor(public payload: Pregunta[]) { }
+  constructor(public payload: {close: Pregunta[], open: Pregunta[]}) { }
 }
 
 export class SuccessOpenAnswer implements Action {

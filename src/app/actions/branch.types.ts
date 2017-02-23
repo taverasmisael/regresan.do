@@ -1,12 +1,7 @@
 // Requesting Open Questions
-export const BRANCH_REQ_QOPEN_R = '[BRANCH]: REQ_QOPEN_R'
-export const BRANCH_REQ_QOPEN_S = '[BRANCH]: REQ_QOPEN_S'
-export const BRANCH_REQ_QOPEN_E = '[BRANCH]: REQ_QOPEN_E'
-
-// Requesting Close Questions
-export const BRANCH_REQ_QCLOSE_R = '[BRANCH]: REQ_QCLOSE_R'
-export const BRANCH_REQ_QCLOSE_S = '[BRANCH]: REQ_QCLOSE_S'
-export const BRANCH_REQ_QCLOSE_E = '[BRANCH]: REQ_QCLOSE_E'
+export const BRANCH_REQ_QUESTIONS_R = '[BRANCH]: REQ_QUESTIONS_R'
+export const BRANCH_REQ_QUESTIONS_S = '[BRANCH]: REQ_QUESTIONS_S'
+export const BRANCH_REQ_QUESTIONS_E = '[BRANCH]: REQ_QUESTIONS_E'
 
 // Requesting Open Answers
 export const BRANCH_REQ_AOPEN_R = '[BRANCH]: REQ_AOPEN_R'
