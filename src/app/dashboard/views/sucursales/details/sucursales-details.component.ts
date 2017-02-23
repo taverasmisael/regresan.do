@@ -30,10 +30,8 @@ import { QuestionFilter } from '@models/filter-question';
 import { UserProfile } from '@models/userprofile';
 
 import {
-  SaveInfo, ResetButInfo,
-  RequestCloseQuestion, RequestCloseAnswer, RequestOpenQuestion, RequestOpenAnswer,
-  ErrorCloseQuestion, ErrorCloseAnswer, ErrorOpenQuestion, ErrorOpenAnswer,
-  SuccessCloseQuestion, SuccessCloseAnswer, SuccessOpenQuestion, SuccessOpenAnswer
+  SaveInfo, ResetButInfo, RequestCloseAnswer, RequestHistoric, RequestKPI,
+  RequestOpenAnswer, RequestQuestions, RequestStaffRanking
 } from '@actions/branch.actions';
 
 @Component({
@@ -45,9 +43,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   public ActiveBranch: BranchState;
 
-  private FetchInformation: EventEmitter<any>;
+  private FetchQuestions: EventEmitter<any>;
   private LoadCases: any;
   private MockQuery: QuestionFilter;
+  private store$: Observable<BranchState>;
 
   constructor(private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -63,20 +62,36 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       STAFF: 'STAFF',
       HISTORIC: 'HISTORIC'
     };
-    this.MockQuery = {
+    this.MockQuery = { // TODO: Replace with the real query
       start: moment().subtract(7, 'days').unix().toString(),
       end: moment().unix().toString(),
       profile: 'MOCK'
     };
-    this.FetchInformation = new EventEmitter();
-    this.FetchInformation.subscribe(($event) => this.OnFetchInformation($event));
+    this.FetchQuestions = new EventEmitter();
+    this.FetchQuestions.subscribe(($event) => this.OnFetchQuestions($event));
 
     // This update the ActiveBranch on each StoreAction
-    this.Store.select('MainStore')
+    this.store$ = this.Store.select('MainStore')
       .distinctUntilKeyChanged('currentSucursal')
-      .pluck<BranchState>('currentSucursal').subscribe((branch) => {
-        this.ActiveBranch = branch;
-      });
+      .pluck<BranchState>('currentSucursal');
+
+    this.store$.subscribe((branch) => this.ActiveBranch = branch);
+
+    // Load all CloseAnswer each time there are new closeQuestions
+    this.store$.distinctUntilKeyChanged('closeQuestions')
+      .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
+      .map(qs => qs.map(q => q.idPregunta))
+      .subscribe(questionsId =>
+        questionsId.forEach(id => this.loadCloseAnswer(id.toString()))
+      );
+
+    // Load all OpenAnswer each time there are new openQuestions
+    this.store$.distinctUntilKeyChanged('openQuestions')
+      .pluck<Pregunta[]>('openQuestions').filter(qs => Boolean(qs.length))
+      .map(qs => qs.map(q => q.idPregunta))
+      .subscribe(questionsId =>
+        questionsId.forEach(id => this.loadOpenAnswer(id.toString()))
+      );
 
 
     const profiles$ = this.Store.select('MainStore')
@@ -88,14 +103,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       (params: Params) =>
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
           profiles.find(prof => prof.OldProfileId === +params['id']))
-      ).subscribe(
-      (res) => {
-        if (!compare(res, this.ActiveBranch.info)) { // Security Measures Prevents Infinite Loop
-          this.Store.dispatch(new SaveInfo(res));
-          this.FetchInformation.emit(this.LoadCases.OPEN);
+      )
+      .filter(info => !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
+      .subscribe(
+        (info) => {
+          this.Store.dispatch(new SaveInfo(info));
+          this.FetchQuestions.emit();
         }
-      },
-      (error) => console.log(error)
       );
 
     // Get the Route query
@@ -115,94 +129,24 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Public Methods
-  public requestOpenAnswer(id: string) {
-    // TODO: use `this.ActiveBranch.filters.question` instead of MockQuery
-    const query = updateObject(this.MockQuery, { pregunta: id });
-    return this.Respuestas.getAbiertasFromProfile(query)
-      .map<OpenAnswer[]>(res => res['RespuestasPreguntas']).toPromise();
+  public loadCloseAnswer(pregunta: string) {
+    // TODO: Replace with the real query
+    const query = updateObject(this.MockQuery, {pregunta});
+    this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`));
+  }
+
+  public loadOpenAnswer(pregunta: string) {
+    // TODO: Replace with the real query
+    const query = updateObject(this.MockQuery, {pregunta});
+    this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
 
   // Private Methods
-  private LoadQuestions(query: APIRequestUser) {
-    this.Store.dispatch(new RequestOpenQuestion('Cargando Preguntas Abiertas...'));
-    this.Store.dispatch(new RequestCloseQuestion('Cargando Preguntas Cerradas...'));
-
-    return this.Preguntas.getAllByProfile(query)
-      .map<Pregunta[]>(res => res['Respuestas']).toPromise();
-  }
-
-  private LoadOpenAnswers(questions: Pregunta[]) {
-    this.Store.dispatch(new RequestOpenAnswer('Cargando Respuestas Abiertas...'))
-    const answersArray = questions.map((question) =>
-      this.requestOpenAnswer(question.idPregunta.toString())
-    );
-    return Promise.all(answersArray)
-      .then((answers: OpenAnswer[][]) => {
-        return this.Store.dispatch(new SuccessOpenAnswer(answers.reduce(merge)));
-      });
-  }
-  private OnFetchInformation(event) {
+  private OnFetchQuestions(event) {
+    // TODO: Replace with the real query
     this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
-    switch (event) {
-      case this.LoadCases.OPEN:
-        this.LoadQuestions(this.MockQuery)
-          .then((questions) => {
-            this.SaveQuestions(questions)
-            this.LoadOpenAnswers(this.ActiveBranch.openQuestions)
-            .catch((err) => this.HandleRequestError('OPENANSWER', err));
-          })
-          .catch((err) => this.HandleRequestError('QUESTIONS', err));
-        break;
-      case this.LoadCases.CLOSE:
-        console.log('Calling Close Data...'); // TODO: Implement
-        break;
-      case this.LoadCases.KPIS:
-        console.log('Calling KPIS...'); // TODO: Implement
-        break;
-      case this.LoadCases.STAFF:
-        console.log('Calling STAFF...'); // TODO: Implement
-        break;
-      case this.LoadCases.HISTORIC:
-        console.log('Calling Historic...'); // TODO: Implement
-        break;
-      default:
-        this.Store.dispatch(new ResetButInfo());
-        console.log('Calling All'); // Todo: Implmenet
-        break;
-    }
-  }
-
-  private SaveQuestions(questions: Pregunta[]) {
-    const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
-    const open = questions.filter(q => q.tipoPregunta === 'Abierta');
-
-    this.Store.dispatch(new SuccessOpenQuestion(open));
-    this.Store.dispatch(new SuccessCloseQuestion(close));
-    return questions;
-  }
-
-  private HandleRequestError(type: ErrorTypes, error?: any) {
-    if (error.status === 401) {
-      this.Store.dispatch({ type: AuthActions.LOGOUT_START });
-      return;
-    } else {
-      switch (type) {
-        case 'QUESTIONS':
-            this.Store.dispatch(new ErrorCloseQuestion(error));
-            this.Store.dispatch(new ErrorOpenQuestion(error));
-          break;
-        case 'OPENANSWER':
-          this.Store.dispatch(new ErrorOpenAnswer(error));
-          break;
-        case 'CLOSEANSWER':
-          this.Store.dispatch(new ErrorCloseAnswer(error));
-          break;
-        default:
-          break;
-      }
-    }
-    return;
+    this.Store.dispatch(new RequestQuestions(this.MockQuery, 'Cargando Preguntas...'));
   }
 }
 
