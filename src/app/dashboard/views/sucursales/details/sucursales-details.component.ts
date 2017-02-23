@@ -54,14 +54,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Angular Lifecycle Hooks
   ngOnInit() {
-    this.LoadCases = {
-      ALL: 'ALL',
-      OPEN: 'OPEN',
-      CLOSE: 'CLOSE',
-      KPIS: 'KPIS',
-      STAFF: 'STAFF',
-      HISTORIC: 'HISTORIC'
-    };
     this.MockQuery = { // TODO: Replace with the real query
       start: moment().subtract(7, 'days').unix().toString(),
       end: moment().unix().toString(),
