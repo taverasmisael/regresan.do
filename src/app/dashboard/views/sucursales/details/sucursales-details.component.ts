@@ -44,6 +44,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public ActiveBranch: BranchState;
 
   private FetchQuestions: EventEmitter<any>;
+  private FetchKPIs: EventEmitter<any>;
+  private FetchStaffRanking: EventEmitter<any>;
+  private FetchHistoric: EventEmitter<any>;
   private LoadCases: any;
   private MockQuery: QuestionFilter;
   private store$: Observable<BranchState>;
@@ -60,7 +63,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       profile: 'MOCK'
     };
     this.FetchQuestions = new EventEmitter();
+    this.FetchKPIs = new EventEmitter();
+    this.FetchStaffRanking = new EventEmitter();
+    this.FetchHistoric = new EventEmitter();
     this.FetchQuestions.subscribe(($event) => this.OnFetchQuestions($event));
+    this.FetchKPIs.subscribe(($event) => this.OnFetchKPIs($event));
+    this.FetchStaffRanking.subscribe(($event) => this.OnFetchStaffRanking($event));
+    this.FetchHistoric.subscribe(($event) => this.OnFetchHistoric($event));
 
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store.select('MainStore')
@@ -101,6 +110,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         (info) => {
           this.Store.dispatch(new SaveInfo(info));
           this.FetchQuestions.emit();
+          this.FetchKPIs.emit();
+          this.FetchStaffRanking.emit();
+          this.FetchHistoric.emit();
         }
       );
 
@@ -139,6 +151,21 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     // TODO: Replace with the real query
     this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
     this.Store.dispatch(new RequestQuestions(this.MockQuery, 'Cargando Preguntas...'));
+  }
+  private OnFetchKPIs(event) {
+    // TODO: Replace with the real query
+    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
+    this.Store.dispatch(new RequestKPI(this.MockQuery, 'Cargando KPIs..'));
+  }
+  private OnFetchStaffRanking(event) {
+    // TODO: Replace with the real query
+    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
+    this.Store.dispatch(new RequestStaffRanking(this.MockQuery, 'Cargando Ranking de Personal...'));
+  }
+  private OnFetchHistoric(event) {
+    // TODO: Replace with the real query
+    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
+    this.Store.dispatch(new RequestHistoric(this.MockQuery, 'Cargando Histórico de Encuestas...'));
   }
 }
 
