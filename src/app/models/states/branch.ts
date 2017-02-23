@@ -23,7 +23,7 @@ export class BranchState {
     AOPEN: StateRequest,
     QUESTIONS: StateRequest,
     KPI: StateRequest,
-    STAFF_RANKING: StateRequest,
+    STAFF: StateRequest,
     HISTORIC: StateRequest
   }
   filters: Filter;
@@ -43,7 +43,7 @@ export class BranchState {
       AOPEN: new StateRequest(undefined, false, ''),
       QUESTIONS: new StateRequest(undefined, false, ''),
       KPI: new StateRequest(undefined, false, ''),
-      STAFF_RANKING: new StateRequest(undefined, false, ''),
+      STAFF: new StateRequest(undefined, false, ''),
       HISTORIC: new StateRequest(undefined, false, '')
     }
   }
