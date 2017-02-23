@@ -142,7 +142,12 @@ function saveStaffRanking(state: BranchState, action: ActionEnhanced): BranchSta
   return updateObject(state, { staffRanking: payload });
 }
 function saveHistoric(state: BranchState, action: ActionEnhanced): BranchState {
-  const { payload } = action;
+  const { payload, section } = action;
 
-  return updateObject(state, { staffRanking: payload });
+  return updateObject(state, {
+    historicData: payload,
+    requests: updateObject(state.requests, {
+      [section]: new StateRequest(undefined, false, '')
+    })
+  });
 }
