@@ -16,8 +16,8 @@ export class BranchState {
   openAnswers: RespuestaAbierta[]
   closeAnswers: Pregunta[]
   kpis: KPI[]
+  historicData: HistoricEntry[]
   staffRanking: StaffRanking[]
-  historic: HistoricEntry[]
   requests: {
     ACLOSE: StateRequest,
     AOPEN: StateRequest,
@@ -27,7 +27,6 @@ export class BranchState {
     STAFF_RANKING: StateRequest,
     HISTORIC: StateRequest
   }
-  answerCharts: {[key: string]: any[][]}
   filters: Filter;
 
   constructor(info?, cq?, oq?, ca?, oa?, filters?, loading?) {
@@ -37,8 +36,7 @@ export class BranchState {
     this.closeAnswers = ca || [];
     this.openAnswers = oa || [];
     this.filters = filters || [];
-    this.answerCharts = {};
-    this.historic = []
+    this.historicData = [];
     this.staffRanking = [];
     this.kpis = [];
     this.requests = {
