@@ -14,7 +14,7 @@ import {
   BRANCH_REQ_KPI_R, BRANCH_REQ_KPI_S, BRANCH_REQ_KPI_E,
   BRANCH_REQ_STAFF_RANKING_R, BRANCH_REQ_STAFF_RANKING_S, BRANCH_REQ_STAFF_RANKING_E,
   BRANCH_REQ_HISTORIC_R, BRANCH_REQ_HISTORIC_S, BRANCH_REQ_HISTORIC_E,
-  BRANCH_RESET_ALL, BRANCH_RESET_BUT_INFO, BRANCH_INFO_SAVE
+  BRANCH_RESET_ALL, BRANCH_RESET_BUT_INFO, BRANCH_INFO_SAVE, BRANCH_SAVE_CURRENT_QUERY
 } from '@actions/branch.types';
 
 export const INITIAL_STATE = new BranchState();
@@ -42,7 +42,8 @@ export function BranchCases() {
     [BRANCH_REQ_ACLOSE_S]: saveAClose,
     [BRANCH_REQ_KPI_S]: saveKPI,
     [BRANCH_REQ_STAFF_RANKING_S]: saveStaffRanking,
-    [BRANCH_REQ_HISTORIC_S]: saveHistoric
+    [BRANCH_REQ_HISTORIC_S]: saveHistoric,
+    [BRANCH_SAVE_CURRENT_QUERY]: saveCurrentQuery
   }
 }
 
@@ -149,5 +150,12 @@ function saveHistoric(state: BranchState, action: ActionEnhanced): BranchState {
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })
+  });
+}
+
+function saveCurrentQuery(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload } = action;
+  return updateObject(state, {
+    currentQuery: payload
   });
 }

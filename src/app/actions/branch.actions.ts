@@ -162,3 +162,16 @@ export class SaveInfo implements Action {
 
   constructor(public payload: UserProfile) { }
 }
+
+// Filters and Queries
+export class ApplyCurrentQuery implements Action {
+  public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY;
+
+  constructor(public payload: APIRequestParams) { }
+}
+
+export class SaveCurrentQuery implements Action {
+  public type = ACTIONS.BRANCH_SAVE_CURRENT_QUERY;
+
+  constructor(public payload: APIRequestUser) { }
+}

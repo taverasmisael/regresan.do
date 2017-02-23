@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import * as moment from 'moment';
 
@@ -31,7 +31,7 @@ import { UserProfile } from '@models/userprofile';
 
 import {
   SaveInfo, ResetButInfo, RequestCloseAnswer, RequestHistoric, RequestKPI,
-  RequestOpenAnswer, RequestQuestions, RequestStaffRanking
+  RequestOpenAnswer, RequestQuestions, RequestStaffRanking, ApplyCurrentQuery
 } from '@actions/branch.actions';
 
 @Component({
@@ -48,20 +48,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private FetchStaffRanking: EventEmitter<any>;
   private FetchHistoric: EventEmitter<any>;
   private LoadCases: any;
-  private MockQuery: QuestionFilter;
   private store$: Observable<BranchState>;
 
-  constructor(private Preguntas: PreguntasService,
+  constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
     private Store: Store<AppState>, private Route: ActivatedRoute) { }
 
   // Angular Lifecycle Hooks
   ngOnInit() {
-    this.MockQuery = { // TODO: Replace with the real query
-      start: moment().subtract(7, 'days').unix().toString(),
-      end: moment().unix().toString(),
-      profile: 'MOCK'
-    };
     this.FetchQuestions = new EventEmitter();
     this.FetchKPIs = new EventEmitter();
     this.FetchStaffRanking = new EventEmitter();
@@ -105,23 +99,27 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
           profiles.find(prof => prof.OldProfileId === +params['id']))
       )
-      .filter(info => !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
+      .filter(info => info && !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
+      .do(info => this.Store.dispatch(new SaveInfo(info)))
+      .switchMap(val => {
+        return this.Route.queryParams;
+      })
       .subscribe(
-        (info) => {
-          this.Store.dispatch(new SaveInfo(info));
-          this.FetchQuestions.emit();
-          this.FetchKPIs.emit();
-          this.FetchStaffRanking.emit();
-          this.FetchHistoric.emit();
+      (info) => {
+        if (compare(info, {})) {
+          const query = {
+            start: moment().subtract(1, 'week').unix().toString(),
+            end: moment().unix().toString(),
+          }
+          this.Store.dispatch(new ApplyCurrentQuery(query));
+          this.router.navigate([], {
+            queryParams: query
+          });
         }
+      }
       );
 
     // Get the Route query
-    this.Route.queryParams.subscribe(
-      (res) => console.log(res),
-      (err) => console.error(err),
-      () => console.log('Done!')
-    );
   }
 
   ngAfterViewInit() {
@@ -134,38 +132,34 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Public Methods
   public loadCloseAnswer(pregunta: string) {
-    // TODO: Replace with the real query
-    const query = updateObject(this.MockQuery, {pregunta});
+    const currentQuery = this.ActiveBranch.currentQuery;
+    const query = updateObject(currentQuery, { pregunta });
     this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
   public loadOpenAnswer(pregunta: string) {
-    // TODO: Replace with the real query
-    const query = updateObject(this.MockQuery, {pregunta});
+    const currentQuery = this.ActiveBranch.currentQuery;
+    const query = updateObject(currentQuery, { pregunta });
     this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
 
   // Private Methods
   private OnFetchQuestions(event) {
-    // TODO: Replace with the real query
-    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
-    this.Store.dispatch(new RequestQuestions(this.MockQuery, 'Cargando Preguntas...'));
+    const currentQuery = this.ActiveBranch.currentQuery;
+    this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
   private OnFetchKPIs(event) {
-    // TODO: Replace with the real query
-    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
-    this.Store.dispatch(new RequestKPI(this.MockQuery, 'Cargando KPIs..'));
+    const currentQuery = this.ActiveBranch.currentQuery;
+    this.Store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'));
   }
   private OnFetchStaffRanking(event) {
-    // TODO: Replace with the real query
-    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
-    this.Store.dispatch(new RequestStaffRanking(this.MockQuery, 'Cargando Ranking de Personal...'));
+    const currentQuery = this.ActiveBranch.currentQuery;
+    this.Store.dispatch(new RequestStaffRanking(currentQuery, 'Cargando Ranking de Personal...'));
   }
   private OnFetchHistoric(event) {
-    // TODO: Replace with the real query
-    this.MockQuery = updateObject(this.MockQuery, { profile: this.ActiveBranch.info.OldProfileId.toString() });
-    this.Store.dispatch(new RequestHistoric(this.MockQuery, 'Cargando Histórico de Encuestas...'));
+    const currentQuery = this.ActiveBranch.currentQuery;
+    this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
   }
 }
 

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Actions, Effect } from '@ngrx/effects';
 
+import { AppState } from '@models/states/appstate';
+import { APIRequestParams, APIRequestUser } from '@models/apiparams';
+import { BranchState } from '@models/states/branch';
 import { HistoricEntry } from '@models/historic-entry';
 import { KPI } from '@models/kpi';
 import { OpenAnswer } from '@models/answer.open';
@@ -22,7 +26,7 @@ import { ActionTypes as AuthTypes } from '@actions/auth.actions';
 import {
   ErrorCloseAnswer, ErrorHistoric, ErrorKPI, ErrorOpenAnswer, ErrorQuestions, ErrorStaffRanking,
   SuccessCloseAnswer, SuccessHistoric, SuccessKPI, SuccessOpenAnswer, SuccessQuestions, SuccessStaffRanking,
-  ResetButInfo
+  SaveCurrentQuery
 } from '@actions/branch.actions';
 
 @Injectable()
@@ -72,13 +76,13 @@ export class BranchEffects {
     .map(action => action.payload)
     .switchMap(payload => { // Trying Some Different RXJS operator
       return this.preguntasService.getAllByProfile(payload)
-          .map<Pregunta[]>(res => res['Respuestas']) // return only the real data
-          .map(questions => {
-            const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
-            const open = questions.filter(q => q.tipoPregunta === 'Abierta');
-            return new SuccessQuestions({ close, open })
-          })
-          .catch(err => this.HandleError(err, ErrorQuestions));
+        .map<Pregunta[]>(res => res['Respuestas']) // return only the real data
+        .map(questions => {
+          const close = questions.filter(q => q.tipoPregunta !== 'Abierta');
+          const open = questions.filter(q => q.tipoPregunta === 'Abierta');
+          return new SuccessQuestions({ close, open })
+        })
+        .catch(err => this.HandleError(err, ErrorQuestions));
     });
 
   @Effect() requestStaff$ = this.actions$
@@ -87,8 +91,24 @@ export class BranchEffects {
     .switchMap(payload => {
       return this.staffService.getKpisCamareros(payload)
         .map<StaffRanking[]>(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
-        .map(ranking =>  new SuccessStaffRanking(ranking))
+        .map(ranking => new SuccessStaffRanking(ranking))
         .catch(err => this.HandleError(err, ErrorStaffRanking));
+    });
+
+  @Effect() applyQuery$ = this.actions$
+    .ofType(ACTIONS.BRANCH_APPLY_CURRENT_QUERY)
+    .withLatestFrom<APIRequestUser>(this.store, (action, state) => {
+      const currentSucursal = state.MainStore.currentSucursal;
+      const profile = currentSucursal.info.OldProfileId.toString();
+      const { start, end } = action.payload;
+      return {
+        profile,
+        start,
+        end
+      }
+    })
+    .switchMap(query => {
+      return Observable.of(new SaveCurrentQuery(query))
     })
 
 
@@ -96,7 +116,8 @@ export class BranchEffects {
     private kpiService: KpisService,
     private preguntasService: PreguntasService,
     private respuestasService: RespuestasService,
-    private staffService: StaffService) { }
+    private staffService: StaffService,
+    private store: Store<AppState>) { }
 
   private HandleError(error: any, Action: any): Observable<any> {
     if (error.status === 401) {

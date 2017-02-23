@@ -6,6 +6,7 @@ import { HistoricEntry } from '@models/historic-entry';
 import { StaffRanking } from '@models/staff-ranking';
 import { RespuestaAbierta } from '@models/respuesta-abierta';
 import { StateRequest } from '@models/states/state-request';
+import { APIRequestUser } from '@models/apiparams';
 
 import * as moment from 'moment';
 
@@ -27,6 +28,7 @@ export class BranchState {
     HISTORIC: StateRequest
   }
   filters: Filter;
+  currentQuery: APIRequestUser
 
   constructor(info?, cq?, oq?, ca?, oa?, filters?, loading?) {
     this.info = info || new UserProfile();
