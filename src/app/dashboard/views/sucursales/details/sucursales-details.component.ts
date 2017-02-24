@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import * as moment from 'moment';
@@ -30,8 +30,8 @@ import { QuestionFilter } from '@models/filter-question';
 import { UserProfile } from '@models/userprofile';
 
 import {
-  SaveInfo, ResetButInfo, RequestCloseAnswer, RequestHistoric, RequestKPI,
-  RequestOpenAnswer, RequestQuestions, RequestStaffRanking, ApplyCurrentQuery
+  SaveInfo, ResetButInfo, ResetAll, RequestCloseAnswer, RequestHistoric, RequestKPI,
+  RequestOpenAnswer, RequestQuestions, RequestStaffRanking, ApplyCurrentQuery,
 } from '@actions/branch.actions';
 
 const start = moment().subtract(1, 'week').unix().toString();
@@ -45,8 +45,6 @@ const end = moment().unix().toString();
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ActiveBranch: BranchState;
-
-  private LoadCases: any;
   private store$: Observable<BranchState>;
 
   constructor(private router: Router, private Preguntas: PreguntasService,
@@ -90,8 +88,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           profiles.find(prof => prof.OldProfileId === +params['id']))
       )
       .filter(info => info && !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
+      .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
       .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
-      .switchMap(val => this.Route.queryParams) // ... We add readibility to our code
+      .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
 
     // Get the Route query
@@ -103,6 +102,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy() {
     console.log('Destroying...');
+    this.Store.dispatch(new ResetAll());
   }
 
   // Public Methods
@@ -120,19 +120,20 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
 
   // Private Methods
-  private FetchQuestions(event) {
+  private FetchQuestions() {
     const currentQuery = this.ActiveBranch.currentQuery;
+    console.log(currentQuery)
     this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
-  private FetchKPIs(event) {
+  private FetchKPIs() {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'));
   }
-  private FetchStaffRanking(event) {
+  private FetchStaffRanking() {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestStaffRanking(currentQuery, 'Cargando Ranking de Personal...'));
   }
-  private FetchHistoric(event) {
+  private FetchHistoric() {
     const currentQuery = this.ActiveBranch.currentQuery;
     this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
   }
@@ -145,8 +146,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.router.navigate([], {
         queryParams: query
       });
+      this.FetchQuestions();
     }
+
   }
 }
-
-type ErrorTypes = 'QUESTIONS' | 'OPENANSWER' | 'CLOSEANSWER';
