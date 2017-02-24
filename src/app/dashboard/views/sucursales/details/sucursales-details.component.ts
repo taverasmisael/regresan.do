@@ -25,7 +25,7 @@ import { AppState } from '@models/states/appstate';
 import { BranchState } from '@models/states/branch';
 import { Pregunta } from '@models/pregunta';
 import { OpenAnswer } from '@models/answer.open';
-import { APIRequestUser, APIRequestRespuesta } from '@models/apiparams';
+import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams';
 import { QuestionFilter } from '@models/filter-question';
 import { UserProfile } from '@models/userprofile';
 
@@ -34,8 +34,8 @@ import {
   RequestOpenAnswer, RequestQuestions, RequestStaffRanking, ApplyCurrentQuery,
 } from '@actions/branch.actions';
 
-const start = moment().subtract(1, 'week').unix().toString();
-const end = moment().unix().toString();
+const aWeekAgo = moment().subtract(1, 'week').unix().toString();
+const today = moment().unix().toString();
 
 @Component({
   selector: 'app-sucursales-details',
@@ -139,15 +139,33 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Private Helpers
-  private ApplyQueryParams(params: Params) {
-    if (compare(params, {})) {
-      const query = { start, end };
-      this.Store.dispatch(new ApplyCurrentQuery(query));
-      this.router.navigate([], {
-        queryParams: query
-      });
-      this.FetchQuestions();
+  private ApplyQueryParams(queryParams: Params) {
+    const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
+    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
+    const dispatchNavigate = (query: APIRequestParams) => { dispatch(query); navigate(query); this.FetchQuestions(); }
+    const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
+    const applyPartial = (s?: string, e?: string) => {
+      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString();
+      let end = e || moment.unix(+s).add(1, 'week').unix().toString();
+      dispatchNavigate({ start, end });
     }
-
+    const DateFilter = {
+      exists: (params) => params['start']  && params['end'],
+      areNumeric: (params) => +params['start'] && +params['end'],
+      isNumeric: (slice: string, params) => +params[slice]
+    }
+    if (compare(queryParams, {})) {
+      applyDefault();
+    } else if (!DateFilter.exists(queryParams)) { // If there's not an DateFilter applyed
+      applyDefault();
+    } else if (!DateFilter.areNumeric(queryParams)) {
+      applyDefault();
+    } else if (DateFilter.areNumeric(queryParams)) {
+      applyPartial(queryParams['start'], queryParams['end'])
+    } else if (DateFilter.isNumeric('start', queryParams) && !DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(queryParams['start']);
+    } else if (!DateFilter.isNumeric('start', queryParams) && DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(undefined, queryParams['end']);
+    }
   }
 }
