@@ -20,8 +20,8 @@ export class BranchState {
   historicData: HistoricEntry[]
   staffRanking: StaffRanking[]
   requests: {
-    ACLOSE: StateRequest,
-    AOPEN: StateRequest,
+    ACLOSE: StateRequest[],
+    AOPEN: StateRequest[],
     QUESTIONS: StateRequest,
     KPI: StateRequest,
     STAFF: StateRequest,
@@ -41,8 +41,8 @@ export class BranchState {
     this.staffRanking = [];
     this.kpis = [];
     this.requests = {
-      ACLOSE: new StateRequest(undefined, false, ''),
-      AOPEN: new StateRequest(undefined, false, ''),
+      ACLOSE: [],
+      AOPEN: [],
       QUESTIONS: new StateRequest(undefined, false, ''),
       KPI: new StateRequest(undefined, false, ''),
       STAFF: new StateRequest(undefined, false, ''),

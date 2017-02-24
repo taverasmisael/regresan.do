@@ -112,14 +112,14 @@ export class SuccessOpenAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_AOPEN_S;
   public section = getSectionName(this.type);
 
-  constructor(public payload: OpenAnswer[]) { }
+  constructor(public payload: {answer: OpenAnswer[], question: string}) { }
 }
 
 export class SuccessCloseAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_S;
   public section = getSectionName(this.type);
 
-  constructor(public payload: Pregunta[]) { }
+  constructor(public payload: {answer: Pregunta[], question: string}) { }
 }
 
 export class SuccessKPI implements ActionEnhanced {

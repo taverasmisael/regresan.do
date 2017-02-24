@@ -37,7 +37,7 @@ export class BranchEffects {
     .mergeMap(payload => {
       return this.respuestasService.getFromProfile(payload)
         .map<Pregunta[]>(res => res['RespuestasPreguntas']) // return only the real data
-        .map(answers => new SuccessCloseAnswer(answers))
+        .map(answer => new SuccessCloseAnswer({answer: answer, question: payload.pregunta}))
         .catch(err => this.HandleError(err, ErrorCloseAnswer));
     });
 
@@ -67,7 +67,7 @@ export class BranchEffects {
     .mergeMap(payload => {
       return this.respuestasService.getAbiertasFromProfile(payload)
         .map<OpenAnswer[]>(res => res['RespuestasPreguntas'])
-        .map(answers => new SuccessOpenAnswer(answers))
+        .map(answer => new SuccessOpenAnswer({answer: answer, question: payload.pregunta}))
         .catch(err => this.HandleError(err, ErrorOpenAnswer));
     })
 

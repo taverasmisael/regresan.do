@@ -139,7 +139,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Private Helpers
-  private ApplyQueryParams(queryParams: Params) {
+  public ApplyQueryParams(queryParams: Params) {
     const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
     const dispatchNavigate = (query: APIRequestParams) => { dispatch(query); navigate(query); this.FetchQuestions(); }

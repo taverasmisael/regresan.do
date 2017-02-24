@@ -26,8 +26,8 @@ export function BranchCases() {
     [BRANCH_RESET_ALL]: resetStore,
     [BRANCH_RESET_BUT_INFO]: resetDate,
     [BRANCH_REQ_QUESTIONS_R]: requesting,
-    [BRANCH_REQ_AOPEN_R]: requesting,
-    [BRANCH_REQ_ACLOSE_R]: requesting,
+    [BRANCH_REQ_AOPEN_R]: requestingAnswer,
+    [BRANCH_REQ_ACLOSE_R]: requestingAnswer,
     [BRANCH_REQ_KPI_R]: requesting,
     [BRANCH_REQ_STAFF_RANKING_R]: requesting,
     [BRANCH_REQ_HISTORIC_R]: requesting,
@@ -73,11 +73,22 @@ function requesting(state: BranchState, action: ActionEnhanced): BranchState {
   });
 }
 
-function requestError(state: BranchState, action: ActionEnhanced): BranchState {
-  const { payload, error, section } = action;
+function requestingAnswer(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, message, section } = action;
 
   return updateObject(state, {
-    requests: updateObject(state.requests, { [section]: new StateRequest(error, false, '') })
+    requests: updateObject(state.requests, { [section]: [
+      ...state.requests[section],
+      new StateRequest(undefined, true, message, payload.pregunta)
+    ] })
+  });
+}
+
+function requestError(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, section } = action;
+
+  return updateObject(state, {
+    requests: updateObject(state.requests, { [section]: new StateRequest(payload, false, '') })
   });
 }
 
@@ -106,22 +117,36 @@ function saveQClose(state: BranchState, action: ActionEnhanced): BranchState {
 
 function saveAOpen(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
+  const { answer, question } = payload;
 
   return updateObject(state, {
-    openAnswers: [...state.openAnswers, payload],
+    openAnswers: [...state.openAnswers, answer],
     requests: updateObject(state.requests, {
-      [section]: new StateRequest(undefined, false, '')
+      [section]: state.requests[section].map((sr: StateRequest) => {
+        if (sr.id === question) {
+          return updateObject(sr, {isLoading: false, error: undefined, text: '' })
+        } else {
+          return sr;
+        }
+      })
     })
   });
 }
 
 function saveAClose(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
+  const { answer, question } = payload;
 
   return updateObject(state, {
-    closeAnswers: [...state.closeAnswers, payload],
+    closeAnswers: [...state.closeAnswers, answer],
     requests: updateObject(state.requests, {
-      [section]: new StateRequest(undefined, false, '')
+      [section]: state.requests[section].map((sr: StateRequest) => {
+        if (sr.id === question) {
+          return updateObject(sr, {isLoading: false, error: undefined, text: '' })
+        } else {
+          return sr;
+        }
+      })
     })
   });
 }
