@@ -155,7 +155,7 @@ function saveKPI(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, section } = action;
 
   return updateObject(state, {
-    kpi: payload,
+    kpis: payload,
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })

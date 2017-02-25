@@ -90,7 +90,7 @@ export class BranchEffects {
     .map(action => action.payload)
     .switchMap(payload => {
       return this.staffService.getKpisCamareros(payload)
-        .map<StaffRanking[]>(res => res['RankingCamareros'].sort((prev, curr) => prev.Total > curr.Total))
+        .map<StaffRanking[]>(res => res['Camareros'].sort((prev, curr) => prev.Total > curr.Total))
         .map(ranking => new SuccessStaffRanking(ranking))
         .catch(err => this.HandleError(err, ErrorStaffRanking));
     });
