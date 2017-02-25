@@ -138,6 +138,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
   }
 
+  private FetchAll() {
+    this.FetchHistoric();
+    this.FetchKPIs();
+    this.FetchQuestions();
+    this.FetchStaffRanking();
+  }
+
   // Private Helpers
   public ApplyQueryParams(queryParams: Params) {
     const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
@@ -146,7 +153,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       this.Store.dispatch(new ResetButInfo()); // UNCOMMITED:
       dispatch(query);
       navigate(query);
-      this.FetchQuestions();
+      this.FetchAll();
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string) => {
