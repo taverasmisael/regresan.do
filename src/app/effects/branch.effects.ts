@@ -48,6 +48,7 @@ export class BranchEffects {
     .switchMap(payload => {
       return this.preguntasService.getTotalPorDia(payload)
         .map<HistoricEntry[]>(res => res['Encuestas']['TotalesxSucursalxDia'].sort(sortResDate))
+        .map(entries => entries.filter(entry => entry.Sucursal === this.currentBranch.Title)) // return only data of currentBranch
         .map(entries => new SuccessHistoric(entries))
         .catch(err => this.HandleError(err, ErrorHistoric));
     });
