@@ -6,6 +6,7 @@ import { Actions, Effect } from '@ngrx/effects';
 
 import { AppState } from '@models/states/appstate';
 import { APIRequestParams, APIRequestUser } from '@models/apiparams';
+import { UserProfile } from '@models/userprofile';
 import { BranchState } from '@models/states/branch';
 import { HistoricEntry } from '@models/historic-entry';
 import { KPI } from '@models/kpi';
@@ -97,27 +98,29 @@ export class BranchEffects {
 
   @Effect() applyQuery$ = this.actions$
     .ofType(ACTIONS.BRANCH_APPLY_CURRENT_QUERY)
-    .withLatestFrom<APIRequestUser>(this.store, (action, state) => {
-      const currentSucursal = state.MainStore.currentSucursal;
-      const profile = currentSucursal.info.OldProfileId.toString();
-      const { start, end } = action.payload;
-      return {
-        profile,
-        start,
-        end
-      }
-    })
+    .map(action => action.payload)
+    .map(payload => ({
+      profile: this.currentBranch.OldProfileId.toString(),
+      start: payload.start,
+      end: payload.end
+    }))
     .switchMap(query => {
       return Observable.of(new SaveCurrentQuery(query))
     })
 
-
+  public currentBranch: UserProfile;
   constructor(private actions$: Actions,
     private kpiService: KpisService,
     private preguntasService: PreguntasService,
     private respuestasService: RespuestasService,
     private staffService: StaffService,
-    private store: Store<AppState>) { }
+    private store: Store<AppState>) {
+      this.store.select('MainStore')
+        .pluck('currentSucursal')
+        .distinctUntilKeyChanged('info')
+        .pluck<UserProfile>('info')
+        .subscribe(val =>  this.currentBranch = val);
+    }
 
   private HandleError(error: any, Action: any): Observable<any> {
     if (error.status === 401) {
