@@ -13,7 +13,7 @@ export function mapPieChart(prev = [[], []], curr) {
   return [[...prev[0], curr.Sucursal], [...prev[1], curr.Total]];
 }
 
-export function TotalPorDiaLineal(entries: any[], nombre?: string) {
+export function TotalPorDiaLineal(entries: any[]) {
 
   let labels = []; // Globally store the Labels
   let sucursales = []; // Globally store the Sucursal's name
@@ -21,7 +21,6 @@ export function TotalPorDiaLineal(entries: any[], nombre?: string) {
   const mapped = entries.map(mapData); // Reject the unneded keys
   const transformedData = groupBy(mapped, item => [item.row]) // Group them by date
     .reduce(mockMissingData, []) // Create an entry with value 0 in the date where 'Sucursal' is missing
-    .map(el => nombre ? el.filter(curr => curr.serie === nombre) : el) // In case we want an specific 'Sucursal'
     .reduce(transformSeries, []) // Map the data as more simple objects for Chart
     .reduce(merge, []);
   const groupedData = groupBy(transformedData, item => [item.label]) // Group them by 'Sucursal'
