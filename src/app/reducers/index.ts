@@ -9,10 +9,10 @@ import { AuthReducer, INITIAL_STATE as StateAuth } from './auth.reducer';
 import { BranchCases, INITIAL_STATE as BranchState } from './branch.reducer';
 
 const authReducer = createReducer(StateAuth, AuthReducer());
-const sucursalesReducer = createReducer(BranchState, BranchCases());
+const branchReducer = createReducer(BranchState, BranchCases());
 
 const RootReducer = compose(
   localStorageSync(['auth'], true),
-  combineReducers)({auth: authReducer, currentSucursal: sucursalesReducer});
+  combineReducers)({auth: authReducer, currentBranch: branchReducer});
 
 export { RootReducer };

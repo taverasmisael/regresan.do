@@ -55,8 +55,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   ngOnInit() {
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store.select('MainStore')
-      .distinctUntilKeyChanged('currentSucursal')
-      .pluck<BranchState>('currentSucursal');
+      .distinctUntilKeyChanged('currentBranch')
+      .pluck<BranchState>('currentBranch');
 
     this.store$.subscribe((branch) => this.ActiveBranch = branch);
 

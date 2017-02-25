@@ -117,7 +117,7 @@ export class BranchEffects {
     private staffService: StaffService,
     private store: Store<AppState>) {
       this.store.select('MainStore')
-        .pluck('currentSucursal')
+        .pluck('currentBranch')
         .distinctUntilKeyChanged('info')
         .pluck<UserProfile>('info')
         .subscribe(val =>  this.currentBranch = val);
