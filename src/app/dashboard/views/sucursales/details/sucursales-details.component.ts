@@ -142,7 +142,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public ApplyQueryParams(queryParams: Params) {
     const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
-    const dispatchNavigate = (query: APIRequestParams) => { dispatch(query); navigate(query); this.FetchQuestions(); }
+    const dispatchNavigate = (query: APIRequestParams) => {
+      this.Store.dispatch(new ResetButInfo()); // UNCOMMITED:
+      dispatch(query);
+      navigate(query);
+      this.FetchQuestions();
+    }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string) => {
       let start = s || moment.unix(+e).subtract(1, 'week').unix().toString();
