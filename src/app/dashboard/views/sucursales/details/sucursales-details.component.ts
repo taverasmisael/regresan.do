@@ -122,7 +122,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   // Private Methods
   private FetchQuestions() {
     const currentQuery = this.ActiveBranch.currentQuery;
-    console.log(currentQuery)
     this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
   private FetchKPIs() {
