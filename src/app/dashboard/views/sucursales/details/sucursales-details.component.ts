@@ -47,6 +47,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public ActiveBranch: BranchState;
   private store$: Observable<BranchState>;
 
+  private subCloseQs: Subscription;
+  private subOpeneQs: Subscription;
+  private subBranch: Subscription;
+  private subRoute: Subscription;
+
   constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
     private Store: Store<AppState>, private Route: ActivatedRoute) { }
@@ -58,10 +63,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentBranch')
       .pluck<BranchState>('currentBranch');
 
-    this.store$.subscribe((branch) => this.ActiveBranch = branch);
+    this.subBranch = this.store$.subscribe((branch) => this.ActiveBranch = branch);
 
     // Load all CloseAnswer each time there are new closeQuestions
-    this.store$.distinctUntilKeyChanged('closeQuestions')
+    this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
       .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
       .map(qs => qs.map(q => q.idPregunta))
       .subscribe(questionsId =>
@@ -69,7 +74,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       );
 
     // Load all OpenAnswer each time there are new openQuestions
-    this.store$.distinctUntilKeyChanged('openQuestions')
+    this.subOpeneQs = this.store$.distinctUntilKeyChanged('openQuestions')
       .pluck<Pregunta[]>('openQuestions').filter(qs => Boolean(qs.length))
       .map(qs => qs.map(q => q.idPregunta))
       .subscribe(questionsId =>
@@ -81,7 +86,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
 
     // Get the Route Params
-    this.Route.params.distinctUntilKeyChanged('id')
+    this.subRoute = this.Route.params.distinctUntilKeyChanged('id')
       .switchMap(
       (params) =>
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
@@ -102,6 +107,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy() {
     console.log('Destroying...');
+    this.subCloseQs.unsubscribe();
+    this.subOpeneQs.unsubscribe();
+    this.subBranch.unsubscribe();
+    this.subRoute.unsubscribe();
     this.Store.dispatch(new ResetAll());
   }
 
