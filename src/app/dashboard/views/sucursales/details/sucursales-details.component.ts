@@ -21,11 +21,12 @@ import { updateObject } from '@utilities/objects';
 import { merge } from '@utilities/arrays';
 import { ratingPalette, gamaRegresando } from '@utilities/colors';
 
+import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams';
 import { AppState } from '@models/states/appstate';
 import { BranchState } from '@models/states/branch';
-import { Pregunta } from '@models/pregunta';
+import { HistoricEntry } from '@models/historic-entry';
 import { OpenAnswer } from '@models/answer.open';
-import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams';
+import { Pregunta } from '@models/pregunta';
 import { QuestionFilter } from '@models/filter-question';
 import { UserProfile } from '@models/userprofile';
 
@@ -44,13 +45,21 @@ const today = moment().unix().toString();
 })
 export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public ActiveBranch: BranchState;
-  private store$: Observable<BranchState>;
+  public activeBranch: BranchState
+  public totalToday: BehaviorSubject<number>;
+  public totalGeneral: BehaviorSubject<number>;
+  public newContacts: BehaviorSubject<number>;
+  public branchIndex: BehaviorSubject<number>;
 
-  private subCloseQs: Subscription;
-  private subOpeneQs: Subscription;
-  private subBranch: Subscription;
-  private subRoute: Subscription;
+  public chartData = {historic: { colors: [gamaRegresando()[3]], data: [], labels: [] }, aopen: [], aclose: []};
+
+  private store$: Observable<BranchState>
+
+  private subCloseQs: Subscription
+  private subOpeneQs: Subscription
+  private subBranch: Subscription
+  private subRoute: Subscription
+  private subHistoric: Subscription
 
   constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -63,14 +72,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentBranch')
       .pluck<BranchState>('currentBranch');
 
-    this.subBranch = this.store$.subscribe((branch) => this.ActiveBranch = branch);
+    this.subBranch = this.store$.subscribe((branch) => this.activeBranch = branch);
 
     // Load all CloseAnswer each time there are new closeQuestions
     this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
       .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
       .map(qs => qs.map(q => q.idPregunta))
       .subscribe(questionsId =>
-        questionsId.forEach(id => this.loadCloseAnswer(id.toString()))
+        questionsId.forEach(id => this.LoadCloseAnswer(id.toString()))
       );
 
     // Load all OpenAnswer each time there are new openQuestions
@@ -78,9 +87,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<Pregunta[]>('openQuestions').filter(qs => Boolean(qs.length))
       .map(qs => qs.map(q => q.idPregunta))
       .subscribe(questionsId =>
-        questionsId.forEach(id => this.loadOpenAnswer(id.toString()))
+        questionsId.forEach(id => this.LoadOpenAnswer(id.toString()))
       );
 
+    this.subHistoric = this.store$.distinctUntilKeyChanged('historicData')
+      .pluck<HistoricEntry[]>('historicData').filter(entries => Boolean(entries.length))
+      .map(TotalPorDiaLineal)
+      .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
 
     const profiles$ = this.Store.select('MainStore')
       .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
@@ -92,13 +105,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
           profiles.find(prof => prof.OldProfileId === +params['id']))
       )
-      .filter(info => info && !compare(info, this.ActiveBranch.info)) // Security Measures Prevents Infinite Loop
+      .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
       .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
       .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
 
-    // Get the Route query
+    this.totalToday = new BehaviorSubject(0);
+    this.totalGeneral = new BehaviorSubject(0);
+    this.newContacts = new BehaviorSubject(0);
+    this.branchIndex = new BehaviorSubject(0);
   }
 
   ngAfterViewInit() {
@@ -115,42 +131,61 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Public Methods
-  public loadCloseAnswer(pregunta: string) {
-    const currentQuery = this.ActiveBranch.currentQuery;
+  public LoadCloseAnswer(pregunta: string) {
+    const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
     this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
-  public loadOpenAnswer(pregunta: string) {
-    const currentQuery = this.ActiveBranch.currentQuery;
+  public LoadOpenAnswer(pregunta: string) {
+    const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
     this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
+  public LoadResumen() {
+    const currentQuery = this.activeBranch.currentQuery;
+    this.Preguntas.getResumenSucursal(currentQuery)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        if (res) {
+          this.totalToday.next(res['TotalEncuestadosHoy']);
+          this.totalGeneral.next(res['TotalEncuestas']);
+          this.newContacts.next(res['NuevosContactos']);
+          this.branchIndex.next(res['IndiceSucursal']);
+        } else {
+          this.totalToday.next(0);
+          this.totalGeneral.next(0);
+          this.newContacts.next(0);
+          this.branchIndex.next(0);
+        }
 
-  // Private Methods
-  private FetchQuestions() {
-    const currentQuery = this.ActiveBranch.currentQuery;
+      });
+  }
+
+  public FetchQuestions() {
+    const currentQuery = this.activeBranch.currentQuery;
     this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
-  private FetchKPIs() {
-    const currentQuery = this.ActiveBranch.currentQuery;
+  public FetchKPIs() {
+    const currentQuery = this.activeBranch.currentQuery;
     this.Store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'));
   }
-  private FetchStaffRanking() {
-    const currentQuery = this.ActiveBranch.currentQuery;
+  public FetchStaffRanking() {
+    const currentQuery = this.activeBranch.currentQuery;
     this.Store.dispatch(new RequestStaffRanking(currentQuery, 'Cargando Ranking de Personal...'));
   }
-  private FetchHistoric() {
-    const currentQuery = this.ActiveBranch.currentQuery;
+  public FetchHistoric() {
+    const currentQuery = this.activeBranch.currentQuery;
     this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
   }
 
-  private FetchAll() {
+  public FetchAll() {
     this.FetchHistoric();
     this.FetchKPIs();
     this.FetchQuestions();
     this.FetchStaffRanking();
+    this.LoadResumen();
   }
 
   // Private Helpers
@@ -170,7 +205,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       dispatchNavigate({ start, end });
     }
     const DateFilter = {
-      exists: (params) => params['start']  && params['end'],
+      exists: (params) => params['start'] && params['end'],
       areNumeric: (params) => +params['start'] && +params['end'],
       isNumeric: (slice: string, params) => +params[slice]
     }
@@ -187,5 +222,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     } else if (!DateFilter.isNumeric('start', queryParams) && DateFilter.isNumeric('end', queryParams)) {
       applyPartial(undefined, queryParams['end']);
     }
+  }
+
+  private SaveHistoricEntries(entries: any[]) {
+    console.log([gamaRegresando()[3]]);
+    this.chartData = updateObject(this.chartData, { historic: {
+      colors: [gamaRegresando()[3]],
+      data: entries[1].sort((prev, curr) => prev.label > curr.label),
+      labels: entries[0],
+    }});
   }
 }
