@@ -4,7 +4,7 @@ import { KPI } from '@models/kpi';
 import { Filter } from '@models/filter';
 import { HistoricEntry } from '@models/historic-entry';
 import { StaffRanking } from '@models/staff-ranking';
-import { OpenAnswer } from '@models/respuesta-abierta';
+import { OpenAnswer } from '@models/answer.open';
 import { CloseAnswer } from '@models/answer.close';
 import { StateRequest } from '@models/states/state-request';
 import { APIRequestUser } from '@models/apiparams';
