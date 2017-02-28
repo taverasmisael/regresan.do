@@ -18,7 +18,7 @@ import { KpisService } from '@services/kpis.service';
 
 import { makePieChart, TotalPorDiaLineal } from '@utilities/respuestas';
 import { updateObject } from '@utilities/objects';
-import { merge } from '@utilities/arrays';
+import { merge, findByObjectId } from '@utilities/arrays';
 import { ratingPalette, gamaRegresando } from '@utilities/colors';
 
 import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams';
@@ -27,8 +27,12 @@ import { BranchState } from '@models/states/branch';
 import { HistoricEntry } from '@models/historic-entry';
 import { OpenAnswer } from '@models/answer.open';
 import { Pregunta } from '@models/pregunta';
+import { CloseAnswer } from '@models/answer.close';
 import { QuestionFilter } from '@models/filter-question';
+import { StateRequest } from '@models/states/state-request';
 import { UserProfile } from '@models/userprofile';
+import { BranchChartData } from '@models/branch.chart-data';
+import { ChartData } from '@models/chart-data';
 
 import {
   SaveInfo, ResetButInfo, ResetAll, RequestCloseAnswer, RequestHistoric, RequestKPI,
@@ -51,7 +55,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public newContacts: BehaviorSubject<number>;
   public branchIndex: BehaviorSubject<number>;
 
-  public chartData = {historic: { colors: [gamaRegresando()[3]], data: [], labels: [] }, aopen: [], aclose: []};
+  public chartData: BranchChartData;
 
   private store$: Observable<BranchState>
 
@@ -60,6 +64,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private subBranch: Subscription
   private subRoute: Subscription
   private subHistoric: Subscription
+  private subCloseAw: Subscription
 
   constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -72,44 +77,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .distinctUntilKeyChanged('currentBranch')
       .pluck<BranchState>('currentBranch');
 
-    this.subBranch = this.store$.subscribe((branch) => this.activeBranch = branch);
+    this.chartData = new BranchChartData(new ChartData([], [], [gamaRegresando()[3]]), [], [])
 
-    // Load all CloseAnswer each time there are new closeQuestions
-    this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
-      .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
-      .map(qs => qs.map(q => q.idPregunta))
-      .subscribe(questionsId =>
-        questionsId.forEach(id => this.LoadCloseAnswer(id.toString()))
-      );
-
-    // Load all OpenAnswer each time there are new openQuestions
-    this.subOpeneQs = this.store$.distinctUntilKeyChanged('openQuestions')
-      .pluck<Pregunta[]>('openQuestions').filter(qs => Boolean(qs.length))
-      .map(qs => qs.map(q => q.idPregunta))
-      .subscribe(questionsId =>
-        questionsId.forEach(id => this.LoadOpenAnswer(id.toString()))
-      );
-
-    this.subHistoric = this.store$.distinctUntilKeyChanged('historicData')
-      .pluck<HistoricEntry[]>('historicData').filter(entries => Boolean(entries.length))
-      .map(TotalPorDiaLineal)
-      .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
-
-    const profiles$ = this.Store.select('MainStore')
-      .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
-
-    // Get the Route Params
-    this.subRoute = this.Route.params.distinctUntilKeyChanged('id')
-      .switchMap(
-      (params) =>
-        profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
-          profiles.find(prof => prof.OldProfileId === +params['id']))
-      )
-      .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
-      .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
-      .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
-      .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
-      .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
+    this.InitializeSubscriptions();
 
     this.totalToday = new BehaviorSubject(0);
     this.totalGeneral = new BehaviorSubject(0);
@@ -127,6 +97,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.subOpeneQs.unsubscribe();
     this.subBranch.unsubscribe();
     this.subRoute.unsubscribe();
+    this.subCloseAw.unsubscribe();
     this.Store.dispatch(new ResetAll());
   }
 
@@ -188,7 +159,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.LoadResumen();
   }
 
-  // Private Helpers
+  // Public Helpers
+  public GetRequesAnswerInfo(qid: number) {
+    return findByObjectId(this.activeBranch.requests.ACLOSE, qid.toString());
+  }
+
+  public GetCloseAChart(question: string) {
+    return findByObjectId(this.chartData.aClose, question);
+  }
+
   public ApplyQueryParams(queryParams: Params) {
     const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
@@ -224,12 +203,69 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  // Private Methods
+
+  private InitializeSubscriptions() {
+    this.subBranch = this.store$.subscribe((branch) => this.activeBranch = branch);
+
+    // Load all CloseAnswer each time there are new closeQuestions
+    this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
+      .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
+      .map(qs => qs.map(q => q.idPregunta))
+      .subscribe(questionsId =>
+        questionsId.forEach(id => this.LoadCloseAnswer(id.toString()))
+      );
+
+    // Load all OpenAnswer each time there are new openQuestions
+    this.subOpeneQs = this.store$.distinctUntilKeyChanged('openQuestions')
+      .pluck<Pregunta[]>('openQuestions').filter(qs => Boolean(qs.length))
+      .map(qs => qs.map(q => q.idPregunta))
+      .subscribe(questionsId =>
+        questionsId.forEach(id => this.LoadOpenAnswer(id.toString()))
+      );
+
+    this.subCloseAw = this.store$.distinctUntilKeyChanged('closeAnswers')
+      .pluck<CloseAnswer[]>('closeAnswers').filter(aws => Boolean(aws.length))
+      .map(aws => [aws[aws.length - 1]])
+      .map(aws => aws.map(makePieChart).reduce(merge, []))
+      .subscribe(answers => this.SaveCloseAnswers(answers));
+
+    this.subHistoric = this.store$.distinctUntilKeyChanged('historicData')
+      .pluck<HistoricEntry[]>('historicData').filter(entries => Boolean(entries.length))
+      .map(TotalPorDiaLineal)
+      .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
+
+    const profiles$ = this.Store.select('MainStore')
+      .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
+    // Get the Route Params
+    this.subRoute = this.Route.params.distinctUntilKeyChanged('id')
+      .switchMap(
+      (params) =>
+        profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
+          profiles.find(prof => prof.OldProfileId === +params['id']))
+      )
+      .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
+      .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
+      .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
+      .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
+      .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
+  }
+
+  // Private Helpers
+
   private SaveHistoricEntries(entries: any[]) {
-    console.log([gamaRegresando()[3]]);
-    this.chartData = updateObject(this.chartData, { historic: {
-      colors: [gamaRegresando()[3]],
-      data: entries[1].sort((prev, curr) => prev.label > curr.label),
-      labels: entries[0],
-    }});
+    this.chartData = updateObject(this.chartData, {
+      historic: {
+        colors: [gamaRegresando()[3]],
+        data: entries[1].sort((prev, curr) => prev.label > curr.label),
+        labels: entries[0],
+      }
+    });
+  }
+
+  private SaveCloseAnswers(entries: ChartData[]) {
+    this.chartData = updateObject(this.chartData, {
+      aClose: [...this.chartData.aClose, entries[0]]
+    })
   }
 }

@@ -15,7 +15,7 @@
     chartTitle="Histórico de Encuestas"
     (failed)="FetchHistoric()"
     [loading]="activeBranch.requests.HISTORIC.isLoading && !chartData.historic.labels.length"
-    [loadingText]="activeBranch.requests.HISTORIC.text"
+    [loadingText]="activeBranch.requests.HISTORIC.text || 'Cargando Histórico de Encustas'"
     [errorText]="activeBranch.requests.HISTORIC.error ? activeBranch.requests.HISTORIC.error.text : ''"
     [chartLabels]="chartData.historic.labels"
     [chartData]="chartData.historic.data"
@@ -46,8 +46,48 @@
       class="mdl-cell mdl-cell--8-col"
       [indiceSatisfaccion]="branchIndex | async"
       [kpis]="activeBranch.kpis"
-      [loading]="activeBranch.requests.KPI.loading"
+      [loading]="activeBranch.requests.KPI.isLoading"
       [errorText]="activeBranch.requests.KPI.error ? activeBranch.requests.KPI.error.text : ''"
     ></app-kpi-card>
+  </div>
+</section>
+<section class="section section--charts">
+  <div class="mdl-grid main-content">
+    <div class="mdl-cell mdl-cell--12-col qa-holder">
+      <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
+        <app-chart-card
+          class="mdl-cell mdl-cell--4-col-desktop mdl-card"
+          *ngFor="let q of activeBranch.closeQuestions; let i = index;"
+          chartType="pie"
+          loadingText="Respuesta {{ i + 1 }}"
+          (failed)="LoadCloseAnswer(q.idPregunta)"
+          [errorText]="GetRequesAnswerInfo(q.idPregunta).error?.text"
+          [loading]="GetRequesAnswerInfo(q.idPregunta).isLoading && !GetCloseAChart(q.pregunta)?.labels.length"
+          [chartTitle]="q.pregunta"
+          [chartLabels]="GetCloseAChart(q.pregunta)?.labels || []"
+          [chartData]="GetCloseAChart(q.pregunta)?.data || []"
+          [chartColors]="GetCloseAChart(q.pregunta)?.colors || []">
+        </app-chart-card>
+      </div>
+      <!-- Questions Loading Indicator -->
+      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
+        <div class="content">
+          <div class="mdl-spinner mdl-js-spinner is-active"></div>
+          <h4 class="mdl-typography--text-center">{{ activeBranch.requests.QUESTIONS.text }}</h4>
+        </div>
+      </div>
+      <!-- Empty Response Indicator -->
+      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && !activeBranch.requests.QUESTIONS.error">
+        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+          <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
+        </h4>
+      </div>
+      <!-- Error Response Indicator -->
+      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && activeBranch.requests.QUESTIONS.error">
+        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+          <i class="material-icons">error</i><br /> {{ activeBranch.requests.QUESTIONS.error.text }}
+        </h4>
+      </div>
+    </div>
   </div>
 </section>
