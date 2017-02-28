@@ -242,7 +242,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .switchMap(
       (params) =>
         profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
-          profiles.find(prof => prof.OldProfileId === +params['id']))
+          profiles ? profiles.find(prof => prof.OldProfileId === +params['id']) : undefined)
       )
       .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
       .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
