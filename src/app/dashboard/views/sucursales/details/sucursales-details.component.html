@@ -4,7 +4,7 @@
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary">
       <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
-    <h3 id="sucursales-list" class="title mdl-color-text--primary">{{ activeBranch.info.Title }}
+    <h3 id="branch-list" class="title mdl-color-text--primary">{{ activeBranch.info.Title }}
       <i class="material-icons" style="font-size: 1em;">arrow_drop_down</i>
     </h3>
   </div>
@@ -91,3 +91,31 @@
     </div>
   </div>
 </section>
+<section class="section">
+  <div class="mdl-grid">
+    <!--<app-card
+      class="mdl-cell mdl-typography--text-center"
+      [class.mdl-cell--12-col]="SucursalState.openQuestions.length === 1"
+      [class.mdl-cell--6-col]="SucursalState.openQuestions.length === 2"
+      [class.mdl-cell--4-col]="SucursalState.openQuestions.length === 3"
+      *ngFor="let q of SucursalState.openQuestions"
+      loadingText="Cargando Preguntas Abiertas"
+      [isDataTable]="true"
+      [title]="q.pregunta "
+      [loading]="SucursalState.loading">
+        <app-answers-table
+          (failed)="loadOpenAnswers($event)"
+          [withinCard]="true"
+          [questionsErrorText]="questionError"
+          [answersErrorText]="openAnswersError"
+          [loading]="SucursalState.loading"
+          [answers]="getMyAnswers(q.idPregunta)">
+        </app-answers-table>
+    </app-card>-->
+  </div>
+</section>
+<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
+  <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
+    {{ prof.Title }}
+  </a>
+</ul>

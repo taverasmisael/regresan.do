@@ -58,6 +58,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public chartData: BranchChartData;
 
   private store$: Observable<BranchState>
+  public profiles$: Observable<UserProfile[]>
 
   private subCloseQs: Subscription
   private subOpeneQs: Subscription
@@ -78,13 +79,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<BranchState>('currentBranch');
 
     this.chartData = new BranchChartData(new ChartData([], [], [gamaRegresando()[3]]), [], [])
+    this.profiles$ = this.Store.select('MainStore')
+      .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
 
     this.InitializeSubscriptions();
 
-    this.totalToday = new BehaviorSubject(0);
-    this.totalGeneral = new BehaviorSubject(0);
-    this.newContacts = new BehaviorSubject(0);
-    this.branchIndex = new BehaviorSubject(0);
+    this.ResetResume();
   }
 
   ngAfterViewInit() {
@@ -114,6 +114,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
+  public NavigateToBranch(profileId: number) {
+    this.router.navigate(['../', profileId], {
+      relativeTo: this.Route,
+      preserveQueryParams: true,
+      preserveFragment: true
+    });
+  }
+
   public LoadResumen() {
     const currentQuery = this.activeBranch.currentQuery;
     this.Preguntas.getResumenSucursal(currentQuery)
@@ -125,10 +133,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           this.newContacts.next(res['NuevosContactos']);
           this.branchIndex.next(res['IndiceSucursal']);
         } else {
-          this.totalToday.next(0);
-          this.totalGeneral.next(0);
-          this.newContacts.next(0);
-          this.branchIndex.next(0);
+          this.ResetResume();
         }
 
       });
@@ -235,23 +240,34 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .map(TotalPorDiaLineal)
       .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
 
-    const profiles$ = this.Store.select('MainStore')
-      .pluck<UserProfile[]>('auth', 'currentUser', 'Profiles');
     // Get the Route Params
     this.subRoute = this.Route.params.distinctUntilKeyChanged('id')
       .switchMap(
       (params) =>
-        profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
+        this.profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
           profiles ? profiles.find(prof => prof.OldProfileId === +params['id']) : undefined)
       )
       .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
-      .do(() => this.Store.dispatch(new ResetAll())) // Clean up the State and let only the info
+      .do(() => this.ResetView()) // Clean up the State and let only the info
       .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
   }
 
   // Private Helpers
+
+  private ResetView() {
+    this.ResetResume();
+    this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
+    this.Store.dispatch(new ResetAll());
+  }
+
+  private ResetResume() {
+    this.totalToday = new BehaviorSubject(0);
+    this.totalGeneral = new BehaviorSubject(0);
+    this.newContacts = new BehaviorSubject(0);
+    this.branchIndex = new BehaviorSubject(0);
+  }
 
   private SaveHistoricEntries(entries: any[]) {
     this.chartData = updateObject(this.chartData, {
