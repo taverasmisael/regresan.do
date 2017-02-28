@@ -5,6 +5,7 @@ import { ActionEnhanced } from '@models/action.enhanced';
 import { UserProfile} from '@models/userprofile';
 import { RequestError } from '@models/request-error';
 import { Pregunta } from '@models/pregunta';
+import { CloseAnswer } from '@models/answer.close';
 import { OpenAnswer } from '@models/answer.open';
 import { KPI } from '@models/kpi';
 import { StaffRanking } from '@models/staff-ranking';
@@ -119,7 +120,7 @@ export class SuccessCloseAnswer implements ActionEnhanced {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_S;
   public section = getSectionName(this.type);
 
-  constructor(public payload: {answer: Pregunta[], question: string}) { }
+  constructor(public payload: {answer: CloseAnswer[], question: string}) { }
 }
 
 export class SuccessKPI implements ActionEnhanced {

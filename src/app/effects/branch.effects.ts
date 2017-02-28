@@ -7,6 +7,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { AppState } from '@models/states/appstate';
 import { APIRequestParams, APIRequestUser } from '@models/apiparams';
 import { UserProfile } from '@models/userprofile';
+import { CloseAnswer } from '@models/answer.close';
 import { BranchState } from '@models/states/branch';
 import { HistoricEntry } from '@models/historic-entry';
 import { KPI } from '@models/kpi';
@@ -37,7 +38,7 @@ export class BranchEffects {
     .map(action => action.payload)
     .mergeMap(payload => {
       return this.respuestasService.getFromProfile(payload)
-        .map<Pregunta[]>(res => res['RespuestasPreguntas']) // return only the real data
+        .map<CloseAnswer[]>(res => res['RespuestasPreguntas']) // return only the real data
         .map(answer => new SuccessCloseAnswer({answer: answer, question: payload.pregunta}))
         .catch(err => this.HandleError(err, ErrorCloseAnswer));
     });

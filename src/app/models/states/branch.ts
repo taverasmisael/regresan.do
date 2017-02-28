@@ -4,7 +4,8 @@ import { KPI } from '@models/kpi';
 import { Filter } from '@models/filter';
 import { HistoricEntry } from '@models/historic-entry';
 import { StaffRanking } from '@models/staff-ranking';
-import { RespuestaAbierta } from '@models/respuesta-abierta';
+import { OpenAnswer } from '@models/respuesta-abierta';
+import { CloseAnswer } from '@models/answer.close';
 import { StateRequest } from '@models/states/state-request';
 import { APIRequestUser } from '@models/apiparams';
 
@@ -14,8 +15,8 @@ export class BranchState {
   info: UserProfile
   openQuestions: Pregunta[]
   closeQuestions: Pregunta[]
-  openAnswers: RespuestaAbierta[]
-  closeAnswers: Pregunta[]
+  openAnswers: OpenAnswer[]
+  closeAnswers: CloseAnswer[]
   kpis: KPI[]
   historicData: HistoricEntry[]
   staffRanking: StaffRanking[]
