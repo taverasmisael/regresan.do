@@ -32,8 +32,8 @@ export function BranchCases() {
     [BRANCH_REQ_STAFF_RANKING_R]: requesting,
     [BRANCH_REQ_HISTORIC_R]: requesting,
     [BRANCH_REQ_QUESTIONS_E]: requestError,
-    [BRANCH_REQ_AOPEN_E]: requestError,
-    [BRANCH_REQ_ACLOSE_E]: requestError,
+    [BRANCH_REQ_AOPEN_E]: requestAnswerError,
+    [BRANCH_REQ_ACLOSE_E]: requestAnswerError,
     [BRANCH_REQ_KPI_E]: requestError,
     [BRANCH_REQ_STAFF_RANKING_E]: requestError,
     [BRANCH_REQ_HISTORIC_E]: requestError,
@@ -80,6 +80,17 @@ function requestingAnswer(state: BranchState, action: ActionEnhanced): BranchSta
     requests: updateObject(state.requests, { [section]: [
       ...state.requests[section],
       new StateRequest(undefined, true, message, payload.pregunta)
+    ] })
+  });
+}
+
+function requestAnswerError(state: BranchState, action: ActionEnhanced): BranchState {
+  const { payload, message, section } = action;
+
+  return updateObject(state, {
+    requests: updateObject(state.requests, { [section]: [
+      ...state.requests[section],
+      new StateRequest(payload, false, '', payload.pregunta)
     ] })
   });
 }
