@@ -1,12 +1,21 @@
 import * as moment from 'moment';
 import { merge, groupBy } from './arrays';
+import { ratingPalette } from '@utilities/colors';
+import { ChartData } from '@models/chart-data';
+
+const ratingColors = ratingPalette(true);
+const ratingColorsArray = ratingPalette(false);
 
 export function makeDonughtChart(prev = [], curr) {
   return [...prev, Object.assign({}, prev, {value: curr.Total, label: curr.Sucursal})]
 }
 
-export function makePieChart(prev = [[], []], curr) {
-  return [[...prev[0], curr.Respuesta], [...prev[1], curr.Total]];
+export function makePieChart(answer: any) {
+  const brute = answer.map(aw => [aw.Respuesta, aw.Total]);
+  const labels = brute.reduce((prev, curr) => [...prev, curr[0]], []);
+  const data = brute.reduce((prev, curr) => [...prev, curr[1]], []);
+  const colors = labels.map((el, i) => ratingColors[el] || ratingColorsArray[i]);
+  return new ChartData(labels, data, colors, answer[0].Pregunta);
 }
 
 export function mapPieChart(prev = [[], []], curr) {

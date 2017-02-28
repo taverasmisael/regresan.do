@@ -12,3 +12,4 @@ export const groupBy = (array: any[], f: (el: any) => any[]) => {
     return Object.keys(groups).map(group => groups[group])
   }
 export const sortResDate = (prev, curr) => moment(prev.Fecha).isSameOrAfter(moment(curr.Fecha)) ? 1 : -1;
+export const findByObjectId = <T>(list: T[], id: number | string): T => list.find(el => el['id'] === id);
