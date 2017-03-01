@@ -56,19 +56,19 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     let { start, end } = this.filters;
-    const altStart = moment.unix(+start).format('MM/DD/YYYY');
-    const altEnd = moment.unix(+end).format('MM/DD/YYYY');
+    const altStart = moment.unix(+start).format('YYYY-MM-DD');
+    const altEnd = moment.unix(+end).format('YYYY-MM-DD');
 
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
     this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart});
     this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd});
+    console.log(altStart, altEnd)
 
-    this.filterFechaInicio = new FormControl(start, [Validators.required]);
-    this.filterFechaFin = new FormControl(end, [Validators.required]);
+    this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
+    this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
 
     this.lastFilter = this.filters;
     this.setActivesFilters();
-    console.log(this.filterFechaFin);
     this.filterForm = this.fb.group({
       start: this.filterFechaInicio,
       end: this.filterFechaFin
@@ -102,7 +102,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
   }
 
   private setActivesFilters() {
-    console.log(this.lastFilter);
     this.activeFilters = Object.keys(this.lastFilter).length;
   }
 
