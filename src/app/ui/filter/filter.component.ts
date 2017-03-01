@@ -18,12 +18,14 @@ import {
   Validators
 } from '@angular/forms';
 
+import * as moment from 'moment';
 import compare from 'just-compare';
 
 import { UserProfile } from '@models/userprofile';
 import { DateFilter } from '@models/filter-date';
 import { FlatpickrOptions } from '@thirdparty/flatpickr/models';
-import { DateValidator } from '@utilities/validators/date.validator';
+import { updateObject } from '@utilities/objects';
+
 
 @Component({
   selector: 'app-filter',
@@ -41,26 +43,35 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterForm: FormGroup;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
-  public flatpickrOptions: FlatpickrOptions;
   public lastFilter: DateFilter;
   public activeFilters: number;
+  public startOptions: FlatpickrOptions;
+  public endOptions: FlatpickrOptions;
+
+  private flatpickrOptions: FlatpickrOptions;
 
   @HostBinding('class.mdl-grid') isGrid = true;
   @HostBinding('class.mdl-grid--no-spacing') noSpacing = true;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.flatpickrOptions = { dateFormat: 'd/m/Y' };
     let { start, end } = this.filters;
-    this.filterFechaInicio = new FormControl(start, [Validators.required, DateValidator.spanishDate]);
-    this.filterFechaFin = new FormControl(end, [Validators.required, DateValidator.spanishDate]);
+    const altStart = moment.unix(+start).format('MM/DD/YYYY');
+    const altEnd = moment.unix(+end).format('MM/DD/YYYY');
+
+    this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
+    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart});
+    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd});
+
+    this.filterFechaInicio = new FormControl(start, [Validators.required]);
+    this.filterFechaFin = new FormControl(end, [Validators.required]);
 
     this.lastFilter = this.filters;
     this.setActivesFilters();
-
+    console.log(this.filterFechaFin);
     this.filterForm = this.fb.group({
-      fechaInicio: this.filterFechaInicio,
-      fechaFin: this.filterFechaFin
+      start: this.filterFechaInicio,
+      end: this.filterFechaFin
     });
   }
 
@@ -91,6 +102,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   }
 
   private setActivesFilters() {
+    console.log(this.lastFilter);
     this.activeFilters = Object.keys(this.lastFilter).length;
   }
 

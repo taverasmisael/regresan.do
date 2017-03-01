@@ -177,9 +177,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     const dispatch = (query: APIRequestParams) => this.Store.dispatch(new ApplyCurrentQuery(query));
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
     const dispatchNavigate = (query: APIRequestParams) => {
-      this.Store.dispatch(new ResetButInfo()); // UNCOMMITED:
       dispatch(query);
       navigate(query);
+      this.ResetButInfo();
       this.FetchAll();
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
@@ -258,8 +258,14 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private ResetView() {
     this.ResetResume();
-    this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
     this.Store.dispatch(new ResetAll());
+    this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
+  }
+
+  private ResetButInfo() {
+    this.ResetResume();
+    this.Store.dispatch(new ResetButInfo());
+    this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
   }
 
   private ResetResume() {
