@@ -1,32 +1,32 @@
-<app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
+<app-filter (applyFilters)="ApplyQueryParams($event)" [filters]="activeBranch.currentQuery"></app-filter>
 <div class="info__header mdl-grid">
   <div class="headline mdl-cell mdl-cell--12-col">
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary">
       <i class="material-icons mdl-color-text--primary-contrast">arrow_back</i>
     </a>
-    <h3 id="sucursales-list" class="title mdl-color-text--primary">{{ SucursalState.info.Title }}
+    <h3 id="branch-list" class="title mdl-color-text--primary">{{ activeBranch.info.Title }}
       <i class="material-icons" style="font-size: 1em;">arrow_drop_down</i>
     </h3>
   </div>
   <app-chart-card
-    class="mdl-cell mdl-cell--9-col mdl-card mdl-shadow--2dp"
+    class="mdl-cell mdl-cell--9-col mdl-card mdl-shadow--2dp mdl-cell--order-2 mdl-cell--order-1-desktop"
     style="font-size: 1.5rem;"
     chartType="line"
     chartTitle="Histórico de Encuestas"
-    loadingText="Cargando Histórico de Encuestas"
-    (failed)="loadHistoricoEncuestas(QuestionsQuery)"
-    [loading]="SucursalState.historicoEncuestas.loading"
-    [errorText]="SucursalState.historicoEncuestas.errorText"
-    [chartLabels]="SucursalState.historicoEncuestas.labels"
-    [chartData]="SucursalState.historicoEncuestas.data"
-    [chartColors]="SucursalState.historicoEncuestas.colors">
+    (failed)="FetchHistoric()"
+    [loading]="activeBranch.requests.HISTORIC.isLoading && !chartData.historic.labels.length"
+    [loadingText]="activeBranch.requests.HISTORIC.text || 'Cargando Histórico de Encustas'"
+    [errorText]="activeBranch.requests.HISTORIC.error ? activeBranch.requests.HISTORIC.error.text : ''"
+    [chartLabels]="chartData.historic.labels"
+    [chartData]="chartData.historic.data"
+    [chartColors]="chartData.historic.colors">
   </app-chart-card>
   <app-totales-container
-    class="mdl-cell mdl-cell--3-col-desktop mdl-cell--8-col-tablet"
+    class="mdl-cell mdl-cell--3-col-desktop mdl-cell--8-col-tablet mdl-cell--order-1 mdl-cell--order-2-desktop"
     [total]="totalGeneral | async"
-    [hoy]="totalHoy | async"
-    [indice]="indiceSucursal | async"
-    [contactos]="nuevosContactos | async"
+    [hoy]="totalToday | async"
+    [indice]="branchIndex | async"
+    [contactos]="newContacts | async"
     tipoIndice="de Sucursal"
     fullCards="true">
   </app-totales-container>
@@ -36,62 +36,64 @@
     <app-staf-ranking-card
       class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col"
       style="font-size: 1.5rem;"
-      (failed)="loadRankingCamareros(QuestionsQuery)"
-      [currentFilter]="SucursalState.filters"
-      [errorText]="questionError"
-      [loading]="loadingRC"
-      [staffData]="SucursalState.staffRanking"
+      (failed)="FetchStaffRanking()"
+      [currentFilter]="activeBranch.currentQuery"
+      [errorText]="activeBranch.requests.STAFF.error ? activeBranch.requests.STAFF.error.text : ''"
+      [loading]="activeBranch.requests.STAFF.isLoading"
+      [staffData]="activeBranch.staffRanking"
     ></app-staf-ranking-card>
     <app-kpi-card
       class="mdl-cell mdl-cell--8-col"
-      [indiceSatisfaccion]="indiceSucursal | async"
-      [kpis]="SucursalState.kpis"
-      [loading]="SucursalState.loading"
-      [errorText]="questionError"
+      [indiceSatisfaccion]="branchIndex | async"
+      [kpis]="activeBranch.kpis"
+      [loading]="activeBranch.requests.KPI.isLoading"
+      [errorText]="activeBranch.requests.KPI.error ? activeBranch.requests.KPI.error.text : ''"
     ></app-kpi-card>
   </div>
 </section>
 <section class="section section--charts">
   <div class="mdl-grid main-content">
     <div class="mdl-cell mdl-cell--12-col qa-holder">
-      <div class="mdl-grid charts-list" *ngIf="!SucursalState.loading || SucursalState.closeQuestions.length">
+      <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
         <app-chart-card
           class="mdl-cell mdl-cell--4-col-desktop mdl-card"
-          *ngFor="let q of SucursalState.closeQuestions; let i = index;"
+          *ngFor="let q of activeBranch.closeQuestions; let i = index;"
           chartType="pie"
           loadingText="Respuesta {{ i + 1 }}"
-          (failed)="loadCloseAnswer(i)"
-          [errorText]="chartErrors[i]"
+          (failed)="LoadCloseAnswer(q.idPregunta)"
+          [errorText]="GetRequesAnswerInfo(q.idPregunta).error?.text"
+          [loading]="GetRequesAnswerInfo(q.idPregunta).isLoading && !GetCloseAChart(q.pregunta)?.labels.length"
           [chartTitle]="q.pregunta"
-          [chartLabels]="SucursalState.answerCharts[q.idPregunta][0]"
-          [chartData]="SucursalState.answerCharts[q.idPregunta][1]" [chartColors]="SucursalState.answerCharts[q.idPregunta][2]">
+          [chartLabels]="GetCloseAChart(q.pregunta)?.labels || []"
+          [chartData]="GetCloseAChart(q.pregunta)?.data || []"
+          [chartColors]="GetCloseAChart(q.pregunta)?.colors || []">
         </app-chart-card>
       </div>
-      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="SucursalState.loading && !SucursalState.closeQuestions.length">
+      <!-- Questions Loading Indicator -->
+      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
         <div class="content">
           <div class="mdl-spinner mdl-js-spinner is-active"></div>
-          <h4 class="mdl-typography--text-center">{{ SucursalState.currentAction }}</h4>
+          <h4 class="mdl-typography--text-center">{{ activeBranch.requests.QUESTIONS.text }}</h4>
         </div>
       </div>
-      <!-- Questions Loading Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && !questionError">
+      <!-- Empty Response Indicator -->
+      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && !activeBranch.requests.QUESTIONS.error">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
           <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
         </h4>
       </div>
-      <!-- Empty Response Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!SucursalState.loading && !SucursalState.closeQuestions.length && questionError">
+      <!-- Error Response Indicator -->
+      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && activeBranch.requests.QUESTIONS.error">
         <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-          <i class="material-icons">error</i><br /> {{ questionError }}
+          <i class="material-icons">error</i><br /> {{ activeBranch.requests.QUESTIONS.error.text }}
         </h4>
       </div>
-      <!-- Error Response Indicator -->
     </div>
   </div>
 </section>
 <section class="section">
   <div class="mdl-grid">
-    <app-card
+    <!--<app-card
       class="mdl-cell mdl-typography--text-center"
       [class.mdl-cell--12-col]="SucursalState.openQuestions.length === 1"
       [class.mdl-cell--6-col]="SucursalState.openQuestions.length === 2"
@@ -109,15 +111,11 @@
           [loading]="SucursalState.loading"
           [answers]="getMyAnswers(q.idPregunta)">
         </app-answers-table>
-    </app-card>
+    </app-card>-->
   </div>
 </section>
-
-<!-- tooltips, menu and hidden stuffs -->
-<div class="mdl-tooltip mdl-tooltip--right" for="btn-back"> Volver a la lista de sucursales </div>
-<div class="mdl-tooltip mdl-tooltip--left" for="sucursales-list"> Lista de Sucursales </div>
-<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="sucursales-list">
-  <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " [routerLink]="['../', prof.OldProfileId]">
+<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
+  <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
     {{ prof.Title }}
   </a>
 </ul>

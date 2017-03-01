@@ -1,126 +1,172 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment';
+import compare from 'just-compare';
 
-import { PreguntasService } from '../../../services/preguntas.service';
+import { PreguntasService } from '@services/preguntas.service';
 
-import { ActionTypes } from '../../../actions/auth.actions';
+import { ActionTypes } from '@actions/auth.actions';
 
-import { UserProfile } from '../../../models/userprofile';
-import { AppState } from '../../../models/states/appstate';
-import { AuthState } from '../../../models/states/authstate';
-import { APIRequestParams } from '../../../models/apiparams';
-import { Filter } from '../../../models/filter';
+import { UserProfile } from '@models/userprofile';
+import { AppState } from '@models/states/appstate';
+import { AuthState } from '@models/states/authstate';
+import { APIRequestParams } from '@models/apiparams';
+import { DateFilter } from '@models/filter-date';
 
-import { merge, sum } from '../../../utilities/arrays';
-import { mapPieChart, TotalPorDiaLineal } from '../../../utilities/respuestas';
-import { gamaRegresando } from '../../../utilities/colors';
+import { merge, sum } from '@utilities/arrays';
+import { updateObject } from '@utilities/objects';
+import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas';
+import { gamaRegresando } from '@utilities/colors';
 
+const today = moment().unix().toString();
+const aWeekAgo = moment().subtract(1, 'week').unix().toString();
 
 @Component({
   selector: 'app-dashboard-overview',
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit {
+export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public userProfiles: UserProfile[];
+  public currentQuery: DateFilter;
 
-  public totalGeneral = new BehaviorSubject(0);
-  public totalHoy = new BehaviorSubject(0);
-  public nuevosContactos = new BehaviorSubject(0);
-  public indiceSucursal = new BehaviorSubject(0);
-  public currentFilters: Filter;
-  public query: APIRequestParams;
-  public encuestasSucursalesError: string;
-  public encuestasSucursalesData: number[] = [];
-  public encuestasSucursalesLabels: string[] = [];
-  public encuestasSucursalesLoading: Boolean;
-  public historicoEncuestasLoading: Boolean;
-  public historicoEncuestasError: string;
-  public historicoEncuestasLabels: string[] = [];
-  public historicoEncuestasData: any[] = [];
-  public COLORS: any;
+  public totalToday: BehaviorSubject<number>;
+  public totalGeneral: BehaviorSubject<number>;
+  public newContacts: BehaviorSubject<number>;
+  public branchIndex: BehaviorSubject<number>;
+
+  public generalSurveyError: string;
+  public generalSurveyData: number[];
+  public generalSurveyLabels: string[];
+  public generalSurveyLoading: Boolean;
+  public historicSurveyLoading: Boolean;
+  public historicSurveyError: string;
+  public historicSurveyLabels: string[];
+  public historicSurveyData: any[];
+  public branchColors: any;
 
   private AuthState: Observable<AuthState>;
-  private today: moment.Moment;
-  private aWeekAgo: moment.Moment;
+  private subProfile: Subscription;
+  private subFetch: Subscription;
+  private subRoute: Subscription;
+  private fetchEvent: EventEmitter<any>;
 
-  constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
+  constructor(private router: Router, private Route: ActivatedRoute,
+    private preguntas: PreguntasService, private store: Store<AppState>) { }
 
   ngOnInit() {
+    this.fetchEvent = new EventEmitter();
     this.AuthState = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('auth')
       .pluck<AuthState>('auth');
 
-    this.AuthState
+    this.subFetch = this.fetchEvent.subscribe((query) => this.FetchAll(query))
+
+    this.subProfile = this.AuthState
       .pluck<UserProfile[]>('currentUser', 'Profiles')
       .subscribe(profiles => this.userProfiles = profiles);
 
-    this.today = moment();
-    this.aWeekAgo = moment().subtract(7, 'days');
-    this.currentFilters = {
-      fechaInicio: this.aWeekAgo.format('DD/MM/YYYY'),
-      fechaFin: this.today.format('DD/MM/YYYY')
-    };
-    this.query = {
-      start: this.aWeekAgo.unix().toString(),
-      end: moment().unix().toString(),
-    };
+    this.subRoute = this.Route.queryParams.subscribe((params) => this.ApplyFilters(params))
 
-    this.COLORS = gamaRegresando();
+    this.totalToday = new BehaviorSubject(0);
+    this.totalGeneral = new BehaviorSubject(0);
+    this.newContacts = new BehaviorSubject(0);
+    this.branchIndex = new BehaviorSubject(0);
+
+    this.generalSurveyData = [];
+    this.generalSurveyLabels = [];
+    this.historicSurveyLabels = [];
+    this.historicSurveyData = [];
+
+    this.branchColors = gamaRegresando();
   }
   ngAfterViewInit() {
-    this.loadEncuestasSucursales(this.query);
-    this.loadHistoricoEncuestas(this.query);
-    this.loadResumen(this.query);
+    console.log('AfterViewInit...')
   }
 
-  applyFilters(filter: Filter) {
-    this.query = {
-      start: moment(filter.fechaInicio, 'DD/MM/YYYY').unix().toString(),
-      end: moment(filter.fechaFin, 'DD/MM/YYYY').hours(18).unix().toString()
+  ngOnDestroy() {
+    this.subProfile.unsubscribe();
+    this.subFetch.unsubscribe();
+  }
+
+  public ApplyFilters(filter: Params) {
+    const filterStart = filter['start'];
+    const filterEnd = filter['end'];
+    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
+    const dispatch = (query: APIRequestParams) => this.fetchEvent.emit(query);
+    const dispatchNavigate = (query: APIRequestParams) => {
+      this.currentQuery = updateObject(this.currentQuery, query);
+      dispatch(query);
+      navigate(query);
     }
-
-    this.loadEncuestasSucursales(this.query);
-    this.loadHistoricoEncuestas(this.query);
-    this.loadResumen(this.query);
+    const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
+    const applyPartial = (s?: string, e?: string) => {
+      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString();
+      let end = e || moment.unix(+s).add(1, 'week').unix().toString();
+      dispatchNavigate({ start, end });
+    }
+    const DateFilter = {
+      exists: (params) => params['start'] && params['end'],
+      areNumeric: (params) => +params['start'] && +params['end'],
+      isNumeric: (slice: string, params) => +params[slice],
+      isUnix: (date) => moment.unix(date).isValid() && date
+    }
+    const queryParams = {
+      start: DateFilter.isUnix(filterStart || undefined) ||  moment(filterStart).format('X'),
+      end: DateFilter.isUnix(filterEnd || undefined) ||  moment(filterEnd).format('X'),
+    }
+    if (compare(filter, {})) {
+      applyDefault();
+    } else if (!DateFilter.exists(queryParams)) { // If there's not an DateFilter applyed
+      applyDefault();
+    } else if (!DateFilter.areNumeric(queryParams)) {
+      applyDefault();
+    } else if (DateFilter.areNumeric(queryParams)) {
+      applyPartial(queryParams.start, queryParams.end)
+    } else if (DateFilter.isNumeric('start', queryParams) && !DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(queryParams.start);
+    } else if (!DateFilter.isNumeric('start', queryParams) && DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(undefined, queryParams.end);
+    }
   }
 
-  loadEncuestasSucursales(query: APIRequestParams) {
-    this.encuestasSucursalesLoading = true;
-    this.encuestasSucursalesError = '';
+  public LoadGeneralSurvey(query: APIRequestParams) {
+    this.generalSurveyLoading = true;
+    this.generalSurveyError = '';
     this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
         if (data[1].length) {
-          this.encuestasSucursalesLabels = data[0];
-          this.encuestasSucursalesData = data[1];
-          this.encuestasSucursalesLoading = false;
+          this.generalSurveyLabels = data[0];
+          this.generalSurveyData = data[1];
+          this.generalSurveyLoading = false;
         } else {
-          this.encuestasSucursalesLoading = false;
-          this.encuestasSucursalesError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
+          this.generalSurveyLoading = false;
+          this.generalSurveyError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
-        this.encuestasSucursalesLoading = false;
+        this.generalSurveyLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.encuestasSucursalesError = 'Error Cargando Total de Sucursales';
+          this.generalSurveyError = 'Error Cargando Total de Sucursales';
         }
       }
       );
   }
 
-  loadHistoricoEncuestas(query: APIRequestParams) {
-    this.historicoEncuestasLoading = true;
-    this.historicoEncuestasError = '';
+  public LoadHistoricSurvey(query: APIRequestParams) {
+    this.historicSurveyLoading = true;
+    this.historicSurveyError = '';
 
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia'].sort((prev, curr) => {
@@ -131,40 +177,49 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(
       data => {
         if (data[1].length) {
-          this.historicoEncuestasLabels = data[0];
-          this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-          this.historicoEncuestasLoading = false;
+          this.historicSurveyLabels = data[0];
+          this.historicSurveyData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+          this.historicSurveyLoading = false;
         } else {
-          this.historicoEncuestasLoading = false;
-          this.historicoEncuestasError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
+          this.historicSurveyLoading = false;
+          this.historicSurveyError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
-        this.historicoEncuestasLoading = false;
+        this.historicSurveyLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.historicoEncuestasError = 'Error Cargando Historico de Encuestas';
+          this.historicSurveyError = 'Error Cargando Historico de Encuestas';
         }
       }
       );
   }
 
-  loadResumen(query: APIRequestParams) {
+  public LoadResumen(query: APIRequestParams) {
     this.preguntas.getResumen(query)
       .map(res => res['Cabecera'])
       .subscribe(res => {
         if (res) {
-          this.totalHoy.next(res['TotalEncuestadosHoy']);
+          this.totalToday.next(res['TotalEncuestadosHoy']);
           this.totalGeneral.next(res['TotalEncuestas']);
-          this.nuevosContactos.next(res['NuevosContactos']);
-          this.indiceSucursal.next(res['IndiceSucursal']);
+          this.newContacts.next(res['NuevosContactos']);
+          this.branchIndex.next(res['IndiceSucursal']);
         } else {
-           this.totalHoy.next(0);
+          this.totalToday.next(0);
           this.totalGeneral.next(0);
-          this.nuevosContactos.next(0);
-          this.indiceSucursal.next(0);
+          this.newContacts.next(0);
+          this.branchIndex.next(0);
         }
       });
+  }
+
+  // Private Helpers
+
+  private FetchAll(query: APIRequestParams) {
+    this.currentQuery = updateObject(this.currentQuery, query);
+    this.LoadGeneralSurvey(query);
+    this.LoadHistoricSurvey(query);
+    this.LoadResumen(query);
   }
 }

@@ -1,19 +1,28 @@
 import * as moment from 'moment';
 import { merge, groupBy } from './arrays';
+import { ratingPalette } from '@utilities/colors';
+import { ChartData } from '@models/chart-data';
+
+const ratingColors = ratingPalette(true);
+const ratingColorsArray = ratingPalette(false);
 
 export function makeDonughtChart(prev = [], curr) {
   return [...prev, Object.assign({}, prev, {value: curr.Total, label: curr.Sucursal})]
 }
 
-export function makePieChart(prev = [[], []], curr) {
-  return [[...prev[0], curr.Respuesta], [...prev[1], curr.Total]];
+export function makePieChart(answer: any) {
+  const brute = answer.map(aw => [aw.Respuesta, aw.Total]);
+  const labels = brute.reduce((prev, curr) => [...prev, curr[0]], []);
+  const data = brute.reduce((prev, curr) => [...prev, curr[1]], []);
+  const colors = labels.map((el, i) => ratingColors[el] || ratingColorsArray[i]);
+  return new ChartData(labels, data, colors, answer[0].Pregunta);
 }
 
 export function mapPieChart(prev = [[], []], curr) {
   return [[...prev[0], curr.Sucursal], [...prev[1], curr.Total]];
 }
 
-export function TotalPorDiaLineal(entries: any[], nombre?: string) {
+export function TotalPorDiaLineal(entries: any[]) {
 
   let labels = []; // Globally store the Labels
   let sucursales = []; // Globally store the Sucursal's name
@@ -21,7 +30,6 @@ export function TotalPorDiaLineal(entries: any[], nombre?: string) {
   const mapped = entries.map(mapData); // Reject the unneded keys
   const transformedData = groupBy(mapped, item => [item.row]) // Group them by date
     .reduce(mockMissingData, []) // Create an entry with value 0 in the date where 'Sucursal' is missing
-    .map(el => nombre ? el.filter(curr => curr.serie === nombre) : el) // In case we want an specific 'Sucursal'
     .reduce(transformSeries, []) // Map the data as more simple objects for Chart
     .reduce(merge, []);
   const groupedData = groupBy(transformedData, item => [item.label]) // Group them by 'Sucursal'

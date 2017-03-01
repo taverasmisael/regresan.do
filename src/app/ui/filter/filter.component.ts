@@ -18,12 +18,14 @@ import {
   Validators
 } from '@angular/forms';
 
+import * as moment from 'moment';
 import compare from 'just-compare';
 
-import { UserProfile } from '../../models/userprofile';
-import { Filter } from '../../models/filter';
-import { FlatpickrOptions } from '../../thirdparty/flatpickr/models';
-import { DateValidator } from '../../utilities/validators/date.validator';
+import { UserProfile } from '@models/userprofile';
+import { DateFilter } from '@models/filter-date';
+import { FlatpickrOptions } from '@thirdparty/flatpickr/models';
+import { updateObject } from '@utilities/objects';
+
 
 @Component({
   selector: 'app-filter',
@@ -33,7 +35,7 @@ import { DateValidator } from '../../utilities/validators/date.validator';
 })
 export class FilterComponent implements OnInit, AfterViewInit {
 
-  @Input() filters: Filter;
+  @Input() filters: DateFilter;
   @Output() applyFilters = new EventEmitter();
 
   @ViewChild('filterDialog') filterDialog: ElementRef;
@@ -41,26 +43,34 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterForm: FormGroup;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
-  public flatpickrOptions: FlatpickrOptions;
-  public lastFilter: Filter;
+  public lastFilter: DateFilter;
   public activeFilters: number;
+  public startOptions: FlatpickrOptions;
+  public endOptions: FlatpickrOptions;
+
+  private flatpickrOptions: FlatpickrOptions;
 
   @HostBinding('class.mdl-grid') isGrid = true;
   @HostBinding('class.mdl-grid--no-spacing') noSpacing = true;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.flatpickrOptions = { dateFormat: 'd/m/Y' };
-    let {fechaInicio: inicio, fechaFin: fin } = this.filters;
-    this.filterFechaInicio = new FormControl(inicio, [Validators.required, DateValidator.spanishDate]);
-    this.filterFechaFin = new FormControl(fin, [Validators.required, DateValidator.spanishDate]);
+    let { start, end } = this.filters;
+    const altStart = moment.unix(+start).format('YYYY-MM-DD');
+    const altEnd = moment.unix(+end).format('YYYY-MM-DD');
+
+    this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
+    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart});
+    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd});
+
+    this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
+    this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
 
     this.lastFilter = this.filters;
     this.setActivesFilters();
-
     this.filterForm = this.fb.group({
-      fechaInicio: this.filterFechaInicio,
-      fechaFin: this.filterFechaFin
+      start: this.filterFechaInicio,
+      end: this.filterFechaFin
     });
   }
 
