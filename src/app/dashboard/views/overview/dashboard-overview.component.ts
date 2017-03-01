@@ -29,26 +29,24 @@ import { gamaRegresando } from '@utilities/colors';
 export class DashboardOverviewComponent implements OnInit, AfterViewInit {
 
   public userProfiles: UserProfile[];
+  public currentQuery: DateFilter;
 
-  public totalGeneral = new BehaviorSubject(0);
-  public totalHoy = new BehaviorSubject(0);
-  public nuevosContactos = new BehaviorSubject(0);
-  public indiceSucursal = new BehaviorSubject(0);
-  public currentFilters: DateFilter;
-  public query: APIRequestParams;
-  public encuestasSucursalesError: string;
-  public encuestasSucursalesData: number[] = [];
-  public encuestasSucursalesLabels: string[] = [];
-  public encuestasSucursalesLoading: Boolean;
-  public historicoEncuestasLoading: Boolean;
-  public historicoEncuestasError: string;
-  public historicoEncuestasLabels: string[] = [];
-  public historicoEncuestasData: any[] = [];
-  public COLORS: any;
+  public totalToday: BehaviorSubject<number>;
+  public totalGeneral: BehaviorSubject<number>;
+  public newContacts: BehaviorSubject<number>;
+  public branchIndex: BehaviorSubject<number>;
+
+  public generalSurveyError: string;
+  public generalSurveyData: number[];
+  public generalSurveyLabels: string[];
+  public generalSurveyLoading: Boolean;
+  public historicSurveyLoading: Boolean;
+  public historicSurveyError: string;
+  public historicSurveyLabels: string[];
+  public historicSurveyData: any[];
+  public branchColors: any;
 
   private AuthState: Observable<AuthState>;
-  private today: moment.Moment;
-  private aWeekAgo: moment.Moment;
 
   constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
 
@@ -61,66 +59,67 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .pluck<UserProfile[]>('currentUser', 'Profiles')
       .subscribe(profiles => this.userProfiles = profiles);
 
-    this.today = moment();
-    this.aWeekAgo = moment().subtract(7, 'days');
-    this.currentFilters = {
-      start: this.aWeekAgo.format('DD/MM/YYYY').toString(),
-      end: this.today.format('DD/MM/YYYY').toString()
-    };
-    this.query = {
-      start: this.aWeekAgo.unix().toString(),
+    this.totalToday = new BehaviorSubject(0);
+    this.totalGeneral = new BehaviorSubject(0);
+    this.newContacts = new BehaviorSubject(0);
+    this.branchIndex = new BehaviorSubject(0);
+
+    this.generalSurveyData = [];
+    this.generalSurveyLabels = [];
+    this.historicSurveyLabels = [];
+    this.historicSurveyData = [];
+
+    this.currentQuery = {
+      start: moment().subtract(1, 'week').unix().toString(),
       end: moment().unix().toString(),
     };
 
-    this.COLORS = gamaRegresando();
+    this.branchColors = gamaRegresando();
   }
   ngAfterViewInit() {
-    this.loadEncuestasSucursales(this.query);
-    this.loadHistoricoEncuestas(this.query);
-    this.loadResumen(this.query);
+    this.FetchAll(this.currentQuery);
   }
 
-  applyFilters(filter: DateFilter) {
-    this.query = {
-      start: moment(filter.start, 'DD/MM/YYYY').unix().toString(),
-      end: moment(filter.end, 'DD/MM/YYYY').hours(18).unix().toString()
-    }
+  public ApplyFilters(filter: DateFilter) {
+    const { start, end } = filter;
+    this.currentQuery = {
+      start: moment.unix(+start).isValid() ? start : moment(start).format('X'),
+      end: moment.unix(+end).isValid() ? end : moment(end).format('X')
+    };
 
-    this.loadEncuestasSucursales(this.query);
-    this.loadHistoricoEncuestas(this.query);
-    this.loadResumen(this.query);
+    this.FetchAll(this.currentQuery);
   }
 
-  loadEncuestasSucursales(query: APIRequestParams) {
-    this.encuestasSucursalesLoading = true;
-    this.encuestasSucursalesError = '';
+  public LoadGeneralSurvey(query: APIRequestParams) {
+    this.generalSurveyLoading = true;
+    this.generalSurveyError = '';
     this.preguntas.getAll(query)
       .map(res => res['Preguntas'].reduce(mapPieChart, [[], []]))
       .subscribe(
       data => {
         if (data[1].length) {
-          this.encuestasSucursalesLabels = data[0];
-          this.encuestasSucursalesData = data[1];
-          this.encuestasSucursalesLoading = false;
+          this.generalSurveyLabels = data[0];
+          this.generalSurveyData = data[1];
+          this.generalSurveyLoading = false;
         } else {
-          this.encuestasSucursalesLoading = false;
-          this.encuestasSucursalesError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
+          this.generalSurveyLoading = false;
+          this.generalSurveyError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
-        this.encuestasSucursalesLoading = false;
+        this.generalSurveyLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.encuestasSucursalesError = 'Error Cargando Total de Sucursales';
+          this.generalSurveyError = 'Error Cargando Total de Sucursales';
         }
       }
       );
   }
 
-  loadHistoricoEncuestas(query: APIRequestParams) {
-    this.historicoEncuestasLoading = true;
-    this.historicoEncuestasError = '';
+  public LoadHistoricSurvey(query: APIRequestParams) {
+    this.historicSurveyLoading = true;
+    this.historicSurveyError = '';
 
     this.preguntas.getTotalPorDia(query)
       .map(res => TotalPorDiaLineal(res['Encuestas']['TotalesxSucursalxDia'].sort((prev, curr) => {
@@ -131,40 +130,48 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
       .subscribe(
       data => {
         if (data[1].length) {
-          this.historicoEncuestasLabels = data[0];
-          this.historicoEncuestasData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
-          this.historicoEncuestasLoading = false;
+          this.historicSurveyLabels = data[0];
+          this.historicSurveyData = data[1].sort((prev, curr) => prev.label > curr.label); // The API doesn't sort this response
+          this.historicSurveyLoading = false;
         } else {
-          this.historicoEncuestasLoading = false;
-          this.historicoEncuestasError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
+          this.historicSurveyLoading = false;
+          this.historicSurveyError = 'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo';
         }
       },
       error => {
-        this.historicoEncuestasLoading = false;
+        this.historicSurveyLoading = false;
         if (error.status === 401) {
           this.store.dispatch({ type: ActionTypes.LOGOUT_START });
         } else {
-          this.historicoEncuestasError = 'Error Cargando Historico de Encuestas';
+          this.historicSurveyError = 'Error Cargando Historico de Encuestas';
         }
       }
       );
   }
 
-  loadResumen(query: APIRequestParams) {
+  public LoadResumen(query: APIRequestParams) {
     this.preguntas.getResumen(query)
       .map(res => res['Cabecera'])
       .subscribe(res => {
         if (res) {
-          this.totalHoy.next(res['TotalEncuestadosHoy']);
+          this.totalToday.next(res['TotalEncuestadosHoy']);
           this.totalGeneral.next(res['TotalEncuestas']);
-          this.nuevosContactos.next(res['NuevosContactos']);
-          this.indiceSucursal.next(res['IndiceSucursal']);
+          this.newContacts.next(res['NuevosContactos']);
+          this.branchIndex.next(res['IndiceSucursal']);
         } else {
-           this.totalHoy.next(0);
+          this.totalToday.next(0);
           this.totalGeneral.next(0);
-          this.nuevosContactos.next(0);
-          this.indiceSucursal.next(0);
+          this.newContacts.next(0);
+          this.branchIndex.next(0);
         }
       });
+  }
+
+  // Private Helpers
+
+  private FetchAll(query: APIRequestParams) {
+    this.LoadGeneralSurvey(query);
+    this.LoadHistoricSurvey(query);
+    this.LoadResumen(query);
   }
 }

@@ -1,9 +1,9 @@
-<app-filter (applyFilters)="applyFilters($event)" [filters]="currentFilters"></app-filter>
+<app-filter (applyFilters)="ApplyFilters($event)" [filters]="currentQuery"></app-filter>
 <app-totales-container
   [total]="totalGeneral | async"
-  [hoy]="totalHoy | async"
-  [indice]="indiceSucursal |async"
-  [contactos]="nuevosContactos | async"
+  [hoy]="totalToday | async"
+  [indice]="branchIndex |async"
+  [contactos]="newContacts | async"
   tipoIndice="General"
 ></app-totales-container>
 <div class="mdl-grid">
@@ -13,12 +13,12 @@
     chartTitle="Histórico de Encuestas"
     chartType="bar"
     loadingText="Cargando Histórico de Encuestas"
-    (failed)="loadHistoricoEncuestas(query)"
-    [loading]="historicoEncuestasLoading"
-    [errorText]="historicoEncuestasError"
-    [chartLabels]="historicoEncuestasLabels"
-    [chartData]="historicoEncuestasData"
-    [chartColors]="COLORS"
+    (failed)="LoadHistoricSurvey(currentQuery)"
+    [loading]="historicSurveyLoading"
+    [errorText]="historicSurveyError"
+    [chartLabels]="historicSurveyLabels"
+    [chartData]="historicSurveyData"
+    [chartColors]="branchColors"
     ></app-chart-card>
   <app-chart-card
     class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-card mdl-shadow--2dp"
@@ -26,15 +26,15 @@
     chartTitle="Encuestas por Sucursal"
     chartType="doughnut"
     loadingText="Cargando Total de Sucursales"
-    (failed)="loadEncuestasSucursales(query)"
-    [loading]="encuestasSucursalesLoading"
-    [errorText]="encuestasSucursalesError"
-    [chartLabels]="encuestasSucursalesLabels"
-    [chartData]="encuestasSucursalesData"
-    [chartColors]="COLORS"
+    (failed)="LoadGeneralSurvey(currentQuery)"
+    [loading]="generalSurveyLoading"
+    [errorText]="generalSurveyError"
+    [chartLabels]="generalSurveyLabels"
+    [chartData]="generalSurveyData"
+    [chartColors]="branchColors"
     >
   </app-chart-card>
 </div>
 <section class="section">
-  <app-sucursales-list [sucursales]="userProfiles" [colors]="COLORS"></app-sucursales-list>
+  <app-sucursales-list [sucursales]="userProfiles" [colors]="branchColors"></app-sucursales-list>
 </section>
