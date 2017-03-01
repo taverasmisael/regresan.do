@@ -20,6 +20,7 @@ import { APIRequestParams } from '@models/apiparams';
 import { DateFilter } from '@models/filter-date';
 
 import { merge, sum } from '@utilities/arrays';
+import { updateObject } from '@utilities/objects';
 import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas';
 import { gamaRegresando } from '@utilities/colors';
 
@@ -74,8 +75,6 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
 
     this.subRoute = this.Route.queryParams.subscribe((params) => this.ApplyFilters(params))
 
-    this.currentQuery = new DateFilter();
-
     this.totalToday = new BehaviorSubject(0);
     this.totalGeneral = new BehaviorSubject(0);
     this.newContacts = new BehaviorSubject(0);
@@ -103,7 +102,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
     const dispatch = (query: APIRequestParams) => this.fetchEvent.emit(query);
     const dispatchNavigate = (query: APIRequestParams) => {
-      this.currentQuery = query;
+      this.currentQuery = updateObject(this.currentQuery, query);
       dispatch(query);
       navigate(query);
     }
@@ -218,6 +217,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   // Private Helpers
 
   private FetchAll(query: APIRequestParams) {
+    this.currentQuery = updateObject(this.currentQuery, query);
     this.LoadGeneralSurvey(query);
     this.LoadHistoricSurvey(query);
     this.LoadResumen(query);
