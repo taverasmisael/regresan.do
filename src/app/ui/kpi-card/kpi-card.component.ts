@@ -44,7 +44,7 @@ export class KpiCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     let cKpis = changes['kpis'];
     let cIndice = changes['indiceSatisfaccion'];
-    if (cKpis && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
+    if (cKpis && cKpis.currentValue && cKpis.currentValue.length && !compare(cKpis.previousValue, cKpis.currentValue)) {
       this.KPIS = this.formatKPIS(<KPI[]>cKpis.currentValue);
     } else if (cIndice && cIndice.currentValue && cIndice.previousValue !== cIndice.currentValue) {
       this.IndiceSatisfaccion = createGauge({text: 'Indice de Satisfacción', value: +cIndice.currentValue, color: this.colors[4]});
