@@ -62,7 +62,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
     this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart});
     this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd});
-    console.log(altStart, altEnd)
 
     this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
     this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
