@@ -1,10 +1,13 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment';
+import compare from 'just-compare';
 
 import { PreguntasService } from '@services/preguntas.service';
 
@@ -20,13 +23,15 @@ import { merge, sum } from '@utilities/arrays';
 import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas';
 import { gamaRegresando } from '@utilities/colors';
 
+const today = moment().unix().toString();
+const aWeekAgo = moment().subtract(1, 'week').unix().toString();
 
 @Component({
   selector: 'app-dashboard-overview',
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit {
+export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public userProfiles: UserProfile[];
   public currentQuery: DateFilter;
@@ -47,17 +52,29 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
   public branchColors: any;
 
   private AuthState: Observable<AuthState>;
+  private subProfile: Subscription;
+  private subFetch: Subscription;
+  private subRoute: Subscription;
+  private fetchEvent: EventEmitter<any>;
 
-  constructor(private preguntas: PreguntasService, private store: Store<AppState>) { }
+  constructor(private router: Router, private Route: ActivatedRoute,
+    private preguntas: PreguntasService, private store: Store<AppState>) { }
 
   ngOnInit() {
+    this.fetchEvent = new EventEmitter();
     this.AuthState = this.store.select<AppState>('MainStore')
       .distinctUntilKeyChanged('auth')
       .pluck<AuthState>('auth');
 
-    this.AuthState
+    this.subFetch = this.fetchEvent.subscribe((query) => this.FetchAll(query))
+
+    this.subProfile = this.AuthState
       .pluck<UserProfile[]>('currentUser', 'Profiles')
       .subscribe(profiles => this.userProfiles = profiles);
+
+    this.subRoute = this.Route.queryParams.subscribe((params) => this.ApplyFilters(params))
+
+    this.currentQuery = new DateFilter();
 
     this.totalToday = new BehaviorSubject(0);
     this.totalGeneral = new BehaviorSubject(0);
@@ -69,25 +86,56 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit {
     this.historicSurveyLabels = [];
     this.historicSurveyData = [];
 
-    this.currentQuery = {
-      start: moment().subtract(1, 'week').unix().toString(),
-      end: moment().unix().toString(),
-    };
-
     this.branchColors = gamaRegresando();
   }
   ngAfterViewInit() {
-    this.FetchAll(this.currentQuery);
+    console.log('AfterViewInit...')
   }
 
-  public ApplyFilters(filter: DateFilter) {
-    const { start, end } = filter;
-    this.currentQuery = {
-      start: moment.unix(+start).isValid() ? start : moment(start).format('X'),
-      end: moment.unix(+end).isValid() ? end : moment(end).format('X')
-    };
+  ngOnDestroy() {
+    this.subProfile.unsubscribe();
+    this.subFetch.unsubscribe();
+  }
 
-    this.FetchAll(this.currentQuery);
+  public ApplyFilters(filter: Params) {
+    const filterStart = filter['start'];
+    const filterEnd = filter['end'];
+    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query });
+    const dispatch = (query: APIRequestParams) => this.fetchEvent.emit(query);
+    const dispatchNavigate = (query: APIRequestParams) => {
+      this.currentQuery = query;
+      dispatch(query);
+      navigate(query);
+    }
+    const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
+    const applyPartial = (s?: string, e?: string) => {
+      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString();
+      let end = e || moment.unix(+s).add(1, 'week').unix().toString();
+      dispatchNavigate({ start, end });
+    }
+    const DateFilter = {
+      exists: (params) => params['start'] && params['end'],
+      areNumeric: (params) => +params['start'] && +params['end'],
+      isNumeric: (slice: string, params) => +params[slice],
+      isUnix: (date) => moment.unix(date).isValid() && date
+    }
+    const queryParams = {
+      start: DateFilter.isUnix(filterStart || undefined) ||  moment(filterStart).format('X'),
+      end: DateFilter.isUnix(filterEnd || undefined) ||  moment(filterEnd).format('X'),
+    }
+    if (compare(filter, {})) {
+      applyDefault();
+    } else if (!DateFilter.exists(queryParams)) { // If there's not an DateFilter applyed
+      applyDefault();
+    } else if (!DateFilter.areNumeric(queryParams)) {
+      applyDefault();
+    } else if (DateFilter.areNumeric(queryParams)) {
+      applyPartial(queryParams.start, queryParams.end)
+    } else if (DateFilter.isNumeric('start', queryParams) && !DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(queryParams.start);
+    } else if (!DateFilter.isNumeric('start', queryParams) && DateFilter.isNumeric('end', queryParams)) {
+      applyPartial(undefined, queryParams.end);
+    }
   }
 
   public LoadGeneralSurvey(query: APIRequestParams) {
