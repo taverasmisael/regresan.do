@@ -56,6 +56,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public branchIndex: BehaviorSubject<number>;
 
   public chartData: BranchChartData;
+  public branchColor: number;
 
   private store$: Observable<BranchState>
   public profiles$: Observable<UserProfile[]>
@@ -248,8 +249,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           profiles ? profiles.find(prof => prof.OldProfileId === +params['id']) : undefined)
       )
       .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
+      .do((info) => this.branchColor = +info.OldProfileId.toString().split('')[0] + +info.OldProfileId.toString().split('')[1])
       .do(() => this.ResetView()) // Clean up the State and let only the info
-      .do(info => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
+      .do((info) => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
   }
@@ -278,7 +280,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private SaveHistoricEntries(entries: any[]) {
     this.chartData = updateObject(this.chartData, {
       historic: {
-        colors: [gamaRegresando()[3]],
+        colors: [gamaRegresando()[this.branchColor]],
         data: entries[1].sort((prev, curr) => prev.label > curr.label),
         labels: entries[0],
       }
