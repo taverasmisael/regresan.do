@@ -1,14 +1,12 @@
-<div class="mdl-card">
-  <div class="mdl-card__title" [class.mdl-shadow--2dp]="headerShadow">
-    <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-      {{ chartTitle}}
-    </h5>
-    <button id="graph-toggler" class="mdl-button mdl-js-button mdl-button--icon" (click)="toggleChart()">
-        <i class="material-icons">{{ useDataset(chartType) && 'show_chart' || 'pie_chart'}}</i>
-      </button>
-  </div>
-  <div class="mdl-card__supporting-text">
-    <div *ngIf="useDataset(chartType)" class="chart-holder">
+<app-card
+  [action]="chartAction"
+  [title]="chartTitle"
+  [loadingText]="loadingText"
+  [loading]="loading"
+  [errorText]="errorText"
+  (retry)="failed.emit($event)"
+  (primaryAction)="toggleChart($event)">
+  <div *ngIf="useDataset(chartType)" class="chart-holder">
       <canvas *ngIf="chartData.length && !loading" baseChart
         [options]="ChartOptions"
         [chartType]="chartType"
@@ -24,23 +22,4 @@
         [data]="chartData"
         [colors]="ChartColors"></canvas>
     </div>
-    <div *ngIf="(!chartData.length && !errorText) || loading" class="loading-holder">
-      <div class="content">
-        <div class="mdl-spinner mdl-js-spinner is-active"></div>
-        <p class="mdl-typography--text-center">{{ loadingText }}</p>
-      </div>
-    </div>
-    <div *ngIf="errorText" class="loading-holder no--opacity">
-      <div class="content">
-        <i class="material-icons error-icon">error</i>
-        <p class="mdl-typography--text-center">{{ errorText }}</p>
-        <button (click)="failed.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
-            <i class="material-icons">refresh</i> Reintentar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="mdl-tooltip" for="graph-toggler">
-  Cambiar Tipo de Gráfica
-</div>
+</app-card>
