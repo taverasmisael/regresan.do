@@ -11,7 +11,7 @@
   <app-chart-card
     class="mdl-cell mdl-cell--9-col mdl-card mdl-shadow--2dp mdl-cell--order-2 mdl-cell--order-1-desktop"
     style="font-size: 1.5rem;"
-    chartType="line"
+    chartType="bar"
     chartTitle="Histórico de Encuestas"
     (failed)="FetchHistoric()"
     [loading]="activeBranch.requests.HISTORIC.isLoading && !chartData.historic.labels.length"
