@@ -108,4 +108,5 @@ a {
 }
 .section__title {
   padding: 0 1rem;
+  @extend .mdl-color-text--primary;
 }

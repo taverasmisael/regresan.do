@@ -9,8 +9,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import { createPalette, ChartJsColor, createCirularPalette } from '../../utilities/charts';
-import { updateObject } from '../../utilities/objects';
+import { createPalette, ChartJsColor, createCirularPalette } from '@utilities/charts';
+import { updateObject } from '@utilities/objects';
 
 @Component({
   selector: 'app-chart-card',
@@ -35,12 +35,22 @@ export class ChartCardComponent implements OnInit, OnChanges {
 
   public ChartColors: any[];
   public ChartOptions: any;
+  public chartAction: {
+    id: string,
+    icon: string,
+    text: string
+  };
 
   private baseChartOptions: any;
 
   constructor() { }
 
   ngOnInit() {
+    this.chartAction  = {
+      id: `chart-${(Math.random() * 5 + 1) * (Math.random() * 100)}`,
+      icon: this.useDataset(this.chartType) && 'show_chart' || 'pie_chart',
+      text: 'Cambiar Tipo de Gráfica'
+    };
     let linearOptions = updateObject(this.baseChartOptions, { scales: { yAxes: [{ ticks: { beginAtZero: true } }] } });
     if (this.useDataset(this.chartType)) {
       this.ChartOptions = updateObject(linearOptions, this.chartOptions);

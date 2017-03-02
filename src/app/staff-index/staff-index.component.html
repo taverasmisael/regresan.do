@@ -1,5 +1,5 @@
 <dialog #staffIndexDialog class="mdl-dialog mdl-cell--9-col mdl-cell--8-col-tablet cell">
-  <h4 class="mdl-dialog__title">Indice de Personal</h4>
+  <h4 class="mdl-dialog__title">Índices de KPIs por personal</h4>
   <div class="mdl-dialog__content mdl-grid">
     <div class="mdl-cell--12-col chart-holder">
       <div *ngIf="!loading && !errorText && chartData" class="content-holder">
@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="mdl-dialog__actions mdl-cell mdl-cell--12-col">
-    <button type=button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised" (click)="closeDialog()">
+    <button type=button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" (click)="closeDialog()">
        Ok
     </button>
   </div>
