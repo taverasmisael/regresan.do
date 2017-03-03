@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./answers-table.component.scss']
 })
 export class AnswersTableComponent implements OnInit {
-  @Input() questionsErrorText: string;
   @Input() answersErrorText: string;
   @Input() answers: any[];
   @Input() loading: boolean;
