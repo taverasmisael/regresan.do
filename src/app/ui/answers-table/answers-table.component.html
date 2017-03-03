@@ -2,14 +2,14 @@
   <thead>
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
-        (click)="sortBy('fecha')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'fecha'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === '-fecha'"
+        (click)="sortBy('date')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'date'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-date'"
       >Fecha</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
-        (click)="sortBy('respuesta')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'respuesta'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === '-respuesta'"
+        (click)="sortBy('answer')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'answer'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-answer'"
       >Respuesta</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
         (click)="sortBy('sesion')"
@@ -20,8 +20,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let a of answers | orderBy: [sorting];">
-      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.fecha }}</td>
-      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.respuesta }}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.date }}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.answer }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.sesion || "Anonimo"}}</td>
     </tr>
   </tbody>
