@@ -240,7 +240,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .map(aws => aws.map(makePieChart).reduce(merge, []))
       .subscribe(answers => this.SaveCloseAnswers(answers));
 
-    this.subCloseAw = this.store$.distinctUntilKeyChanged('openAnswers')
+    this.subOpenAw = this.store$.distinctUntilKeyChanged('openAnswers')
       .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length))
       .map(aws => [aws[aws.length - 1]])
       .map(aws => <OpenAnswerData[]>aws.map(createOpenAnswerEntry).reduce(merge, []))
