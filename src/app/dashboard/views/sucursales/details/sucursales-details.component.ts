@@ -166,12 +166,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Public Helpers
-  public GetRequesAnswerInfo(qid: number) {
-    return findByObjectId(this.activeBranch.requests.ACLOSE, qid.toString());
+  public GetRequesAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number) {
+    return findByObjectId(this.activeBranch.requests[type], qid.toString());
   }
 
-  public GetCloseAChart(question: string) {
-    return findByObjectId(this.chartData.aClose, question);
+  public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string) {
+    return findByObjectId(this.chartData[type], question);
   }
 
   public ApplyQueryParams(queryParams: Params) {
@@ -289,7 +289,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private SaveCloseAnswers(entries: ChartData[]) {
     this.chartData = updateObject(this.chartData, {
-      aClose: [...this.chartData.aClose, entries[0]]
+      ACLOSE: [...this.chartData.ACLOSE, entries[0]]
     })
   }
 }

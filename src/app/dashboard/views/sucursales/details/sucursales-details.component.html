@@ -61,12 +61,12 @@
           chartType="pie"
           loadingText="Respuesta {{ i + 1 }}"
           (failed)="LoadCloseAnswer(q.idPregunta)"
-          [errorText]="GetRequesAnswerInfo(q.idPregunta).error?.text"
-          [loading]="GetRequesAnswerInfo(q.idPregunta).isLoading && !GetCloseAChart(q.pregunta)?.labels.length"
+          [errorText]="GetRequesAnswerInfo('ACLOSE', q.idPregunta).error?.text"
+          [loading]="GetRequesAnswerInfo('ACLOSE', q.idPregunta).isLoading && !GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels.length"
           [chartTitle]="q.pregunta"
-          [chartLabels]="GetCloseAChart(q.pregunta)?.labels || []"
-          [chartData]="GetCloseAChart(q.pregunta)?.data || []"
-          [chartColors]="GetCloseAChart(q.pregunta)?.colors || []">
+          [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
+          [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
+          [chartColors]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.colors || []">
         </app-chart-card>
       </div>
       <!-- Questions Loading Indicator -->
@@ -91,29 +91,29 @@
     </div>
   </div>
 </section>
-<section class="section">
+<!--<section class="section">
   <div class="mdl-grid">
-    <!--<app-card
+    <app-card
       class="mdl-cell mdl-typography--text-center"
-      [class.mdl-cell--12-col]="SucursalState.openQuestions.length === 1"
-      [class.mdl-cell--6-col]="SucursalState.openQuestions.length === 2"
-      [class.mdl-cell--4-col]="SucursalState.openQuestions.length === 3"
-      *ngFor="let q of SucursalState.openQuestions"
+      [class.mdl-cell--12-col]="activeBranch.openQuestions.length === 1"
+      [class.mdl-cell--6-col]="activeBranch.openQuestions.length === 2"
+      [class.mdl-cell--4-col]="activeBranch.openQuestions.length === 3"
+      *ngFor="let q of activeBranch.openQuestions"
       loadingText="Cargando Preguntas Abiertas"
+      (failed)="FetchQuestions()"
       [isDataTable]="true"
       [title]="q.pregunta "
-      [loading]="SucursalState.loading">
+      [loading]="GetRequesAnswerInfo('AOPEN', q.idPregunta)">
         <app-answers-table
-          (failed)="loadOpenAnswers($event)"
+          (failed)="LoadOpenAnswers(q.idPregunta)"
           [withinCard]="true"
-          [questionsErrorText]="questionError"
-          [answersErrorText]="openAnswersError"
-          [loading]="SucursalState.loading"
-          [answers]="getMyAnswers(q.idPregunta)">
+          [answersErrorText]="activeBranch.requests.AOPEN.error?.text"
+          [loading]="GetRequesAnswerInfo('AOPEN', q.idPregunta)"
+          [answers]="GetAnswerDisplayData('AOPEN', q.pregunta)">
         </app-answers-table>
-    </app-card>-->
+    </app-card>
   </div>
-</section>
+</section>-->
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
   <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
     {{ prof.Title }}
