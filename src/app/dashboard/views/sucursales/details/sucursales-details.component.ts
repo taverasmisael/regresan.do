@@ -16,7 +16,7 @@ import { PreguntasService } from '@services/preguntas.service';
 import { RespuestasService } from '@services/respuestas.service';
 import { KpisService } from '@services/kpis.service';
 
-import { makePieChart, TotalPorDiaLineal } from '@utilities/respuestas';
+import { createOpenAnswerEntry, makePieChart, TotalPorDiaLineal } from '@utilities/respuestas';
 import { updateObject } from '@utilities/objects';
 import { merge, findByObjectId } from '@utilities/arrays';
 import { ratingPalette, gamaRegresando } from '@utilities/colors';
@@ -33,6 +33,7 @@ import { StateRequest } from '@models/states/state-request';
 import { UserProfile } from '@models/userprofile';
 import { BranchChartData } from '@models/branch.chart-data';
 import { ChartData } from '@models/chart-data';
+import { OpenAnswerData } from '@models/answer.open-data';
 
 import {
   SaveInfo, ResetButInfo, ResetAll, RequestCloseAnswer, RequestHistoric, RequestKPI,
@@ -67,6 +68,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private subRoute: Subscription
   private subHistoric: Subscription
   private subCloseAw: Subscription
+  private subOpenAw: Subscription
 
   constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -99,6 +101,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.subBranch.unsubscribe();
     this.subRoute.unsubscribe();
     this.subCloseAw.unsubscribe();
+    this.subOpenAw.unsubscribe();
     this.Store.dispatch(new ResetAll());
   }
 
@@ -167,11 +170,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Public Helpers
   public GetRequesAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number) {
-    return findByObjectId(this.activeBranch.requests[type], qid.toString());
+    return findByObjectId(this.activeBranch.requests[type], qid.toString()) || [];
   }
 
-  public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string) {
-    return findByObjectId(this.chartData[type], question);
+  public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string): any[] {
+    const result = findByObjectId<any>(this.chartData[type], question) || [];
+    return result; // NO A REAL ERROR. JUST TYPESCRIPT CRAZINESS >:V
   }
 
   public ApplyQueryParams(queryParams: Params) {
@@ -236,6 +240,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .map(aws => aws.map(makePieChart).reduce(merge, []))
       .subscribe(answers => this.SaveCloseAnswers(answers));
 
+    this.subCloseAw = this.store$.distinctUntilKeyChanged('openAnswers')
+      .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length))
+      .map(aws => [aws[aws.length - 1]])
+      .map(aws => <OpenAnswerData[]>aws.map(createOpenAnswerEntry).reduce(merge, []))
+      .subscribe(answers => this.SaveOpenAnswers(answers));
+
     this.subHistoric = this.store$.distinctUntilKeyChanged('historicData')
       .pluck<HistoricEntry[]>('historicData').filter(entries => Boolean(entries.length))
       .map(TotalPorDiaLineal)
@@ -290,6 +300,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private SaveCloseAnswers(entries: ChartData[]) {
     this.chartData = updateObject(this.chartData, {
       ACLOSE: [...this.chartData.ACLOSE, entries[0]]
+    })
+  }
+
+  private SaveOpenAnswers(entries: OpenAnswerData[]) {
+    this.chartData = updateObject(this.chartData, {
+      AOPEN: [...this.chartData.AOPEN, entries[0]]
     })
   }
 }

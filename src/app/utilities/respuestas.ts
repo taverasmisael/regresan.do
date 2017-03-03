@@ -2,6 +2,9 @@ import * as moment from 'moment';
 import { merge, groupBy } from './arrays';
 import { ratingPalette } from '@utilities/colors';
 import { ChartData } from '@models/chart-data';
+import { OpenAnswerDataEntry } from '@models/answer.open-data-entry';
+import { OpenAnswer } from '@models/answer.open';
+import { OpenAnswerData } from '@models/answer.open-data';
 
 const ratingColors = ratingPalette(true);
 const ratingColorsArray = ratingPalette(false);
@@ -16,6 +19,11 @@ export function makePieChart(answer: any) {
   const data = brute.reduce((prev, curr) => [...prev, curr[1]], []);
   const colors = labels.map((el, i) => ratingColors[el] || ratingColorsArray[i]);
   return new ChartData(labels, data, colors, answer[0].Pregunta);
+}
+
+export function createOpenAnswerEntry(openAnswers: OpenAnswer[]): OpenAnswerData {
+  const answers = openAnswers.map(aw => new OpenAnswerDataEntry(aw.Respuesta, aw.Fecha, aw.Sesion));
+  return new OpenAnswerData(openAnswers[0].Pregunta, answers);
 }
 
 export function mapPieChart(prev = [[], []], curr) {

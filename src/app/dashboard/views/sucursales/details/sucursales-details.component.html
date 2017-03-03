@@ -62,7 +62,7 @@
           loadingText="Respuesta {{ i + 1 }}"
           (failed)="LoadCloseAnswer(q.idPregunta)"
           [errorText]="GetRequesAnswerInfo('ACLOSE', q.idPregunta).error?.text"
-          [loading]="GetRequesAnswerInfo('ACLOSE', q.idPregunta).isLoading && !GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels.length"
+          [loading]="GetRequesAnswerInfo('ACLOSE', q.idPregunta).isLoading && !(GetAnswerDisplayData('ACLOSE', q.pregunta).labels && GetAnswerDisplayData('ACLOSE', q.pregunta).labels.length)"
           [chartTitle]="q.pregunta"
           [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
           [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
@@ -91,7 +91,7 @@
     </div>
   </div>
 </section>
-<!--<section class="section">
+<section class="section">
   <div class="mdl-grid">
     <app-card
       class="mdl-cell mdl-typography--text-center"
@@ -103,17 +103,17 @@
       (failed)="FetchQuestions()"
       [isDataTable]="true"
       [title]="q.pregunta "
-      [loading]="GetRequesAnswerInfo('AOPEN', q.idPregunta)">
+      [loading]="GetRequesAnswerInfo('AOPEN', q.idPregunta) && !GetAnswerDisplayData('AOPEN', q.pregunta).answers">
         <app-answers-table
           (failed)="LoadOpenAnswers(q.idPregunta)"
           [withinCard]="true"
           [answersErrorText]="activeBranch.requests.AOPEN.error?.text"
           [loading]="GetRequesAnswerInfo('AOPEN', q.idPregunta)"
-          [answers]="GetAnswerDisplayData('AOPEN', q.pregunta)">
+          [answers]="GetAnswerDisplayData('AOPEN', q.pregunta).answers || []">
         </app-answers-table>
     </app-card>
   </div>
-</section>-->
+</section>
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
   <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
     {{ prof.Title }}
