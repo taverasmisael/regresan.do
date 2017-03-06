@@ -109,13 +109,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public LoadCloseAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
-    this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`));
+    setTimeout(() => this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`)), 5000);
   }
 
   public LoadOpenAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
-    this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
+    setTimeout(() => this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`)), 5000);
   }
 
   public NavigateToBranch(profileId: number) {
@@ -241,7 +241,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .subscribe(answers => this.SaveCloseAnswers(answers));
 
     this.subOpenAw = this.store$.distinctUntilKeyChanged('openAnswers')
-      .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length))
+      .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length) && aws[1] && Boolean(aws[1].length))
       .map(aws => [aws[aws.length - 1]])
       .map(aws => <OpenAnswerData[]>aws.map(createOpenAnswerEntry).reduce(merge, []))
       .subscribe(answers => this.SaveOpenAnswers(answers));
