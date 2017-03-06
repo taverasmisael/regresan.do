@@ -11,13 +11,13 @@
     <div *ngIf="!loading && !errorText" class="content-holder">
       <ng-content></ng-content>
     </div>
-    <div *ngIf="!errorText && loading" class="loading-holder">
+    <div *ngIf="loading && !errorTex " class="loading-holder">
       <div class="content">
         <div class="mdl-spinner mdl-js-spinner is-active"></div>
         <p class="mdl-typography--text-center">{{ loadingText }}</p>
       </div>
     </div>
-    <div *ngIf="errorText" class="loading-holder no--opacity">
+    <div *ngIf="!loading && errorText" class="loading-holder no--opacity">
       <div class="content">
         <i class="material-icons error-icon">error</i>
         <p class="mdl-typography--text-center">{{ errorText }}</p>
