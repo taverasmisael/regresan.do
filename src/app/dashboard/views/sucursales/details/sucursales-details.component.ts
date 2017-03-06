@@ -169,8 +169,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   // Public Helpers
-  public GetRequesAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number) {
-    return findByObjectId(this.activeBranch.requests[type], qid.toString()) || [];
+  public GetRequestAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number): StateRequest   {
+    const res = findByObjectId<StateRequest>(this.activeBranch.requests[type], qid.toString()) || new StateRequest(undefined, true, '');
+    return res;
   }
 
   public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string): any[] {
@@ -241,8 +242,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .subscribe(answers => this.SaveCloseAnswers(answers));
 
     this.subOpenAw = this.store$.distinctUntilKeyChanged('openAnswers')
-      .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length) && aws[1] && Boolean(aws[1].length))
+      .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length))
       .map(aws => [aws[aws.length - 1]])
+      .filter(aws => Boolean(aws[0].length))
+      .do(console.warn.bind(console))
       .map(aws => <OpenAnswerData[]>aws.map(createOpenAnswerEntry).reduce(merge, []))
       .subscribe(answers => this.SaveOpenAnswers(answers));
 
