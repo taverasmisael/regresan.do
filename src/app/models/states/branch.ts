@@ -49,5 +49,7 @@ export class BranchState {
       STAFF: new StateRequest(undefined, false, ''),
       HISTORIC: new StateRequest(undefined, false, '')
     }
+
+    this.currentQuery = new APIRequestUser();
   }
 };
