@@ -109,13 +109,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public LoadCloseAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
-    setTimeout(() => this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`)), 5000);
+    this.Store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
   public LoadOpenAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery;
     const query = updateObject(currentQuery, { pregunta });
-    setTimeout(() => this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`)), 5000);
+    this.Store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`));
   }
 
   public NavigateToBranch(profileId: number) {
@@ -185,7 +185,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     const dispatchNavigate = (query: APIRequestParams) => {
       dispatch(query);
       navigate(query);
-      this.ResetButInfo();
       this.FetchAll();
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
@@ -217,8 +216,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   // Private Methods
 
   private InitializeSubscriptions() {
-    this.subBranch = this.store$.subscribe((branch) => this.activeBranch = branch);
-
+    this.subBranch = this.store$
+    .filter((branch) => !compare(branch, this.activeBranch)) // Only triggers when the sates are differents
+    .subscribe((branch) => {
+      const areBranchs = branch && this.activeBranch;
+      if (areBranchs && !compare(branch.info, this.activeBranch.info)) { this.ResetButInfo(); } // Only ResetButInfo if `.ifno` had changed
+      this.activeBranch = branch;
+    });
     // Load all CloseAnswer each time there are new closeQuestions
     this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
       .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
@@ -245,7 +249,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .pluck<OpenAnswer[][]>('openAnswers').filter(aws => Boolean(aws.length))
       .map(aws => [aws[aws.length - 1]])
       .filter(aws => Boolean(aws[0].length))
-      .do(console.warn.bind(console))
       .map(aws => <OpenAnswerData[]>aws.map(createOpenAnswerEntry).reduce(merge, []))
       .subscribe(answers => this.SaveOpenAnswers(answers));
 
@@ -255,7 +258,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
 
     // Get the Route Params
-    this.subRoute = this.Route.params.distinctUntilKeyChanged('id')
+    this.subRoute = this.Route.params.distinctUntilChanged((before, after) => compare(before, after))
       .switchMap(
       (params) =>
         this.profiles$.map(profiles => // Retrieve The Current Branch from the UserProfile List
@@ -263,9 +266,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       )
       .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
       .do((info) => this.branchColor = +info.OldProfileId.toString().split('')[0] + +info.OldProfileId.toString().split('')[1])
-      .do(() => this.ResetView()) // Clean up the State and let only the info
       .do((info) => this.Store.dispatch(new SaveInfo(info))) // We save this info and then...
+      .distinctUntilChanged((before, after) => compare(before, after))
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
+      .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe((info) => this.ApplyQueryParams(info)); // Finally we apply the query
   }
 
