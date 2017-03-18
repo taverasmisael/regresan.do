@@ -1,63 +1,36 @@
-   :host {
+:host {
     display: block;
     height: 100%;
-  }
+}
 
-  .mdl-card {
-    background: #fff;
-    width: 100%;
-    height: 100%;
-    &.is--data-table {
-      .mdl-card__supporting-text,
-      .content-holder {
-        padding: 0;
-      }
-      .mdl-card__title {
-        margin-bottom: 1em;
-      }
-    }
-    &.no--content-padding {
-      .content-holder {
-        padding: 0;
-      }
-    }
-    .mdl-card__title {
-      color: #00A4A3;
-      display: flex;
-      justify-content: space-between;
-      z-index: 3;
-    }
-    .mdl-card__supporting-text,
-    .content-holder {
-      width: 100%;
-      position: relative;
-      height: 100%;
-    }
-    .content-holder {
-      padding: 1.5em;
-    }
-    .loading-holder {
-      align-items: center;
-      background: rgba(255, 255, 255, 0.6);
-      bottom: 0;
-      display: flex;
-      height: 100%;
-      justify-content: center;
-      left: 0;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      top: 0;
-      width: 100%;
-      &.no--opacity {
-        background: rgba(255, 255, 255, 1);
-      }
-    }
-    .mdl-spinner {
-      width: 56px;
-      height: 56px;
-    }
-    .mdl-spinner__circle {
-      border-width: 6px;
+.mdl-card {
+  background: #fff;
+  display: block;
+  width: 100%;
+  height: 100%;
+  &.is--data-table,
+  &.no--content-padding {
+    .mdl-card__supporting-text {
+      padding: 0;
     }
   }
+  .mdl-card__title {
+    color: #00A4A3;
+    display: flex;
+    justify-content: space-between;
+  }
+  .mdl-card__supporting-text {
+    width: 100%;
+    position: relative;
+    height: 100%;
+  }
+}
+
+.mdl-spinner {
+  width: 56px;
+  height: 56px;
+}
+
+.mdl-spinner__circle {
+  border-width: 6px;
+}
