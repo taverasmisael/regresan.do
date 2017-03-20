@@ -18,5 +18,7 @@ import 'core-js/es6/reflect';
 import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
 const dialogPolyfill = require('dialog-polyfill/dialog-polyfill');
+const flexibility  = require('flexibility');
+window['flexibility'] = flexibility ;
 window['dialogPolyfill'] = dialogPolyfill;
 
