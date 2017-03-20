@@ -10,14 +10,14 @@
   <div *ngIf="!loading && !errorText" class="mdl-card__supporting-text">
     <ng-content></ng-content>
   </div>
-  <div *ngIf="loading && !errorTex " class="mdl-card__supporting-text">
-    <div class="content">
+  <div *ngIf="loading && !errorTex " class="mdl-card__supporting-text card-wait-holder">
+    <div class="card-wait-holder__content">
       <div class="mdl-spinner mdl-js-spinner is-active"></div>
       <p class="mdl-typography--text-center">{{ loadingText }}</p>
     </div>
   </div>
-  <div *ngIf="!loading && errorText" class="mdl-card__supporting-text">
-    <div class="content">
+  <div *ngIf="!loading && errorText" class="mdl-card__supporting-text card-wait-holder">
+    <div class="card-wait-holder__content">
       <i class="material-icons error-icon">error</i>
       <p class="mdl-typography--text-center">{{ errorText }}</p>
       <button (click)="retry.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
