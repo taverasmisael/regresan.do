@@ -14,11 +14,11 @@ import { StaffIndexComponent } from '../../staff-index/staff-index.component';
 import { Filter } from '../../models/filter'
 
 @Component({
-  selector: 'app-staf-ranking-card',
-  templateUrl: './staf-ranking-card.component.html',
-  styleUrls: ['./staf-ranking-card.component.scss']
+  selector: 'app-staff-ranking-card',
+  templateUrl: './staff-ranking-card.component.html',
+  styleUrls: ['./staff-ranking-card.component.scss']
 })
-export class StafRankingCardComponent implements OnInit {
+export class StaffRankingCardComponent implements OnInit {
   @Input() staffData: any[];
   @Input() errorText: string;
   @Input() loading: boolean;
