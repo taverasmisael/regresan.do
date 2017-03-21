@@ -1,12 +1,14 @@
-<app-card
-  [action]="chartAction"
-  [title]="chartTitle"
-  [loadingText]="loadingText"
-  [loading]="loading"
-  [errorText]="errorText"
-  (retry)="failed.emit($event)"
-  (primaryAction)="toggleChart($event)">
-  <div *ngIf="useDataset(chartType)" class="chart-holder">
+<div class="mdl-card" [class.is--data-table]="isDataTable" [class.no--content-padding]="!contentPadding">
+  <div class="mdl-card__title">
+    <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
+      {{ title }}
+    </h5>
+    <button *ngIf="action" [id]="action.id" class="mdl-button mdl-js-button mdl-button--icon" (click)="primaryAction.emit($event)">
+        <i class="material-icons">{{ action.icon }}</i>
+      </button>
+  </div>
+  <div *ngIf="!loading && !errorText" class="mdl-card__supporting-text">
+    <div *ngIf="useDataset(chartType)" class="chart-holder">
       <canvas *ngIf="chartData.length && !loading" baseChart
         [options]="ChartOptions"
         [chartType]="chartType"
@@ -22,4 +24,23 @@
         [data]="chartData"
         [colors]="ChartColors"></canvas>
     </div>
-</app-card>
+  </div>
+  <div *ngIf="loading && !errorTex " class="mdl-card__supporting-text card-wait-holder">
+    <div class="card-wait-holder__content">
+      <div class="mdl-spinner mdl-js-spinner is-active"></div>
+      <p class="mdl-typography--text-center">{{ loadingText }}</p>
+    </div>
+  </div>
+  <div *ngIf="!loading && errorText" class="mdl-card__supporting-text card-wait-holder">
+    <div class="card-wait-holder__content">
+      <i class="material-icons error-icon">error</i>
+      <p class="mdl-typography--text-center">{{ errorText }}</p>
+      <button (click)="retry.emit($event)" class="mdl-button mdl-js-button mdl-js-ripple">
+          <i class="material-icons">refresh</i> Reintentar
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="action" class="mdl-tooltip" [attr.for]="action.id">
+  {{ action.text }}
+</div>
