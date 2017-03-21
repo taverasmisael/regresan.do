@@ -4,6 +4,7 @@
   loadingText="Cargando Información del Personal"
   (retry)="failed.emit($event)"
   (primaryAction)="onPrimaryAction($event)"
+  [contentPadding]="true"
   [action]="cardAction"
   [loading]="loading && !staffData.length"
   [errorText]="errorText">
