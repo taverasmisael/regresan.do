@@ -1,10 +1,10 @@
 <div class="mdl-card" [class.is--data-table]="isDataTable" [class.no--content-padding]="!contentPadding">
   <div class="mdl-card__title">
     <h5 class="mdl-card__title-text mdl-typography--body-2-force-preferred-font-color-contrast chart-title">
-      {{ title }}
+      {{ chartTitle }}
     </h5>
-    <button *ngIf="action" [id]="action.id" class="mdl-button mdl-js-button mdl-button--icon" (click)="primaryAction.emit($event)">
-        <i class="material-icons">{{ action.icon }}</i>
+    <button *ngIf="chartAction" [id]="chartAction.id" class="mdl-button mdl-js-button mdl-button--icon" (click)="toggleChart()">
+        <i class="material-icons">{{ chartAction.icon }}</i>
       </button>
   </div>
   <div *ngIf="!loading && !errorText" class="mdl-card__supporting-text">
@@ -41,6 +41,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="action" class="mdl-tooltip" [attr.for]="action.id">
-  {{ action.text }}
+<div *ngIf="action" class="mdl-tooltip" [attr.for]="chartAction.id">
+  {{ chartAction.text }}
 </div>
