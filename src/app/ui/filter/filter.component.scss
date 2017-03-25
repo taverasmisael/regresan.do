@@ -29,12 +29,15 @@
     transform: none;
   }
 }
+.mdl-textfield {
+  width: 100%;
+}
 .mdl-badge--overlap {
   margin: 0;
 }
 @media (max-width: 479px) {
   .mdl-dialog,
-  .mdl-dialog__content, 
+  .mdl-dialog__content,
   .mdl-dialog__content > *,
   .filter-form {
     padding: 0;
