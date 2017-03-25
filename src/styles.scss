@@ -2,8 +2,19 @@
 @import "custom-mdl";
 @import "flatapickr-custom-theme";
 @import "~dialog-polyfill/dialog-polyfill";
-._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay {
-  z-index: initial !important;
+._dialog_overlay {
+  display: none;
+}
+dialog {
+  z-index: 30;
+}
+dialog::backdrop { /* native */
+  background-color: rgba(#434343, 0.3);
+  z-index: 0;
+}
+dialog + .backdrop { /* polyfill */
+  background-color: rgba(#434343, 0.3);
+  z-index: 0;
 }
 * {
   box-sizing: border-box;

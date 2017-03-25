@@ -1,6 +1,12 @@
 :host {
   display: block;
 }
+dialog {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  z-index:400000;
+}
 .filters { // esta es la columna derecha
   border: none;
   border-right: 1px solid rgba(0,0,0, 0.12); // esto es tomado de los .mdl-textfield

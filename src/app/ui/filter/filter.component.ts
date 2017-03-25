@@ -49,9 +49,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public endOptions: FlatpickrOptions;
 
   private flatpickrOptions: FlatpickrOptions;
-
-  @HostBinding('class.mdl-grid') isGrid = true;
-  @HostBinding('class.mdl-grid--no-spacing') noSpacing = true;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
