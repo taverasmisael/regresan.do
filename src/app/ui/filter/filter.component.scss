@@ -1,11 +1,9 @@
 :host {
   display: block;
 }
-dialog {
-  position: fixed;
-  top: 50%;
-  transform: translate(0, -50%);
-  z-index:400000;
+.mdl-dialog {
+  max-width: 100vw;
+  overflow: hidden;
 }
 .filters { // esta es la columna derecha
   border: none;
@@ -33,4 +31,12 @@ dialog {
 }
 .mdl-badge--overlap {
   margin: 0;
+}
+@media (max-width: 479px) {
+  .mdl-dialog,
+  .mdl-dialog__content, 
+  .mdl-dialog__content > *,
+  .filter-form {
+    padding: 0;
+  }
 }

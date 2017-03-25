@@ -38,6 +38,9 @@ export class FilterComponent implements OnInit, AfterViewInit {
   @Input() filters: DateFilter;
   @Output() applyFilters = new EventEmitter();
 
+  @HostBinding('class.mdl-grid') isMdlGrid = true;
+  @HostBinding('class.mdl-grid--no-spacing') noSpacing = true;
+
   @ViewChild('filterDialog') filterDialog: ElementRef;
 
   public filterForm: FormGroup;
