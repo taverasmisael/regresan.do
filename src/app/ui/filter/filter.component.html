@@ -1,7 +1,7 @@
 <dialog #filterDialog class="mdl-dialog mdl-cell--9-col mdl-cell--8-col-tablet cell ">
   <h4 class="mdl-dialog__title">Filtrar Resultados</h4>
   <form class="filter-form mdl-grid" [formGroup]="filterForm" novalidate (ngSubmit)="sendFilters()">
-    <div class="mdl-dialog__content mdl-grid">
+    <div class="mdl-dialog__content mdl-grid mdl-grid--no-spacing">
       <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet filters">
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--12-col cell__header mdl-grid">
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="mdl-dialog__actions mdl-cell mdl-cell--12-col">
-      <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" [disabled]="!filterForm.valid" type="submit">
+      <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored" [disabled]="!filterForm.valid">
        Aplicar Filtros
       </button>
       <button type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="closeDialog()">

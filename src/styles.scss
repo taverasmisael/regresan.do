@@ -2,39 +2,22 @@
 @import "custom-mdl";
 @import "flatapickr-custom-theme";
 @import "~dialog-polyfill/dialog-polyfill";
-._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay._dialog_overlay {
-  z-index: initial !important;
+._dialog_overlay {
+  display: none;
+}
+dialog {
+  z-index: 30;
+}
+dialog::backdrop { /* native */
+  background-color: rgba(#434343, 0.3);
+  z-index: 0;
+}
+dialog + .backdrop { /* polyfill */
+  background-color: rgba(#434343, 0.3);
+  z-index: 0;
 }
 * {
   box-sizing: border-box;
-}
-
-/* fallback */
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(assets/fonts/material-icons.woff2) format('woff2');
-}
-
-.material-icons {
-  direction: ltr;
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  height: 1em;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  width: 1em;
-  word-wrap: normal;
-  vertical-align: middle;
-  -webkit-font-feature-settings: 'liga';
-  font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
 }
 
 .mdl-card {

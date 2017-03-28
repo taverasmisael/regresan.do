@@ -33,7 +33,7 @@
 </div>
 <section class="section section--staff-kpi">
   <div class="mdl-grid">
-    <app-staf-ranking-card
+    <app-staff-ranking-card
       class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col"
       style="font-size: 1.5rem;"
       (failed)="FetchStaffRanking()"
@@ -41,7 +41,7 @@
       [errorText]="activeBranch.requests.STAFF.error ? activeBranch.requests.STAFF.error.text : ''"
       [loading]="activeBranch.requests.STAFF.isLoading"
       [staffData]="activeBranch.staffRanking"
-    ></app-staf-ranking-card>
+    ></app-staff-ranking-card>
     <app-kpi-card
       class="mdl-cell mdl-cell--8-col"
       [indiceSatisfaccion]="branchIndex | async"
@@ -91,7 +91,7 @@
     </div>
   </div>
 </section>
-<section class="section">
+<section class="section section--open-questions">
   <div class="mdl-grid">
     <app-card
       class="mdl-cell mdl-typography--text-center"

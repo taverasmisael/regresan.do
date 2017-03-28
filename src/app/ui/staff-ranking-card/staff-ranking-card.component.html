@@ -4,8 +4,8 @@
   loadingText="Cargando Información del Personal"
   (retry)="failed.emit($event)"
   (primaryAction)="onPrimaryAction($event)"
+  [contentPadding]="true"
   [action]="cardAction"
-  [contentPadding]="false"
   [loading]="loading && !staffData.length"
   [errorText]="errorText">
   <div *ngIf="staffData.length" class="staff-holder">
@@ -25,4 +25,3 @@
   </div>
 </app-card>
 <app-staff-index #staffIndex [filter]="currentFilter"></app-staff-index>
-
