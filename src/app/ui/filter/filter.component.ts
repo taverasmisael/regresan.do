@@ -60,8 +60,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
     const altEnd = moment.unix(+end).format('YYYY-MM-DD');
 
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
-    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart});
-    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd});
+    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart });
+    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd });
 
     this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
     this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
@@ -92,10 +92,13 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.filterDialog.nativeElement.close();
   }
 
-  sendFilters() {
-    if (!compare(this.lastFilter, this.filterForm.value)) {
-      this.lastFilter = this.filterForm.value;
-      this.applyFilters.emit(this.filterForm.value);
+  sendFilters(formData: FormGroup) {
+    const filter = this.fixDateFilter(formData.value);
+    if (this.shouldUpdateLastFilter(filter)) {
+      console.info('Should update this', this.lastFilter)
+      console.info('Should update whit this', filter)
+      this.lastFilter = filter;
+      this.applyFilters.emit(filter);
     }
     this.closeDialog();
   }
@@ -104,4 +107,23 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.activeFilters = Object.keys(this.lastFilter).length;
   }
 
+  private fixDateFilter({start, end}) {
+    return {
+      start: isValidUnix(start) ? start : toUnix(start),
+      end: isValidUnix(end) ? end : toUnix(end)
+    }
+  }
+  private shouldUpdateLastFilter(filter: DateFilter) {
+    return !compare(filter, this.lastFilter);
+  }
+
+}
+
+
+function isValidUnix(data: string | number) {
+  return moment.unix(+data).isValid();
+}
+
+function toUnix(date: string) {
+  return moment(date).unix().toString();
 }

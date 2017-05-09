@@ -1,6 +1,6 @@
 <dialog #filterDialog class="mdl-dialog mdl-cell--9-col mdl-cell--8-col-tablet cell ">
   <h4 class="mdl-dialog__title">Filtrar Resultados</h4>
-  <form class="filter-form mdl-grid" [formGroup]="filterForm" novalidate (ngSubmit)="sendFilters()">
+  <form class="filter-form mdl-grid" [formGroup]="filterForm" novalidate (ngSubmit)="sendFilters(filterForm)">
     <div class="mdl-dialog__content mdl-grid mdl-grid--no-spacing">
       <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet filters">
         <div class="mdl-grid">
