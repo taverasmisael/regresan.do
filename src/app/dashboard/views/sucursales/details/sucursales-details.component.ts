@@ -126,8 +126,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  public LoadResumen() {
-    const currentQuery = this.activeBranch.currentQuery;
+  public LoadResumen(currentQuery) {
     this.Preguntas.getResumenSucursal(currentQuery)
       .map(res => res['Cabecera'])
       .subscribe(res => {
@@ -143,33 +142,30 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       });
   }
 
-  public FetchQuestions() {
-    const currentQuery = this.activeBranch.currentQuery;
+  public FetchQuestions(currentQuery) {
     this.Store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'));
   }
-  public FetchKPIs() {
-    const currentQuery = this.activeBranch.currentQuery;
+  public FetchKPIs(currentQuery) {
     this.Store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'));
   }
-  public FetchStaffRanking() {
-    const currentQuery = this.activeBranch.currentQuery;
+  public FetchStaffRanking(currentQuery) {
     this.Store.dispatch(new RequestStaffRanking(currentQuery, 'Cargando Ranking de Personal...'));
   }
-  public FetchHistoric() {
-    const currentQuery = this.activeBranch.currentQuery;
+  public FetchHistoric(currentQuery) {
     this.Store.dispatch(new RequestHistoric(currentQuery, 'Cargando Histórico de Encuestas...'));
   }
 
   public FetchAll() {
-    this.FetchHistoric();
-    this.FetchKPIs();
-    this.FetchQuestions();
-    this.FetchStaffRanking();
-    this.LoadResumen();
+    const currentQuery = this.activeBranch.currentQuery;
+    this.FetchHistoric(currentQuery);
+    this.FetchKPIs(currentQuery);
+    this.FetchQuestions(currentQuery);
+    this.FetchStaffRanking(currentQuery);
+    this.LoadResumen(currentQuery);
   }
 
   // Public Helpers
-  public GetRequestAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number): StateRequest   {
+  public GetRequestAnswerInfo(type: 'ACLOSE' | 'AOPEN', qid: number): StateRequest {
     const res = findByObjectId<StateRequest>(this.activeBranch.requests[type], qid.toString()) || new StateRequest(undefined, true, '');
     return res;
   }
@@ -198,6 +194,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       areNumeric: (params) => +params['start'] && +params['end'],
       isNumeric: (slice: string, params) => +params[slice]
     }
+    const currentQuery = this.activeBranch.currentQuery
+    const currentDateQuery = { start: currentQuery.start, end: currentQuery.end }
+    if (currentDateQuery && compare(queryParams, currentDateQuery)) { return; }
     if (compare(queryParams, {})) {
       applyDefault();
     } else if (!DateFilter.exists(queryParams)) { // If there's not an DateFilter applyed
@@ -217,12 +216,13 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   private InitializeSubscriptions() {
     this.subBranch = this.store$
-    .filter((branch) => !compare(branch, this.activeBranch)) // Only triggers when the sates are differents
-    .subscribe((branch) => {
-      const areBranchs = branch && this.activeBranch;
-      if (areBranchs && !compare(branch.info, this.activeBranch.info)) { this.ResetButInfo(); } // Only ResetButInfo if `.ifno` had changed
-      this.activeBranch = branch;
-    });
+      .filter((branch) => !compare(branch, this.activeBranch)) // Only triggers when the sates are differents
+      .subscribe((branch) => {
+        const areBranchs = branch && this.activeBranch;
+        const shouldBranchUpdate = areBranchs && !compare(branch.info, this.activeBranch.info);
+        if (shouldBranchUpdate) { this.ResetButInfo(); } // Only ResetButInfo if `.ifno` had changed
+        this.activeBranch = branch;
+      });
     // Load all CloseAnswer each time there are new closeQuestions
     this.subCloseQs = this.store$.distinctUntilKeyChanged('closeQuestions')
       .pluck<Pregunta[]>('closeQuestions').filter(qs => Boolean(qs.length))
