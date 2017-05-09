@@ -25,6 +25,7 @@ import { UserProfile } from '@models/userprofile';
 import { DateFilter } from '@models/filter-date';
 import { FlatpickrOptions } from '@thirdparty/flatpickr/models';
 import { updateObject } from '@utilities/objects';
+import { isValidUnix, toUnixDate } from '@utilities/dates';
 
 
 @Component({
@@ -95,8 +96,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
   sendFilters(formData: FormGroup) {
     const filter = this.fixDateFilter(formData.value);
     if (this.shouldUpdateLastFilter(filter)) {
-      console.info('Should update this', this.lastFilter)
-      console.info('Should update whit this', filter)
       this.lastFilter = filter;
       this.applyFilters.emit(filter);
     }
@@ -109,21 +108,12 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   private fixDateFilter({start, end}) {
     return {
-      start: isValidUnix(start) ? start : toUnix(start),
-      end: isValidUnix(end) ? end : toUnix(end)
+      start: isValidUnix(start) ? start : toUnixDate(start),
+      end: isValidUnix(end) ? end : toUnixDate(end)
     }
   }
   private shouldUpdateLastFilter(filter: DateFilter) {
     return !compare(filter, this.lastFilter);
   }
 
-}
-
-
-function isValidUnix(data: string | number) {
-  return moment.unix(+data).isValid();
-}
-
-function toUnix(date: string) {
-  return moment(date).unix().toString();
 }
