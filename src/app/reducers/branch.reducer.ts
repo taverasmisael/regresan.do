@@ -67,10 +67,12 @@ function resetDate(state: BranchState, action: ActionEnhanced): BranchState {
 
 function requesting(state: BranchState, action: ActionEnhanced): BranchState {
   const { payload, message, section } = action;
+  let update = {requests: updateObject(state.requests, { [section]: new StateRequest(undefined, true, message) })};
+  if (section === 'QUESTIONS') {
+    update  = updateObject(update, {closeQuestions: [], openAnswers: []});
+  }
 
-  return updateObject(state, {
-    requests: updateObject(state.requests, { [section]: new StateRequest(undefined, true, message) })
-  });
+  return updateObject(state, update);
 }
 
 function requestingAnswer(state: BranchState, action: ActionEnhanced): BranchState {
