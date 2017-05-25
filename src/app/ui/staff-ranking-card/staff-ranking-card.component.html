@@ -6,7 +6,7 @@
   (primaryAction)="onPrimaryAction($event)"
   [contentPadding]="true"
   [action]="cardAction"
-  [loading]="loading && !staffData.length"
+  [loading]="loading"
   [errorText]="errorText">
   <div *ngIf="staffData.length" class="staff-holder">
     <p *ngFor="let staff of staffData" class="staff">

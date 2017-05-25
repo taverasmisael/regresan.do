@@ -69,6 +69,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private subHistoric: Subscription
   private subCloseAw: Subscription
   private subOpenAw: Subscription
+  private subCurrentQr: Subscription
 
   constructor(private router: Router, private Preguntas: PreguntasService,
     private Respuestas: RespuestasService, KPIS: KpisService,
@@ -257,6 +258,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
       .map(TotalPorDiaLineal)
       .subscribe((processedEntries) => this.SaveHistoricEntries(processedEntries));
 
+      this.subCurrentQr = this.store$.distinctUntilKeyChanged('currentQuery')
+        .pluck('currentQuery')
+        .subscribe(() => this.ResetChartData())
     // Get the Route Params
     this.subRoute = this.Route.params.distinctUntilChanged((before, after) => compare(before, after))
       .switchMap(
@@ -278,12 +282,17 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   private ResetView() {
     this.ResetResume();
     this.Store.dispatch(new ResetAll());
-    this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
+    this.ResetChartData();
   }
 
   private ResetButInfo() {
     this.ResetResume();
     this.Store.dispatch(new ResetButInfo());
+    this.ResetChartData();
+
+  }
+
+  private ResetChartData() {
     this.chartData = new BranchChartData(new ChartData([], [], []), [], []);
   }
 
