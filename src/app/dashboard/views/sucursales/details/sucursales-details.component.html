@@ -52,13 +52,7 @@
   </div>
 </section>
 
-<div class="load-charts" *ngIf="!needsAnswersCharts">
-  <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
-    <i class="material-icons">pie_chart</i> Cargar Gráficos de Encuesta
-  </button>
-</div>
-
-<section class="section section--optional-branch-info" *ngIf="needsAnswersCharts">
+<section class="section section--optional-branch-info" *ngIf="needsCloseAnswers">
   <section class="section section--charts">
     <div class="mdl-grid main-content">
       <div class="mdl-cell mdl-cell--12-col qa-holder">
@@ -97,7 +91,7 @@
       </div>
     </div>
   </section>
-  <section class="section section--open-questions">
+  <section class="section section--open-questions" *ngIf="needsOpenAnswers">
     <div class="mdl-grid">
       <app-card
         class="mdl-cell mdl-typography--text-center"
@@ -121,6 +115,11 @@
     </div>
   </section>
 </section>
+<div class="load-optional-info" *ngIf="!needsCloseAnswers || !needsOpenAnswers">
+  <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
+    <i class="material-icons">pie_chart</i> {{needsDataLabel}}
+  </button>
+</div>
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
   <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
     {{ prof.Title }}

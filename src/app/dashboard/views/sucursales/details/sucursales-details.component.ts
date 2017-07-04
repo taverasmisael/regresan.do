@@ -59,7 +59,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public chartData: BranchChartData;
   public branchColor: number;
 
-  public needsAnswersCharts: boolean;
+  public needsCloseAnswers: boolean;
+  public needsOpenAnswers: boolean;
+  public needsDataLabel: string;
 
   private store$: Observable<BranchState>
   public profiles$: Observable<UserProfile[]>
@@ -79,6 +81,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Angular Lifecycle Hooks
   ngOnInit() {
+    this.needsDataLabel = 'Cargar Respuestas Cerradas'
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store.select('MainStore')
       .distinctUntilKeyChanged('currentBranch')
@@ -109,9 +112,15 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public loadAnswersCharts(event) {
-    const currentQuery = this.activeBranch.currentQuery;
-    this.needsAnswersCharts = true;
-    this.FetchQuestions(currentQuery);
+    if(this.needsCloseAnswers) {
+      this.needsDataLabel = 'Cargar Preguntas Cerradas'
+      if(!this.needsOpenAnswers) { this.needsOpenAnswers = true }
+    } else {
+      const currentQuery = this.activeBranch.currentQuery;
+      this.needsDataLabel = 'Cargar Respuestas Cerradas'
+      this.needsCloseAnswers = true;
+      this.FetchQuestions(currentQuery);
+    }
   }
 
   // Public Methods
