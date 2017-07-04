@@ -12,9 +12,9 @@
         [class.mdl-data-table__header--sorted-descending]="sorting === '-answer'"
       >Respuesta</th>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
-        (click)="sortBy('sesion')"
-        [class.mdl-data-table__header--sorted-ascending]="sorting === 'sesion'"
-        [class.mdl-data-table__header--sorted-descending]="sorting === '-sesion'"
+        (click)="sortBy('session')"
+        [class.mdl-data-table__header--sorted-ascending]="sorting === 'session'"
+        [class.mdl-data-table__header--sorted-descending]="sorting === '-session'"
       >Camarero</th>
     </tr>
   </thead>
@@ -22,7 +22,7 @@
     <tr *ngFor="let a of answers | orderBy: [sorting];">
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.date }}</td>
       <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.answer }}</td>
-      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.sesion || "Anonimo"}}</td>
+      <td rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric">{{ a.session || "Anonimo"}}</td>
     </tr>
   </tbody>
 </table>
