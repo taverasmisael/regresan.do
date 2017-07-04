@@ -63,19 +63,17 @@
     <div class="mdl-grid main-content">
       <div class="mdl-cell mdl-cell--12-col qa-holder">
         <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
-          <app-chart-card
+          <app-chart-in-loop
             class="mdl-cell mdl-cell--4-col-desktop mdl-card"
             *ngFor="let q of activeBranch.closeQuestions; let i = index;"
-            chartType="pie"
+            type="pie"
             loadingText="Respuesta {{ i + 1 }}"
             (failed)="LoadCloseAnswer(q.idPregunta)"
-            [errorText]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).error?.text"
-            [loading]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).isLoading && !(GetAnswerDisplayData('ACLOSE', q.pregunta).labels && GetAnswerDisplayData('ACLOSE', q.pregunta).labels.length)"
             [chartTitle]="q.pregunta"
-            [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
-            [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
-            [chartColors]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.colors || []">
-          </app-chart-card>
+            [errorText]="GetRequestAnswerInfo('ACLOSE', q.pregunta).error?.text"
+            [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)"
+            [chartInfo]="GetRequestAnswerInfo('ACLOSE', q.pregunta)"
+          ></app-chart-in-loop>
         </div>
         <!-- Questions Loading Indicator -->
         <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
