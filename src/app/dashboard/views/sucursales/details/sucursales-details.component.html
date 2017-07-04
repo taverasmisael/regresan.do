@@ -51,68 +51,77 @@
     ></app-kpi-card>
   </div>
 </section>
-<section class="section section--charts">
-  <div class="mdl-grid main-content">
-    <div class="mdl-cell mdl-cell--12-col qa-holder">
-      <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
-        <app-chart-card
-          class="mdl-cell mdl-cell--4-col-desktop mdl-card"
-          *ngFor="let q of activeBranch.closeQuestions; let i = index;"
-          chartType="pie"
-          loadingText="Respuesta {{ i + 1 }}"
-          (failed)="LoadCloseAnswer(q.idPregunta)"
-          [errorText]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).error?.text"
-          [loading]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).isLoading && !(GetAnswerDisplayData('ACLOSE', q.pregunta).labels && GetAnswerDisplayData('ACLOSE', q.pregunta).labels.length)"
-          [chartTitle]="q.pregunta"
-          [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
-          [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
-          [chartColors]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.colors || []">
-        </app-chart-card>
-      </div>
-      <!-- Questions Loading Indicator -->
-      <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
-        <div class="content">
-          <div class="mdl-spinner mdl-js-spinner is-active"></div>
-          <h4 class="mdl-typography--text-center">{{ activeBranch.requests.QUESTIONS.text }}</h4>
+
+<div class="load-charts" *ngIf="!needsAnswersCharts">
+  <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
+    <i class="material-icons">pie_chart</i> Cargar Gráficos de Encuesta
+  </button>
+</div>
+
+<section class="section section--optional-branch-info" *ngIf="needsAnswersCharts">
+  <section class="section section--charts">
+    <div class="mdl-grid main-content">
+      <div class="mdl-cell mdl-cell--12-col qa-holder">
+        <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
+          <app-chart-card
+            class="mdl-cell mdl-cell--4-col-desktop mdl-card"
+            *ngFor="let q of activeBranch.closeQuestions; let i = index;"
+            chartType="pie"
+            loadingText="Respuesta {{ i + 1 }}"
+            (failed)="LoadCloseAnswer(q.idPregunta)"
+            [errorText]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).error?.text"
+            [loading]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).isLoading && !(GetAnswerDisplayData('ACLOSE', q.pregunta).labels && GetAnswerDisplayData('ACLOSE', q.pregunta).labels.length)"
+            [chartTitle]="q.pregunta"
+            [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
+            [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
+            [chartColors]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.colors || []">
+          </app-chart-card>
+        </div>
+        <!-- Questions Loading Indicator -->
+        <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
+          <div class="content">
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+            <h4 class="mdl-typography--text-center">{{ activeBranch.requests.QUESTIONS.text }}</h4>
+          </div>
+        </div>
+        <!-- Empty Response Indicator -->
+        <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && !activeBranch.requests.QUESTIONS.error">
+          <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+            <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
+          </h4>
+        </div>
+        <!-- Error Response Indicator -->
+        <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && activeBranch.requests.QUESTIONS.error">
+          <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+            <i class="material-icons">error</i><br /> {{ activeBranch.requests.QUESTIONS.error.text }}
+          </h4>
         </div>
       </div>
-      <!-- Empty Response Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && !activeBranch.requests.QUESTIONS.error">
-        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-          <i class="material-icons">mood_bad</i><br /> NO HAY PREGUNTAS EN ESTE PERÍODO
-        </h4>
-      </div>
-      <!-- Error Response Indicator -->
-      <div class="mdl-grid empty-holder" *ngIf="!activeBranch.requests.QUESTIONS.isLoading  && !activeBranch.closeQuestions.length && activeBranch.requests.QUESTIONS.error">
-        <h4 class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-          <i class="material-icons">error</i><br /> {{ activeBranch.requests.QUESTIONS.error.text }}
-        </h4>
-      </div>
     </div>
-  </div>
-</section>
-<section class="section section--open-questions">
-  <div class="mdl-grid">
-    <app-card
-      class="mdl-cell mdl-typography--text-center"
-      [class.mdl-cell--12-col]="activeBranch.openQuestions.length === 1"
-      [class.mdl-cell--6-col]="activeBranch.openQuestions.length === 2"
-      [class.mdl-cell--4-col]="activeBranch.openQuestions.length === 3"
-      *ngFor="let q of activeBranch.openQuestions"
-      loadingText="Cargando Preguntas Abiertas"
-      (failed)="FetchQuestions()"
-      [isDataTable]="true"
-      [title]="q.pregunta">
-        <app-answers-table
-          (failed)="LoadOpenAnswers(q.idPregunta)"
-          [withinCard]="true"
-          [loading]="GetRequestAnswerInfo('AOPEN', q.idPregunta).isLoading && !GetAnswerDisplayData('AOPEN', q.pregunta).answers"
-          [loadingText]="'Cargando ' + q.pregunta"
-          [answers]="GetAnswerDisplayData('AOPEN', q.pregunta).answers || []"
-          [errorText]="GetRequestAnswerInfo('AOPEN', q.idPregunta).error">
-        </app-answers-table>
-    </app-card>
-  </div>
+  </section>
+  <section class="section section--open-questions">
+    <div class="mdl-grid">
+      <app-card
+        class="mdl-cell mdl-typography--text-center"
+        [class.mdl-cell--12-col]="activeBranch.openQuestions.length === 1"
+        [class.mdl-cell--6-col]="activeBranch.openQuestions.length === 2"
+        [class.mdl-cell--4-col]="activeBranch.openQuestions.length === 3"
+        *ngFor="let q of activeBranch.openQuestions"
+        loadingText="Cargando Preguntas Abiertas"
+        (failed)="FetchQuestions()"
+        [isDataTable]="true"
+        [title]="q.pregunta">
+          <app-answers-table
+            (failed)="LoadOpenAnswers(q.idPregunta)"
+            [withinCard]="true"
+            [loading]="GetRequestAnswerInfo('AOPEN', q.idPregunta).isLoading && !GetAnswerDisplayData('AOPEN', q.pregunta).answers"
+            [loadingText]="'Cargando ' + q.pregunta"
+            [answers]="GetAnswerDisplayData('AOPEN', q.pregunta).answers || []"
+            [errorText]="GetRequestAnswerInfo('AOPEN', q.idPregunta).error">
+          </app-answers-table>
+      </app-card>
+    </div>
+  </section>
 </section>
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
   <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">

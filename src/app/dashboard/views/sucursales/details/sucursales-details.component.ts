@@ -59,6 +59,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public chartData: BranchChartData;
   public branchColor: number;
 
+  public needsAnswersCharts: boolean;
+
   private store$: Observable<BranchState>
   public profiles$: Observable<UserProfile[]>
 
@@ -106,6 +108,12 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.Store.dispatch(new ResetAll());
   }
 
+  public loadAnswersCharts(event) {
+    const currentQuery = this.activeBranch.currentQuery;
+    this.needsAnswersCharts = true;
+    this.FetchQuestions(currentQuery);
+  }
+
   // Public Methods
   public LoadCloseAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery;
@@ -139,7 +147,6 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         } else {
           this.ResetResume();
         }
-
       });
   }
 
@@ -160,9 +167,8 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     const currentQuery = this.activeBranch.currentQuery;
     this.FetchHistoric(currentQuery);
     this.FetchKPIs(currentQuery);
-    this.FetchQuestions(currentQuery);
-    this.FetchStaffRanking(currentQuery);
     this.LoadResumen(currentQuery);
+    this.FetchStaffRanking(currentQuery);
   }
 
   // Public Helpers
