@@ -1,5 +1,7 @@
 export class IUserLoginCredentials {
-  username: string;
-  password: string;
-  grant_type?: string;
+  constructor(
+    public username: any,
+    public password: any,
+    public grant_type?: string
+  ) {}
 }
