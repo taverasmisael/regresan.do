@@ -52,30 +52,22 @@
   </div>
 </section>
 
-<div class="load-charts" *ngIf="!needsAnswersCharts">
-  <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
-    <i class="material-icons">pie_chart</i> Cargar Gráficos de Encuesta
-  </button>
-</div>
-
-<section class="section section--optional-branch-info" *ngIf="needsAnswersCharts">
+<section class="section section--optional-branch-info" *ngIf="needsCloseAnswers">
   <section class="section section--charts">
     <div class="mdl-grid main-content">
       <div class="mdl-cell mdl-cell--12-col qa-holder">
         <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
-          <app-chart-card
+          <app-chart-in-loop
             class="mdl-cell mdl-cell--4-col-desktop mdl-card"
             *ngFor="let q of activeBranch.closeQuestions; let i = index;"
-            chartType="pie"
+            type="pie"
             loadingText="Respuesta {{ i + 1 }}"
             (failed)="LoadCloseAnswer(q.idPregunta)"
-            [errorText]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).error?.text"
-            [loading]="GetRequestAnswerInfo('ACLOSE', q.idPregunta).isLoading && !(GetAnswerDisplayData('ACLOSE', q.pregunta).labels && GetAnswerDisplayData('ACLOSE', q.pregunta).labels.length)"
             [chartTitle]="q.pregunta"
-            [chartLabels]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.labels || []"
-            [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.data || []"
-            [chartColors]="GetAnswerDisplayData('ACLOSE', q.pregunta)?.colors || []">
-          </app-chart-card>
+            [errorText]="GetRequestAnswerInfo('ACLOSE', q.pregunta).error?.text"
+            [chartData]="GetAnswerDisplayData('ACLOSE', q.pregunta)"
+            [chartInfo]="GetRequestAnswerInfo('ACLOSE', q.pregunta)"
+          ></app-chart-in-loop>
         </div>
         <!-- Questions Loading Indicator -->
         <div class="mdl-grid loading-holder mdl-typography--text-center" *ngIf="activeBranch.requests.QUESTIONS.isLoading || !activeBranch.closeQuestions.length">
@@ -99,7 +91,7 @@
       </div>
     </div>
   </section>
-  <section class="section section--open-questions">
+  <section class="section section--open-questions" *ngIf="needsOpenAnswers">
     <div class="mdl-grid">
       <app-card
         class="mdl-cell mdl-typography--text-center"
@@ -123,6 +115,11 @@
     </div>
   </section>
 </section>
+<div class="load-optional-info" *ngIf="!needsCloseAnswers || !needsOpenAnswers">
+  <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
+    <i class="material-icons">pie_chart</i> {{needsDataLabel}}
+  </button>
+</div>
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
   <a class="mdl-menu__item" *ngFor="let prof of profiles$ | async " (click)="NavigateToBranch(prof.OldProfileId)">
     {{ prof.Title }}

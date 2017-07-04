@@ -1,0 +1,11 @@
+<app-chart-card
+  (failed)="failed.emit()"
+  [chartType]="type"
+  [loadingText]="loadingText"
+  [errorText]="chartInfo.error?.text"
+  [loading]="chartInfo.isLoading && !(chartData.labels && chartData.labels.length)"
+  [chartTitle]="chartTitle"
+  [chartLabels]="chartData?.labels || []"
+  [chartData]="chartData?.data || []"
+  [chartColors]="chartData?.colors || []">
+</app-chart-card>
