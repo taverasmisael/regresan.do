@@ -56,6 +56,7 @@ import { CardComponent } from './ui/card/card.component';
 import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
 import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
 import { StaffIndexComponent } from './staff-index/staff-index.component';
+import { ChartInLoopComponent } from './ui/chart-in-loop/chart-in-loop.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { StaffIndexComponent } from './staff-index/staff-index.component';
     KpiCardComponent,
     OrderByPipe,
     StaffIndexComponent,
+    ChartInLoopComponent,
   ],
   imports: [
     BrowserModule,
