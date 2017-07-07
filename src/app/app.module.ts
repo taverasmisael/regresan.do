@@ -57,6 +57,7 @@ import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
 import { OrderByPipe } from './thirdparty/orderby/orderby.pipe';
 import { StaffIndexComponent } from './staff-index/staff-index.component';
 import { ChartInLoopComponent } from './ui/chart-in-loop/chart-in-loop.component';
+import { DoubleSelectComponent } from './ui/double-select/double-select.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { ChartInLoopComponent } from './ui/chart-in-loop/chart-in-loop.component
     OrderByPipe,
     StaffIndexComponent,
     ChartInLoopComponent,
+    DoubleSelectComponent,
   ],
   imports: [
     BrowserModule,
