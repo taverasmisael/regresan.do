@@ -16,7 +16,7 @@ export class BranchState {
   openQuestions: Pregunta[]
   closeQuestions: Pregunta[]
   openAnswers: OpenAnswer[]
-  closeAnswers: CloseAnswer[]
+  closeAnswers: CloseAnswer[][]
   kpis: KPI[]
   historicData: HistoricEntry[]
   staffRanking: StaffRanking[]
