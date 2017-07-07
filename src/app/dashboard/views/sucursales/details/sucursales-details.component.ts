@@ -3,6 +3,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 
 import * as moment from 'moment'
 
+
+import * as R from 'ramda'
+const { compose, reduce, flatten, filter, length, map, prop, tap } = R
+
 import compare from 'just-compare'
 
 import { Store } from '@ngrx/store'
@@ -58,6 +62,10 @@ import {
 
 const aWeekAgo = moment().subtract(1, 'week').unix().toString()
 const today = moment().unix().toString()
+const unique = key => (p, c) => p.find(e => e[key] === c[key]) ? p : [...p, c]
+const uniqueQuestion = unique('idPregunta')
+const uniqueQuestionInAnswer = unique('Pregunta')
+const uniqueValue = unique('value')
 
 @Component({
   selector: 'app-sucursales-details',
@@ -79,7 +87,11 @@ export class SucursalesDetailsComponent
   public needsOpenAnswers: boolean
   public needsDataLabel: string
 
-  public questionsList: Array<{ id: number; text: string }>
+  public questionsList: Array<{
+    value: number
+    text: string
+    children: Array<{ value: string; text: string }>
+  }>
 
   private store$: Observable<BranchState>
   public profiles$: Observable<UserProfile[]>
@@ -104,6 +116,7 @@ export class SucursalesDetailsComponent
 
   // Angular Lifecycle Hooks
   ngOnInit() {
+    this.questionsList = []
     this.needsDataLabel = 'Cargar Respuestas Cerradas'
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store
@@ -387,19 +400,23 @@ export class SucursalesDetailsComponent
 
     this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
       const { closeQuestions, closeAnswers } = store
-      const flatAnswers = closeAnswers.reduce(merge, [])
-      const mappedQuestions = closeQuestions.map(
-        ({ idPregunta: id, pregunta: text }) => ({ id, text })
-      ).map(q => {
-        const myAnswer = flatAnswers.filter(a => a.Pregunta === q.text)
-        if (myAnswer) {
-          const answers = myAnswer.map(({Respuesta: id, Respuesta: text}) => ({ id, text }))
-          return updateObject(q, { answers })
-        }
-        return q
-      })
+      const flatAnswers = flatten<CloseAnswer>(closeAnswers)
+      const mappedQuestions = closeQuestions
+        .map(({ idPregunta: value, pregunta: text }) => ({ value, text }))
+        .map(q => {
+          const myAnswer = flatAnswers.filter(a => a.Pregunta === q.text)
+          if (myAnswer) {
+            const children = myAnswer.map(({ Respuesta: value, Respuesta: text }) => ({
+              value,
+              text
+            }))
+            return updateObject(q, { children })
+          }
+          return undefined
+        })
+        .filter(q => !!q.children.length)
 
-      console.log(mappedQuestions)
+      this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
     })
   }
 
