@@ -23,35 +23,21 @@
           </div>
         </div>
       </div>
-      <div class="mdl-cell mdl-cell--8-col">
+      <div class="mdl-cell mdl-cell--8-col" *ngIf="questions">
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--12-col cell__header mdl-grid">
             <h6 class="cell__title mdl-typography--title">Filtrar por Pregunta/Respuesta</h6>
           </div>
-          <div class="mdl-grid mdl-cell--12-col">
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-              <span class="field__name">Pregunta</span>
-              <div class="mdl-selectfield mdl-js-selectfield">
-                <select id="myselect" name="myselect" class="mdl-selectfield__select">
-                  <option value=""></option>
-                  <option value="option0_value">option 0</option>
-                  <option value="option1_value">option 1</option>
-                </select>
-                <label class="mdl-selectfield__label" for="myselect">Choose option</label>
-              </div>
-            </div>
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-              <span class="field__name">Respuesta</span>
-              <div class="mdl-selectfield mdl-js-selectfield">
-                <select id="myselect" name="myselect" class="mdl-selectfield__select">
-                  <option value=""></option>
-                  <option value="option0_value">option 0</option>
-                  <option value="option1_value">option 1</option>
-                </select>
-                <label class="mdl-selectfield__label" for="myselect">Choose option</label>
-              </div>
-            </div>
-          </div>
+          <app-double-select
+            primaryLabel="Preguntas"
+            secondaryLabel="Respuestas"
+            [options]="questions"
+          ></app-double-select>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--8-col" style="display: flex; align-items: center; justify-content: center;">
+        <div class="mdl-grid" *ngIf="!questions" style="display: flex; align-items: center; justify-content: center;">
+          <h3 class="mdl-typography--display-2">Más filtros en camino</h3>
         </div>
       </div>
     </div>

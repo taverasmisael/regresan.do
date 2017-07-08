@@ -37,6 +37,7 @@ import { isValidUnix, toUnixDate } from '@utilities/dates';
 export class FilterComponent implements OnInit, AfterViewInit {
 
   @Input() filters: DateFilter;
+  @Input() questions: DateFilter;
   @Output() applyFilters = new EventEmitter();
 
   @HostBinding('class.mdl-grid') isMdlGrid = true;
