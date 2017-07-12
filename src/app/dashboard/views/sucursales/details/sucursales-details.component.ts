@@ -233,6 +233,8 @@ export class SucursalesDetailsComponent
     this.FetchKPIs(currentQuery)
     this.LoadResumen(currentQuery)
     this.FetchStaffRanking(currentQuery)
+    this.needsCloseAnswers = true
+    this.FetchQuestions(currentQuery)
   }
 
   // Public Helpers
