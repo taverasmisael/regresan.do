@@ -8,7 +8,9 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  HostBinding
+  OnChanges,
+  HostBinding,
+  SimpleChanges
 } from '@angular/core';
 
 import {
@@ -34,10 +36,14 @@ import { isValidUnix, toUnixDate } from '@utilities/dates';
   styleUrls: ['./filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FilterComponent implements OnInit, AfterViewInit {
+export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() filters: DateFilter;
-  @Input() questions: DateFilter;
+  @Input() questions: Array<{
+    value: number
+    text: string
+    children: Array<{ value: string; text: string }>
+  }>;
   @Output() applyFilters = new EventEmitter();
 
   @HostBinding('class.mdl-grid') isMdlGrid = true;
@@ -48,6 +54,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
   public filterForm: FormGroup;
   public filterFechaInicio: FormControl;
   public filterFechaFin: FormControl;
+  public filterQuestion: FormControl;
+  public filterAnswer: FormControl;
   public lastFilter: DateFilter;
   public activeFilters: number;
   public startOptions: FlatpickrOptions;
@@ -67,7 +75,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
     this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
     this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
-
+    this.filterQuestion = new FormControl({value: '', disabled: this.questions && !this.questions.length})
+    this.filterAnswer = new FormControl({value: '', disabled: this.filterQuestion.disabled})
     this.lastFilter = this.filters;
     this.setActivesFilters();
     this.filterForm = this.fb.group({
@@ -76,6 +85,13 @@ export class FilterComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    const questionsChange = changes['questions']
+    if (questionsChange && questionsChange.currentValue.length && this.filterQuestion.disabled) {
+      this.filterQuestion.enable()
+      this.filterAnswer.enable()
+    }
+  }
   ngAfterViewInit() {
     componentHandler.upgradeAllRegistered();
     if (!this.filterDialog.nativeElement.showModal) {

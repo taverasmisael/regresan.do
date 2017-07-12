@@ -7,6 +7,8 @@ import {
   ViewChild
 } from '@angular/core'
 
+import { FormControl } from '@angular/forms'
+
 @Component({
   selector: 'app-double-select',
   templateUrl: './double-select.component.html',
@@ -16,7 +18,9 @@ import {
 export class DoubleSelectComponent implements OnInit {
   @ViewChild('primarySelect') primarySelect: ElementRef
   @Input() primaryLabel: string
+  @Input() primaryControl: FormControl
   @Input() secondaryLabel: string
+  @Input() secondaryControl: FormControl
   @Input() options: any
 
   public currentSecondary = []

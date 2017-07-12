@@ -30,7 +30,9 @@
           </div>
           <app-double-select
             primaryLabel="Preguntas"
+            [primaryControl]="filterQuestion"
             secondaryLabel="Respuestas"
+            [secondaryControl]="filterAnswer"
             [options]="questions"
           ></app-double-select>
         </div>
