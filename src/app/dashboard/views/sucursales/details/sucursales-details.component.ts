@@ -25,7 +25,7 @@ import {
   makePieChart,
   TotalPorDiaLineal
 } from '@utilities/respuestas'
-import { updateObject } from '@utilities/objects'
+import { updateObject, objectRest } from '@utilities/objects'
 import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
@@ -47,6 +47,8 @@ import { BranchChartData } from '@models/branch.chart-data'
 import { ChartData } from '@models/chart-data'
 import { OpenAnswerData } from '@models/answer.open-data'
 
+import QuestionFilter from '@models/filter-question'
+
 import {
   SaveInfo,
   ResetButInfo,
@@ -66,6 +68,7 @@ const unique = key => (p, c) => p.find(e => e[key] === c[key]) ? p : [...p, c]
 const uniqueQuestion = unique('idPregunta')
 const uniqueQuestionInAnswer = unique('Pregunta')
 const uniqueValue = unique('value')
+const keyWithValue = filter(k => !!k)
 
 @Component({
   selector: 'app-sucursales-details',
@@ -263,16 +266,16 @@ export class SucursalesDetailsComponent
       this.Store.dispatch(new ApplyCurrentQuery(query))
     const navigate = (query: APIRequestParams) =>
       this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: APIRequestParams) => {
+    const dispatchNavigate = (query: QuestionFilter) => {
       dispatch(query)
       navigate(query)
       this.FetchAll()
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
-    const applyPartial = (s?: string, e?: string) => {
+    const applyPartial = (s?: string, e?: string, extra?: any) => {
       let start = s || moment.unix(+e).subtract(1, 'week').unix().toString()
       let end = e || moment.unix(+s).add(1, 'week').unix().toString()
-      dispatchNavigate({ start, end })
+      dispatchNavigate(updateObject({ start, end }, extra))
     }
     const DateFilter = {
       exists: params => params['start'] && params['end'],
@@ -284,28 +287,27 @@ export class SucursalesDetailsComponent
       start: currentQuery.start,
       end: currentQuery.end
     }
+    const extraParams = keyWithValue(<any>(objectRest(queryParams, ['start', 'end'])))
     if (currentDateQuery && compare(queryParams, currentDateQuery)) {
       return
     }
     if (compare(queryParams, {})) {
       applyDefault()
-    } else if (!DateFilter.exists(queryParams)) {
+    } else if (!DateFilter.exists(queryParams) || !DateFilter.areNumeric(queryParams)) {
       // If there's not an DateFilter applyed
       applyDefault()
-    } else if (!DateFilter.areNumeric(queryParams)) {
-      applyDefault()
     } else if (DateFilter.areNumeric(queryParams)) {
-      applyPartial(queryParams['start'], queryParams['end'])
+      applyPartial(queryParams['start'], queryParams['end'], extraParams)
     } else if (
       DateFilter.isNumeric('start', queryParams) &&
       !DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(queryParams['start'])
+      applyPartial(queryParams['start'], undefined, extraParams)
     } else if (
       !DateFilter.isNumeric('start', queryParams) &&
       DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(undefined, queryParams['end'])
+      applyPartial(undefined, queryParams['end'], extraParams)
     }
   }
 
