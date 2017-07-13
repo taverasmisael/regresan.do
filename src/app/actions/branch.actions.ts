@@ -11,6 +11,7 @@ import { KPI } from '@models/kpi';
 import { StaffRanking } from '@models/staff-ranking';
 import { HistoricEntry } from '@models/historic-entry';
 import { APIRequestParams, APIRequestUser, APIRequestRespuesta } from '@models/apiparams';
+import QuestionFilter from '@models/filter-question';
 
 const getSectionName = (type: string) => type.split('_')[1];
 
@@ -168,7 +169,7 @@ export class SaveInfo implements Action {
 export class ApplyCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY;
 
-  constructor(public payload: APIRequestParams) { }
+  constructor(public payload: QuestionFilter) { }
 }
 
 export class SaveCurrentQuery implements Action {
