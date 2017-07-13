@@ -1,4 +1,8 @@
-<app-filter (applyFilters)="ApplyQueryParams($event)" [filters]="activeBranch.currentQuery"></app-filter>
+<app-filter
+  (applyFilters)="ApplyQueryParams($event)"
+  [filters]="activeBranch.currentQuery"
+  [questions]="questionsList">
+</app-filter>
 <div class="info__header mdl-grid">
   <div class="headline mdl-cell mdl-cell--12-col">
     <a id="btn-back" [routerLink]="['../']" class="mdl-button mdl-js-button mdl-js-ripple-effect back-btn mdl-color--primary">

@@ -23,8 +23,22 @@
           </div>
         </div>
       </div>
-      <div class="mdl-cell mdl-cell--8-col" style="display: flex; align-items: center">
+      <div class="mdl-cell mdl-cell--8-col" *ngIf="questions">
         <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--12-col cell__header mdl-grid">
+            <h6 class="cell__title mdl-typography--title">Filtrar por Pregunta/Respuesta</h6>
+          </div>
+          <app-double-select
+            primaryLabel="Preguntas"
+            [primaryControl]="filterQuestion"
+            secondaryLabel="Respuestas"
+            [secondaryControl]="filterAnswer"
+            [options]="questions"
+          ></app-double-select>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--8-col" style="display: flex; align-items: center; justify-content: center;">
+        <div class="mdl-grid" *ngIf="!questions" style="display: flex; align-items: center; justify-content: center;">
           <h3 class="mdl-typography--display-2">Más filtros en camino</h3>
         </div>
       </div>

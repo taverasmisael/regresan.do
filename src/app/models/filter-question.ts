@@ -1,5 +1,7 @@
-import { DateFilter } from '@models/filter-date';
+import { DateFilter } from '@models/filter-date'
 
-export class QuestionFilter extends DateFilter {
-  profile: string;
+export default class QuestionFilter extends DateFilter {
+  public question?: string;
+  public answer?: string;
+  public profile?: string;
 }
