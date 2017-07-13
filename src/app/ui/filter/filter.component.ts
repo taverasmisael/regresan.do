@@ -81,7 +81,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     this.setActivesFilters();
     this.filterForm = this.fb.group({
       start: this.filterFechaInicio,
-      end: this.filterFechaFin
+      end: this.filterFechaFin,
+      question: this.filterQuestion,
+      answer: this.filterAnswer
     });
   }
 
@@ -123,11 +125,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     this.activeFilters = Object.keys(this.lastFilter).length;
   }
 
-  private fixDateFilter({start, end}) {
-    return {
-      start: isValidUnix(start) ? start : toUnixDate(start),
-      end: isValidUnix(end) ? end : toUnixDate(end)
-    }
+  private fixDateFilter(filter) {
+    return updateObject(filter, {
+      start: isValidUnix(filter.start) ? filter.start : toUnixDate(filter.start),
+      end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end),
+    })
   }
   private shouldUpdateLastFilter(filter: DateFilter) {
     return !compare(filter, this.lastFilter);
