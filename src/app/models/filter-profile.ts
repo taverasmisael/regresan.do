@@ -1,5 +1,5 @@
 import { DateFilter } from '@models/filter-date';
 
-export class QuestionFilter extends DateFilter {
+export class ProfileFilter extends DateFilter {
   profile: string;
 }
