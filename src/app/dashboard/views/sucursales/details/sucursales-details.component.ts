@@ -120,7 +120,7 @@ export class SucursalesDetailsComponent
   // Angular Lifecycle Hooks
   ngOnInit() {
     this.questionsList = []
-    this.needsDataLabel = 'Cargar Respuestas Cerradas'
+    this.needsDataLabel = 'Cargar Preguntas Cerradas'
     // This update the ActiveBranch on each StoreAction
     this.store$ = this.Store
       .select('MainStore')
@@ -158,13 +158,13 @@ export class SucursalesDetailsComponent
 
   public loadAnswersCharts(event) {
     if (this.needsCloseAnswers) {
-      this.needsDataLabel = 'Cargar Preguntas Cerradas'
+      this.needsDataLabel = 'Cargar Preguntas Abiertas'
       if (!this.needsOpenAnswers) {
         this.needsOpenAnswers = true
       }
     } else {
       const currentQuery = this.activeBranch.currentQuery
-      this.needsDataLabel = 'Cargar Respuestas Cerradas'
+      this.needsDataLabel = 'Cargar Preguntas Abiertas'
       this.needsCloseAnswers = true
       this.FetchQuestions(currentQuery)
     }
@@ -236,8 +236,6 @@ export class SucursalesDetailsComponent
     this.FetchKPIs(currentQuery)
     this.LoadResumen(currentQuery)
     this.FetchStaffRanking(currentQuery)
-    this.needsCloseAnswers = true
-    this.FetchQuestions(currentQuery)
   }
 
   // Public Helpers
@@ -402,7 +400,7 @@ export class SucursalesDetailsComponent
       .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe(info => this.ApplyQueryParams(info)) // Finally we apply the query
 
-    this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
+/*     this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
       const { closeQuestions, closeAnswers } = store
       const flatAnswers = flatten<CloseAnswer>(closeAnswers)
       const mappedQuestions = closeQuestions
@@ -421,7 +419,7 @@ export class SucursalesDetailsComponent
         .filter(q => !!q.children.length)
 
       this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
-    })
+    }) */
   }
 
   // Private Helpers

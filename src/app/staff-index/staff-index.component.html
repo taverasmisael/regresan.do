@@ -1,5 +1,5 @@
 <dialog #staffIndexDialog class="mdl-dialog mdl-cell--9-col mdl-cell--8-col-tablet cell">
-  <h4 class="mdl-dialog__title">Índices de KPIs por personal</h4>
+  <h4 class="mdl-dialog__title">Índices de KPIs por talento humano</h4>
   <div class="mdl-dialog__content mdl-grid">
     <div class="mdl-cell--12-col chart-holder">
       <div *ngIf="!loading && !errorText && chartData" class="content-holder">
@@ -14,7 +14,7 @@
       <div *ngIf="!errorText && loading" class="loading-holder">
         <div class="content">
           <div class="mdl-spinner mdl-js-spinner is-active"></div>
-          <p class="mdl-typography--text-center">Cargando indice de Camareros...</p>
+          <p class="mdl-typography--text-center">Cargando indice de talento humano...</p>
         </div>
       </div>
       <div *ngIf="errorText" class="loading-holder no--opacity">

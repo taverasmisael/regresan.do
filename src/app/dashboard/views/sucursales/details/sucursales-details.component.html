@@ -1,7 +1,6 @@
 <app-filter
   (applyFilters)="ApplyQueryParams($event)"
-  [filters]="activeBranch.currentQuery"
-  [questions]="questionsList">
+  [filters]="activeBranch.currentQuery">
 </app-filter>
 <div class="info__header mdl-grid">
   <div class="headline mdl-cell mdl-cell--12-col">
@@ -121,7 +120,7 @@
 </section>
 <div class="load-optional-info" *ngIf="!needsCloseAnswers || !needsOpenAnswers">
   <button class="mdl-button mdl-js-button mdl-button--primary mdl-button--raised" (click)="loadAnswersCharts($event)">
-    <i class="material-icons">pie_chart</i> {{needsDataLabel}}
+    {{needsDataLabel}} <i class="material-icons">question_answer</i>
   </button>
 </div>
 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" data-mdl-for="branch-list">
