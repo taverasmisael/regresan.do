@@ -21,15 +21,15 @@ export class BranchState {
   }
   constructor(
     public info?: UserProfile,
-    public openQuestions?: Question[],
-    public closeQuestions?: Question[],
-    public openAnswers?: OpenAnswer[],
-    public closeAnswers?: CloseAnswer[][],
-    public kpis?: KPI[],
-    public historicData?: HistoricEntry[],
-    public staffRanking?: StaffRanking[],
+    public openQuestions: Question[] = [],
+    public closeQuestions: Question[] = [],
+    public openAnswers: OpenAnswer[] = [],
+    public closeAnswers: CloseAnswer[][] = [],
+    public kpis: KPI[] = [],
+    public historicData: HistoricEntry[] = [],
+    public staffRanking: StaffRanking[] = [],
     public filters?: Filter,
-    public currentQuery?: QuestionFilter | APIRequestUser
+    public currentQuery: QuestionFilter | APIRequestUser = {start: '', end: '', profile: ''}
   ) {
     this.requests = {
       ACLOSE: [],
