@@ -166,7 +166,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public NavigateToBranch(profileId: number) {
     this.router.navigate(['../', profileId], {
       relativeTo: this.Route,
-      preserveQueryParams: true,
+      queryParamsHandling: 'preserve',
       preserveFragment: true
     })
   }

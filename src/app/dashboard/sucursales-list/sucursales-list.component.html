@@ -3,6 +3,6 @@
     <div class="mdl-card__title mdl-card--expand">
       <h4>{{ sucursal.Title }}</h4>
     </div>
-    <a [routerLink]="['/dashboard/sucursales', sucursal.OldProfileId]" preserveQueryParams class="cover-link"></a>
+    <a [routerLink]="['/dashboard/sucursales', sucursal.OldProfileId]" queryParamsHandling="preserve" class="cover-link"></a>
   </div>
 </div>
