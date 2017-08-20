@@ -1,3 +1,3 @@
 export class ValidationResult {
-   [key: string]: boolean;
+  [key: string]: boolean
 }
