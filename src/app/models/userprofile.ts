@@ -3,7 +3,7 @@ export class UserProfile {
     public $id: string,
     public Id: number,
     public Title: string,
-    public OldProfileId: string,
+    public OldProfileId: number,
     public NewUserId: number
   ) {}
 }

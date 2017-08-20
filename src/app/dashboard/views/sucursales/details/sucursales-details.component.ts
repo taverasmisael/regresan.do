@@ -25,20 +25,19 @@ import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
 import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams'
-import { AppState } from '@models/states/appstate'
+import { AppState } from '@models/states/app'
 import { BranchState } from '@models/states/branch'
-import { HistoricEntry } from '@models/historic-entry'
-import { OpenAnswer } from '@models/answer.open'
-import { Pregunta } from '@models/pregunta'
-import { CloseAnswer } from '@models/answer.close'
-import { ProfileFilter } from '@models/filter-profile'
-import { StateRequest } from '@models/states/state-request'
-import { UserProfile } from '@models/userprofile'
-import { BranchChartData } from '@models/branch.chart-data'
-import { ChartData } from '@models/chart-data'
-import { OpenAnswerData } from '@models/answer.open-data'
+import { HistoricEntry } from '@models/historicEntry'
+import { OpenAnswer } from '@models/openAnswer'
+import { Question } from '@models/question'
+import { CloseAnswer } from '@models/closeAnswer'
+import { StateRequest } from '@models/states/stateRequest'
+import { UserProfile } from '@models/userProfile'
+import { BranchChartData } from '@models/branchChartData'
+import { ChartData } from '@models/chartData'
+import { OpenAnswerData } from '@models/openAnswerData'
 
-import QuestionFilter from '@models/filter-question'
+import QuestionFilter from '@models/questionFilter'
 
 import {
   SaveInfo,
@@ -222,7 +221,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   public ApplyQueryParams(queryParams: Params) {
     const dispatch = (query: APIRequestParams) => this.store.dispatch(new ApplyCurrentQuery(query))
     const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: QuestionFilter) => {
+    const dispatchNavigate = (query: APIRequestParams) => {
       dispatch(query)
       navigate(query)
       this.FetchAll()
@@ -284,16 +283,16 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.subCloseQs = this.store$
       .distinctUntilKeyChanged('closeQuestions')
       .pluck('closeQuestions')
-      .filter((qs: Pregunta[]) => Boolean(qs.length))
-      .map((qs: Pregunta[]) => qs.map(q => q.idPregunta))
+      .filter((qs: Question[]) => Boolean(qs.length))
+      .map((qs: Question[]) => qs.map(q => q.idPregunta))
       .subscribe(questionsId => questionsId.forEach(id => this.LoadCloseAnswer(id.toString())))
 
     // Load all OpenAnswer each time there are new openQuestions
     this.subOpeneQs = this.store$
       .distinctUntilKeyChanged('openQuestions')
       .pluck('openQuestions')
-      .filter((qs: Pregunta[]) => Boolean(qs.length))
-      .map((qs: Pregunta[]) => qs.map(q => q.idPregunta))
+      .filter((qs: Question[]) => Boolean(qs.length))
+      .map((qs: Question[]) => qs.map(q => q.idPregunta))
       .subscribe(questionsId => questionsId.forEach(id => this.LoadOpenAnswer(id.toString())))
 
     this.subCloseAw = this.store$
