@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment';
 import compare from 'just-compare';
 
-import { PreguntasService } from '@services/preguntas.service';
+import { QuestionsService } from '@services/preguntas.service';
 
 import { ActionTypes } from '@actions/auth.actions';
 
@@ -59,7 +59,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
   private fetchEvent: EventEmitter<any>;
 
   constructor(private router: Router, private Route: ActivatedRoute,
-    private preguntas: PreguntasService, private store: Store<AppState>) { }
+    private preguntas: QuestionsService, private store: Store<AppState>) { }
 
   ngOnInit() {
     this.fetchEvent = new EventEmitter();

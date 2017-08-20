@@ -23,7 +23,7 @@ import { BranchEffects } from './effects/branch.effects';
 
 // Services
 import { ApiService} from './services/api.service';
-import { PreguntasService } from './services/preguntas.service';
+import { QuestionsService } from './services/preguntas.service';
 import { RespuestasService } from './services/respuestas.service';
 import { UserService} from './services/user.service';
 import { KpisService } from './services/kpis.service';
@@ -103,7 +103,7 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     LoginGuardService,
     UserService,
     RespuestasService,
-    PreguntasService,
+    QuestionsService,
     KpisService,
     StaffService
   ],
