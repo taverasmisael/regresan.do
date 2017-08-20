@@ -24,7 +24,7 @@ import { updateObject, objectRest } from '@utilities/objects'
 import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
-import { APIRequestUser, APIRequestRespuesta, APIRequestParams } from '@models/apiparams'
+import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '@models/apiparams'
 import { AppState } from '@models/states/app'
 import { BranchState } from '@models/states/branch'
 import { HistoricEntry } from '@models/historicEntry'
@@ -37,7 +37,7 @@ import { BranchChartData } from '@models/branchChartData'
 import { ChartData } from '@models/chartData'
 import { OpenAnswerData } from '@models/openAnswerData'
 
-import QuestionFilter from '@models/questionFilter'
+import { QuestionFilter } from '@models/questionFilter'
 
 import {
   SaveInfo,
@@ -157,10 +157,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`))
   }
 
-  public LoadOpenAnswer(pregunta: string) {
+  public LoadOpenAnswer(question: string) {
     const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { pregunta })
-    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`))
+    const query = Object.assign(currentQuery, { question })
+    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${question}`))
   }
 
   public NavigateToBranch(profileId: number) {
@@ -219,9 +219,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ApplyQueryParams(queryParams: Params) {
-    const dispatch = (query: APIRequestParams) => this.store.dispatch(new ApplyCurrentQuery(query))
-    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: APIRequestParams) => {
+    const dispatch = (query: APIRequestUser) => this.store.dispatch(new ApplyCurrentQuery(query))
+    const navigate = (query: APIRequestUser) => this.router.navigate([], { queryParams: query })
+    const dispatchNavigate = (query: any) => {
       dispatch(query)
       navigate(query)
       this.FetchAll()

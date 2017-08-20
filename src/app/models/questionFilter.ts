@@ -1,13 +1,13 @@
-import { APIRequestRespuesta } from '@models/apiparams'
+import { APIRequestParams } from '@models/apiparams'
 
-export default class QuestionFilter extends APIRequestRespuesta {
+export class QuestionFilter extends APIRequestParams {
   constructor(
     public start: string,
     public end: string,
     public profile: string,
-    public question: string,
-    public answer: string
+    public pregunta ?: string,
+    public answer?: string
   ) {
-    super(start, end, profile, question)
+    super(start, end)
   }
 }

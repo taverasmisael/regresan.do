@@ -1,5 +1,6 @@
 import { UserProfile } from '@models/userProfile'
 import { Question } from '@models/question'
+import { APIRequestUser } from '@models/apiparams'
 import { KPI } from '@models/kpi'
 import { Filter } from '@models/filter'
 import { HistoricEntry } from '@models/historicEntry'
@@ -7,7 +8,7 @@ import { StaffRanking } from '@models/staffRanking'
 import { OpenAnswer } from '@models/openAnswer'
 import { CloseAnswer } from '@models/closeAnswer'
 import { StateRequest } from '@models/states/stateRequest'
-import { APIRequestUser } from '@models/apiparams'
+import { QuestionFilter } from '@models/questionFilter'
 
 export class BranchState {
   public requests: {
@@ -28,7 +29,7 @@ export class BranchState {
     public historicData?: HistoricEntry[],
     public staffRanking?: StaffRanking[],
     public filters?: Filter,
-    public currentQuery: APIRequestUser = new APIRequestUser('', '', '')
+    public currentQuery?: QuestionFilter | APIRequestUser
   ) {
     this.requests = {
       ACLOSE: [],

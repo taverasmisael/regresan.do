@@ -1,4 +1,4 @@
-import { RequestError } from '@models/request-error'
+import { RequestError } from '@models/requestError'
 
 export class StateRequest {
   constructor(

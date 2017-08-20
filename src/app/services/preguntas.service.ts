@@ -36,7 +36,7 @@ export class QuestionsService {
     })
   }
 
-  getAll(query: APIRequestParams) {
+  getAll(query: APIRequestUser) {
     const url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`
     const params = new URLSearchParams()
 

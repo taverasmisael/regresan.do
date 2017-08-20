@@ -8,12 +8,12 @@
   }
   &.#{$component}--splash {
     background: {
-      image: url(assets/images/RegresandoCompound.jpg);
+      image: url(../../assets/images/RegresandoCompound.jpg);
       size: cover;
       repeat: no-repeat;
       position: center;
       attachment: fixed;
-    };
+    }
     .#{$component}__headline {
       color: white;
       font-size: 6rem;
@@ -39,7 +39,7 @@
     }
   }
   .#{$component}__footer {
-    background: rgba(200,200,200,0.3);
+    background: rgba(200, 200, 200, 0.3);
     padding: 0.5rem;
     a {
       color: #545454;
@@ -54,7 +54,7 @@
     }
     .#{$component}__message {
       &.#{$component}__message--is-error {
-        color: #F44336;
+        color: #f44336;
       }
     }
   }

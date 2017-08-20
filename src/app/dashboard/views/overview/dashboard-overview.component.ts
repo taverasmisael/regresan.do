@@ -16,7 +16,7 @@ import { ActionTypes } from '@actions/auth.actions'
 import { UserProfile } from '@models/userprofile'
 import { AppState } from '@models/states/app'
 import { AuthState } from '@models/states/auth'
-import { APIRequestParams } from '@models/apiparams'
+import { APIRequestUser, APIRequestParams } from '@models/apiparams'
 
 import { merge, sum } from '@utilities/arrays'
 import { updateObject } from '@utilities/objects'
@@ -35,7 +35,7 @@ const emptyResultsMessage =
 })
 export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public userProfiles: UserProfile[]
-  public currentQuery: APIRequestParams
+  public currentQuery: APIRequestUser
 
   public totalToday: BehaviorSubject<number>
   public totalGeneral: BehaviorSubject<number>
@@ -146,7 +146,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  public LoadGeneralSurvey(query: APIRequestParams) {
+  public LoadGeneralSurvey(query: APIRequestUser) {
     this.generalSurveyLoading = true
     this.generalSurveyError = ''
     this.preguntas
@@ -174,7 +174,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
       )
   }
 
-  public LoadHistoricSurvey(query: APIRequestParams) {
+  public LoadHistoricSurvey(query: APIRequestUser) {
     this.historicSurveyLoading = true
     this.historicSurveyError = ''
 
@@ -211,7 +211,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
       )
   }
 
-  public LoadResumen(query: APIRequestParams) {
+  public LoadResumen(query: APIRequestUser) {
     this.preguntas.getResumen(query).map(res => res['Cabecera']).subscribe(res => {
       if (res) {
         this.totalToday.next(res['TotalEncuestadosHoy'])
@@ -229,7 +229,7 @@ export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDest
 
   // Private Helpers
 
-  private FetchAll(query: APIRequestParams) {
+  private FetchAll(query: APIRequestUser) {
     this.currentQuery = updateObject(this.currentQuery, query)
     this.LoadGeneralSurvey(query)
     this.LoadHistoricSurvey(query)

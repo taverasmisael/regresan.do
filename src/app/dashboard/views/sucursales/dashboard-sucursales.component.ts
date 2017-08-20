@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
 
-import { UserProfile } from '../../../models/userprofile'
-import { AuthState } from '../../../models/states/authstate'
-import { AppState } from '../../../models/states/appstate'
-import { gamaRegresando } from '../../../utilities/colors'
+import { UserProfile } from '@models/userprofile'
+import { AuthState } from '@models/states/auth'
+import { AppState } from '@models/states/app'
+import { gamaRegresando } from '@utilities/colors'
 
 @Component({
   selector: 'app-dashboard-sucursales',

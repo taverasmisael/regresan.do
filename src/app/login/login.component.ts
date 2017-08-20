@@ -2,11 +2,11 @@ import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Store } from '@ngrx/store'
-import { AppState } from '../models/states/appstate'
-import { AuthState } from '../models/states/authstate'
-import { Login, LoginFailure, LoginSuccess } from '../actions/auth.actions'
+import { AppState } from '@models/states/app'
+import { AuthState } from '@models/states/auth'
+import { Login, LoginFailure, LoginSuccess } from '@actions/auth.actions'
 
-import { UserService } from '../services/user.service'
+import { UserService } from '@services/user.service'
 
 // RXJS Stuffs
 import { Observable } from 'rxjs/Rx'

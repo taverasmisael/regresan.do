@@ -12,7 +12,7 @@ import { BranchState } from '@models/states/branch'
 import { HistoricEntry } from '@models/historicEntry'
 import { KPI } from '@models/kpi'
 import { OpenAnswer } from '@models/openAnswer'
-import { Pregunta } from '@models/question'
+import { Question } from '@models/question'
 import { StaffRanking } from '@models/staffRanking'
 
 import { KpisService } from '@services/kpis.service'
@@ -109,7 +109,7 @@ export class BranchEffects {
       return this.preguntasService
         .getAllByProfile(payload)
         .map(res => res['Respuestas']) // return only the real data
-        .map((questions: Pregunta[]) => {
+        .map((questions: Question[]) => {
           const close = questions.filter(q => q.tipoPregunta !== 'Abierta')
           const open = questions.filter(q => q.tipoPregunta === 'Abierta')
           return new SuccessQuestions({ close, open })
