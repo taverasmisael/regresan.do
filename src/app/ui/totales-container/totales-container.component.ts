@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-totales-container',
@@ -7,18 +7,15 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TotalesContainerComponent implements OnInit {
+  @Input() total: number
+  @Input() hoy: number
+  @Input() indice: number
+  @Input() contactos: number
+  @Input() halfCards: boolean
+  @Input() fullCards: boolean
+  @Input() tipoIndice: string
 
-  @Input() total: number;
-  @Input() hoy: number;
-  @Input() indice: number;
-  @Input() contactos: number;
-  @Input() halfCards: boolean;
-  @Input() fullCards: boolean;
-  @Input() tipoIndice: string;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

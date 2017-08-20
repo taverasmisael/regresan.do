@@ -5,7 +5,7 @@ import {
   Output,
   ChangeDetectionStrategy,
   EventEmitter
-} from '@angular/core';
+} from '@angular/core'
 
 @Component({
   selector: 'app-card',
@@ -14,25 +14,23 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardComponent implements OnInit {
-
-  @Input() action: {
-    id: string,
-    icon: string,
+  @Input()
+  action: {
+    id: string
+    icon: string
     text: string
-  };
-  @Input() title: string;
-  @Input() loadingText: string;
-  @Input() loading: boolean;
-  @Input() isDataTable: boolean;
-  @Input() contentPadding: boolean;
-  @Input() errorText: string;
-
-  @Output() primaryAction = new EventEmitter();
-  @Output() retry = new EventEmitter();
-
-  constructor() { }
-
-  ngOnInit() {
   }
+  @Input() title: string
+  @Input() loadingText: string
+  @Input() loading: boolean
+  @Input() isDataTable: boolean
+  @Input() contentPadding: boolean
+  @Input() errorText: string
 
+  @Output() primaryAction = new EventEmitter()
+  @Output() retry = new EventEmitter()
+
+  constructor() {}
+
+  ngOnInit() {}
 }

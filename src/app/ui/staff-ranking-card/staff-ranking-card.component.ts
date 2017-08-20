@@ -7,11 +7,11 @@ import {
   Input,
   Output,
   EventEmitter
-} from '@angular/core';
+} from '@angular/core'
 
-import { StaffIndexComponent } from '../../staff-index/staff-index.component';
+import { StaffIndexComponent } from '../../staff-index/staff-index.component'
 
-import { Filter } from '../../models/filter'
+import { Filter } from '@models/filter'
 
 @Component({
   selector: 'app-staff-ranking-card',
@@ -19,25 +19,24 @@ import { Filter } from '../../models/filter'
   styleUrls: ['./staff-ranking-card.component.scss']
 })
 export class StaffRankingCardComponent implements OnInit {
-  @Input() staffData: any[];
-  @Input() errorText: string;
-  @Input() loading: boolean;
-  @Input() currentFilter: Filter;
+  @Input() staffData: any[]
+  @Input() errorText: string
+  @Input() loading: boolean
+  @Input() currentFilter: Filter
 
-  @ViewChild('staffIndex') staffIndex: StaffIndexComponent;
+  @ViewChild('staffIndex') staffIndex: StaffIndexComponent
 
-  public cardAction: any;
+  public cardAction: any
 
-  @Output() failed = new EventEmitter();
+  @Output() failed = new EventEmitter()
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    this.cardAction = { icon: 'info', text: 'Ver Más Detalles', id: 'staff-ranking-card__action' };
+    this.cardAction = { icon: 'info', text: 'Ver Más Detalles', id: 'staff-ranking-card__action' }
   }
 
   onPrimaryAction(event) {
-    this.staffIndex.showDialog();
+    this.staffIndex.showDialog()
   }
-
 }
