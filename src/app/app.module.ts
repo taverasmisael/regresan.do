@@ -9,7 +9,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts'
 import { GaugeModule } from 'ng2-kw-gauge'
 
 // Routes
-import { AppRoutes } from './app.routes'
+import { AppRoutingModule } from './app-routing.module'
 
 // Redux and ngrx
 import { StoreModule } from '@ngrx/store'
@@ -88,7 +88,7 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutes,
+    AppRoutingModule,
     ReactiveFormsModule,
     StoreModule.forRoot(Reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),

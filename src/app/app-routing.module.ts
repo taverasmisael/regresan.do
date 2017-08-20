@@ -1,5 +1,5 @@
-import { ModuleWithProviders } from '@angular/core'
-import { Routes, RouterModule } from '@angular/router'
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
 import { LoginComponent } from './login/login.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
@@ -11,7 +11,7 @@ import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details
 import { AuthGuardService } from './services/auth-guard.service'
 import { LoginGuardService } from './services/login-guard.service'
 
-export const router: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [LoginGuardService] },
   {
@@ -28,6 +28,9 @@ export const router: Routes = [
   { path: '**', redirectTo: 'login', pathMatch: 'full' } // All other Routes
 ]
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(router, {
-  useHash: true
+@NgModule({
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  exports: [RouterModule],
+  declarations: []
 })
+export class AppRoutingModule {}
