@@ -24,29 +24,29 @@ export function AuthReducer() {
   }
 }
 
-function loginUser(state: AuthState, action: Action): AuthState {
+function loginUser<T extends AuthState>(state: T, action: Action): T {
   const { payload } = action;
   return updateObject(state, updateObject(INITIAL_STATE, {loading: true}))
 }
 
-function loginSucessful(state: AuthState, action: Action): AuthState {
+function loginSucessful<T extends AuthState>(state: T, action: Action): T {
   const { payload } = action;
 
   return updateObject(state, {token: payload});
 }
 
-function saveUser(state: AuthState, action: Action): AuthState {
+function saveUser<T extends AuthState>(state: T, action: Action): T {
   const { payload } = action;
 
   return updateObject(state, {currentUser: action.payload, loading: false});
 }
 
-function loginFailed(state: AuthState, action: Action): AuthState {
+function loginFailed<T extends AuthState>(state: T, action: Action): T {
   const { payload } = action;
 
   return updateObject(state, {error: action.payload, loading: false});
 }
 
-function logOutUser(state: AuthState, action: Action): AuthState {
-  return INITIAL_STATE;
+function logOutUser<T extends AuthState>(state: AuthState, action: Action): AuthState {
+  return INITIAL_STATE
 }

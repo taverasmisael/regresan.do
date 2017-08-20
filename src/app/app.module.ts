@@ -14,7 +14,7 @@ import { AppRoutes } from './app.routes'
 // Redux and ngrx
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
-import { RootReducer } from './reducers'
+import { Reducers, metaReducers } from './reducers'
 
 // Redux Side Effects
 import { EffectsModule } from '@ngrx/effects'
@@ -90,7 +90,7 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     HttpModule,
     AppRoutes,
     ReactiveFormsModule,
-    StoreModule.forRoot(RootReducer),
+    StoreModule.forRoot(Reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([AuthEffects, BranchEffects]),
     ChartsModule,

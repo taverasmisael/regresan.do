@@ -1,5 +1,5 @@
 import { compose } from '@ngrx/core/compose'
-import { combineReducers } from '@ngrx/store'
+import { ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx/store'
 import { localStorageSync } from 'ngrx-store-localstorage'
 
 import { createReducer } from '@utilities/reducers'
@@ -11,12 +11,17 @@ import { BranchCases, INITIAL_STATE as BranchState } from './branch.reducer'
 const authReducer = createReducer(AuthState, AuthReducer())
 const branchReducer = createReducer(BranchState, BranchCases())
 
-const RootReducer = compose(
-  localStorageSync({
+export const Reducers: ActionReducerMap<AppState> = {
+  auth: authReducer,
+  currentBranch: branchReducer
+}
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  return localStorageSync({
     keys: ['auth'],
-    rehydrate: true
-  }),
-  combineReducers
-)({ auth: authReducer, currentBranch: branchReducer })
-
-export { RootReducer }
+    rehydrate: true,
+    storageKeySerializer(k) {
+      return `Regresan.do__${k}`
+    }
+  })(reducer)
+}
+export const metaReducers: MetaReducer<AppState>[] = [localStorageSyncReducer]

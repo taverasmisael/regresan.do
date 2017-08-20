@@ -62,25 +62,25 @@ export function BranchCases() {
   }
 }
 
-function saveInfo(state: BranchState, action: EnhancedAction): BranchState {
+function saveInfo<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload } = action
 
   return updateObject(state, { info: payload })
 }
 
-function resetStore(state: BranchState, action: EnhancedAction): BranchState {
+function resetStore<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload } = action
 
   return updateObject(state, INITIAL_STATE)
 }
 
-function resetDate(state: BranchState, action: EnhancedAction): BranchState {
+function resetDate<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload } = action
 
   return Object.assign(state, INITIAL_STATE, { info: state.info })
 }
 
-function requesting(state: BranchState, action: EnhancedAction): BranchState {
+function requesting<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, message, section } = action
   let update = {
     requests: updateObject(state.requests, {
@@ -94,7 +94,7 @@ function requesting(state: BranchState, action: EnhancedAction): BranchState {
   return updateObject(state, update)
 }
 
-function requestingAnswer(state: BranchState, action: EnhancedAction): BranchState {
+function requestingAnswer<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, message, section } = action
 
   return updateObject(state, {
@@ -107,7 +107,7 @@ function requestingAnswer(state: BranchState, action: EnhancedAction): BranchSta
   })
 }
 
-function requestAnswerError(state: BranchState, action: EnhancedAction): BranchState {
+function requestAnswerError<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, message, section } = action
 
   return updateObject(state, {
@@ -120,7 +120,7 @@ function requestAnswerError(state: BranchState, action: EnhancedAction): BranchS
   })
 }
 
-function requestError(state: BranchState, action: EnhancedAction): BranchState {
+function requestError<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -128,7 +128,7 @@ function requestError(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveQuestions(state: BranchState, action: EnhancedAction): BranchState {
+function saveQuestions<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -140,7 +140,7 @@ function saveQuestions(state: BranchState, action: EnhancedAction): BranchState 
   })
 }
 
-function saveQClose(state: BranchState, action: EnhancedAction): BranchState {
+function saveQClose<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -151,7 +151,7 @@ function saveQClose(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveAOpen(state: BranchState, action: EnhancedAction): BranchState {
+function saveAOpen<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
   const { answer, question } = payload
 
@@ -169,7 +169,7 @@ function saveAOpen(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveAClose(state: BranchState, action: EnhancedAction): BranchState {
+function saveAClose<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
   const { answer, question } = payload
 
@@ -187,7 +187,7 @@ function saveAClose(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveKPI(state: BranchState, action: EnhancedAction): BranchState {
+function saveKPI<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -198,7 +198,7 @@ function saveKPI(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveStaffRanking(state: BranchState, action: EnhancedAction): BranchState {
+function saveStaffRanking<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -208,7 +208,7 @@ function saveStaffRanking(state: BranchState, action: EnhancedAction): BranchSta
     })
   })
 }
-function saveHistoric(state: BranchState, action: EnhancedAction): BranchState {
+function saveHistoric<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload, section } = action
   return updateObject(state, {
     historicData: payload,
@@ -218,7 +218,7 @@ function saveHistoric(state: BranchState, action: EnhancedAction): BranchState {
   })
 }
 
-function saveCurrentQuery(state: BranchState, action: EnhancedAction): BranchState {
+function saveCurrentQuery<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
   const { payload } = action
   return updateObject(state, {
     currentQuery: payload

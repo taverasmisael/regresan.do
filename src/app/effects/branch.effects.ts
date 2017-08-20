@@ -154,8 +154,7 @@ export class BranchEffects {
     this.store
       .select('currentBranch')
       .distinctUntilKeyChanged('info')
-      .pluck('info')
-      .subscribe((val: UserProfile) => (this.currentBranch = val))
+      .subscribe(({ info }: BranchState) => (this.currentBranch = info))
   }
 
   private HandleError(error: any, Action: any): Observable<any> {
