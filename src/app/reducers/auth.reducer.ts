@@ -1,13 +1,13 @@
-import { Action } from '@ngrx/store';
+import { Action } from '@models/action';
 
-import { AuthState } from '../models/states/authstate';
+import { AuthState } from '@models/states/auth';
 
-import { ActionTypes } from '../actions/auth.actions';
+import { ActionTypes } from '@actions/auth.actions';
 
 const { LOGIN, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE,
   LOGOUT, TOKEN_EXPIRED, SAVE_USER } = ActionTypes;
 
-import { updateObject } from '../utilities/objects';
+import { updateObject } from '@utilities/objects';
 
 export const INITIAL_STATE = new AuthState();
 
