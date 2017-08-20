@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
 import * as moment from 'moment'
@@ -65,7 +65,7 @@ const keyWithValue = filter(k => !!k)
   templateUrl: './sucursales-details.component.html',
   styleUrls: ['./sucursales-details.component.scss']
 })
-export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   public activeBranch: BranchState
   public totalToday: BehaviorSubject<number>
   public totalGeneral: BehaviorSubject<number>
@@ -121,12 +121,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.ResetResume()
   }
 
-  ngAfterViewInit() {
-    console.log('AfterViewInit...')
-  }
-
   ngOnDestroy() {
-    console.log('Destroying...')
     this.subCloseQs.unsubscribe()
     this.subOpeneQs.unsubscribe()
     this.subBranch.unsubscribe()
@@ -268,6 +263,11 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
 
   // Private Methods
 
+  private getBranchCColor(id: number) {
+    const [head, trail] = id.toString().split('')
+    return Number(head) + Number(trail)
+  }
+
   private InitializeSubscriptions() {
     this.subBranch = this.store$
       .filter(branch => !compare(branch, this.activeBranch)) // Only triggers when the sates are differents
@@ -276,7 +276,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
         const shouldBranchUpdate = areBranchs && !compare(branch.info, this.activeBranch.info)
         if (shouldBranchUpdate) {
           this.ResetButInfo()
-        } // Only ResetButInfo if `.ifno` had changed
+        } // Only ResetButInfo if `.info` had changed
         this.activeBranch = branch
       })
     // Load all CloseAnswer each time there are new closeQuestions
@@ -333,12 +333,9 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
           ) => (profiles ? profiles.find(prof => prof.OldProfileId === +params['id']) : undefined)
         )
       )
-      .filter(info => info && !compare(info, this.activeBranch.info)) // Security Measures Prevents Infinite Loop
-      .do(
-        info =>
-          (this.branchColor =
-            +info.OldProfileId.toString().split('')[0] + +info.OldProfileId.toString().split('')[1])
-      )
+      // Security Measures Prevents Infinite Loop
+      .filter(info => info && !compare(info, this.activeBranch.info))
+      .do(info => (this.branchColor = this.getBranchCColor(info.OldProfileId)))
       .do(info => this.store.dispatch(new SaveInfo(info))) // We save this info and then...
       .distinctUntilChanged((before, after) => compare(before, after))
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
