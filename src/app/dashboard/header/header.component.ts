@@ -16,7 +16,7 @@ import { User } from '../../models/user'
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardHeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit {
   @Input() user: User
   @Output() loginout = new EventEmitter()
 

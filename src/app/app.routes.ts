@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { LoginComponent } from './login/login.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
-import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard-overview.component'
+import { OverviewComponent } from './dashboard/views/overview/dashboard-overview.component'
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component'
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component'
 
@@ -20,7 +20,7 @@ export const router: Routes = [
     canActivate: [AuthGuardService],
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
-      { path: 'overview', component: DashboardOverviewComponent },
+      { path: 'overview', component: OverviewComponent },
       { path: 'sucursales', component: DashboardSucursalesComponent },
       { path: 'sucursales/:id', component: SucursalesDetailsComponent }
     ]

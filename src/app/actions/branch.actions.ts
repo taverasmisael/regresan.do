@@ -167,7 +167,7 @@ export class SaveInfo implements Action {
 export class ApplyCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY
 
-  constructor(public payload: QuestionFilter) {}
+  constructor(public payload: QuestionFilter | APIRequestUser) {}
 }
 
 export class SaveCurrentQuery implements Action {

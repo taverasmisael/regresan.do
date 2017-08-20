@@ -157,10 +157,10 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`))
   }
 
-  public LoadOpenAnswer(question: string) {
+  public LoadOpenAnswer(pregunta: string) {
     const currentQuery = this.activeBranch.currentQuery
-    const query = Object.assign(currentQuery, { question })
-    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${question}`))
+    const query = updateObject(currentQuery, { pregunta })
+    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`))
   }
 
   public NavigateToBranch(profileId: number) {

@@ -40,9 +40,9 @@ import { FlatpickrComponent } from './thirdparty/flatpickr'
 import { AppComponent } from './app.component'
 import { LoginComponent } from './login/login.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
-import { DashboardNavbarComponent } from './dashboard/navbar/navbar.component'
-import { DashboardHeaderComponent } from './dashboard/header/header.component'
-import { DashboardOverviewComponent } from './dashboard/views/overview/dashboard-overview.component'
+import { NavbarComponent } from './dashboard/navbar/navbar.component'
+import { HeaderComponent } from './dashboard/header/header.component'
+import { OverviewComponent } from './dashboard/views/overview/dashboard-overview.component'
 import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component'
 import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component'
 import { SucursalesListComponent } from './dashboard/sucursales-list/sucursales-list.component'
@@ -64,9 +64,9 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    DashboardNavbarComponent,
-    DashboardHeaderComponent,
-    DashboardOverviewComponent,
+    NavbarComponent,
+    HeaderComponent,
+    OverviewComponent,
     DashboardSucursalesComponent,
     SucursalesDetailsComponent,
     SucursalesListComponent,

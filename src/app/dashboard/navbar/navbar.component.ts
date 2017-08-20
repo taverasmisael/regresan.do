@@ -5,7 +5,7 @@ import { Component, OnInit, HostBinding } from '@angular/core'
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class DashboardNavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit {
   @HostBinding('class.mdl-layout__drawer') isDrawer = true
   @HostBinding('class.mdl-color--primary') isColored = false
   constructor() {}

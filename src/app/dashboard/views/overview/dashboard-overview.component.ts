@@ -33,7 +33,7 @@ const emptyResultsMessage =
   templateUrl: './dashboard-overview.component.html',
   styleUrls: ['./dashboard-overview.component.scss']
 })
-export class DashboardOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public userProfiles: UserProfile[]
   public currentQuery: APIRequestUser
 

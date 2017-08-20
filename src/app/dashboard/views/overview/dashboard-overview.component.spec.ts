@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { OverviewComponent } from './overview.component';
+import { OverviewComponent } from './dashboard-overview.component';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
