@@ -12,7 +12,10 @@ const authReducer = createReducer(StateAuth, AuthReducer());
 const branchReducer = createReducer(BranchState, BranchCases());
 
 const RootReducer = compose(
-  localStorageSync(['auth'], true),
+  localStorageSync({
+    keys: ['auth'],
+    rehydrate: true
+  }),
   combineReducers)({auth: authReducer, currentBranch: branchReducer});
 
 export { RootReducer };
