@@ -25,7 +25,7 @@ export class QuestionsService {
   private BASE_URL = 'api/Respuesta'
   private authHeader: Headers
   constructor(private api: ApiService, store: Store<AppState>) {
-    store.select('auth').pluck('token').subscribe((token: JWT) => {
+    store.select('auth').subscribe(({ token }) => {
       if (token) {
         this.authHeader = new Headers({
           Authorization: `${token.token_type} ${token.access_token}`
