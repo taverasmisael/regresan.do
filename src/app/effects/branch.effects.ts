@@ -4,19 +4,19 @@ import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
 import { Actions, Effect } from '@ngrx/effects'
 
-import { AppState } from '@models/states/appstate'
+import { AppState } from '@models/states/app'
 import { APIRequestParams, APIRequestUser } from '@models/apiparams'
-import { UserProfile } from '@models/userprofile'
-import { CloseAnswer } from '@models/answer.close'
+import { UserProfile } from '@models/userProfile'
+import { CloseAnswer } from '@models/closeAnswer'
 import { BranchState } from '@models/states/branch'
-import { HistoricEntry } from '@models/historic-entry'
+import { HistoricEntry } from '@models/historicEntry'
 import { KPI } from '@models/kpi'
-import { OpenAnswer } from '@models/answer.open'
-import { Pregunta } from '@models/pregunta'
-import { StaffRanking } from '@models/staff-ranking'
+import { OpenAnswer } from '@models/openAnswer'
+import { Pregunta } from '@models/question'
+import { StaffRanking } from '@models/staffRanking'
 
 import { KpisService } from '@services/kpis.service'
-import { PreguntasService } from '@services/preguntas.service'
+import { QuestionsService } from '@services/preguntas.service'
 import { RespuestasService } from '@services/respuestas.service'
 import { StaffService } from '@services/staff.service'
 
@@ -146,7 +146,7 @@ export class BranchEffects {
   constructor(
     private actions$: Actions,
     private kpiService: KpisService,
-    private preguntasService: PreguntasService,
+    private preguntasService: QuestionsService,
     private respuestasService: RespuestasService,
     private staffService: StaffService,
     private store: Store<AppState>
