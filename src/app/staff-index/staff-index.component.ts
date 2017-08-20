@@ -6,17 +6,17 @@ import {
   ElementRef,
   SimpleChanges,
   OnChanges
-} from '@angular/core';
+} from '@angular/core'
 
-import compare from 'just-compare';
+import compare from 'just-compare'
 
-import { StaffService } from '../services/staff.service';
+import { StaffService } from '@services/staff.service'
 
-import { APIRequestUser } from '../models/apiparams';
+import { APIRequestUser } from '@models/apiparams'
 
-import { createLinearCamareroKpi } from '../utilities/kpis';
-import { createPalette, ChartJsColor } from '../utilities/charts';
-import { gamaRegresando } from '../utilities/colors';
+import { createLinearStaffKpi } from '@utilities/kpis'
+import { createPalette, ChartJsColor } from '@utilities/charts'
+import { gamaRegresando } from '@utilities/colors'
 
 @Component({
   selector: 'app-staff-index',
@@ -24,62 +24,65 @@ import { gamaRegresando } from '../utilities/colors';
   styleUrls: ['./staff-index.component.scss']
 })
 export class StaffIndexComponent implements OnInit, OnChanges {
-  private COLORS: string[];
-  private needsToRequest: Boolean;
+  private COLORS: string[]
+  private needsToRequest: Boolean
 
-  @Input() filter: APIRequestUser;
-  @ViewChild('staffIndexDialog') staffIndexDialog: ElementRef;
+  @Input() filter: APIRequestUser
+  @ViewChild('staffIndexDialog') staffIndexDialog: ElementRef
 
-  public loading: Boolean;
-  public errorText: string;
-  public chartData: { labels: any[], data: any[] };
-  public chartOptions: any;
-  public chartColor: ChartJsColor[];
+  public loading: Boolean
+  public errorText: string
+  public chartData: { labels: any[]; data: any[] }
+  public chartOptions: any
+  public chartColor: ChartJsColor[]
 
-  constructor(private service: StaffService) { }
+  constructor(private service: StaffService) {}
 
   ngOnInit() {
     if (!this.staffIndexDialog.nativeElement.showModal) {
-      dialogPolyfill.registerDialog(this.staffIndexDialog.nativeElement);
+      dialogPolyfill.registerDialog(this.staffIndexDialog.nativeElement)
     }
-    this.chartOptions = {};
-    this.COLORS = gamaRegresando().reverse();
-    this.chartColor = createPalette(this.COLORS, 0);
+    this.chartOptions = {}
+    this.COLORS = gamaRegresando().reverse()
+    this.chartColor = createPalette(this.COLORS, 0)
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['filter'] && !compare(changes['filter'].currentValue, changes['filter'].previousValue)) {
-      this.needsToRequest = true;
+    if (
+      changes['filter'] &&
+      !compare(changes['filter'].currentValue, changes['filter'].previousValue)
+    ) {
+      this.needsToRequest = true
     }
   }
 
   showDialog() {
-    this.staffIndexDialog.nativeElement.showModal();
+    this.staffIndexDialog.nativeElement.showModal()
     if (this.needsToRequest) {
-      this.loading = true;
-      this.service.getKpisCamareros(this.filter)
-        .map(res => createLinearCamareroKpi(res['Camareros']))
+      this.loading = true
+      this.service
+        .getKpisCamareros(this.filter)
+        .map(res => createLinearStaffKpi(res['Camareros']))
         .subscribe(
-          (res) => {
-            this.loading = false;
-            this.chartData = res;
+          res => {
+            this.loading = false
+            this.chartData = res
           },
-          (error) => this.handleErrors(error),
-          () => this.needsToRequest = false
-        );
+          error => this.handleErrors(error),
+          () => (this.needsToRequest = false)
+        )
     }
   }
 
   private handleErrors(err) {
     if (err.status === 401) {
-      console.error('Unauthorized');
+      console.error('Unauthorized')
     } else {
-      this.errorText = 'Error obteniendo la informacion del Servidor';
+      this.errorText = 'Error obteniendo la informacion del Servidor'
     }
   }
 
   closeDialog(clean?: boolean) {
-    this.staffIndexDialog.nativeElement.close();
+    this.staffIndexDialog.nativeElement.close()
   }
-
 }
