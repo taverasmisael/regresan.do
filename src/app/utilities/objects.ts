@@ -17,8 +17,12 @@ export const removeArrayItem = (array, index): Array<any> => {
 export const objectRest = (obj: any, keys: Array<string>) => {
   let target = {}
   for (let i in obj) {
-    if (keys.indexOf(i) >= 0) { continue }
-    if (!Object.prototype.hasOwnProperty.call(obj, i)) { continue }
+    if (keys.indexOf(i) >= 0) {
+      continue
+    }
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+      continue
+    }
     target[i] = obj[i]
   }
   return target

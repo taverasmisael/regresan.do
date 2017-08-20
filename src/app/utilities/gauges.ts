@@ -1,8 +1,8 @@
-import { GaugeSegment, GaugeLabel } from 'ng2-kw-gauge';
-import * as tinycolor from 'tinycolor2';
+import { GaugeSegment, GaugeLabel } from 'ng2-kw-gauge'
+import * as tinycolor from 'tinycolor2'
 
-import { updateObject } from './objects';
-import { GaugeOptions } from '../models/gauge-options'
+import { updateObject } from '@utilities/objects'
+import { GaugeOptions } from '@models/gaugeOptions'
 
 const basicOptions = {
   bgRadius: 65,
@@ -14,15 +14,15 @@ const basicOptions = {
   segments: []
 }
 
-const whiteColor = '#FFF';
+const whiteColor = '#FFF'
 
 export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
-  const localOptions: GaugeOptions = updateObject(basicOptions, options);
+  const localOptions: GaugeOptions = updateObject(basicOptions, options)
 
-  const currentColor = tinycolor(data.color);
-  const textColor = currentColor.clone().darken(15);
+  const currentColor = tinycolor(data.color)
+  const textColor = currentColor.clone().darken(15)
 
-  localOptions.bgColor = 'transparent';
+  localOptions.bgColor = 'transparent'
 
   localOptions.labels = [
     new GaugeLabel({
@@ -39,14 +39,13 @@ export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
       y: 0,
       fontSize: '1.5em'
     })
-  ];
+  ]
 
   localOptions.segments = [
     new GaugeSegment({
       value: data.value,
       color: currentColor.toString(),
-      borderWidth: 20,
-      rounded: true
+      borderWidth: 20
     }),
     new GaugeSegment({
       value: 100,
@@ -54,12 +53,12 @@ export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
       borderWidth: 20
     })
   ]
-
-  return new GaugeOptions(localOptions);
+  const { rounded, reverse, animationSecs, bgRadius, bgColor, labels, segments } = localOptions
+  return new GaugeOptions(rounded, reverse, animationSecs, bgRadius, bgColor, labels, segments)
 }
 
 export interface DataGauge {
-  value: number,
-  text: string,
+  value: number
+  text: string
   color: string
 }

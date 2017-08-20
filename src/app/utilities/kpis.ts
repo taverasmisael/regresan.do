@@ -1,19 +1,21 @@
-import { KPICamarero } from '../models/kpi-camarero';
+import { KPIStaff } from '@models/kpiStaff'
 
-export const createLinearCamareroKpi = (data: CamarerosKpi[]) => {
-  let labels = [];
+export const createLinearStaffKpi = (data: StaffKPI[]) => {
+  let labels = []
   const mapped = data.map((entry, index) => {
     const mappedKpis = entry.Kpis.map(kpi => ({
       nombre: kpi.Nombre,
       value: kpi.Indice
-    }));
-    labels = [...mappedKpis]
-      .reduce((prev, {nombre}) => prev.find(el => el === nombre) ? prev : [...prev, nombre], []);
+    }))
+    labels = [...mappedKpis].reduce(
+      (prev, { nombre }) => (prev.find(el => el === nombre) ? prev : [...prev, nombre]),
+      []
+    )
     return {
       label: entry.Session || `Anonimo ${index}`,
-      data: mappedKpis.map(kpi => kpi.value),
+      data: mappedKpis.map(kpi => kpi.value)
     }
-  });
+  })
 
   return {
     labels,
@@ -21,8 +23,8 @@ export const createLinearCamareroKpi = (data: CamarerosKpi[]) => {
   }
 }
 
-export interface CamarerosKpi {
-  $id: string,
-  Session: string,
-  Kpis: KPICamarero[]
+export interface StaffKPI {
+  $id: string
+  Session: string
+  Kpis: KPIStaff[]
 }

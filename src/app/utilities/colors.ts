@@ -1,5 +1,4 @@
 export const mdlPalette = (tone = '500', onlyValues = false) => {
-
   const palette = {
     colors500: {
       red: '#F44336',
@@ -43,9 +42,9 @@ export const mdlPalette = (tone = '500', onlyValues = false) => {
   }
 
   if (onlyValues) {
-    return (<any>Object).values(palette[`colors${tone}`]);
+    return (<any>Object).values(palette[`colors${tone}`])
   } else {
-    return palette[`colors${tone}`];
+    return palette[`colors${tone}`]
   }
 }
 
@@ -85,31 +84,24 @@ export const gamaRegresando = () => {
     'rgba(255, 99, 43, 1)',
     'rgba(0, 177, 247, 1)',
     'rgba(0, 173, 34, 1)',
-    'rgba(160, 24, 24, 1)',
-
+    'rgba(160, 24, 24, 1)'
   ]
 }
 
 export const ratingPalette = (asObject: boolean): any | string[] => {
-  const palette =  {
-    'Excelente': '#166499',
-    'Si': '#166499',
-    'Bueno': '#00A4A3',
+  const palette = {
+    Excelente: '#166499',
+    Si: '#166499',
+    Bueno: '#00A4A3',
     'Muy Bueno': '#00A4A3',
     'Muy Buena': '#00A4A3',
-    'Regular': '#F8AA19',
-    'Deficiente': '#E54128',
-    'Malo': '#E54128',
-    'No': '#E54128'
-  };
+    Regular: '#F8AA19',
+    Deficiente: '#E54128',
+    Malo: '#E54128',
+    No: '#E54128'
+  }
 
-  const paletteArray = [
-    '#166499',
-    '#00A4A3',
-    '#F8AA19',
-    '#E54128',
-    '#002f41'
-  ];
+  const paletteArray = ['#166499', '#00A4A3', '#F8AA19', '#E54128', '#002f41']
 
-  return asObject ? palette : paletteArray;
+  return asObject ? palette : paletteArray
 }
