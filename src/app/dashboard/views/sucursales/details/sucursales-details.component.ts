@@ -117,7 +117,7 @@ export class SucursalesDetailsComponent implements OnInit, AfterViewInit, OnDest
     this.profiles$ = this.store.select('auth').pluck('currentUser', 'Profiles')
 
     this.InitializeSubscriptions()
-
+    this.store$.subscribe(s => (this.activeBranch = s))
     this.ResetResume()
   }
 
