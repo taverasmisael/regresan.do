@@ -3530,15 +3530,15 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+ng-gauge@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ng-gauge/-/ng-gauge-1.0.0.tgz#74fcf4ca8479e326866fd8d522f87e185e660c38"
+
 ng2-charts@^1.4.4:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ng2-charts/-/ng2-charts-1.6.0.tgz#108a2133ff62a8623895240fadbddbea2951f29d"
   dependencies:
     chart.js "^2.6.0"
-
-ng2-kw-gauge@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/ng2-kw-gauge/-/ng2-kw-gauge-0.0.8.tgz#db6fb2f382e90edad72fbc8852514993976b7fe9"
 
 ngrx-store-localstorage@^0.2.0:
   version "0.2.0"

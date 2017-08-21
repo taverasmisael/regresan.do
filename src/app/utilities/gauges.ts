@@ -1,4 +1,4 @@
-import { GaugeSegment, GaugeLabel } from 'ng2-kw-gauge'
+import { GaugeSegment, GaugeLabel } from 'ng-gauge'
 import * as tinycolor from 'tinycolor2'
 
 import { updateObject } from '@utilities/objects'
@@ -7,7 +7,7 @@ import { GaugeOptions } from '@models/gaugeOptions'
 const basicOptions = {
   bgRadius: 65,
   bgColor: 'transparent',
-  rounded: false,
+  rounded: true,
   reverse: false,
   animationSecs: 1,
   labels: [],
@@ -37,7 +37,7 @@ export const createGauge = (data: DataGauge, options = {}): GaugeOptions => {
       text: data.value + '%',
       x: 5,
       y: 0,
-      fontSize: '1.5em'
+      fontSize: '2em'
     })
   ]
 

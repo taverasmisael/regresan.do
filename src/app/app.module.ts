@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http'
 
 // Charts
 import { ChartsModule } from 'ng2-charts/ng2-charts'
-import { GaugeModule } from 'ng2-kw-gauge'
+import { GaugeModule } from 'ng-gauge'
 
 // Routes
 import { AppRoutingModule } from './app-routing.module'

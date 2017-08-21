@@ -8,24 +8,24 @@
   [loading]="loading">
   <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;  " *ngIf="IndiceSatisfaccion && KPIS">
     <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-      <ng2-kw-gauge
+      <ng-gauge
         [rounded]="IndiceSatisfaccion.rounded"
         [bgRadius]="IndiceSatisfaccion.bgRadius"
         [bgColor]="IndiceSatisfaccion.bgColor"
         [labels]="IndiceSatisfaccion.labels"
         [segments]="IndiceSatisfaccion.segments">
-      </ng2-kw-gauge>
+      </ng-gauge>
     </div>
     <div class="mdl-cell mdl-cell--8-col">
       <div class="mdl-grid">
         <div class="mdl-cell" *ngFor="let kpi of KPIS;">
-          <ng2-kw-gauge
+          <ng-gauge
             [rounded]="kpi.rounded"
             [bgRadius]="kpi.bgRadius"
             [bgColor]="kpi.bgColor"
             [labels]="kpi.labels"
             [segments]="kpi.segments">
-          </ng2-kw-gauge>
+          </ng-gauge>
         </div>
       </div>
     </div>

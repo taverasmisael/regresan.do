@@ -10,7 +10,7 @@ import {
 
 import compare from 'just-compare'
 
-import { GaugeSegment, GaugeLabel } from 'ng2-kw-gauge'
+import { GaugeSegment, GaugeLabel } from 'ng-gauge'
 
 import { KPI } from '@models/kpi'
 import { GaugeOptions } from '@models/gaugeOptions'
