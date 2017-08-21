@@ -61,7 +61,7 @@
       <div class="mdl-cell mdl-cell--12-col qa-holder">
         <div class="mdl-grid charts-list" *ngIf="!activeBranch.requests.QUESTIONS.isLoading || activeBranch.closeQuestions.length">
           <app-chart-in-loop
-            class="mdl-cell mdl-cell--4-col-desktop mdl-card"
+            class="mdl-cell mdl-cell--3-col-desktop mdl-card"
             *ngFor="let q of activeBranch.closeQuestions; let i = index;"
             type="pie"
             loadingText="Respuesta {{ i + 1 }}"
