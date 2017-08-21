@@ -60,15 +60,13 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {
     let { start, end } = this.filters
-    const altStart = moment.unix(+start).format('YYYY-MM-DD')
-    const altEnd = moment.unix(+end).format('YYYY-MM-DD')
 
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true }
-    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart })
-    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd })
+    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: start })
+    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: end })
 
-    this.filterFechaInicio = new FormControl(altStart, [Validators.required])
-    this.filterFechaFin = new FormControl(altEnd, [Validators.required])
+    this.filterFechaInicio = new FormControl(start, [Validators.required])
+    this.filterFechaFin = new FormControl(end, [Validators.required])
     this.filterQuestion = new FormControl({
       value: '',
       disabled: this.questions && !this.questions.length

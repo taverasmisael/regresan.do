@@ -8,11 +8,13 @@
 dialog {
   z-index: 30;
 }
-dialog::backdrop { /* native */
+dialog::backdrop {
+  /* native */
   background-color: rgba(#434343, 0.3);
   z-index: 0;
 }
-dialog + .backdrop { /* polyfill */
+dialog + .backdrop {
+  /* polyfill */
   background-color: rgba(#434343, 0.3);
   z-index: 0;
 }
@@ -33,7 +35,7 @@ main {
 }
 .mdl-layout__header .mdl-layout__drawer-button {
   background: transparent;
-  color: rgba(0,0,0,.5);
+  color: rgba(0, 0, 0, .5);
   .material-icons {
     vertical-align: baseline;
   }
@@ -54,7 +56,6 @@ main {
 .mdl-layout__drawer.mdl-color--primary-dark,
 .mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link {
   color: white;
-
 }
 .mdl-layout__drawer.mdl-color--primary .mdl-navigation__link:hover,
 .mdl-layout__drawer.mdl-color--primary .mdl-navigation__link.mdl-navigation__link--active,
@@ -62,17 +63,18 @@ main {
 .mdl-layout__drawer.mdl-color--primary-dark .mdl-navigation__link.mdl-navigation__link--active {
   background: rgba(50, 50, 50, 0.36);
 }
-.mdl-data-table td, .mdl-data-table td .mdl-data-table__select {
-  color: rgba(0,0,0,0.87);
+.mdl-data-table td,
+.mdl-data-table td .mdl-data-table__select {
+  color: rgba(0, 0, 0, 0.87);
 }
 .mdl-badge[data-badge]:after {
   // TODO hay que cambiar esto cada vez que se cambie la paleta de colores para que se ajuste
-  background: #00A4A3;
+  background: #00a4a3;
   color: rgb(255, 255, 255);
 }
 a {
   // TODO hay que cambiar esto cada vez que se cambie la paleta de colores para que se ajuste
-  color: #00A4A3;
+  color: #00a4a3;
 }
 .u {
   &__img {
@@ -87,7 +89,7 @@ a {
 }
 
 .mdl-spinner:not(.is-upgraded).is-active:after {
-  content: 'Cargando...'
+  content: 'Cargando...';
 }
 .section__title {
   padding: 0 1rem;
