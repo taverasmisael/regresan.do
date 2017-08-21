@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core'
 
-import { UserProfile } from '../../models/userprofile';
+import { UserProfile } from '@models/userProfile'
 
 @Component({
   selector: 'app-sucursales-list',
@@ -8,13 +8,10 @@ import { UserProfile } from '../../models/userprofile';
   styleUrls: ['./sucursales-list.component.scss']
 })
 export class SucursalesListComponent implements OnInit {
+  @Input() sucursales: UserProfile[]
+  @Input() colors: string[]
 
-  @Input() sucursales: UserProfile[];
-  @Input() colors: string[];
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

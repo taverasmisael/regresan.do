@@ -6,9 +6,9 @@ import {
   ChangeDetectionStrategy,
   EventEmitter,
   HostBinding
-} from '@angular/core';
+} from '@angular/core'
 
-import { User } from '../../models/user';
+import { User } from '../../models/user'
 
 @Component({
   selector: 'app-dashboard-header',
@@ -16,16 +16,13 @@ import { User } from '../../models/user';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardHeaderComponent implements OnInit {
-  @Input() user: User;
-  @Output() loginout = new EventEmitter();
+export class HeaderComponent implements OnInit {
+  @Input() user: User
+  @Output() loginout = new EventEmitter()
 
-  @HostBinding('class.mdl-layout__header') isHeader = true;
-  @HostBinding('class.mdl-color--primary') isColored = true;
-  constructor() { }
+  @HostBinding('class.mdl-layout__header') isHeader = true
+  @HostBinding('class.mdl-color--primary') isColored = true
+  constructor() {}
 
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }

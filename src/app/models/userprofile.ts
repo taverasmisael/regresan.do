@@ -1,7 +1,9 @@
 export class UserProfile {
-  $id: string;
-  Id: number;
-  Title: string;
-  OldProfileId: number;
-  NewUserId: number;
+  constructor(
+    public $id: string,
+    public Id: number,
+    public Title: string,
+    public OldProfileId: number,
+    public NewUserId: number
+  ) {}
 }

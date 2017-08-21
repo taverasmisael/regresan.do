@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-totales-card',
@@ -7,14 +7,11 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TotalesCardComponent implements OnInit {
+  @Input() cardType: 'total' | 'indice' | 'hoy'
+  @Input() count: number
+  @Input() text: string
 
-  @Input() cardType: 'total' | 'indice' | 'hoy';
-  @Input() count: number;
-  @Input() text: string;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

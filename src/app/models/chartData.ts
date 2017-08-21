@@ -3,5 +3,6 @@ export class ChartData {
     public labels: string[],
     public data: number[],
     public colors: string[],
-    public id?: string) { }
+    public id?: string
+  ) {}
 }

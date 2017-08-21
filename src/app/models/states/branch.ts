@@ -1,46 +1,36 @@
-import { UserProfile } from '@models/userprofile';
-import { Pregunta } from '@models/pregunta';
-import { KPI } from '@models/kpi';
-import { Filter } from '@models/filter';
-import { HistoricEntry } from '@models/historic-entry';
-import { StaffRanking } from '@models/staff-ranking';
-import { OpenAnswer } from '@models/answer.open';
-import { CloseAnswer } from '@models/answer.close';
-import { StateRequest } from '@models/states/state-request';
-import { APIRequestUser } from '@models/apiparams';
-
-import * as moment from 'moment';
+import { UserProfile } from '@models/userProfile'
+import { Question } from '@models/question'
+import { APIRequestUser } from '@models/apiparams'
+import { KPI } from '@models/kpi'
+import { Filter } from '@models/filter'
+import { HistoricEntry } from '@models/historicEntry'
+import { StaffRanking } from '@models/staffRanking'
+import { OpenAnswer } from '@models/openAnswer'
+import { CloseAnswer } from '@models/closeAnswer'
+import { StateRequest } from '@models/states/stateRequest'
+import { QuestionFilter } from '@models/questionFilter'
 
 export class BranchState {
-  info: UserProfile
-  openQuestions: Pregunta[]
-  closeQuestions: Pregunta[]
-  openAnswers: OpenAnswer[]
-  closeAnswers: CloseAnswer[][]
-  kpis: KPI[]
-  historicData: HistoricEntry[]
-  staffRanking: StaffRanking[]
-  requests: {
-    ACLOSE: StateRequest[],
-    AOPEN: StateRequest[],
-    QUESTIONS: StateRequest,
-    KPI: StateRequest,
-    STAFF: StateRequest,
+  public requests: {
+    ACLOSE: StateRequest[]
+    AOPEN: StateRequest[]
+    QUESTIONS: StateRequest
+    KPI: StateRequest
+    STAFF: StateRequest
     HISTORIC: StateRequest
   }
-  filters: Filter;
-  currentQuery: APIRequestUser
-
-  constructor(info?, cq?, oq?, ca?, oa?, filters?, loading?) {
-    this.info = info || new UserProfile();
-    this.closeQuestions = cq || [];
-    this.openQuestions = oq || [];
-    this.closeAnswers = ca || [];
-    this.openAnswers = oa || [];
-    this.filters = filters || [];
-    this.historicData = [];
-    this.staffRanking = [];
-    this.kpis = [];
+  constructor(
+    public info?: UserProfile,
+    public openQuestions: Question[] = [],
+    public closeQuestions: Question[] = [],
+    public openAnswers: OpenAnswer[] = [],
+    public closeAnswers: CloseAnswer[][] = [],
+    public kpis: KPI[] = [],
+    public historicData: HistoricEntry[] = [],
+    public staffRanking: StaffRanking[] = [],
+    public filters?: Filter,
+    public currentQuery: QuestionFilter | APIRequestUser = {start: '', end: '', profile: ''}
+  ) {
     this.requests = {
       ACLOSE: [],
       AOPEN: [],
@@ -49,7 +39,5 @@ export class BranchState {
       STAFF: new StateRequest(undefined, false, ''),
       HISTORIC: new StateRequest(undefined, false, '')
     }
-
-    this.currentQuery = new APIRequestUser();
   }
-};
+}

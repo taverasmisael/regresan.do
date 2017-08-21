@@ -1,35 +1,6 @@
-$palette-regresando:
-
-"174, 255, 255"
-
-"98, 255, 254"
-
-"42, 255, 254"
-
-"0, 225, 224"
-
-"0, 195, 193"
-
-"0, 164, 163"
-
-"0, 133, 133"
-
-"0, 103, 102"
-
-"0, 72, 72"
-
-"0, 42, 41"
-
-"174, 255, 255"
-
-"98, 255, 254"
-
-"0, 195, 193"
-
-"0, 103, 102"
-
-;
-
+$palette-regresando: "174, 255, 255" "98, 255, 254" "42, 255, 254" "0, 225, 224" "0, 195, 193"
+  "0, 164, 163" "0, 133, 133" "0, 103, 102" "0, 72, 72" "0, 42, 41" "174, 255, 255" "98, 255, 254"
+  "0, 195, 193" "0, 103, 102";
 
 $palette-regresando-50: nth($palette-regresando, 1);
 
@@ -72,23 +43,27 @@ $performance_font: 'Roboto', 'Helvetica', 'Arial', sans-serif !default;
 @import "~material-design-lite/src/material-design-lite";
 @import "~mdl-select-component/mdl-selectfield.min";
 
-::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color: #6f6f6f;
-    color:rgba(0, 0, 0, 0.26);
+::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #6f6f6f;
+  color: rgba(0, 0, 0, 0.26);
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:#6f6f6f;
-   color:rgba(0, 0, 0, 0.26);
-   opacity: 1;
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #6f6f6f;
+  color: rgba(0, 0, 0, 0.26);
+  opacity: 1;
 }
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:#6f6f6f;
-   color:rgba(0, 0, 0, 0.26);
-   opacity: 1;
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #6f6f6f;
+  color: rgba(0, 0, 0, 0.26);
+  opacity: 1;
 }
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:#6f6f6f;
-   color:rgba(0, 0, 0, 0.26);
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #6f6f6f;
+  color: rgba(0, 0, 0, 0.26);
 }
 .mdl-dialog__title {
   color: #007f7e;

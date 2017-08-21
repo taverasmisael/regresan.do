@@ -11,24 +11,18 @@ import {
   OnChanges,
   HostBinding,
   SimpleChanges
-} from '@angular/core';
+} from '@angular/core'
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
-import * as moment from 'moment';
-import compare from 'just-compare';
+import * as moment from 'moment'
+import compare from 'just-compare'
 
-import { UserProfile } from '@models/userprofile';
-import { DateFilter } from '@models/filter-date';
-import { FlatpickrOptions } from '@thirdparty/flatpickr/models';
-import { updateObject } from '@utilities/objects';
-import { isValidUnix, toUnixDate } from '@utilities/dates';
-
+import { UserProfile } from '@models/userprofile'
+import { APIRequestUser } from '@models/apiparams'
+import { FlatpickrOptions } from '@thirdparty/flatpickr/models'
+import { updateObject } from '@utilities/objects'
+import { isValidUnix, toUnixDate } from '@utilities/dates'
 
 @Component({
   selector: 'app-filter',
@@ -37,54 +31,55 @@ import { isValidUnix, toUnixDate } from '@utilities/dates';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
-
-  @Input() filters: DateFilter;
-  @Input() questions: Array<{
+  @Input() filters: APIRequestUser
+  @Input()
+  questions: Array<{
     value: number
     text: string
     children: Array<{ value: string; text: string }>
-  }>;
-  @Output() applyFilters = new EventEmitter();
+  }>
+  @Output() applyFilters = new EventEmitter()
 
-  @HostBinding('class.mdl-grid') isMdlGrid = true;
-  @HostBinding('class.mdl-grid--no-spacing') noSpacing = true;
+  @HostBinding('class.mdl-grid') isMdlGrid = true
+  @HostBinding('class.mdl-grid--no-spacing') noSpacing = true
 
-  @ViewChild('filterDialog') filterDialog: ElementRef;
+  @ViewChild('filterDialog') filterDialog: ElementRef
 
-  public filterForm: FormGroup;
-  public filterFechaInicio: FormControl;
-  public filterFechaFin: FormControl;
-  public filterQuestion: FormControl;
-  public filterAnswer: FormControl;
-  public lastFilter: DateFilter;
-  public activeFilters: number;
-  public startOptions: FlatpickrOptions;
-  public endOptions: FlatpickrOptions;
+  public filterForm: FormGroup
+  public filterFechaInicio: FormControl
+  public filterFechaFin: FormControl
+  public filterQuestion: FormControl
+  public filterAnswer: FormControl
+  public lastFilter: APIRequestUser
+  public activeFilters: number
+  public startOptions: FlatpickrOptions
+  public endOptions: FlatpickrOptions
 
-  private flatpickrOptions: FlatpickrOptions;
-  constructor(private fb: FormBuilder) { }
+  private flatpickrOptions: FlatpickrOptions
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    let { start, end } = this.filters;
-    const altStart = moment.unix(+start).format('YYYY-MM-DD');
-    const altEnd = moment.unix(+end).format('YYYY-MM-DD');
+    let { start, end } = this.filters
 
-    this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true };
-    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: altStart });
-    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: altEnd });
+    this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true }
+    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: start })
+    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: end })
 
-    this.filterFechaInicio = new FormControl(altStart, [Validators.required]);
-    this.filterFechaFin = new FormControl(altEnd, [Validators.required]);
-    this.filterQuestion = new FormControl({value: '', disabled: this.questions && !this.questions.length})
-    this.filterAnswer = new FormControl({value: '', disabled: this.filterQuestion.disabled})
-    this.lastFilter = this.filters;
-    this.setActivesFilters();
+    this.filterFechaInicio = new FormControl(start, [Validators.required])
+    this.filterFechaFin = new FormControl(end, [Validators.required])
+    this.filterQuestion = new FormControl({
+      value: '',
+      disabled: this.questions && !this.questions.length
+    })
+    this.filterAnswer = new FormControl({ value: '', disabled: this.filterQuestion.disabled })
+    this.lastFilter = this.filters
+    this.setActivesFilters()
     this.filterForm = this.fb.group({
       start: this.filterFechaInicio,
       end: this.filterFechaFin,
       question: this.filterQuestion,
       answer: this.filterAnswer
-    });
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -95,44 +90,43 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
   ngAfterViewInit() {
-    componentHandler.upgradeAllRegistered();
+    componentHandler.upgradeAllRegistered()
     if (!this.filterDialog.nativeElement.showModal) {
-      dialogPolyfill.registerDialog(this.filterDialog.nativeElement);
+      dialogPolyfill.registerDialog(this.filterDialog.nativeElement)
     }
     Array.from(document.querySelectorAll('.flatpickr-calendar')).forEach(el => {
-      this.filterDialog.nativeElement.appendChild(el);
+      this.filterDialog.nativeElement.appendChild(el)
     })
   }
 
   showDialog() {
-    this.filterDialog.nativeElement.showModal();
+    this.filterDialog.nativeElement.showModal()
   }
 
   closeDialog(clean?: boolean) {
-    this.filterDialog.nativeElement.close();
+    this.filterDialog.nativeElement.close()
   }
 
   sendFilters(formData: FormGroup) {
-    const filter = this.fixDateFilter(formData.value);
+    const filter = this.fixDateFilter(formData.value)
     if (this.shouldUpdateLastFilter(filter)) {
-      this.lastFilter = filter;
-      this.applyFilters.emit(filter);
+      this.lastFilter = filter
+      this.applyFilters.emit(filter)
     }
-    this.closeDialog();
+    this.closeDialog()
   }
 
   private setActivesFilters() {
-    this.activeFilters = Object.keys(this.lastFilter).length;
+    this.activeFilters = Object.keys(this.lastFilter).length
   }
 
   private fixDateFilter(filter) {
     return updateObject(filter, {
       start: isValidUnix(filter.start) ? filter.start : toUnixDate(filter.start),
-      end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end),
+      end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end)
     })
   }
-  private shouldUpdateLastFilter(filter: DateFilter) {
-    return !compare(filter, this.lastFilter);
+  private shouldUpdateLastFilter(filter: APIRequestUser) {
+    return !compare(filter, this.lastFilter)
   }
-
 }

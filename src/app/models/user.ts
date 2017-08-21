@@ -1,9 +1,11 @@
 export class User {
-  fullName: String;
-  usuername: String;
-  role: number;
-  UID: string;
-  image: string;
-  message: string;
-  lastLogon: string;
+  constructor(
+    public fullName: string,
+    public username: string,
+    public role: number,
+    public UID: string,
+    public image: string,
+    public memssage: string,
+    public lastLogon: string
+  ) {}
 }

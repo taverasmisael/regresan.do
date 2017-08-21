@@ -1,7 +1,6 @@
-import { DateFilter } from '@models/filter-date';
-import { ProfileFilter } from '@models/filter-profile';
+import { APIRequestParams, APIRequestUser } from '@models/apiparams'
 
 export class Filter {
-  date: DateFilter;
-  question: ProfileFilter;
-};
+  date: APIRequestParams
+  question: APIRequestUser
+}

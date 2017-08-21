@@ -3,7 +3,7 @@
     <img src="assets/images/Identidad-Regresando-2016.png" alt="Logo Regresando" class="logo u__img--responsive">
   </div>
   <div class="mdl-layout-spacer"></div>
-  <button id="menu--notifications" class="mdl-button mdl-js-button mdl-button--no-effect mdl-button--icon mdl-button--extra-padding mdl-color-text--accent-contrast">
+  <button *ngIf="false" id="menu--notifications" class="mdl-button mdl-js-button mdl-button--no-effect mdl-button--icon mdl-button--extra-padding mdl-color-text--accent-contrast">
     <span class="material-icons">notifications</span>
   </button>
   <button id="menu--user-config" class="mdl-button mdl-js-button mdl-button--no-effect mdl-color-text--accent-contrast profile mdl-cell--hide-phone">
@@ -15,7 +15,7 @@
     <li class="mdl-menu__item mdl-menu__item--full-bleed-divider">Sucursales</li>
     <li class="mdl-menu__item" (click)="loginout.emit()">Cerrar Sesión</li>
   </ul>
-  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+  <ul *ngIf="false" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
 data-mdl-for="menu--notifications">
     <li class="mdl-menu__item">No tiene notificaciones</li>
   </ul>

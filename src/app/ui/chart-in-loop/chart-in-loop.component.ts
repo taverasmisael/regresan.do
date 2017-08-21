@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy
+} from '@angular/core'
 
 @Component({
   selector: 'app-chart-in-loop',
@@ -7,7 +14,6 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartInLoopComponent implements OnInit {
-
   @Input() loadingText: any
   @Input() chartInfo: any
   @Input() chartData: any
@@ -16,8 +22,7 @@ export class ChartInLoopComponent implements OnInit {
   @Input() errorText: any
   @Output() failed = new EventEmitter()
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

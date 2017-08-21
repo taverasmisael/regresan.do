@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store'
+import { Observable } from 'rxjs/Observable'
 
-import { UserProfile } from '../../../models/userprofile';
-import { AuthState } from '../../../models/states/authstate';
-import { AppState } from '../../../models/states/appstate';
-import { gamaRegresando } from '../../../utilities/colors';
+import { UserProfile } from '@models/userprofile'
+import { AuthState } from '@models/states/auth'
+import { AppState } from '@models/states/app'
+import { gamaRegresando } from '@utilities/colors'
 
 @Component({
   selector: 'app-dashboard-sucursales',
@@ -14,22 +14,19 @@ import { gamaRegresando } from '../../../utilities/colors';
   styleUrls: ['./dashboard-sucursales.component.scss']
 })
 export class DashboardSucursalesComponent implements OnInit {
+  public userProfiles: Observable<UserProfile[]>
+  public colores: string[]
 
-  public userProfiles: Observable<UserProfile[]>;
-  public colores: string[];
+  private AuthState: Observable<AuthState>
 
-  private AuthState: Observable<AuthState>;
-
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.AuthState = this.store.select<AppState>('MainStore')
-      .distinctUntilKeyChanged('auth')
-      .pluck<AuthState>('auth');
+    this.AuthState = this.store
+      .select('auth')
 
-    this.colores = gamaRegresando();
+    this.colores = gamaRegresando()
 
-    this.userProfiles = this.AuthState.pluck<UserProfile[]>('currentUser', 'Profiles')
+    this.userProfiles = this.AuthState.pluck('currentUser', 'Profiles')
   }
-
 }
