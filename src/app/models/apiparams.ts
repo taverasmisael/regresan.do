@@ -18,3 +18,15 @@ export class APIRequestRespuesta extends APIRequestUser {
     super(start, end, profile)
   }
 }
+
+export class APIRequestQA extends APIRequestRespuesta {
+  constructor(
+    public start: string,
+    public end: string,
+    public profile: string,
+    public pregunta: string,
+    public respuesta: string
+  ) {
+    super(start, end, profile, pregunta)
+  }
+}

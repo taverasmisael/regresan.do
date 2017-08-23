@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 
-import { APIRequestRespuesta } from '@models/apiparams'
+import { APIRequestRespuesta, APIRequestQA } from '@models/apiparams'
 
 import {
   Response,
@@ -37,6 +37,19 @@ export class RespuestasService {
     })
   }
 
+  getFiltered(query: APIRequestQA) {
+    const url = `${this.BASE_URL}/GetRespuestasByFiltro`
+    const search = new URLSearchParams()
+    search.append('_startDate', query.start)
+    search.append('_endDate', query.end)
+    search.append('profileId', query.profile)
+    search.append('idPregunta', query.pregunta)
+
+    return this.api.get(url, {
+      search,
+      headers: this.authHeader
+    })
+  }
   getFromProfile(query: APIRequestRespuesta) {
     const url = `${this.BASE_URL}/GetRespuestasByProfiles2`
     const params = new URLSearchParams()
