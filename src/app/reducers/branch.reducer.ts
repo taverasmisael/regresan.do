@@ -68,7 +68,10 @@ function saveInfo<T extends BranchState>(state: BranchState, action: EnhancedAct
   return updateObject(state, { info: payload })
 }
 
-function resetStore<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function resetStore<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload } = action
 
   return updateObject(state, INITIAL_STATE)
@@ -80,7 +83,10 @@ function resetDate<T extends BranchState>(state: BranchState, action: EnhancedAc
   return Object.assign(state, INITIAL_STATE, { info: state.info })
 }
 
-function requesting<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function requesting<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, message, section } = action
   let update = {
     requests: updateObject(state.requests, {
@@ -94,7 +100,10 @@ function requesting<T extends BranchState>(state: BranchState, action: EnhancedA
   return updateObject(state, update)
 }
 
-function requestingAnswer<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function requestingAnswer<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, message, section } = action
 
   return updateObject(state, {
@@ -107,7 +116,10 @@ function requestingAnswer<T extends BranchState>(state: BranchState, action: Enh
   })
 }
 
-function requestAnswerError<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function requestAnswerError<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, message, section } = action
 
   return updateObject(state, {
@@ -120,7 +132,10 @@ function requestAnswerError<T extends BranchState>(state: BranchState, action: E
   })
 }
 
-function requestError<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function requestError<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -128,7 +143,10 @@ function requestError<T extends BranchState>(state: BranchState, action: Enhance
   })
 }
 
-function saveQuestions<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveQuestions<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -140,7 +158,10 @@ function saveQuestions<T extends BranchState>(state: BranchState, action: Enhanc
   })
 }
 
-function saveQClose<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveQClose<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -169,7 +190,10 @@ function saveAOpen<T extends BranchState>(state: BranchState, action: EnhancedAc
   })
 }
 
-function saveAClose<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveAClose<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
   const { answer, question } = payload
 
@@ -198,7 +222,10 @@ function saveKPI<T extends BranchState>(state: BranchState, action: EnhancedActi
   })
 }
 
-function saveStaffRanking<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveStaffRanking<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
 
   return updateObject(state, {
@@ -208,7 +235,10 @@ function saveStaffRanking<T extends BranchState>(state: BranchState, action: Enh
     })
   })
 }
-function saveHistoric<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveHistoric<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload, section } = action
   return updateObject(state, {
     historicData: payload,
@@ -218,7 +248,10 @@ function saveHistoric<T extends BranchState>(state: BranchState, action: Enhance
   })
 }
 
-function saveCurrentQuery<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
+function saveCurrentQuery<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
   const { payload } = action
   return updateObject(state, {
     currentQuery: payload

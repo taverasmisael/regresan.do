@@ -1,15 +1,22 @@
-import { Action } from '@models/action';
+import { Action } from '@models/action'
 
-import { AuthState } from '@models/states/auth';
+import { AuthState } from '@models/states/auth'
 
-import { ActionTypes } from '@actions/auth.actions';
+import { ActionTypes } from '@actions/auth.actions'
 
-const { LOGIN, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE,
-  LOGOUT, TOKEN_EXPIRED, SAVE_USER } = ActionTypes;
+const {
+  LOGIN,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT,
+  TOKEN_EXPIRED,
+  SAVE_USER
+} = ActionTypes
 
-import { updateObject } from '@utilities/objects';
+import { updateObject } from '@utilities/objects'
 
-export const INITIAL_STATE = new AuthState();
+export const INITIAL_STATE = new AuthState()
 
 export function AuthReducer() {
   return {
@@ -20,31 +27,30 @@ export function AuthReducer() {
     [LOGIN_FAILURE]: loginFailed,
     [LOGOUT]: logOutUser,
     [TOKEN_EXPIRED]: logOutUser
-
   }
 }
 
 function loginUser<T extends AuthState>(state: T, action: Action): T {
-  const { payload } = action;
-  return updateObject(state, updateObject(INITIAL_STATE, {loading: true}))
+  const { payload } = action
+  return updateObject(state, updateObject(INITIAL_STATE, { loading: true }))
 }
 
 function loginSucessful<T extends AuthState>(state: T, action: Action): T {
-  const { payload } = action;
+  const { payload } = action
 
-  return updateObject(state, {token: payload});
+  return updateObject(state, { token: payload })
 }
 
 function saveUser<T extends AuthState>(state: T, action: Action): T {
-  const { payload } = action;
+  const { payload } = action
 
-  return updateObject(state, {currentUser: action.payload, loading: false});
+  return updateObject(state, { currentUser: action.payload, loading: false })
 }
 
 function loginFailed<T extends AuthState>(state: T, action: Action): T {
-  const { payload } = action;
+  const { payload } = action
 
-  return updateObject(state, {error: action.payload, loading: false});
+  return updateObject(state, { error: action.payload, loading: false })
 }
 
 function logOutUser<T extends AuthState>(state: AuthState, action: Action): AuthState {
