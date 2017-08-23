@@ -342,7 +342,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe(info => this.ApplyQueryParams(info)) // Finally we apply the query
 
-    /*     this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
+    this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
       const { closeQuestions, closeAnswers } = store
       const flatAnswers = flatten<CloseAnswer>(closeAnswers)
       const mappedQuestions = closeQuestions
@@ -361,7 +361,8 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
         .filter(q => !!q.children.length)
 
       this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
-    }) */
+      console.log(this.questionsList)
+    })
   }
 
   // Private Helpers
