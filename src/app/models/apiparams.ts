@@ -13,7 +13,7 @@ export class APIRequestRespuesta extends APIRequestUser {
     public start: string,
     public end: string,
     public profile: string,
-    public pregunta: string
+    public question: string
   ) {
     super(start, end, profile)
   }
@@ -24,9 +24,9 @@ export class APIRequestQA extends APIRequestRespuesta {
     public start: string,
     public end: string,
     public profile: string,
-    public pregunta: string,
-    public respuesta: string
+    public question: string,
+    public answer: string
   ) {
-    super(start, end, profile, pregunta)
+    super(start, end, profile, question)
   }
 }
