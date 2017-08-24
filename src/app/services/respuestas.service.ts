@@ -38,14 +38,15 @@ export class RespuestasService {
   }
 
   getFiltered(query: APIRequestQA) {
-    const url = `${this.BASE_URL}/GetRespuestasByFiltro`
+    const url = `https://webapiregresandodev.azurewebsites.net/api/Respuesta/GetRespuestaByFiltro`
     const search = new URLSearchParams()
     search.append('_startDate', query.start)
     search.append('_endDate', query.end)
     search.append('profileId', query.profile)
-    search.append('idPregunta', query.pregunta)
+    search.append('idPregunta', query.question)
+    search.append('respuesta', query.answer)
 
-    return this.api.get(url, {
+    return this.api.GET(url, {
       search,
       headers: this.authHeader
     })
@@ -57,7 +58,7 @@ export class RespuestasService {
     params.append('_startDate', query.start)
     params.append('_endDate', query.end)
     params.append('profileId', query.profile)
-    params.append('idPregunta', query.pregunta)
+    params.append('idPregunta', query.question)
 
     return this.api.get(url, {
       headers: this.authHeader,
@@ -72,7 +73,7 @@ export class RespuestasService {
     params.append('_startDate', query.start)
     params.append('_endDate', query.end)
     params.append('profileId', query.profile)
-    params.append('idPregunta', query.pregunta)
+    params.append('idPregunta', query.question)
 
     return this.api.get(url, {
       headers: this.authHeader,
