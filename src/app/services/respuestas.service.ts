@@ -38,7 +38,7 @@ export class RespuestasService {
   }
 
   getFiltered(query: APIRequestQA) {
-    const url = `https://webapiregresandodev.azurewebsites.net/api/Respuesta/GetRespuestaByFiltro`
+    const url = `${this.BASE_URL}/GetRespuestaByFiltro`
     const search = new URLSearchParams()
     search.append('_startDate', query.start)
     search.append('_endDate', query.end)
@@ -46,7 +46,7 @@ export class RespuestasService {
     search.append('idPregunta', query.question)
     search.append('respuesta', query.answer)
 
-    return this.api.GET(url, {
+    return this.api.get(url, {
       search,
       headers: this.authHeader
     })

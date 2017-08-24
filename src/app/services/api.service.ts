@@ -10,7 +10,7 @@ import { JWT } from '@models/jwt'
 
 @Injectable()
 export class ApiService {
-  private BASE_URL = 'https://devregresando.azurewebsites.net'
+  private BASE_URL = 'https://webapiregresandodev.azurewebsites.net'
   private COMMON_HEADERS = new Headers([{ 'Content-Type': 'application/x-www-form-urlencoded' }])
   constructor(private http: Http) {}
 
@@ -21,12 +21,6 @@ export class ApiService {
       .catch(this.HandleErrors)
   }
 
-  GET(path: string, options?: RequestOptionsArgs): Observable<{}> {
-    return this.http
-      .get(path, options)
-      .map(this.HandleResponse)
-      .catch(this.HandleErrors)
-  }
   post(path: string | Request, body: any, options?: RequestOptionsArgs): Observable<{}> {
     // This Line Ensure All 'FormRequest' are sended with the right content-type
     const innerOptions = updateObject({ headers: this.COMMON_HEADERS }, options)
