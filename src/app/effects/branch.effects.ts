@@ -103,7 +103,7 @@ export class BranchEffects {
     })
 
   @Effect()
-  requestQA = this.actions$
+  requestQA$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_FILTERED_R)
     .map(action => action['payload'])
     .switchMap(payload =>
@@ -113,6 +113,7 @@ export class BranchEffects {
         )
         .map(res => new SuccessFilteredQuestions(res))
     )
+    .catch(err => this.HandleError(err, ErrorFilteredQuestions))
 
   @Effect()
   requestQS$ = this.actions$
@@ -149,8 +150,7 @@ export class BranchEffects {
     .map(action => action['payload'])
     .map(payload => ({
       profile: this.currentBranch.OldProfileId.toString(),
-      start: payload.start,
-      end: payload.end
+      ...payload
     }))
     .switchMap(query => {
       return Observable.of(new SaveCurrentQuery(query))

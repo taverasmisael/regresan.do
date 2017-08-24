@@ -24,7 +24,12 @@ import { updateObject, objectRest } from '@utilities/objects'
 import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
-import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '@models/apiparams'
+import {
+  APIRequestParams,
+  APIRequestRespuesta,
+  APIRequestUser,
+  APIRequestQA
+} from '@models/apiparams'
 import { AppState } from '@models/states/app'
 import { BranchState } from '@models/states/branch'
 import { HistoricEntry } from '@models/historicEntry'
@@ -43,6 +48,7 @@ import {
   SaveInfo,
   ResetButInfo,
   ResetAll,
+  RequestFilteredQuestions,
   RequestCloseAnswer,
   RequestHistoric,
   RequestKPI,
@@ -55,6 +61,7 @@ import {
 const aWeekAgo = moment().subtract(1, 'week').unix().toString()
 const today = moment().unix().toString()
 const unique = key => (p, c) => (p.find(e => e[key] === c[key]) ? p : [...p, c])
+const needsFilter = q => q.question && q.answer
 const uniqueQuestion = unique('idPregunta')
 const uniqueQuestionInAnswer = unique('Pregunta')
 const uniqueValue = unique('value')
@@ -146,16 +153,16 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   // Public Methods
-  public LoadCloseAnswer(pregunta: string) {
+  public LoadCloseAnswer(question: string) {
     const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { pregunta })
-    this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`))
+    const query = updateObject(currentQuery, { question })
+    this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${question}`))
   }
 
-  public LoadOpenAnswer(pregunta: string) {
+  public LoadOpenAnswer(question: string) {
     const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { pregunta })
-    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`))
+    const query = updateObject(currentQuery, { question })
+    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${question}`))
   }
 
   public NavigateToBranch(profileId: number) {
@@ -180,7 +187,11 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public FetchQuestions(currentQuery) {
-    this.store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'))
+    const queryNeedsFilter = needsFilter(currentQuery)
+    const Dispatcher = queryNeedsFilter ? RequestFilteredQuestions : RequestQuestions
+    this.store.dispatch(
+      new Dispatcher(currentQuery, `Cargando Preguntas ${queryNeedsFilter && 'Filtradas'}...`)
+    )
   }
   public FetchKPIs(currentQuery) {
     this.store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'))
@@ -214,9 +225,9 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ApplyQueryParams(queryParams: Params) {
-    const dispatch = (query: APIRequestUser) => this.store.dispatch(new ApplyCurrentQuery(query))
-    const navigate = (query: APIRequestUser) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: any) => {
+    const dispatch = query => this.store.dispatch(new ApplyCurrentQuery(query))
+    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
+    const dispatchNavigate = (query: APIRequestQA | APIRequestParams) => {
       dispatch(query)
       navigate(query)
       this.FetchAll()
