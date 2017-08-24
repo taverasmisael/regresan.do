@@ -10,7 +10,12 @@ import { OpenAnswer } from '@models/openAnswer'
 import { KPI } from '@models/kpi'
 import { StaffRanking } from '@models/staffRanking'
 import { HistoricEntry } from '@models/historicEntry'
-import { APIRequestParams, APIRequestUser, APIRequestRespuesta } from '@models/apiparams'
+import {
+  APIRequestParams,
+  APIRequestUser,
+  APIRequestRespuesta,
+  APIRequestQA
+} from '@models/apiparams'
 import { QuestionFilter } from '@models/questionFilter'
 
 const getSectionName = (type: string) => type.split('_')[1]
@@ -21,6 +26,13 @@ export class RequestQuestions implements EnhancedAction {
   public section = getSectionName(this.type)
 
   constructor(public payload: APIRequestUser, public message: string) {}
+}
+
+export class RequestFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_R
+  public section = getSectionName(this.type)
+
+  constructor(public payload: APIRequestQA, public message: string) {}
 }
 
 export class RequestOpenAnswer implements EnhancedAction {
@@ -66,6 +78,12 @@ export class ErrorQuestions implements EnhancedAction {
   constructor(public payload: RequestError) {}
 }
 
+export class ErrorFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_E
+  public section = getSectionName(this.type)
+  constructor(public payload: RequestError) {}
+}
+
 export class ErrorOpenAnswer implements Action {
   public type = ACTIONS.BRANCH_REQ_AOPEN_E
   public section = getSectionName(this.type)
@@ -107,6 +125,12 @@ export class SuccessQuestions implements EnhancedAction {
   public section = getSectionName(this.type)
 
   constructor(public payload: { close: Question[]; open: Question[] }) {}
+}
+
+export class SuccessFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_S
+  public section = getSectionName(this.type)
+  constructor(public payload: any) {}
 }
 
 export class SuccessOpenAnswer implements EnhancedAction {

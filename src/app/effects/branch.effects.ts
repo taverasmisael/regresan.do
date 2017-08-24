@@ -27,12 +27,14 @@ import { ActionTypes as AuthTypes } from '@actions/auth.actions'
 
 import {
   ErrorCloseAnswer,
+  ErrorFilteredQuestions,
   ErrorHistoric,
   ErrorKPI,
   ErrorOpenAnswer,
   ErrorQuestions,
   ErrorStaffRanking,
   SuccessCloseAnswer,
+  SuccessFilteredQuestions,
   SuccessHistoric,
   SuccessKPI,
   SuccessOpenAnswer,
@@ -99,6 +101,18 @@ export class BranchEffects {
         )
         .catch(err => this.HandleError(err, ErrorOpenAnswer))
     })
+
+  @Effect()
+  requestQA = this.actions$
+    .ofType(ACTIONS.BRANCH_REQ_FILTERED_R)
+    .map(action => action['payload'])
+    .switchMap(payload =>
+      this.respuestasService
+        .getFiltered(
+          Object.assign({}, payload, { profile: this.currentBranch.OldProfileId.toString() })
+        )
+        .map(res => new SuccessFilteredQuestions(res))
+    )
 
   @Effect()
   requestQS$ = this.actions$

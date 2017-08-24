@@ -11,6 +11,9 @@ import {
   BRANCH_REQ_QUESTIONS_R,
   BRANCH_REQ_QUESTIONS_S,
   BRANCH_REQ_QUESTIONS_E,
+  BRANCH_REQ_FILTERED_R,
+  BRANCH_REQ_FILTERED_S,
+  BRANCH_REQ_FILTERED_E,
   BRANCH_REQ_AOPEN_R,
   BRANCH_REQ_AOPEN_S,
   BRANCH_REQ_AOPEN_E,
@@ -41,18 +44,21 @@ export function BranchCases() {
     [BRANCH_RESET_ALL]: resetStore,
     [BRANCH_RESET_BUT_INFO]: resetDate,
     [BRANCH_REQ_QUESTIONS_R]: requesting,
+    [BRANCH_REQ_FILTERED_R]: requesting,
     [BRANCH_REQ_AOPEN_R]: requestingAnswer,
     [BRANCH_REQ_ACLOSE_R]: requestingAnswer,
     [BRANCH_REQ_KPI_R]: requesting,
     [BRANCH_REQ_STAFF_RANKING_R]: requesting,
     [BRANCH_REQ_HISTORIC_R]: requesting,
     [BRANCH_REQ_QUESTIONS_E]: requestError,
+    [BRANCH_REQ_FILTERED_E]: requestError,
     [BRANCH_REQ_AOPEN_E]: requestAnswerError,
     [BRANCH_REQ_ACLOSE_E]: requestAnswerError,
     [BRANCH_REQ_KPI_E]: requestError,
     [BRANCH_REQ_STAFF_RANKING_E]: requestError,
     [BRANCH_REQ_HISTORIC_E]: requestError,
     [BRANCH_REQ_QUESTIONS_S]: saveQuestions,
+    [BRANCH_REQ_FILTERED_S]: saveFilteredQuestions,
     [BRANCH_REQ_AOPEN_S]: saveAOpen,
     [BRANCH_REQ_ACLOSE_S]: saveAClose,
     [BRANCH_REQ_KPI_S]: saveKPI,
@@ -156,6 +162,15 @@ function saveQuestions<T extends BranchState>(
       [section]: new StateRequest(undefined, false, '')
     })
   })
+}
+
+function saveFilteredQuestions<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
+  const { payload, section } = action
+  console.log(section, payload)
+  return state;
 }
 
 function saveQClose<T extends BranchState>(

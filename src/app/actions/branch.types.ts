@@ -3,6 +3,11 @@ export const BRANCH_REQ_QUESTIONS_R = '[BRANCH]: REQ_QUESTIONS_R'
 export const BRANCH_REQ_QUESTIONS_S = '[BRANCH]: REQ_QUESTIONS_S'
 export const BRANCH_REQ_QUESTIONS_E = '[BRANCH]: REQ_QUESTIONS_E'
 
+// Requesting Filtered Answers
+export const BRANCH_REQ_FILTERED_R = '[BRANCH]: REQ_FILTERED_R'
+export const BRANCH_REQ_FILTERED_S = '[BRANCH]: REQ_FILTERED_S'
+export const BRANCH_REQ_FILTERED_E = '[BRANCH]: REQ_FILTERED_E'
+
 // Requesting Open Answers
 export const BRANCH_REQ_AOPEN_R = '[BRANCH]: REQ_AOPEN_R'
 export const BRANCH_REQ_AOPEN_S = '[BRANCH]: REQ_AOPEN_S'
