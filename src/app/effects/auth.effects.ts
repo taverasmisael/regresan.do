@@ -5,7 +5,7 @@ import { Actions, Effect } from '@ngrx/effects'
 
 import { Observable } from 'rxjs/Observable'
 
-import { ActionTypes, SaveUser, LoginFailure, LoginSuccess } from '../actions/auth.actions'
+import { ActionTypes, SaveUser, LoginFailure, LoginSuccess, LoginComplete } from '../actions/auth.actions'
 
 import { UserService } from '../services/user.service'
 
@@ -32,7 +32,7 @@ export class AuthEffects {
   @Effect()
   saveUser$ = this.actions$.ofType(SAVE_USER).switchMap(action => {
     this.router.navigate(['dashboard'])
-    return Observable.of({ type: false })
+    return Observable.of(new LoginComplete())
   })
 
   @Effect()

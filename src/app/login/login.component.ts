@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       username: this.username,
       password: this.password
     })
-    this.AuthState = this.store.select('auth').distinctUntilKeyChanged('auth')
+    this.AuthState = this.store.select('auth').distinctUntilChanged();
 
     this.AuthState.pluck('loading').subscribe((value: boolean) => (this.requesting = value))
 
