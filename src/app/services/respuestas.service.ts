@@ -52,13 +52,16 @@ export class RespuestasService {
     })
   }
   getFromProfile(query: APIRequestRespuesta) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfiles2`
+    const url = `${this.BASE_URL}/GetData`
     const params = new URLSearchParams()
 
-    params.append('_startDate', query.start)
-    params.append('_endDate', query.end)
-    params.append('profileId', query.profile)
-    params.append('idPregunta', query.question)
+    params.append('startDate', query.start)
+    params.append('endDate', query.end)
+    params.append('idprofile', query.profile)
+    params.append('idQuestion', query.question)
+    params.append('filterIdQuestion', '0')
+    params.append('answer', '')
+
 
     return this.api.get(url, {
       headers: this.authHeader,
