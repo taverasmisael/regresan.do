@@ -16,7 +16,7 @@
         [segments]="IndiceSatisfaccion.segments">
       </ng-gauge>
     </div>
-    <div class="mdl-cell mdl-cell--8-col" *ngIf="KPIS">
+    <div class="mdl-cell {{!IndiceSatisfaccion ? 'mdl-cell--12-col' : 'mdl-cell--8-col'}}" *ngIf="KPIS">
       <div class="mdl-grid">
         <div class="mdl-cell" *ngFor="let kpi of KPIS;">
           <ng-gauge
