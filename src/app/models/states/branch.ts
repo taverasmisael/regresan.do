@@ -1,6 +1,6 @@
 import { UserProfile } from '@models/userProfile'
 import { Question } from '@models/question'
-import { APIRequestUser } from '@models/apiparams'
+import { StandardRequest } from '@models/standardRequest'
 import { KPI } from '@models/kpi'
 import { Filter } from '@models/filter'
 import { HistoricEntry } from '@models/historicEntry'
@@ -28,8 +28,7 @@ export class BranchState {
     public kpis: KPI[] = [],
     public historicData: HistoricEntry[] = [],
     public staffRanking: StaffRanking[] = [],
-    public filters?: Filter,
-    public currentQuery: QuestionFilter | APIRequestUser = {start: '', end: '', profile: ''}
+    public currentQuery: QuestionFilter | StandardRequest = new StandardRequest('', '', '')
   ) {
     this.requests = {
       ACLOSE: [],
