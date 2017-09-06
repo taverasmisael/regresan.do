@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable'
 import { Actions, Effect } from '@ngrx/effects'
 
 import { AppState } from '@models/states/app'
-import { APIRequestParams, APIRequestUser } from '@models/apiparams'
 import { UserProfile } from '@models/userProfile'
 import { CloseAnswer } from '@models/closeAnswer'
 import { BranchState } from '@models/states/branch'

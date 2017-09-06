@@ -5,9 +5,9 @@ import { Actions, Effect } from '@ngrx/effects'
 
 import { Observable } from 'rxjs/Observable'
 
-import { ActionTypes, SaveUser, LoginFailure, LoginSuccess, LoginComplete } from '../actions/auth.actions'
+import { ActionTypes, SaveUser, LoginFailure, LoginSuccess, LoginComplete } from '@actions/auth.actions'
 
-import { UserService } from '../services/user.service'
+import { UserService } from '@services/user.service'
 
 const { LOGIN_SUCCESS, SAVE_USER, LOGIN_START, LOGOUT, LOGOUT_START, LOGIN } = ActionTypes
 
