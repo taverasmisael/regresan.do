@@ -121,7 +121,10 @@ export class BranchEffects {
     .switchMap(payload => {
       // Trying Some Different RXJS operator
       return this.preguntasService
-        .getAllByProfile(payload)
+        .getAllByProfile({
+          ...payload,
+          profile: this.currentBranch.OldProfileId.toString()
+        })
         .map(res => res['Respuestas']) // return only the real data
         .map((questions: Question[]) => {
           const close = questions.filter(q => q.tipoPregunta !== 'Abierta')
@@ -148,8 +151,8 @@ export class BranchEffects {
     .ofType(ACTIONS.BRANCH_APPLY_CURRENT_QUERY)
     .map(action => action['payload'])
     .map(payload => ({
-      profile: this.currentBranch.OldProfileId.toString(),
-      ...payload
+      ...payload,
+      profile: this.currentBranch.OldProfileId.toString()
     }))
     .switchMap(query => {
       return Observable.of(new SaveCurrentQuery(query))

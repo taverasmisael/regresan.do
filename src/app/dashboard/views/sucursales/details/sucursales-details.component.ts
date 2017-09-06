@@ -191,11 +191,8 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public FetchQuestions(currentQuery) {
-    const queryNeedsFilter = needsFilter(currentQuery)
-    const Dispatcher = queryNeedsFilter ? RequestFilteredQuestions : RequestQuestions
-    this.store.dispatch(
-      new Dispatcher(currentQuery, `Cargando Preguntas ${queryNeedsFilter && 'Filtradas'}...`)
-    )
+    console.log(currentQuery, 'SI')
+    this.store.dispatch(new RequestQuestions(currentQuery, `Cargando Preguntas...`))
   }
   public FetchKPIs(currentQuery) {
     this.store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'))
@@ -225,16 +222,21 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string): any[] {
     const result = findByObjectId<any>(this.chartData[type], question) || []
-    return result // NO A REAL ERROR. JUST TYPESCRIPT CRAZINESS >:V
+    return result
   }
 
   public ApplyQueryParams(queryParams: Params) {
+    console.log(queryParams)
     const dispatch = query => this.store.dispatch(new ApplyCurrentQuery(query))
     const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: AnswerRequest | BasicRequest) => {
-      dispatch(query)
+    const dispatchNavigate = (query: BasicRequest | AnswerRequest) => {
+      const { start, end, profile, answer, idQuestion, question } = <AnswerRequest>query
+      dispatch(new AnswerRequest(start, end, profile, question, answer, idQuestion))
       navigate(query)
       this.FetchAll()
+      if (this.needsCloseAnswers || this.needsOpenAnswers) {
+        this.FetchQuestions(query)
+      }
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string, extra?: any) => {
@@ -252,7 +254,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
           .add(1, 'week')
           .unix()
           .toString()
-      dispatchNavigate(updateObject({ start, end }, extra))
+      dispatchNavigate({ start, end, ...extra })
     }
     const DateFilter = {
       exists: params => params['start'] && params['end'],
@@ -264,7 +266,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       start: currentQuery.start,
       end: currentQuery.end
     }
-    const extraParams = keyWithValue(<any>objectRest(queryParams, ['start', 'end']))
+    const { queryStart, queryEnd, ...rest } = queryParams
     if (currentDateQuery && compare(queryParams, currentDateQuery)) {
       return
     }
@@ -274,17 +276,17 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       // If there's not an DateFilter applyed
       applyDefault()
     } else if (DateFilter.areNumeric(queryParams)) {
-      applyPartial(queryParams['start'], queryParams['end'], extraParams)
+      applyPartial(queryStart, queryEnd, rest)
     } else if (
       DateFilter.isNumeric('start', queryParams) &&
       !DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(queryParams['start'], undefined, extraParams)
+      applyPartial(queryStart, undefined, rest)
     } else if (
       !DateFilter.isNumeric('start', queryParams) &&
       DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(undefined, queryParams['end'], extraParams)
+      applyPartial(undefined, queryEnd, rest)
     }
   }
 
@@ -388,7 +390,6 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
         .filter(q => !!q.children.length)
 
       this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
-      console.log(this.questionsList)
     })
   }
 

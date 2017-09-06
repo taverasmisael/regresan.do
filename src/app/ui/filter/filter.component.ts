@@ -77,7 +77,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     this.filterForm = this.fb.group({
       start: this.filterFechaInicio,
       end: this.filterFechaFin,
-      question: this.filterQuestion,
+      idQuestion: this.filterQuestion,
       answer: this.filterAnswer
     })
   }
