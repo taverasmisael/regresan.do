@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core'
 
-import { APIRequestRespuesta, APIRequestQA } from '@models/apiparams'
-
 import {
   Response,
   Headers,
@@ -12,11 +10,13 @@ import {
 } from '@angular/http'
 
 import { Observable } from 'rxjs/Rx'
-
-// Auth Stuffs
 import { Store } from '@ngrx/store'
+
 import { AppState } from '@models/states/app'
 import { JWT } from '@models/jwt'
+import { StandardRequest } from '@models/standardRequest'
+import { AnswerRequest } from '@models/answerRequest'
+import { OpenAnswerRequest } from '@models/openAnswerRequest'
 
 import { ApiService } from '@services/api.service'
 
@@ -37,7 +37,7 @@ export class RespuestasService {
     })
   }
 
-  getFiltered(query: APIRequestQA) {
+  getFiltered(query: AnswerRequest) {
     const url = `${this.BASE_URL}/GetRespuestaByFiltro`
     const search = new URLSearchParams()
     search.append('_startDate', query.start)
@@ -51,7 +51,7 @@ export class RespuestasService {
       headers: this.authHeader
     })
   }
-  getFromProfile(query: APIRequestRespuesta) {
+  getFromProfile(query: AnswerRequest) {
     const url = `${this.BASE_URL}/GetData`
     const params = new URLSearchParams()
 
@@ -59,8 +59,8 @@ export class RespuestasService {
     params.append('endDate', query.end)
     params.append('idprofile', query.profile)
     params.append('idQuestion', query.question)
-    params.append('filterIdQuestion', '0')
-    params.append('answer', '')
+    params.append('filterIdQuestion', query.idQuestion)
+    params.append('answer', query.answer)
 
 
     return this.api.get(url, {
@@ -69,7 +69,7 @@ export class RespuestasService {
     })
   }
 
-  getAbiertasFromProfile(query: APIRequestRespuesta) {
+  getAbiertasFromProfile(query: OpenAnswerRequest) {
     const url = `${this.BASE_URL}/GetRespuestasByProfilesAbierta2`
     const params = new URLSearchParams()
 
