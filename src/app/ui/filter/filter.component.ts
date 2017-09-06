@@ -19,7 +19,7 @@ import * as moment from 'moment'
 import compare from 'just-compare'
 
 import { UserProfile } from '@models/userprofile'
-import { APIRequestUser } from '@models/apiparams'
+import { AnswerRequest } from '@models/answerRequest'
 import { FlatpickrOptions } from '@thirdparty/flatpickr/models'
 import { updateObject } from '@utilities/objects'
 import { isValidUnix, toUnixDate } from '@utilities/dates'
@@ -31,7 +31,7 @@ import { isValidUnix, toUnixDate } from '@utilities/dates'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
-  @Input() filters: APIRequestUser
+  @Input() filters: AnswerRequest
   @Input()
   questions: Array<{
     value: number
@@ -50,7 +50,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
   public filterFechaFin: FormControl
   public filterQuestion: FormControl
   public filterAnswer: FormControl
-  public lastFilter: APIRequestUser
+  public lastFilter: AnswerRequest
   public activeFilters: number
   public startOptions: FlatpickrOptions
   public endOptions: FlatpickrOptions
@@ -126,7 +126,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
       end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end)
     })
   }
-  private shouldUpdateLastFilter(filter: APIRequestUser) {
+  private shouldUpdateLastFilter(filter: AnswerRequest) {
     return !compare(filter, this.lastFilter)
   }
 }

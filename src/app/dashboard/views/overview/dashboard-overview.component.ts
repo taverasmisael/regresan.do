@@ -16,7 +16,8 @@ import { ActionTypes } from '@actions/auth.actions'
 import { UserProfile } from '@models/userprofile'
 import { AppState } from '@models/states/app'
 import { AuthState } from '@models/states/auth'
-import { APIRequestUser, APIRequestParams } from '@models/apiparams'
+import { StandardRequest } from '@models/standardRequest'
+import { BasicRequest } from '@models/basicRequest'
 
 import { merge, sum } from '@utilities/arrays'
 import { updateObject } from '@utilities/objects'
@@ -35,7 +36,7 @@ const emptyResultsMessage =
 })
 export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public userProfiles: UserProfile[]
-  public currentQuery: APIRequestUser
+  public currentQuery: StandardRequest
 
   public totalToday: BehaviorSubject<number>
   public totalGeneral: BehaviorSubject<number>
@@ -101,9 +102,9 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public ApplyFilters(filter: Params) {
     const filterStart = filter['start']
     const filterEnd = filter['end']
-    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
-    const dispatch = (query: APIRequestParams) => this.fetchEvent.emit(query)
-    const dispatchNavigate = (query: APIRequestParams) => {
+    const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
+    const dispatch = (query: BasicRequest) => this.fetchEvent.emit(query)
+    const dispatchNavigate = (query: BasicRequest) => {
       this.currentQuery = updateObject(this.currentQuery, query)
       dispatch(query)
       navigate(query)
@@ -146,7 +147,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public LoadGeneralSurvey(query: APIRequestUser) {
+  public LoadGeneralSurvey(query: StandardRequest) {
     this.generalSurveyLoading = true
     this.generalSurveyError = ''
     this.preguntas
@@ -174,7 +175,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       )
   }
 
-  public LoadHistoricSurvey(query: APIRequestUser) {
+  public LoadHistoricSurvey(query: StandardRequest) {
     this.historicSurveyLoading = true
     this.historicSurveyError = ''
 
@@ -211,7 +212,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       )
   }
 
-  public LoadResumen(query: APIRequestUser) {
+  public LoadResumen(query: StandardRequest) {
     this.preguntas.getResumen(query).map(res => res['Cabecera']).subscribe(res => {
       if (res) {
         this.totalToday.next(res['TotalEncuestadosHoy'])
@@ -229,7 +230,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Private Helpers
 
-  private FetchAll(query: APIRequestUser) {
+  private FetchAll(query: StandardRequest) {
     this.currentQuery = updateObject(this.currentQuery, query)
     this.LoadGeneralSurvey(query)
     this.LoadHistoricSurvey(query)

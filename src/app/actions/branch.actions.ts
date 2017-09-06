@@ -13,7 +13,6 @@ import { HistoricEntry } from '@models/historicEntry'
 import { StandardRequest } from '@models/standardRequest'
 import { OpenAnswerRequest } from '@models/openAnswerRequest'
 import { AnswerRequest } from '@models/answerRequest'
-import { QuestionFilter } from '@models/questionFilter'
 
 const getSectionName = (type: string) => type.split('_')[1]
 
@@ -188,7 +187,7 @@ export class SaveInfo implements Action {
 export class ApplyCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY
 
-  constructor(public payload: QuestionFilter | StandardRequest) {}
+  constructor(public payload:  StandardRequest) {}
 }
 
 export class SaveCurrentQuery implements Action {

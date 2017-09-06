@@ -24,12 +24,8 @@ import { updateObject, objectRest } from '@utilities/objects'
 import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
-import {
-  APIRequestParams,
-  APIRequestRespuesta,
-  APIRequestUser,
-  APIRequestQA
-} from '@models/apiparams'
+import { BasicRequest } from '@models/basicRequest'
+import { AnswerRequest } from '@models/answerRequest'
 import { AppState } from '@models/states/app'
 import { BranchState } from '@models/states/branch'
 import { HistoricEntry } from '@models/historicEntry'
@@ -58,8 +54,13 @@ import {
   ApplyCurrentQuery
 } from '@actions/branch.actions'
 
-const aWeekAgo = moment().subtract(1, 'week').unix().toString()
-const today = moment().unix().toString()
+const aWeekAgo = moment()
+  .subtract(1, 'week')
+  .unix()
+  .toString()
+const today = moment()
+  .unix()
+  .toString()
 const unique = key => (p, c) => (p.find(e => e[key] === c[key]) ? p : [...p, c])
 const needsFilter = q => q.question && q.answer
 const uniqueQuestion = unique('idPregunta')
@@ -174,16 +175,19 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public LoadResumen(currentQuery) {
-    this.Preguntas.getResumenSucursal(currentQuery).map(res => res['Cabecera']).subscribe(res => {
-      if (res) {
-        this.totalToday.next(res['TotalEncuestadosHoy'])
-        this.totalGeneral.next(res['TotalEncuestas'])
-        this.newContacts.next(res['NuevosContactos'])
-        this.branchIndex.next(res['IndiceSucursal'])
-      } else {
-        this.ResetResume()
-      }
-    })
+    this.Preguntas
+      .getResumenSucursal(currentQuery)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        if (res) {
+          this.totalToday.next(res['TotalEncuestadosHoy'])
+          this.totalGeneral.next(res['TotalEncuestas'])
+          this.newContacts.next(res['NuevosContactos'])
+          this.branchIndex.next(res['IndiceSucursal'])
+        } else {
+          this.ResetResume()
+        }
+      })
   }
 
   public FetchQuestions(currentQuery) {
@@ -226,16 +230,28 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   public ApplyQueryParams(queryParams: Params) {
     const dispatch = query => this.store.dispatch(new ApplyCurrentQuery(query))
-    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: APIRequestQA | APIRequestParams) => {
+    const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
+    const dispatchNavigate = (query: AnswerRequest | BasicRequest) => {
       dispatch(query)
       navigate(query)
       this.FetchAll()
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string, extra?: any) => {
-      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString()
-      let end = e || moment.unix(+s).add(1, 'week').unix().toString()
+      let start =
+        s ||
+        moment
+          .unix(+e)
+          .subtract(1, 'week')
+          .unix()
+          .toString()
+      let end =
+        e ||
+        moment
+          .unix(+s)
+          .add(1, 'week')
+          .unix()
+          .toString()
       dispatchNavigate(updateObject({ start, end }, extra))
     }
     const DateFilter = {
