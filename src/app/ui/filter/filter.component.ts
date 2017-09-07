@@ -86,7 +86,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     const questionsChange = changes['questions']
     if (questionsChange && questionsChange.currentValue.length && this.filterQuestion.disabled) {
       this.filterQuestion.enable()
+      this.filterQuestion.setValue(this.filters.idQuestion)
       this.filterAnswer.enable()
+      this.filterAnswer.setValue(this.filters.answer)
+      componentHandler.upgradeAllRegistered()
     }
   }
   ngAfterViewInit() {
@@ -112,12 +115,15 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.shouldUpdateLastFilter(filter)) {
       this.lastFilter = filter
       this.applyFilters.emit(filter)
+      this.setActivesFilters()
     }
     this.closeDialog()
   }
 
   private setActivesFilters() {
-    this.activeFilters = Object.keys(this.lastFilter).length
+    this.activeFilters = Object.keys(this.lastFilter).filter(
+      k => this.lastFilter[k] && this.lastFilter[k] !== '0'
+    ).length
   }
 
   private fixDateFilter(filter) {

@@ -9,6 +9,8 @@ import {
 
 import { FormControl } from '@angular/forms'
 
+import { Observable } from 'rxjs/Observable'
+
 @Component({
   selector: 'app-double-select',
   templateUrl: './double-select.component.html',
@@ -27,10 +29,12 @@ export class DoubleSelectComponent implements OnInit {
 
   constructor() {}
 
-  public ngOnInit() {}
-
-  public onPrimaryChange($event) {
-
-    this.currentSecondary = this.options.find(o => Number(o.value) === Number(this.primarySelect.nativeElement.value)).children
+  public ngOnInit() {
+    this.primaryControl.valueChanges
+      .filter(() => this.primaryControl.value && this.primaryControl.value !== '0')
+      .distinct()
+      .subscribe(value => {
+        this.currentSecondary = this.options.find(o => Number(o.value) === Number(value)).children
+      })
   }
 }

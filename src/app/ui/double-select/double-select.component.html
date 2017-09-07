@@ -2,7 +2,7 @@
     <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
       <span class="field__name">{{ primaryLabel }}</span>
       <div class="mdl-textfield mdl-js-textfield">
-        <select #primarySelect [formControl]="primaryControl" id="ds-{{primaryLabel}}" name="ds-{{primaryLabel}}" class="mdl-textfield__input" (change)="onPrimaryChange($event)">
+        <select #primarySelect [formControl]="primaryControl" id="ds-{{primaryLabel}}" name="ds-{{primaryLabel}}" class="mdl-textfield__input">
           <option value></option>
           <option *ngFor="let o of options;" [value]="o.value">{{ o.text }}</option>
         </select>
