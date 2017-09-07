@@ -21,7 +21,6 @@ import compare from 'just-compare'
 import { UserProfile } from '@models/userprofile'
 import { AnswerRequest } from '@models/answerRequest'
 import { FlatpickrOptions } from '@thirdparty/flatpickr/models'
-import { updateObject } from '@utilities/objects'
 import { isValidUnix, toUnixDate } from '@utilities/dates'
 
 @Component({
@@ -62,8 +61,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     let { start, end } = this.filters
 
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true }
-    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: start })
-    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: end })
+    this.startOptions = { ...this.flatpickrOptions, defaultDate: start }
+    this.endOptions = { ...this.flatpickrOptions, defaultDate: end }
 
     this.filterFechaInicio = new FormControl(start, [Validators.required])
     this.filterFechaFin = new FormControl(end, [Validators.required])
@@ -127,10 +126,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private fixDateFilter(filter) {
-    return updateObject(filter, {
+    return {
+      ...filter,
       start: isValidUnix(filter.start) ? filter.start : toUnixDate(filter.start),
       end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end)
-    })
+    }
   }
   private shouldUpdateLastFilter(filter: AnswerRequest) {
     return !compare(filter, this.lastFilter)

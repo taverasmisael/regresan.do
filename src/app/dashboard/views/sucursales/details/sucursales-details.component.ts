@@ -155,8 +155,9 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   // Public Methods
   public LoadCloseAnswer(question: string) {
-    const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { question })
+    const { start, end, profile, answer, idQuestion } = <AnswerRequest>this.activeBranch
+      .currentQuery
+    const query = new AnswerRequest(start, end, profile, question, answer || undefined, idQuestion || undefined)
     this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${question}`))
   }
 
@@ -191,7 +192,6 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public FetchQuestions(currentQuery) {
-    console.log(currentQuery, 'SI')
     this.store.dispatch(new RequestQuestions(currentQuery, `Cargando Preguntas...`))
   }
   public FetchKPIs(currentQuery) {
@@ -226,7 +226,6 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ApplyQueryParams(queryParams: Params) {
-    console.log(queryParams)
     const dispatch = query => this.store.dispatch(new ApplyCurrentQuery(query))
     const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
     const dispatchNavigate = (query: BasicRequest | AnswerRequest) => {
