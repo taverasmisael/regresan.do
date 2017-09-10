@@ -1,5 +1,5 @@
 // @angular modules
-import { BrowserModule } from '@angular/platform-browser'
+import { BrowserModule, Title } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
@@ -58,7 +58,6 @@ import { OrderByPipe } from './thirdparty/orderby/orderby.pipe'
 import { StaffIndexComponent } from './staff-index/staff-index.component'
 import { ChartInLoopComponent } from './ui/chart-in-loop/chart-in-loop.component'
 import { DoubleSelectComponent } from './ui/double-select/double-select.component'
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -97,6 +96,7 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     GaugeModule
   ],
   providers: [
+    Title,
     ApiService,
     AuthGuardService,
     LoginGuardService,

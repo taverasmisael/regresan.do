@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
@@ -25,12 +26,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
   public AuthState: Observable<AuthState>
 
   constructor(
+    private titleService: Title,
     private fb: FormBuilder,
     private userService: UserService,
     private store: Store<AppState>
   ) {}
 
   ngOnInit() {
+    this.titleService.setTitle('Login — Regresan.do')
     this.username = new FormControl('', [Validators.required])
     this.password = new FormControl('', [Validators.required])
     this.loginForm = this.fb.group({

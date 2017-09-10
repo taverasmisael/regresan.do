@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
@@ -24,8 +25,13 @@ import { updateObject } from '@utilities/objects'
 import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas'
 import { gamaRegresando } from '@utilities/colors'
 
-const today = moment().unix().toString()
-const aWeekAgo = moment().subtract(1, 'week').unix().toString()
+const today = moment()
+  .unix()
+  .toString()
+const aWeekAgo = moment()
+  .subtract(1, 'week')
+  .unix()
+  .toString()
 const emptyResultsMessage =
   'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo'
 
@@ -60,6 +66,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   private fetchEvent: EventEmitter<any>
 
   constructor(
+    private titleService: Title,
     private router: Router,
     private Route: ActivatedRoute,
     private preguntas: QuestionsService,
@@ -67,6 +74,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.titleService.setTitle('Resumén — Regresan.do')
     this.fetchEvent = new EventEmitter()
     this.AuthState = this.store.select('auth')
 
@@ -107,12 +115,29 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     const dispatchNavigate = (query: BasicRequest) => {
       this.currentQuery = updateObject(this.currentQuery, query)
       dispatch(query)
+      this.titleService.setTitle(
+        `Resumén ${moment.unix(+query.start).format('MMM, D')} - ${moment
+          .unix(+query.end)
+          .format('MMM, D')} — Regresan.do`
+      )
       navigate(query)
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string) => {
-      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString()
-      let end = e || moment.unix(+s).add(1, 'week').unix().toString()
+      let start =
+        s ||
+        moment
+          .unix(+e)
+          .subtract(1, 'week')
+          .unix()
+          .toString()
+      let end =
+        e ||
+        moment
+          .unix(+s)
+          .add(1, 'week')
+          .unix()
+          .toString()
       dispatchNavigate({ start, end })
     }
     const DateFilter = {
@@ -213,19 +238,22 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public LoadResumen(query: StandardRequest) {
-    this.preguntas.getResumen(query).map(res => res['Cabecera']).subscribe(res => {
-      if (res) {
-        this.totalToday.next(res['TotalEncuestadosHoy'])
-        this.totalGeneral.next(res['TotalEncuestas'])
-        this.newContacts.next(res['NuevosContactos'])
-        this.branchIndex.next(res['IndiceSucursal'])
-      } else {
-        this.totalToday.next(0)
-        this.totalGeneral.next(0)
-        this.newContacts.next(0)
-        this.branchIndex.next(0)
-      }
-    })
+    this.preguntas
+      .getResumen(query)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        if (res) {
+          this.totalToday.next(res['TotalEncuestadosHoy'])
+          this.totalGeneral.next(res['TotalEncuestas'])
+          this.newContacts.next(res['NuevosContactos'])
+          this.branchIndex.next(res['IndiceSucursal'])
+        } else {
+          this.totalToday.next(0)
+          this.totalGeneral.next(0)
+          this.newContacts.next(0)
+          this.branchIndex.next(0)
+        }
+      })
   }
 
   // Private Helpers

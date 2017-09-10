@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit } from '@angular/core'
 
 import { Store } from '@ngrx/store'
@@ -19,12 +20,17 @@ export class DashboardSucursalesComponent implements OnInit {
 
   private AuthState: Observable<AuthState>
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private titleService: Title, private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.AuthState = this.store
-      .select('auth')
+    this.titleService.setTitle('Sucursales — Regresan.do')
+    this.AuthState = this.store.select('auth')
 
+    this.AuthState.subscribe(state =>
+      this.titleService.setTitle(
+        `Sucursales ${state.currentUser.User['FullName'].split(' ')[0]} — Regresan.do`
+      )
+    )
     this.colores = gamaRegresando()
 
     this.userProfiles = this.AuthState.pluck('currentUser', 'Profiles')

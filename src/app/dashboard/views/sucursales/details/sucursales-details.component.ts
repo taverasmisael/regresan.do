@@ -1,3 +1,5 @@
+import { Title } from '@angular/platform-browser'
+
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
@@ -106,6 +108,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   private subCurrentQr: Subscription
 
   constructor(
+    private titleService: Title,
     private router: Router,
     private Preguntas: QuestionsService,
     private Respuestas: RespuestasService,
@@ -157,7 +160,14 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   public LoadCloseAnswer(question: string) {
     const { start, end, profile, answer, idQuestion } = <AnswerRequest>this.activeBranch
       .currentQuery
-    const query = new AnswerRequest(start, end, profile, question, answer || undefined, idQuestion || undefined)
+    const query = new AnswerRequest(
+      start,
+      end,
+      profile,
+      question,
+      answer || undefined,
+      idQuestion || undefined
+    )
     this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${question}`))
   }
 
@@ -236,6 +246,11 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       if (this.needsCloseAnswers || this.needsOpenAnswers) {
         this.FetchQuestions(query)
       }
+      this.titleService.setTitle(
+        `${this.activeBranch.info.Title} ${moment
+          .unix(+query.start)
+          .format('MMM, D')} - ${moment.unix(+query.end).format('MMM, D')} — Regresan.do`
+      )
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string, extra?: any) => {
@@ -370,8 +385,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe(info => this.ApplyQueryParams(info)) // Finally we apply the query
 
-    this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
-      const { closeQuestions, closeAnswers } = store
+    this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(({ closeQuestions, closeAnswers }) => {
       const flatAnswers = flatten<CloseAnswer>(closeAnswers)
       const mappedQuestions = closeQuestions
         .map(({ idPregunta: value, pregunta: text }) => ({ value, text }))
