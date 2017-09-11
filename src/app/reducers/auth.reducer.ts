@@ -4,6 +4,8 @@ import { AuthState } from '@models/states/auth'
 
 import { ActionTypes } from '@actions/auth.actions'
 
+import { createReducer } from '@utilities/reducers'
+
 const {
   LOGIN,
   LOGIN_START,
@@ -18,8 +20,8 @@ import { updateObject } from '@utilities/objects'
 
 export const INITIAL_STATE = new AuthState()
 
-export function AuthReducer() {
-  return {
+export function AuthReducer(state = INITIAL_STATE, action) {
+  const Cases = {
     [LOGIN]: loginUser,
     [LOGIN_START]: loginUser,
     [LOGIN_SUCCESS]: loginSucessful,
@@ -28,6 +30,13 @@ export function AuthReducer() {
     [LOGOUT]: logOutUser,
     [TOKEN_EXPIRED]: logOutUser
   }
+
+  return Cases.hasOwnProperty(action.type) ? Cases[action.type](state, action) : defaultCase(state, action)
+}
+
+function defaultCase<T extends AuthState>(state: T, action: Action): T {
+  const { payload } = action
+  return state
 }
 
 function loginUser<T extends AuthState>(state: T, action: Action): T {

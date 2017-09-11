@@ -6,6 +6,7 @@ import { BranchState } from '@models/states/branch'
 import { StateRequest } from '@models/states/stateRequest'
 
 import { updateObject, updateItemInArray } from '@utilities/objects'
+import { createReducer } from '@utilities/reducers'
 
 import {
   BRANCH_REQ_QUESTIONS_R,
@@ -37,9 +38,8 @@ import {
 
 export const INITIAL_STATE = new BranchState()
 
-export function BranchCases() {
-  return {
-    // Resets and Saves
+export function BranchReducer(state = INITIAL_STATE, action: EnhancedAction) {
+  const Cases = {
     [BRANCH_INFO_SAVE]: saveInfo,
     [BRANCH_RESET_ALL]: resetStore,
     [BRANCH_RESET_BUT_INFO]: resetDate,
@@ -66,6 +66,16 @@ export function BranchCases() {
     [BRANCH_REQ_HISTORIC_S]: saveHistoric,
     [BRANCH_SAVE_CURRENT_QUERY]: saveCurrentQuery
   }
+  return Cases.hasOwnProperty(action.type)
+    ? Cases[action.type](state, action)
+    : defaultCase(state, action)
+}
+
+function defaultCase<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
+  return state
 }
 
 function saveInfo<T extends BranchState>(state: BranchState, action: EnhancedAction): BranchState {
@@ -170,7 +180,7 @@ function saveFilteredQuestions<T extends BranchState>(
 ): BranchState {
   const { payload, section } = action
   console.log(section, payload)
-  return state;
+  return state
 }
 
 function saveQClose<T extends BranchState>(

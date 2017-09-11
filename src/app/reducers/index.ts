@@ -5,16 +5,10 @@ import { localStorageSync } from 'ngrx-store-localstorage'
 import { createReducer } from '@utilities/reducers'
 import { updateObject } from '@utilities/objects'
 import { AppState } from '@models/states/app'
-import { AuthReducer, INITIAL_STATE as AuthState } from './auth.reducer'
-import { BranchCases, INITIAL_STATE as BranchState } from './branch.reducer'
+import { AuthReducer as auth } from './auth.reducer'
+import { BranchReducer as currentBranch } from './branch.reducer'
 
-const authReducer = createReducer(AuthState, AuthReducer())
-const branchReducer = createReducer(BranchState, BranchCases())
-
-export const Reducers: ActionReducerMap<AppState> = {
-  auth: authReducer,
-  currentBranch: branchReducer
-}
+export const Reducers: ActionReducerMap<AppState> = { auth, currentBranch }
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({
     keys: ['auth'],
