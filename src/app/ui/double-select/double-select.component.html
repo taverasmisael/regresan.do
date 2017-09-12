@@ -12,11 +12,11 @@
     <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
       <span class="field__name">{{ secondaryLabel }}</span>
       <div class="mdl-textfield mdl-js-textfield">
-        <select [formControl]="secondaryControl" id="ds-{{secondary}}" name="ds-{{secondary}}" class="mdl-textfield__input">
+        <select [formControl]="secondaryControl" id="ds-{{secondaryLabel}}" name="ds-{{secondaryLabel}}" class="mdl-textfield__input">
           <option value></option>
           <option *ngFor="let o of currentSecondary;" [value]="o.value">{{ o.text }}</option>
         </select>
-        <label class="mdl-textfield__label" for="ds-{{secondary}}">{{ currentSecondary.length ? 'Elije una opción' : 'Elije una opción de la primera lista'}}</label>
+        <label class="mdl-textfield__label" for="ds-{{secondaryLabel}}">{{ currentSecondary.length ? 'Elije una opción' : 'Elije una opción de la primera lista'}}</label>
       </div>
     </div>
   </div>

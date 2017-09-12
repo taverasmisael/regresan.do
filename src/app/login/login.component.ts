@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   public loginForm: FormGroup
   public username: FormControl
   public password: FormControl
-  public requesting: Boolean
+  public requesting: boolean
   public loginError: any
   public AuthState: Observable<AuthState>
 

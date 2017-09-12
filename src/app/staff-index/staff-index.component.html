@@ -2,7 +2,7 @@
   <h4 class="mdl-dialog__title">Índices de KPIs por talento humano</h4>
   <div class="mdl-dialog__content mdl-grid">
     <div class="mdl-cell--12-col chart-holder">
-      <div *ngIf="!loading && !errorText && chartData" class="content-holder">
+      <div *ngIf="!loading && !errorText && !!chartData" class="content-holder">
         <canvas *ngIf="chartData.data.length" baseChart
           chartType="line"
           [options]="chartOptions"

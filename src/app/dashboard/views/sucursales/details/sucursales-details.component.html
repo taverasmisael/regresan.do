@@ -17,7 +17,7 @@
     style="font-size: 1.5rem;"
     chartType="bar"
     chartTitle="Histórico de Encuestas"
-    (failed)="FetchHistoric()"
+    (failed)="FetchHistoric(activeBranch.currentQuery)"
     [loading]="activeBranch.requests.HISTORIC.isLoading && !chartData.historic.labels.length"
     [loadingText]="activeBranch.requests.HISTORIC.text || 'Cargando Histórico de Encustas'"
     [errorText]="activeBranch.requests.HISTORIC.error ? activeBranch.requests.HISTORIC.error.text : ''"
@@ -40,7 +40,7 @@
     <app-staff-ranking-card
       class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col"
       style="font-size: 1.5rem;"
-      (failed)="FetchStaffRanking()"
+      (failed)="FetchStaffRanking(activeBranch.currentQuery)"
       [currentFilter]="activeBranch.currentQuery"
       [errorText]="activeBranch.requests.STAFF.error ? activeBranch.requests.STAFF.error.text : ''"
       [loading]="activeBranch.requests.STAFF.isLoading"
@@ -104,7 +104,7 @@
         [class.mdl-cell--4-col]="activeBranch.openQuestions.length === 3"
         *ngFor="let q of activeBranch.openQuestions"
         loadingText="Cargando Preguntas Abiertas"
-        (failed)="FetchQuestions()"
+        (failed)="FetchQuestions(activeBranch.currentQuery)"
         [isDataTable]="true"
         [title]="q.pregunta">
           <app-answers-table

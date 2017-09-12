@@ -1,11 +1,13 @@
 export class User {
   constructor(
-    public fullName: string,
-    public username: string,
-    public role: number,
-    public UID: string,
-    public image: string,
-    public memssage: string,
-    public lastLogon: string
+    public $id: string,
+    public Id: number,
+    public UniqueID: string,
+    public Username: string,
+    public FullName: string,
+    public Role: number,
+    public Status: number,
+    public LastLogon: string,
+    public UserImage: string,
   ) {}
 }

@@ -30,7 +30,7 @@ export class StaffIndexComponent implements OnInit, OnChanges {
   @Input() filter: StandardRequest
   @ViewChild('staffIndexDialog') staffIndexDialog: ElementRef
 
-  public loading: Boolean
+  public loading: boolean
   public errorText: string
   public chartData: { labels: any[]; data: any[] }
   public chartOptions: any
