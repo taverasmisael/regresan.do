@@ -92,7 +92,7 @@ export class BranchEffects {
     .map(action => action['payload'])
     .mergeMap(payload => {
       return this.respuestasService
-        .getAbiertasFromProfile(payload)
+        .getOpenFromProfile(payload)
         .map(res => res['RespuestasPreguntas'])
         .map(
           (answer: OpenAnswer[]) =>

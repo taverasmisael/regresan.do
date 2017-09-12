@@ -16,7 +16,6 @@ import { AppState } from '@models/states/app'
 import { JWT } from '@models/jwt'
 import { StandardRequest } from '@models/standardRequest'
 import { AnswerRequest } from '@models/answerRequest'
-import { OpenAnswerRequest } from '@models/openAnswerRequest'
 
 import { ApiService } from '@services/api.service'
 
@@ -69,18 +68,20 @@ export class RespuestasService {
     })
   }
 
-  getAbiertasFromProfile(query: OpenAnswerRequest) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfilesAbierta2`
-    const params = new URLSearchParams()
+  getOpenFromProfile(query: AnswerRequest) {
+    const url = `${this.BASE_URL}/GetDataOpenQ`
+    const search = new URLSearchParams()
 
-    params.append('_startDate', query.start)
-    params.append('_endDate', query.end)
-    params.append('profileId', query.profile)
-    params.append('idPregunta', query.question)
+    search.append('startDate', query.start)
+    search.append('endDate', query.end)
+    search.append('idprofile', query.profile)
+    search.append('idQuestion', query.question)
+    search.append('filterIdQuestion', query.idQuestion)
+    search.append('answer', query.answer)
 
     return this.api.get(url, {
-      headers: this.authHeader,
-      search: params
+      search,
+      headers: this.authHeader
     })
   }
 }
