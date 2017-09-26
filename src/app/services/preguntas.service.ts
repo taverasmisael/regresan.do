@@ -35,6 +35,19 @@ export class QuestionsService {
     })
   }
 
+  FilterQuestionsData(query: StandardRequest) {
+    const url = `${this.BASE_URL}/GetPreguntasByProfile3`
+    const search = new URLSearchParams()
+    search.append('_startDate', query.start)
+    search.append('_endDate', query.end)
+    search.append('profileId', query.profile)
+
+    return this.api.get(url, {
+      search,
+      headers: this.authHeader
+    })
+  }
+
   getAll(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`
     const params = new URLSearchParams()

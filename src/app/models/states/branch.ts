@@ -25,6 +25,7 @@ export class BranchState {
     public openAnswers: OpenAnswer[] = [],
     public closeAnswers: CloseAnswer[][] = [],
     public kpis: KPI[] = [],
+    public filterQuestions: { open: Question[]; close: Question[] } = { open: [], close: [] },
     public historicData: HistoricEntry[] = [],
     public staffRanking: StaffRanking[] = [],
     public currentQuery: QuestionFilter | StandardRequest = new StandardRequest('', '', '')

@@ -8,63 +8,39 @@ import { StateRequest } from '@models/states/stateRequest'
 import { updateObject, updateItemInArray } from '@utilities/objects'
 import { createReducer } from '@utilities/reducers'
 
-import {
-  BRANCH_REQ_QUESTIONS_R,
-  BRANCH_REQ_QUESTIONS_S,
-  BRANCH_REQ_QUESTIONS_E,
-  BRANCH_REQ_FILTERED_R,
-  BRANCH_REQ_FILTERED_S,
-  BRANCH_REQ_FILTERED_E,
-  BRANCH_REQ_AOPEN_R,
-  BRANCH_REQ_AOPEN_S,
-  BRANCH_REQ_AOPEN_E,
-  BRANCH_REQ_ACLOSE_R,
-  BRANCH_REQ_ACLOSE_S,
-  BRANCH_REQ_ACLOSE_E,
-  BRANCH_REQ_KPI_R,
-  BRANCH_REQ_KPI_S,
-  BRANCH_REQ_KPI_E,
-  BRANCH_REQ_STAFF_RANKING_R,
-  BRANCH_REQ_STAFF_RANKING_S,
-  BRANCH_REQ_STAFF_RANKING_E,
-  BRANCH_REQ_HISTORIC_R,
-  BRANCH_REQ_HISTORIC_S,
-  BRANCH_REQ_HISTORIC_E,
-  BRANCH_RESET_ALL,
-  BRANCH_RESET_BUT_INFO,
-  BRANCH_INFO_SAVE,
-  BRANCH_SAVE_CURRENT_QUERY
-} from '@actions/branch.types'
-
+import * as ACTIONS from '@actions/branch.types'
 export const INITIAL_STATE = new BranchState()
 
 export function BranchReducer(state = INITIAL_STATE, action: EnhancedAction) {
   const Cases = {
-    [BRANCH_INFO_SAVE]: saveInfo,
-    [BRANCH_RESET_ALL]: resetStore,
-    [BRANCH_RESET_BUT_INFO]: resetDate,
-    [BRANCH_REQ_QUESTIONS_R]: requesting,
-    [BRANCH_REQ_FILTERED_R]: requesting,
-    [BRANCH_REQ_AOPEN_R]: requestingAnswer,
-    [BRANCH_REQ_ACLOSE_R]: requestingAnswer,
-    [BRANCH_REQ_KPI_R]: requesting,
-    [BRANCH_REQ_STAFF_RANKING_R]: requesting,
-    [BRANCH_REQ_HISTORIC_R]: requesting,
-    [BRANCH_REQ_QUESTIONS_E]: requestError,
-    [BRANCH_REQ_FILTERED_E]: requestError,
-    [BRANCH_REQ_AOPEN_E]: requestAnswerError,
-    [BRANCH_REQ_ACLOSE_E]: requestAnswerError,
-    [BRANCH_REQ_KPI_E]: requestError,
-    [BRANCH_REQ_STAFF_RANKING_E]: requestError,
-    [BRANCH_REQ_HISTORIC_E]: requestError,
-    [BRANCH_REQ_QUESTIONS_S]: saveQuestions,
-    [BRANCH_REQ_FILTERED_S]: saveFilteredQuestions,
-    [BRANCH_REQ_AOPEN_S]: saveAOpen,
-    [BRANCH_REQ_ACLOSE_S]: saveAClose,
-    [BRANCH_REQ_KPI_S]: saveKPI,
-    [BRANCH_REQ_STAFF_RANKING_S]: saveStaffRanking,
-    [BRANCH_REQ_HISTORIC_S]: saveHistoric,
-    [BRANCH_SAVE_CURRENT_QUERY]: saveCurrentQuery
+    [ACTIONS.BRANCH_INFO_SAVE]: saveInfo,
+    [ACTIONS.BRANCH_RESET_ALL]: resetStore,
+    [ACTIONS.BRANCH_RESET_BUT_INFO]: resetDate,
+    [ACTIONS.BRANCH_REQ_QUESTIONS_R]: requesting,
+    [ACTIONS.BRANCH_REQ_FILTERED_R]: requesting,
+    [ACTIONS.BRANCH_REQ_AOPEN_R]: requestingAnswer,
+    [ACTIONS.BRANCH_REQ_ACLOSE_R]: requestingAnswer,
+    [ACTIONS.BRANCH_REQ_KPI_R]: requesting,
+    [ACTIONS.BRANCH_REQ_STAFF_RANKING_R]: requesting,
+    [ACTIONS.BRANCH_REQ_HISTORIC_R]: requesting,
+    [ACTIONS.BRANCH_REQ_FILTER_Q_R]: requesting,
+    [ACTIONS.BRANCH_REQ_QUESTIONS_E]: requestError,
+    [ACTIONS.BRANCH_REQ_FILTERED_E]: requestError,
+    [ACTIONS.BRANCH_REQ_AOPEN_E]: requestAnswerError,
+    [ACTIONS.BRANCH_REQ_ACLOSE_E]: requestAnswerError,
+    [ACTIONS.BRANCH_REQ_KPI_E]: requestError,
+    [ACTIONS.BRANCH_REQ_STAFF_RANKING_E]: requestError,
+    [ACTIONS.BRANCH_REQ_HISTORIC_E]: requestError,
+    [ACTIONS.BRANCH_REQ_FILTER_Q_E]: requestError,
+    [ACTIONS.BRANCH_REQ_QUESTIONS_S]: saveQuestions,
+    [ACTIONS.BRANCH_REQ_FILTERED_S]: saveFilteredQuestions,
+    [ACTIONS.BRANCH_REQ_AOPEN_S]: saveAOpen,
+    [ACTIONS.BRANCH_REQ_ACLOSE_S]: saveAClose,
+    [ACTIONS.BRANCH_REQ_KPI_S]: saveKPI,
+    [ACTIONS.BRANCH_REQ_STAFF_RANKING_S]: saveStaffRanking,
+    [ACTIONS.BRANCH_REQ_FILTER_Q_S]: saveFilterQuestions,
+    [ACTIONS.BRANCH_REQ_HISTORIC_S]: saveHistoric,
+    [ACTIONS.BRANCH_SAVE_CURRENT_QUERY]: saveCurrentQuery
   }
   return Cases.hasOwnProperty(action.type)
     ? Cases[action.type](state, action)
@@ -168,6 +144,23 @@ function saveQuestions<T extends BranchState>(
   return updateObject(state, {
     openQuestions: payload.open,
     closeQuestions: payload.close,
+    requests: updateObject(state.requests, {
+      [section]: new StateRequest(undefined, false, '')
+    })
+  })
+}
+
+function saveFilterQuestions<T extends BranchState>(
+  state: BranchState,
+  action: EnhancedAction
+): BranchState {
+  const { payload, section } = action
+
+  return updateObject(state, {
+    filterQuestions: {
+      openQuestions: payload.open,
+      closeQuestions: payload.close
+    },
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })

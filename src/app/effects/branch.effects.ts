@@ -32,6 +32,7 @@ import {
   ErrorOpenAnswer,
   ErrorQuestions,
   ErrorStaffRanking,
+  ErrorFilterQuestions,
   SuccessCloseAnswer,
   SuccessFilteredQuestions,
   SuccessHistoric,
@@ -39,11 +40,29 @@ import {
   SuccessOpenAnswer,
   SuccessQuestions,
   SuccessStaffRanking,
-  SaveCurrentQuery
+  SaveCurrentQuery,
+  SuccessFilterQuestions
 } from '@actions/branch.actions'
 
 @Injectable()
 export class BranchEffects {
+  @Effect()
+  requestFilterQuestion = this.actions$
+    .ofType(ACTIONS.BRANCH_REQ_FILTER_Q_R)
+    .map(action => action['payload'])
+    .map(payload => ({ ...payload, profile: this.currentBranch.OldProfileId.toString() }))
+    .mergeMap(payload =>
+      this.preguntasService
+        .FilterQuestionsData(payload)
+        .map(res => res['RespuestasPreguntas'])
+        .map((questions: Question[]) => {
+          const close = questions.filter(q => q.tipoPregunta !== 'Abierta')
+          const open = questions.filter(q => q.tipoPregunta === 'Abierta')
+          return new SuccessFilterQuestions({ close, open })
+        })
+        .catch(err => this.HandleError(err, ErrorFilterQuestions))
+    )
+
   @Effect()
   requestCA$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_ACLOSE_R)

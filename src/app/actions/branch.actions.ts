@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store'
-import * as ACTIONS from './branch.types'
+import * as ACTIONS from '@actions/branch.types'
 
 import { EnhancedAction } from '@models/enhancedAction'
 import { UserProfile } from '@models/userprofile'
@@ -187,11 +187,32 @@ export class SaveInfo implements Action {
 export class ApplyCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY
 
-  constructor(public payload:  StandardRequest) {}
+  constructor(public payload: StandardRequest) {}
 }
 
 export class SaveCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_SAVE_CURRENT_QUERY
 
   constructor(public payload: StandardRequest) {}
+}
+
+export class ReuquestFilterQuestion implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_R
+  public section = getSectionName(this.type)
+
+  constructor(public payload: StandardRequest, public message: string) {}
+}
+
+export class ErrorFilterQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_E
+  public section = getSectionName(this.type)
+
+  constructor(public payload: RequestError) {}
+}
+
+export class SuccessFilterQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_S
+  public section = getSectionName(this.type)
+
+  constructor(public payload: { close: Question[]; open: Question[] }) {}
 }
