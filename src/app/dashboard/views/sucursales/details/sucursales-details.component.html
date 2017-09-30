@@ -1,7 +1,7 @@
 <app-filter
   (applyFilters)="ApplyQueryParams($event)"
   [filters]="activeBranch.currentQuery"
-  [questions]="questionsList">
+  [questions]="activeBranch.filterQuestions">
 </app-filter>
 <div class="info__header mdl-grid">
   <div class="headline mdl-cell mdl-cell--12-col">
