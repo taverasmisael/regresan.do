@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store'
-import * as ACTIONS from './branch.types'
+import * as ACTIONS from '@actions/branch.types'
 
 import { EnhancedAction } from '@models/enhancedAction'
 import { UserProfile } from '@models/userprofile'
@@ -10,8 +10,9 @@ import { OpenAnswer } from '@models/openAnswer'
 import { KPI } from '@models/kpi'
 import { StaffRanking } from '@models/staffRanking'
 import { HistoricEntry } from '@models/historicEntry'
-import { APIRequestParams, APIRequestUser, APIRequestRespuesta } from '@models/apiparams'
-import { QuestionFilter } from '@models/questionFilter'
+import { StandardRequest } from '@models/standardRequest'
+import { OpenAnswerRequest } from '@models/openAnswerRequest'
+import { AnswerRequest } from '@models/answerRequest'
 
 const getSectionName = (type: string) => type.split('_')[1]
 
@@ -20,42 +21,49 @@ export class RequestQuestions implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_QUESTIONS_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestUser, public message: string) {}
+  constructor(public payload: StandardRequest, public message: string) {}
+}
+
+export class RequestFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_R
+  public section = getSectionName(this.type)
+
+  constructor(public payload: AnswerRequest, public message: string) {}
 }
 
 export class RequestOpenAnswer implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_AOPEN_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestRespuesta, message: string) {}
+  constructor(public payload: OpenAnswerRequest, message: string) {}
 }
 
 export class RequestCloseAnswer implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_ACLOSE_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestRespuesta, message: string) {}
+  constructor(public payload: OpenAnswerRequest, message: string) {}
 }
 
 export class RequestKPI implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_KPI_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestUser, message: string) {}
+  constructor(public payload: StandardRequest, message: string) {}
 }
 
 export class RequestStaffRanking implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_STAFF_RANKING_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestUser, message: string) {}
+  constructor(public payload: StandardRequest, message: string) {}
 }
 
 export class RequestHistoric implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_HISTORIC_R
   public section = getSectionName(this.type)
 
-  constructor(public payload: APIRequestUser, message: string) {}
+  constructor(public payload: StandardRequest, message: string) {}
 }
 
 // Errors
@@ -63,6 +71,12 @@ export class ErrorQuestions implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_QUESTIONS_E
   public section = getSectionName(this.type)
 
+  constructor(public payload: RequestError) {}
+}
+
+export class ErrorFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_E
+  public section = getSectionName(this.type)
   constructor(public payload: RequestError) {}
 }
 
@@ -107,6 +121,12 @@ export class SuccessQuestions implements EnhancedAction {
   public section = getSectionName(this.type)
 
   constructor(public payload: { close: Question[]; open: Question[] }) {}
+}
+
+export class SuccessFilteredQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTERED_S
+  public section = getSectionName(this.type)
+  constructor(public payload: any) {}
 }
 
 export class SuccessOpenAnswer implements EnhancedAction {
@@ -167,11 +187,32 @@ export class SaveInfo implements Action {
 export class ApplyCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_APPLY_CURRENT_QUERY
 
-  constructor(public payload: QuestionFilter | APIRequestUser) {}
+  constructor(public payload: StandardRequest) {}
 }
 
 export class SaveCurrentQuery implements Action {
   public type = ACTIONS.BRANCH_SAVE_CURRENT_QUERY
 
-  constructor(public payload: APIRequestUser) {}
+  constructor(public payload: StandardRequest) {}
+}
+
+export class ReuquestFilterQuestion implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_R
+  public section = getSectionName(this.type)
+
+  constructor(public payload: StandardRequest, public message: string) {}
+}
+
+export class ErrorFilterQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_E
+  public section = getSectionName(this.type)
+
+  constructor(public payload: RequestError) {}
+}
+
+export class SuccessFilterQuestions implements EnhancedAction {
+  public type = ACTIONS.BRANCH_REQ_FILTER_Q_S
+  public section = getSectionName(this.type)
+
+  constructor(public payload: any[]) {}
 }

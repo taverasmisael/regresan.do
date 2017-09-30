@@ -1,6 +1,6 @@
-import { APIRequestParams } from '@models/apiparams'
+import { BasicRequest } from '@models/basicRequest'
 
-export class QuestionFilter extends APIRequestParams {
+export class QuestionFilter extends BasicRequest {
   constructor(
     public start: string,
     public end: string,

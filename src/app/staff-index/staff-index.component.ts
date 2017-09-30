@@ -12,7 +12,7 @@ import compare from 'just-compare'
 
 import { StaffService } from '@services/staff.service'
 
-import { APIRequestUser } from '@models/apiparams'
+import { StandardRequest } from '@models/standardRequest'
 
 import { createLinearStaffKpi } from '@utilities/kpis'
 import { createPalette, ChartJsColor } from '@utilities/charts'
@@ -27,10 +27,10 @@ export class StaffIndexComponent implements OnInit, OnChanges {
   private COLORS: string[]
   private needsToRequest: Boolean
 
-  @Input() filter: APIRequestUser
+  @Input() filter: StandardRequest
   @ViewChild('staffIndexDialog') staffIndexDialog: ElementRef
 
-  public loading: Boolean
+  public loading: boolean
   public errorText: string
   public chartData: { labels: any[]; data: any[] }
   public chartOptions: any

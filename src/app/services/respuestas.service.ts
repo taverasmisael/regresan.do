@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core'
 
-import { APIRequestRespuesta } from '@models/apiparams'
-
 import {
   Response,
   Headers,
@@ -12,11 +10,12 @@ import {
 } from '@angular/http'
 
 import { Observable } from 'rxjs/Rx'
-
-// Auth Stuffs
 import { Store } from '@ngrx/store'
+
 import { AppState } from '@models/states/app'
 import { JWT } from '@models/jwt'
+import { StandardRequest } from '@models/standardRequest'
+import { AnswerRequest } from '@models/answerRequest'
 
 import { ApiService } from '@services/api.service'
 
@@ -37,14 +36,31 @@ export class RespuestasService {
     })
   }
 
-  getFromProfile(query: APIRequestRespuesta) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfiles2`
+  getFiltered(query: AnswerRequest) {
+    const url = `${this.BASE_URL}/GetRespuestaByFiltro`
+    const search = new URLSearchParams()
+    search.append('_startDate', query.start)
+    search.append('_endDate', query.end)
+    search.append('profileId', query.profile)
+    search.append('idPregunta', query.question)
+    search.append('respuesta', query.answer)
+
+    return this.api.get(url, {
+      search,
+      headers: this.authHeader
+    })
+  }
+  getFromProfile(query: AnswerRequest) {
+    const url = `${this.BASE_URL}/GetData`
     const params = new URLSearchParams()
 
-    params.append('_startDate', query.start)
-    params.append('_endDate', query.end)
-    params.append('profileId', query.profile)
-    params.append('idPregunta', query.pregunta)
+    params.append('startDate', query.start)
+    params.append('endDate', query.end)
+    params.append('idprofile', query.profile)
+    params.append('idQuestion', query.question)
+    params.append('filterIdQuestion', query.idQuestion)
+    params.append('answer', query.answer)
+
 
     return this.api.get(url, {
       headers: this.authHeader,
@@ -52,18 +68,20 @@ export class RespuestasService {
     })
   }
 
-  getAbiertasFromProfile(query: APIRequestRespuesta) {
-    const url = `${this.BASE_URL}/GetRespuestasByProfilesAbierta2`
-    const params = new URLSearchParams()
+  getOpenFromProfile(query: AnswerRequest) {
+    const url = `${this.BASE_URL}/GetDataOpenQ`
+    const search = new URLSearchParams()
 
-    params.append('_startDate', query.start)
-    params.append('_endDate', query.end)
-    params.append('profileId', query.profile)
-    params.append('idPregunta', query.pregunta)
+    search.append('startDate', query.start)
+    search.append('endDate', query.end)
+    search.append('idprofile', query.profile)
+    search.append('idQuestion', query.question)
+    search.append('filterIdQuestion', query.idQuestion)
+    search.append('answer', query.answer)
 
     return this.api.get(url, {
-      headers: this.authHeader,
-      search: params
+      search,
+      headers: this.authHeader
     })
   }
 }

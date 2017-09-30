@@ -1,4 +1,4 @@
-<table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="!loading && answers.length">
+<table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="!loading && !!answers.length">
   <thead>
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
@@ -38,7 +38,7 @@
     <p class="mdl-typography--text-center">No se han encontrado respuestas para esta pregunta en este periodo</p>
   </div>
 </div>
-<div class="mdl-grid error loading-holder mdl-typography--text-center" *ngIf="!loading && !answers.length && errorText">
+<div class="mdl-grid error loading-holder mdl-typography--text-center" *ngIf="!loading && !answers.length && !!errorText">
   <div class="content">
     <i class="material-icons">error</i><br />
     <p class="mdl-typography--text-center">{{ errorText }}</p>

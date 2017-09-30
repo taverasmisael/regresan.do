@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core'
 
-import { APIRequestParams, APIRequestUser } from '@models/apiparams'
-
 import {
   Response,
   Headers,
@@ -12,13 +10,15 @@ import {
 } from '@angular/http'
 
 import { Observable } from 'rxjs/Rx'
-
-// Auth Stuffs
 import { Store } from '@ngrx/store'
+
 import { AppState } from '@models/states/app'
 import { JWT } from '@models/jwt'
+import { StandardRequest } from '@models/standardRequest'
+import { BasicRequest } from '@models/basicRequest'
 
 import { ApiService } from './api.service'
+import { AnswerRequest } from '@app/models/answerRequest'
 
 @Injectable()
 export class QuestionsService {
@@ -36,7 +36,23 @@ export class QuestionsService {
     })
   }
 
-  getAll(query: APIRequestUser) {
+  FilterQuestionsData(query: AnswerRequest) {
+    const url = `${this.BASE_URL}/GetQuestions`
+    const search = new URLSearchParams()
+    search.append('startDate', query.start)
+    search.append('endDate', query.end)
+    search.append('idprofile', query.profile)
+    search.append('idQuestion', query.question || '0')
+    search.append('filterIdQuestion', query.idQuestion)
+    search.append('answer', query.answer)
+
+    return this.api.get(url, {
+      search,
+      headers: this.authHeader
+    })
+  }
+
+  getAll(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetTotalEncuestasbySucursalesPie2`
     const params = new URLSearchParams()
 
@@ -49,7 +65,7 @@ export class QuestionsService {
     })
   }
 
-  getAllByProfile(query: APIRequestUser) {
+  getAllByProfile(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetPreguntasByProfile2`
     const params = new URLSearchParams()
 
@@ -63,7 +79,7 @@ export class QuestionsService {
     })
   }
 
-  getTotalPorDia(query: APIRequestParams) {
+  getTotalPorDia(query: BasicRequest) {
     const url = `${this.BASE_URL}/GetTotalEncuestasxDia2`
     const params = new URLSearchParams()
     params.append('_startDate', query.start)
@@ -75,7 +91,7 @@ export class QuestionsService {
     })
   }
 
-  getResumen(query: APIRequestParams) {
+  getResumen(query: BasicRequest) {
     const url = `${this.BASE_URL}/GetDatosCabecera2`
     const params = new URLSearchParams()
     params.append('_startDate', query.start)
@@ -87,7 +103,7 @@ export class QuestionsService {
     })
   }
 
-  getResumenSucursal(query: APIRequestUser) {
+  getResumenSucursal(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetDatosCabecerabyProfileId2`
     const params = new URLSearchParams()
     params.append('_startDate', query.start)
@@ -100,7 +116,7 @@ export class QuestionsService {
     })
   }
 
-  getRankingCamareros(query: APIRequestUser) {
+  getRankingCamareros(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetRankingCamareros`
     const params = new URLSearchParams()
     params.append('_startDate', query.start)

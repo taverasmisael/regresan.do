@@ -11,7 +11,7 @@ import {
 
 import { StaffIndexComponent } from '../../staff-index/staff-index.component'
 
-import { Filter } from '@models/filter'
+import { StandardRequest } from '@models/standardRequest'
 
 @Component({
   selector: 'app-staff-ranking-card',
@@ -22,7 +22,7 @@ export class StaffRankingCardComponent implements OnInit {
   @Input() staffData: any[]
   @Input() errorText: string
   @Input() loading: boolean
-  @Input() currentFilter: Filter
+  @Input() currentFilter: StandardRequest
 
   @ViewChild('staffIndex') staffIndex: StaffIndexComponent
 

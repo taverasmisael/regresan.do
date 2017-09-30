@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
@@ -16,15 +17,21 @@ import { ActionTypes } from '@actions/auth.actions'
 import { UserProfile } from '@models/userprofile'
 import { AppState } from '@models/states/app'
 import { AuthState } from '@models/states/auth'
-import { APIRequestUser, APIRequestParams } from '@models/apiparams'
+import { StandardRequest } from '@models/standardRequest'
+import { BasicRequest } from '@models/basicRequest'
 
 import { merge, sum } from '@utilities/arrays'
 import { updateObject } from '@utilities/objects'
 import { mapPieChart, TotalPorDiaLineal } from '@utilities/respuestas'
 import { gamaRegresando } from '@utilities/colors'
 
-const today = moment().unix().toString()
-const aWeekAgo = moment().subtract(1, 'week').unix().toString()
+const today = moment()
+  .unix()
+  .toString()
+const aWeekAgo = moment()
+  .subtract(1, 'week')
+  .unix()
+  .toString()
 const emptyResultsMessage =
   'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo'
 
@@ -35,7 +42,7 @@ const emptyResultsMessage =
 })
 export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public userProfiles: UserProfile[]
-  public currentQuery: APIRequestUser
+  public currentQuery: StandardRequest
 
   public totalToday: BehaviorSubject<number>
   public totalGeneral: BehaviorSubject<number>
@@ -59,6 +66,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   private fetchEvent: EventEmitter<any>
 
   constructor(
+    private titleService: Title,
     private router: Router,
     private Route: ActivatedRoute,
     private preguntas: QuestionsService,
@@ -66,6 +74,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.titleService.setTitle('Resumén — Regresan.do')
     this.fetchEvent = new EventEmitter()
     this.AuthState = this.store.select('auth')
 
@@ -101,17 +110,34 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public ApplyFilters(filter: Params) {
     const filterStart = filter['start']
     const filterEnd = filter['end']
-    const navigate = (query: APIRequestParams) => this.router.navigate([], { queryParams: query })
-    const dispatch = (query: APIRequestParams) => this.fetchEvent.emit(query)
-    const dispatchNavigate = (query: APIRequestParams) => {
+    const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
+    const dispatch = (query: BasicRequest) => this.fetchEvent.emit(query)
+    const dispatchNavigate = (query: BasicRequest) => {
       this.currentQuery = updateObject(this.currentQuery, query)
       dispatch(query)
+      this.titleService.setTitle(
+        `Resumén ${moment.unix(+query.start).format('MMM, D')} - ${moment
+          .unix(+query.end)
+          .format('MMM, D')} — Regresan.do`
+      )
       navigate(query)
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string) => {
-      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString()
-      let end = e || moment.unix(+s).add(1, 'week').unix().toString()
+      let start =
+        s ||
+        moment
+          .unix(+e)
+          .subtract(1, 'week')
+          .unix()
+          .toString()
+      let end =
+        e ||
+        moment
+          .unix(+s)
+          .add(1, 'week')
+          .unix()
+          .toString()
       dispatchNavigate({ start, end })
     }
     const DateFilter = {
@@ -146,7 +172,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public LoadGeneralSurvey(query: APIRequestUser) {
+  public LoadGeneralSurvey(query: StandardRequest) {
     this.generalSurveyLoading = true
     this.generalSurveyError = ''
     this.preguntas
@@ -174,7 +200,7 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       )
   }
 
-  public LoadHistoricSurvey(query: APIRequestUser) {
+  public LoadHistoricSurvey(query: StandardRequest) {
     this.historicSurveyLoading = true
     this.historicSurveyError = ''
 
@@ -211,25 +237,28 @@ export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
       )
   }
 
-  public LoadResumen(query: APIRequestUser) {
-    this.preguntas.getResumen(query).map(res => res['Cabecera']).subscribe(res => {
-      if (res) {
-        this.totalToday.next(res['TotalEncuestadosHoy'])
-        this.totalGeneral.next(res['TotalEncuestas'])
-        this.newContacts.next(res['NuevosContactos'])
-        this.branchIndex.next(res['IndiceSucursal'])
-      } else {
-        this.totalToday.next(0)
-        this.totalGeneral.next(0)
-        this.newContacts.next(0)
-        this.branchIndex.next(0)
-      }
-    })
+  public LoadResumen(query: StandardRequest) {
+    this.preguntas
+      .getResumen(query)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        if (res) {
+          this.totalToday.next(res['TotalEncuestadosHoy'])
+          this.totalGeneral.next(res['TotalEncuestas'])
+          this.newContacts.next(res['NuevosContactos'])
+          this.branchIndex.next(res['IndiceSucursal'])
+        } else {
+          this.totalToday.next(0)
+          this.totalGeneral.next(0)
+          this.newContacts.next(0)
+          this.branchIndex.next(0)
+        }
+      })
   }
 
   // Private Helpers
 
-  private FetchAll(query: APIRequestUser) {
+  private FetchAll(query: StandardRequest) {
     this.currentQuery = updateObject(this.currentQuery, query)
     this.LoadGeneralSurvey(query)
     this.LoadHistoricSurvey(query)

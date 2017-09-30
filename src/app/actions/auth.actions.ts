@@ -8,7 +8,8 @@ export const ActionTypes = {
   LOGOUT: '[AUTH]: LOGOUT',
   LOGOUT_START: '[AUTH]: LOGOUT_START',
   TOKEN_EXPIRED: '[AUTH] TOKEN_EXPIRED:',
-  SAVE_USER: '[AUTH] SAVE_USER:'
+  SAVE_USER: '[AUTH] SAVE_USER:',
+  LOGIN_COMPLETE: '[AUTH] LOGIN_COMPLETE'
 }
 
 export class Login implements Action {
@@ -33,6 +34,11 @@ export class SaveUser implements Action {
   type = ActionTypes.SAVE_USER
 
   constructor(public payload) {}
+}
+export class LoginComplete implements Action {
+  type = ActionTypes.LOGIN_COMPLETE
+
+  constructor() {}
 }
 export class Logout implements Action {
   type = ActionTypes.LOGOUT

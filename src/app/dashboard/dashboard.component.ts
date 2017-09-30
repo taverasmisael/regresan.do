@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser'
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 
 import { Store } from '@ngrx/store'
@@ -20,9 +21,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private userProfiles: UserProfile[]
 
   public currentUser: User
-  constructor(private store: Store<AppState>) {}
+  constructor(private titleService: Title, private store: Store<AppState>) {}
 
   ngOnInit() {
+    this.titleService.setTitle('Resumén — Regresan.do')
     this.AuthState = this.store.select('auth')
 
     this.AuthState.pluck('currentUser', 'User').subscribe((user: User) => (this.currentUser = user))

@@ -19,9 +19,8 @@ import * as moment from 'moment'
 import compare from 'just-compare'
 
 import { UserProfile } from '@models/userprofile'
-import { APIRequestUser } from '@models/apiparams'
+import { AnswerRequest } from '@models/answerRequest'
 import { FlatpickrOptions } from '@thirdparty/flatpickr/models'
-import { updateObject } from '@utilities/objects'
 import { isValidUnix, toUnixDate } from '@utilities/dates'
 
 @Component({
@@ -31,7 +30,7 @@ import { isValidUnix, toUnixDate } from '@utilities/dates'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
-  @Input() filters: APIRequestUser
+  @Input() filters: AnswerRequest
   @Input()
   questions: Array<{
     value: number
@@ -50,7 +49,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
   public filterFechaFin: FormControl
   public filterQuestion: FormControl
   public filterAnswer: FormControl
-  public lastFilter: APIRequestUser
+  public lastFilter: AnswerRequest
   public activeFilters: number
   public startOptions: FlatpickrOptions
   public endOptions: FlatpickrOptions
@@ -62,8 +61,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     let { start, end } = this.filters
 
     this.flatpickrOptions = { altFormat: 'd/m/Y', dateFormat: 'U', altInput: true }
-    this.startOptions = updateObject(this.flatpickrOptions, { defaultDate: start })
-    this.endOptions = updateObject(this.flatpickrOptions, { defaultDate: end })
+    this.startOptions = { ...this.flatpickrOptions, defaultDate: start }
+    this.endOptions = { ...this.flatpickrOptions, defaultDate: end }
 
     this.filterFechaInicio = new FormControl(start, [Validators.required])
     this.filterFechaFin = new FormControl(end, [Validators.required])
@@ -77,7 +76,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     this.filterForm = this.fb.group({
       start: this.filterFechaInicio,
       end: this.filterFechaFin,
-      question: this.filterQuestion,
+      idQuestion: this.filterQuestion,
       answer: this.filterAnswer
     })
   }
@@ -86,7 +85,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     const questionsChange = changes['questions']
     if (questionsChange && questionsChange.currentValue.length && this.filterQuestion.disabled) {
       this.filterQuestion.enable()
+      this.filterQuestion.setValue(this.filters.idQuestion)
       this.filterAnswer.enable()
+      this.filterAnswer.setValue(this.filters.answer)
+      componentHandler.upgradeAllRegistered()
     }
   }
   ngAfterViewInit() {
@@ -112,21 +114,25 @@ export class FilterComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.shouldUpdateLastFilter(filter)) {
       this.lastFilter = filter
       this.applyFilters.emit(filter)
+      this.setActivesFilters()
     }
     this.closeDialog()
   }
 
   private setActivesFilters() {
-    this.activeFilters = Object.keys(this.lastFilter).length
+    this.activeFilters = Object.keys(this.lastFilter).filter(
+      k => this.lastFilter[k] && this.lastFilter[k] !== '0'
+    ).length
   }
 
   private fixDateFilter(filter) {
-    return updateObject(filter, {
+    return {
+      ...filter,
       start: isValidUnix(filter.start) ? filter.start : toUnixDate(filter.start),
       end: isValidUnix(filter.end) ? filter.end : toUnixDate(filter.end)
-    })
+    }
   }
-  private shouldUpdateLastFilter(filter: APIRequestUser) {
+  private shouldUpdateLastFilter(filter: AnswerRequest) {
     return !compare(filter, this.lastFilter)
   }
 }

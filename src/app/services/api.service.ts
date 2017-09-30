@@ -10,7 +10,7 @@ import { JWT } from '@models/jwt'
 
 @Injectable()
 export class ApiService {
-  private BASE_URL = 'https://devregresando.azurewebsites.net'
+  private BASE_URL = 'https://webapiregresandodev.azurewebsites.net'
   private COMMON_HEADERS = new Headers([{ 'Content-Type': 'application/x-www-form-urlencoded' }])
   constructor(private http: Http) {}
 

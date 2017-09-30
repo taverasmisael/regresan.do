@@ -6,8 +6,8 @@
   [contentPadding]="false"
   [errorText]="errorText"
   [loading]="loading">
-  <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;  " *ngIf="IndiceSatisfaccion && KPIS">
-    <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+  <div class="mdl-grid" style="padding: 0 0.5rem; align-items: center;">
+    <div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col-tablet mdl-cell--4-col-phone" *ngIf="IndiceSatisfaccion">
       <ng-gauge
         [rounded]="IndiceSatisfaccion.rounded"
         [bgRadius]="IndiceSatisfaccion.bgRadius"
@@ -16,7 +16,7 @@
         [segments]="IndiceSatisfaccion.segments">
       </ng-gauge>
     </div>
-    <div class="mdl-cell mdl-cell--8-col">
+    <div class="mdl-cell {{!IndiceSatisfaccion ? 'mdl-cell--12-col' : 'mdl-cell--8-col'}}" *ngIf="KPIS">
       <div class="mdl-grid">
         <div class="mdl-cell" *ngFor="let kpi of KPIS;">
           <ng-gauge

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 
-import { APIRequestUser } from '@models/apiparams'
 
 import {
   Response,
@@ -12,11 +11,11 @@ import {
 } from '@angular/http'
 
 import { Observable } from 'rxjs/Rx'
-
-// Auth Stuffs
 import { Store } from '@ngrx/store'
+
 import { AppState } from '@models/states/app'
 import { JWT } from '@models/jwt'
+import { StandardRequest } from '@models/standardRequest'
 
 import { ApiService } from '@services/api.service'
 
@@ -37,7 +36,7 @@ export class KpisService {
     })
   }
 
-  getFromProfile(query: APIRequestUser) {
+  getFromProfile(query: StandardRequest) {
     const url = `${this.BASE_URL}/GetKpis`
     const params = new URLSearchParams()
 

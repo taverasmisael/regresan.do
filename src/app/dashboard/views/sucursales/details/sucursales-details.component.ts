@@ -1,3 +1,5 @@
+import { Title } from '@angular/platform-browser'
+
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 
@@ -24,7 +26,8 @@ import { updateObject, objectRest } from '@utilities/objects'
 import { merge, findByObjectId } from '@utilities/arrays'
 import { ratingPalette, gamaRegresando } from '@utilities/colors'
 
-import { APIRequestParams, APIRequestRespuesta, APIRequestUser } from '@models/apiparams'
+import { BasicRequest } from '@models/basicRequest'
+import { AnswerRequest } from '@models/answerRequest'
 import { AppState } from '@models/states/app'
 import { BranchState } from '@models/states/branch'
 import { HistoricEntry } from '@models/historicEntry'
@@ -43,6 +46,7 @@ import {
   SaveInfo,
   ResetButInfo,
   ResetAll,
+  ReuquestFilterQuestion,
   RequestCloseAnswer,
   RequestHistoric,
   RequestKPI,
@@ -52,13 +56,13 @@ import {
   ApplyCurrentQuery
 } from '@actions/branch.actions'
 
-const aWeekAgo = moment().subtract(1, 'week').unix().toString()
-const today = moment().unix().toString()
-const unique = key => (p, c) => (p.find(e => e[key] === c[key]) ? p : [...p, c])
-const uniqueQuestion = unique('idPregunta')
-const uniqueQuestionInAnswer = unique('Pregunta')
-const uniqueValue = unique('value')
-const keyWithValue = filter(k => !!k)
+const aWeekAgo = moment()
+  .subtract(1, 'week')
+  .unix()
+  .toString()
+const today = moment()
+  .unix()
+  .toString()
 
 @Component({
   selector: 'app-sucursales-details',
@@ -98,6 +102,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   private subCurrentQr: Subscription
 
   constructor(
+    private titleService: Title,
     private router: Router,
     private Preguntas: QuestionsService,
     private Respuestas: RespuestasService,
@@ -146,16 +151,24 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   // Public Methods
-  public LoadCloseAnswer(pregunta: string) {
-    const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { pregunta })
-    this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${pregunta}`))
+  public LoadCloseAnswer(question: string) {
+    const { start, end, profile, answer, idQuestion } = <AnswerRequest>this.activeBranch
+      .currentQuery
+    const query = new AnswerRequest(
+      start,
+      end,
+      profile,
+      question,
+      answer || undefined,
+      idQuestion || undefined
+    )
+    this.store.dispatch(new RequestCloseAnswer(query, `Cargando Respuesta ${question}`))
   }
 
-  public LoadOpenAnswer(pregunta: string) {
+  public LoadOpenAnswer(question: string) {
     const currentQuery = this.activeBranch.currentQuery
-    const query = updateObject(currentQuery, { pregunta })
-    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${pregunta}`))
+    const query = updateObject(currentQuery, { question })
+    this.store.dispatch(new RequestOpenAnswer(query, `Cargando Respuesta ${question}`))
   }
 
   public NavigateToBranch(profileId: number) {
@@ -167,20 +180,23 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
   }
 
   public LoadResumen(currentQuery) {
-    this.Preguntas.getResumenSucursal(currentQuery).map(res => res['Cabecera']).subscribe(res => {
-      if (res) {
-        this.totalToday.next(res['TotalEncuestadosHoy'])
-        this.totalGeneral.next(res['TotalEncuestas'])
-        this.newContacts.next(res['NuevosContactos'])
-        this.branchIndex.next(res['IndiceSucursal'])
-      } else {
-        this.ResetResume()
-      }
-    })
+    this.Preguntas
+      .getResumenSucursal(currentQuery)
+      .map(res => res['Cabecera'])
+      .subscribe(res => {
+        if (res) {
+          this.totalToday.next(res['TotalEncuestadosHoy'])
+          this.totalGeneral.next(res['TotalEncuestas'])
+          this.newContacts.next(res['NuevosContactos'])
+          this.branchIndex.next(res['IndiceSucursal'])
+        } else {
+          this.ResetResume()
+        }
+      })
   }
 
   public FetchQuestions(currentQuery) {
-    this.store.dispatch(new RequestQuestions(currentQuery, 'Cargando Preguntas...'))
+    this.store.dispatch(new RequestQuestions(currentQuery, `Cargando Preguntas...`))
   }
   public FetchKPIs(currentQuery) {
     this.store.dispatch(new RequestKPI(currentQuery, 'Cargando KPIs..'))
@@ -194,10 +210,12 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   public FetchAll() {
     const currentQuery = this.activeBranch.currentQuery
+    console.log('cq', currentQuery)
     this.FetchHistoric(currentQuery)
     this.FetchKPIs(currentQuery)
     this.LoadResumen(currentQuery)
     this.FetchStaffRanking(currentQuery)
+    this.store.dispatch(new ReuquestFilterQuestion(currentQuery, 'Cargando Preguntas del Filtro'))
   }
 
   // Public Helpers
@@ -210,22 +228,43 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   public GetAnswerDisplayData(type: 'ACLOSE' | 'AOPEN', question: string): any[] {
     const result = findByObjectId<any>(this.chartData[type], question) || []
-    return result // NO A REAL ERROR. JUST TYPESCRIPT CRAZINESS >:V
+    return result
   }
 
   public ApplyQueryParams(queryParams: Params) {
-    const dispatch = (query: APIRequestUser) => this.store.dispatch(new ApplyCurrentQuery(query))
-    const navigate = (query: APIRequestUser) => this.router.navigate([], { queryParams: query })
-    const dispatchNavigate = (query: any) => {
-      dispatch(query)
+    const dispatch = query => this.store.dispatch(new ApplyCurrentQuery(query))
+    const navigate = (query: BasicRequest) => this.router.navigate([], { queryParams: query })
+    const dispatchNavigate = (query: BasicRequest | AnswerRequest) => {
+      const { start, end, profile, answer, idQuestion, question } = <AnswerRequest>query
+      dispatch(new AnswerRequest(start, end, profile, question, answer, idQuestion))
       navigate(query)
       this.FetchAll()
+      if (this.needsCloseAnswers || this.needsOpenAnswers) {
+        this.FetchQuestions(query)
+      }
+      this.titleService.setTitle(
+        `${this.activeBranch.info.Title} ${moment
+          .unix(+query.start)
+          .format('MMM, D')} - ${moment.unix(+query.end).format('MMM, D')} — Regresan.do`
+      )
     }
     const applyDefault = () => dispatchNavigate({ start: aWeekAgo, end: today })
     const applyPartial = (s?: string, e?: string, extra?: any) => {
-      let start = s || moment.unix(+e).subtract(1, 'week').unix().toString()
-      let end = e || moment.unix(+s).add(1, 'week').unix().toString()
-      dispatchNavigate(updateObject({ start, end }, extra))
+      let start =
+        s ||
+        moment
+          .unix(+e)
+          .subtract(1, 'week')
+          .unix()
+          .toString()
+      let end =
+        e ||
+        moment
+          .unix(+s)
+          .add(1, 'week')
+          .unix()
+          .toString()
+      dispatchNavigate({ start, end, ...extra })
     }
     const DateFilter = {
       exists: params => params['start'] && params['end'],
@@ -237,7 +276,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       start: currentQuery.start,
       end: currentQuery.end
     }
-    const extraParams = keyWithValue(<any>objectRest(queryParams, ['start', 'end']))
+    const { queryStart, queryEnd, ...rest } = queryParams
     if (currentDateQuery && compare(queryParams, currentDateQuery)) {
       return
     }
@@ -247,17 +286,17 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       // If there's not an DateFilter applyed
       applyDefault()
     } else if (DateFilter.areNumeric(queryParams)) {
-      applyPartial(queryParams['start'], queryParams['end'], extraParams)
+      applyPartial(queryStart, queryEnd, rest)
     } else if (
       DateFilter.isNumeric('start', queryParams) &&
       !DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(queryParams['start'], undefined, extraParams)
+      applyPartial(queryStart, undefined, rest)
     } else if (
       !DateFilter.isNumeric('start', queryParams) &&
       DateFilter.isNumeric('end', queryParams)
     ) {
-      applyPartial(undefined, queryParams['end'], extraParams)
+      applyPartial(undefined, queryEnd, rest)
     }
   }
 
@@ -341,27 +380,6 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe(info => this.ApplyQueryParams(info)) // Finally we apply the query
-
-    /*     this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(store => {
-      const { closeQuestions, closeAnswers } = store
-      const flatAnswers = flatten<CloseAnswer>(closeAnswers)
-      const mappedQuestions = closeQuestions
-        .map(({ idPregunta: value, pregunta: text }) => ({ value, text }))
-        .map(q => {
-          const myAnswer = flatAnswers.filter(a => a.Pregunta === q.text)
-          if (myAnswer) {
-            const children = myAnswer.map(({ Respuesta: value, Respuesta: text }) => ({
-              value,
-              text
-            }))
-            return updateObject(q, { children })
-          }
-          return undefined
-        })
-        .filter(q => !!q.children.length)
-
-      this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
-    }) */
   }
 
   // Private Helpers

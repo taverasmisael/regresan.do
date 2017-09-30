@@ -1,5 +1,5 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-  <app-dashboard-header dashboard-header (loginout)="logOut($event)" [user]="currentUser"></app-dashboard-header>
+  <app-dashboard-header dashboard-header (loginout)="logOut()" [user]="currentUser"></app-dashboard-header>
   <app-dashboard-navbar aria-hidden="true"></app-dashboard-navbar>
   <main class="mdl-layout__content">
     <router-outlet class="page-content"></router-outlet>

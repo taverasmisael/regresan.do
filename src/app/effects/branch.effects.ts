@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable'
 import { Actions, Effect } from '@ngrx/effects'
 
 import { AppState } from '@models/states/app'
-import { APIRequestParams, APIRequestUser } from '@models/apiparams'
 import { UserProfile } from '@models/userProfile'
 import { CloseAnswer } from '@models/closeAnswer'
 import { BranchState } from '@models/states/branch'
@@ -27,22 +26,38 @@ import { ActionTypes as AuthTypes } from '@actions/auth.actions'
 
 import {
   ErrorCloseAnswer,
+  ErrorFilteredQuestions,
   ErrorHistoric,
   ErrorKPI,
   ErrorOpenAnswer,
   ErrorQuestions,
   ErrorStaffRanking,
+  ErrorFilterQuestions,
   SuccessCloseAnswer,
+  SuccessFilteredQuestions,
   SuccessHistoric,
   SuccessKPI,
   SuccessOpenAnswer,
   SuccessQuestions,
   SuccessStaffRanking,
-  SaveCurrentQuery
+  SaveCurrentQuery,
+  SuccessFilterQuestions
 } from '@actions/branch.actions'
 
 @Injectable()
 export class BranchEffects {
+  @Effect()
+  requestFilterQuestion = this.actions$
+    .ofType(ACTIONS.BRANCH_REQ_FILTER_Q_R)
+    .map(action => action['payload'])
+    .map(payload => ({ ...payload, profile: this.currentBranch.OldProfileId.toString() }))
+    .mergeMap(payload =>
+      this.preguntasService
+        .FilterQuestionsData(payload)
+        .map(res => new SuccessFilterQuestions(res['Questions']))
+        .catch(err => this.HandleError(err, ErrorFilterQuestions))
+    )
+
   @Effect()
   requestCA$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_ACLOSE_R)
@@ -91,7 +106,7 @@ export class BranchEffects {
     .map(action => action['payload'])
     .mergeMap(payload => {
       return this.respuestasService
-        .getAbiertasFromProfile(payload)
+        .getOpenFromProfile(payload)
         .map(res => res['RespuestasPreguntas'])
         .map(
           (answer: OpenAnswer[]) =>
@@ -101,13 +116,29 @@ export class BranchEffects {
     })
 
   @Effect()
+  requestQA$ = this.actions$
+    .ofType(ACTIONS.BRANCH_REQ_FILTERED_R)
+    .map(action => action['payload'])
+    .switchMap(payload =>
+      this.respuestasService
+        .getFiltered(
+          Object.assign({}, payload, { profile: this.currentBranch.OldProfileId.toString() })
+        )
+        .map(res => new SuccessFilteredQuestions(res))
+    )
+    .catch(err => this.HandleError(err, ErrorFilteredQuestions))
+
+  @Effect()
   requestQS$ = this.actions$
     .ofType(ACTIONS.BRANCH_REQ_QUESTIONS_R)
     .map(action => action['payload'])
     .switchMap(payload => {
       // Trying Some Different RXJS operator
       return this.preguntasService
-        .getAllByProfile(payload)
+        .getAllByProfile({
+          ...payload,
+          profile: this.currentBranch.OldProfileId.toString()
+        })
         .map(res => res['Respuestas']) // return only the real data
         .map((questions: Question[]) => {
           const close = questions.filter(q => q.tipoPregunta !== 'Abierta')
@@ -134,9 +165,8 @@ export class BranchEffects {
     .ofType(ACTIONS.BRANCH_APPLY_CURRENT_QUERY)
     .map(action => action['payload'])
     .map(payload => ({
-      profile: this.currentBranch.OldProfileId.toString(),
-      start: payload.start,
-      end: payload.end
+      ...payload,
+      profile: this.currentBranch.OldProfileId.toString()
     }))
     .switchMap(query => {
       return Observable.of(new SaveCurrentQuery(query))
