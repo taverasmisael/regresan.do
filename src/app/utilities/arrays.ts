@@ -15,3 +15,5 @@ export const sortResDate = (prev, curr) =>
   moment(prev.Fecha).isSameOrAfter(moment(curr.Fecha)) ? 1 : -1
 export const findByObjectId = <T>(list: T[], id: number | string): T =>
   list.find(el => el['id'] === id)
+export const unique = key => (p, c) => (p.find(e => e[key] === c[key]) ? p : [...p, c])
+export const uniqueValue = unique('value')

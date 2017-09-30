@@ -46,7 +46,7 @@ import {
   SaveInfo,
   ResetButInfo,
   ResetAll,
-  RequestFilteredQuestions,
+  ReuquestFilterQuestion,
   RequestCloseAnswer,
   RequestHistoric,
   RequestKPI,
@@ -63,12 +63,6 @@ const aWeekAgo = moment()
 const today = moment()
   .unix()
   .toString()
-const unique = key => (p, c) => (p.find(e => e[key] === c[key]) ? p : [...p, c])
-const needsFilter = q => q.question && q.answer
-const uniqueQuestion = unique('idPregunta')
-const uniqueQuestionInAnswer = unique('Pregunta')
-const uniqueValue = unique('value')
-const keyWithValue = filter(k => !!k)
 
 @Component({
   selector: 'app-sucursales-details',
@@ -216,10 +210,12 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
 
   public FetchAll() {
     const currentQuery = this.activeBranch.currentQuery
+    console.log('cq', currentQuery)
     this.FetchHistoric(currentQuery)
     this.FetchKPIs(currentQuery)
     this.LoadResumen(currentQuery)
     this.FetchStaffRanking(currentQuery)
+    this.store.dispatch(new ReuquestFilterQuestion(currentQuery, 'Cargando Preguntas del Filtro'))
   }
 
   // Public Helpers
@@ -384,26 +380,6 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
       .switchMap(val => this.Route.queryParams) // ... We switch to our queryParams to
       .filter(() => Boolean(this.activeBranch.info.OldProfileId))
       .subscribe(info => this.ApplyQueryParams(info)) // Finally we apply the query
-
-    this.store$.distinctUntilKeyChanged('closeAnswers').subscribe(({ closeQuestions, closeAnswers }) => {
-      const flatAnswers = flatten<CloseAnswer>(closeAnswers)
-      const mappedQuestions = closeQuestions
-        .map(({ idPregunta: value, pregunta: text }) => ({ value, text }))
-        .map(q => {
-          const myAnswer = flatAnswers.filter(a => a.Pregunta === q.text)
-          if (myAnswer) {
-            const children = myAnswer.map(({ Respuesta: value, Respuesta: text }) => ({
-              value,
-              text
-            }))
-            return updateObject(q, { children })
-          }
-          return undefined
-        })
-        .filter(q => !!q.children.length)
-
-      this.questionsList = reduce(uniqueValue, [], [...this.questionsList, ...mappedQuestions])
-    })
   }
 
   // Private Helpers
