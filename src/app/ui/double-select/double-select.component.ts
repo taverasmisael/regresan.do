@@ -34,7 +34,8 @@ export class DoubleSelectComponent implements OnInit {
       .filter(() => this.primaryControl.value && this.primaryControl.value !== '0')
       .distinct()
       .subscribe(value => {
-        this.currentSecondary = this.options.find(o => Number(o.value) === Number(value)).children
+        let temp = this.options.find(o => Number(o.value) === Number(value))
+        this.currentSecondary = temp ? temp.children : []
       })
   }
 }
