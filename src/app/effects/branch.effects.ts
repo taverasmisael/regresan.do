@@ -54,12 +54,7 @@ export class BranchEffects {
     .mergeMap(payload =>
       this.preguntasService
         .FilterQuestionsData(payload)
-        .map(res => res['RespuestasPreguntas'])
-        .map((questions: Question[]) => {
-          const close = questions.filter(q => q.tipoPregunta !== 'Abierta')
-          const open = questions.filter(q => q.tipoPregunta === 'Abierta')
-          return new SuccessFilterQuestions({ close, open })
-        })
+        .map(res => new SuccessFilterQuestions(res['Questions']))
         .catch(err => this.HandleError(err, ErrorFilterQuestions))
     )
 

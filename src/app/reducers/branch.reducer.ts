@@ -1,14 +1,22 @@
 import { EnhancedAction } from '@models/enhancedAction'
 
 import * as moment from 'moment'
+import { flatten, map, filter, reduce } from 'ramda'
 
 import { BranchState } from '@models/states/branch'
 import { StateRequest } from '@models/states/stateRequest'
 
 import { updateObject, updateItemInArray } from '@utilities/objects'
+import { uniqueValue } from '@utilities/arrays'
 import { createReducer } from '@utilities/reducers'
 
 import * as ACTIONS from '@actions/branch.types'
+
+interface FlattenAnswer {
+  IdPregunta: number
+  Pregunta: string
+  respuesta: String
+}
 export const INITIAL_STATE = new BranchState()
 
 export function BranchReducer(state = INITIAL_STATE, action: EnhancedAction) {
@@ -156,11 +164,30 @@ function saveFilterQuestions<T extends BranchState>(
 ): BranchState {
   const { payload, section } = action
 
+  const flatAnswers: FlattenAnswer[] = flatten(
+    map(
+      d => map(a => ({ IdPregunta: d.IdPregunta, Pregunta: d.Pregunta, ...a }), d.Respuestas),
+      payload
+    )
+  )
+  const mappedQuestions = payload
+    .map(({ IdPregunta: value, Pregunta: text }) => ({ value, text }))
+    .map(q => {
+      const myAnswer = flatAnswers.filter(a => a.IdPregunta === q.value)
+      if (myAnswer) {
+        const children = myAnswer.map(({ respuesta: value, respuesta: text }) => ({
+          value,
+          text
+        }))
+        return { ...q, children }
+      }
+    })
+    .filter(q => !!q.children.length)
+
+  const questionsList = reduce(uniqueValue, [], [...mappedQuestions])
+
   return updateObject(state, {
-    filterQuestions: {
-      openQuestions: payload.open,
-      closeQuestions: payload.close
-    },
+    filterQuestions: questionsList,
     requests: updateObject(state.requests, {
       [section]: new StateRequest(undefined, false, '')
     })

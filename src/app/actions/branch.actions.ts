@@ -214,5 +214,5 @@ export class SuccessFilterQuestions implements EnhancedAction {
   public type = ACTIONS.BRANCH_REQ_FILTER_Q_S
   public section = getSectionName(this.type)
 
-  constructor(public payload: { close: Question[]; open: Question[] }) {}
+  constructor(public payload: any[]) {}
 }
