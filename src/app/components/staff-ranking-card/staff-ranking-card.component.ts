@@ -9,7 +9,7 @@ import {
   EventEmitter
 } from '@angular/core'
 
-import { StaffIndexComponent } from '../../staff-index/staff-index.component'
+import { StaffIndexComponent } from '@components/staff-index/staff-index.component'
 
 import { StandardRequest } from '@models/standardRequest'
 

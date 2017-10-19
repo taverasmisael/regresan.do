@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
     "paths": {
-      "@actions/*": ["app/actions/*"],
+      "@actions/*": ["redux/actions/*"],
       "@app/*": ["app/*"],
       "@components/*": ["app/components/*"],
       "@effects/*": ["redux/effects/*"],

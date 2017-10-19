@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
-import { LoginComponent } from './login/login.component'
-import { DashboardComponent } from './dashboard/dashboard.component'
-import { OverviewComponent } from './dashboard/views/overview/dashboard-overview.component'
-import { DashboardSucursalesComponent } from './dashboard/views/sucursales/dashboard-sucursales.component'
-import { SucursalesDetailsComponent } from './dashboard/views/sucursales/details/sucursales-details.component'
+import { LoginComponent } from '@pages/login/login.component'
+import { DashboardComponent } from '@pages/dashboard/dashboard.component'
+import { OverviewComponent } from '@pages/overview/dashboard-overview.component'
+import { DashboardSucursalesComponent } from '@pages/sucursales/dashboard-sucursales.component'
+import { SucursalesDetailsComponent } from '@pages/sucursales/details/sucursales-details.component'
 
 // Security
-import { AuthGuardService } from './services/auth-guard.service'
-import { LoginGuardService } from './services/login-guard.service'
+import { AuthGuardService } from '@services/auth-guard.service'
+import { LoginGuardService } from '@services/login-guard.service'
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

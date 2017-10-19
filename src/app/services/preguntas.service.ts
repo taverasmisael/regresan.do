@@ -18,7 +18,7 @@ import { StandardRequest } from '@models/standardRequest'
 import { BasicRequest } from '@models/basicRequest'
 
 import { ApiService } from './api.service'
-import { AnswerRequest } from '@app/models/answerRequest'
+import { AnswerRequest } from '@models/answerRequest'
 
 @Injectable()
 export class QuestionsService {
