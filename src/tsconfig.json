@@ -18,7 +18,7 @@
       "@pages/*": ["app/pages/*"],
       "@reducers/*": ["redux/reducers/*"],
       "@redux/*": ["redux/*"],
-      "@services/*": ["app/services/*"],
+      "@services/*": ["services/*"],
       "@thirdparty/*": ["thirdparty/*"],
       "@utilities/*": ["utilities/*"]
     },
