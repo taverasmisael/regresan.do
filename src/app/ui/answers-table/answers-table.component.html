@@ -1,4 +1,11 @@
-<table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="!loading && !!answers.length">
+<ag-grid-angular style="width: 500px; height: 115px;"
+              class="ag-fresh"
+              [rowData]="rowData"
+              [columnDefs]="columnDefs">
+</ag-grid-angular>
+
+<!--
+  <table class="mdl-data-table" [class.is--in-card]="withinCard" *ngIf="!loading && !!answers.length">
   <thead>
     <tr>
       <th rowspan="1" colspan="1" class="mdl-data-table__cell--non-numeric clickable"
@@ -44,3 +51,4 @@
     <p class="mdl-typography--text-center">{{ errorText }}</p>
   </div>
 </div>
+-->

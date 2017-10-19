@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http'
 // Charts
 import { ChartsModule } from 'ng2-charts/ng2-charts'
 import { GaugeModule } from 'ng-gauge'
+import { AgGridModule } from 'ag-grid-angular/main'
 
 // Routes
 import { AppRoutingModule } from './app-routing.module'
@@ -93,7 +94,8 @@ import { DoubleSelectComponent } from './ui/double-select/double-select.componen
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
     EffectsModule.forRoot([AuthEffects, BranchEffects]),
     ChartsModule,
-    GaugeModule
+    GaugeModule,
+    AgGridModule
   ],
   providers: [
     Title,
