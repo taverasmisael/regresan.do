@@ -24,8 +24,8 @@ import { BranchEffects } from '@effects/branch.effects'
 
 // Services
 import { ApiService } from '@services/api.service'
-import { QuestionsService } from '@services/preguntas.service'
-import { RespuestasService } from '@services/respuestas.service'
+import { QuestionsService } from '@services/questions.service'
+import { AnswersService } from '@services/answers.service'
 import { UserService } from '@services/user.service'
 import { KpisService } from '@services/kpis.service'
 import { StaffService } from '@services/staff.service'
@@ -43,15 +43,15 @@ import { LoginComponent } from '@pages/login/login.component'
 import { DashboardComponent } from '@pages/dashboard/dashboard.component'
 import { NavbarComponent } from '@components/navbar/navbar.component'
 import { HeaderComponent } from '@components/header/header.component'
-import { OverviewComponent } from '@pages/overview/dashboard-overview.component'
-import { DashboardSucursalesComponent } from '@pages/sucursales/dashboard-sucursales.component'
-import { SucursalesDetailsComponent } from '@pages/sucursales/details/sucursales-details.component'
-import { SucursalesListComponent } from '@components/sucursales-list/sucursales-list.component'
+import { OverviewComponent } from '@pages/overview/overview.component'
+import { BranchesComponent } from '@pages/branches/branches.component'
+import { BranchComponent } from '@pages/branch/branch.component'
+import { BranchListComponent } from '@components/branch-list/branch-list.component'
 import { ChartCardComponent } from '@components/chart-card/chart-card.component'
 import { AnswersTableComponent } from '@components/answers-table/answers-table.component'
 import { FilterComponent } from '@components/filter/filter.component'
-import { TotalesCardComponent } from '@components/totales-card/totales-card.component'
-import { TotalesContainerComponent } from '@components/totales-container/totales-container.component'
+import { InfoCardComponent } from '@components/info-card/info-card.component'
+import { BranchInfoCardsComponent } from '@components/branch-info-cards/branch-info-cards.component'
 import { StaffRankingCardComponent } from '@components/staff-ranking-card/staff-ranking-card.component'
 import { CardComponent } from '@components/card/card.component'
 import { KpiCardComponent } from '@components/kpi-card/kpi-card.component'
@@ -67,15 +67,15 @@ import { DoubleSelectComponent } from '@components/double-select/double-select.c
     NavbarComponent,
     HeaderComponent,
     OverviewComponent,
-    DashboardSucursalesComponent,
-    SucursalesDetailsComponent,
-    SucursalesListComponent,
+    BranchesComponent,
+    BranchComponent,
+    BranchListComponent,
     ChartCardComponent,
     FlatpickrComponent,
     AnswersTableComponent,
     FilterComponent,
-    TotalesCardComponent,
-    TotalesContainerComponent,
+    InfoCardComponent,
+    BranchInfoCardsComponent,
     StaffRankingCardComponent,
     CardComponent,
     KpiCardComponent,
@@ -103,7 +103,7 @@ import { DoubleSelectComponent } from '@components/double-select/double-select.c
     AuthGuardService,
     LoginGuardService,
     UserService,
-    RespuestasService,
+    AnswersService,
     QuestionsService,
     KpisService,
     StaffService

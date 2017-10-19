@@ -1,11 +1,11 @@
 <app-filter (applyFilters)="ApplyFilters($event)" [filters]="currentQuery"></app-filter>
-<app-totales-container
+<app-branch-info-cards
   [total]="totalGeneral | async"
   [hoy]="totalToday | async"
   [indice]="branchIndex |async"
   [contactos]="newContacts | async"
   tipoIndice="General"
-></app-totales-container>
+></app-branch-info-cards>
 <div class="mdl-grid">
   <app-chart-card
     class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-card mdl-shadow--2dp"
@@ -36,5 +36,5 @@
   </app-chart-card>
 </div>
 <section class="section">
-  <app-sucursales-list [sucursales]="userProfiles" [colors]="branchColors"></app-sucursales-list>
+  <app-branch-list [branches]="userProfiles" [colors]="branchColors"></app-branch-list>
 </section>

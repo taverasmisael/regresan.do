@@ -15,8 +15,8 @@ import { Question } from '@models/question'
 import { StaffRanking } from '@models/staffRanking'
 
 import { KpisService } from '@services/kpis.service'
-import { QuestionsService } from '@services/preguntas.service'
-import { RespuestasService } from '@services/respuestas.service'
+import { QuestionsService } from '@services/questions.service'
+import { AnswersService } from '@services/answers.service'
 import { StaffService } from '@services/staff.service'
 
 import { sortResDate } from '@utilities/arrays'
@@ -177,7 +177,7 @@ export class BranchEffects {
     private actions$: Actions,
     private kpiService: KpisService,
     private preguntasService: QuestionsService,
-    private respuestasService: RespuestasService,
+    private respuestasService: AnswersService,
     private staffService: StaffService,
     private store: Store<AppState>
   ) {

@@ -17,8 +17,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 import { ActionTypes as AuthActions } from '@actions/auth.actions'
 
-import { QuestionsService } from '@services/preguntas.service'
-import { RespuestasService } from '@services/respuestas.service'
+import { QuestionsService } from '@services/questions.service'
+import { AnswersService } from '@services/answers.service'
 import { KpisService } from '@services/kpis.service'
 
 import { createOpenAnswerEntry, makePieChart, TotalPorDiaLineal } from '@utilities/respuestas'
@@ -65,11 +65,11 @@ const today = moment()
   .toString()
 
 @Component({
-  selector: 'app-sucursales-details',
-  templateUrl: './sucursales-details.component.html',
-  styleUrls: ['./sucursales-details.component.scss']
+  selector: 'app-branch',
+  templateUrl: './branch.component.html',
+  styleUrls: ['./branch.component.scss']
 })
-export class SucursalesDetailsComponent implements OnInit, OnDestroy {
+export class BranchComponent implements OnInit, OnDestroy {
   public activeBranch: BranchState
   public totalToday: BehaviorSubject<number>
   public totalGeneral: BehaviorSubject<number>
@@ -105,7 +105,7 @@ export class SucursalesDetailsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private router: Router,
     private Preguntas: QuestionsService,
-    private Respuestas: RespuestasService,
+    private Respuestas: AnswersService,
     KPIS: KpisService,
     private store: Store<AppState>,
     private Route: ActivatedRoute

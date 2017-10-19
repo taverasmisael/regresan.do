@@ -10,11 +10,11 @@ import { AppState } from '@models/states/app'
 import { gamaRegresando } from '@utilities/colors'
 
 @Component({
-  selector: 'app-dashboard-sucursales',
-  templateUrl: './dashboard-sucursales.component.html',
-  styleUrls: ['./dashboard-sucursales.component.scss']
+  selector: 'app-branches',
+  templateUrl: './branches.component.html',
+  styleUrls: ['./branches.component.scss']
 })
-export class DashboardSucursalesComponent implements OnInit {
+export class BranchesComponent implements OnInit {
   public userProfiles: Observable<UserProfile[]>
   public colores: string[]
 

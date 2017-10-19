@@ -1,0 +1,8 @@
+<div class="mdl-grid">
+  <div *ngFor="let branch of branches; let i = index" [style.backgroundColor]="colors[i]" class="card-sucursales mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-card">
+    <div class="mdl-card__title mdl-card--expand">
+      <h4>{{ branch.Title }}</h4>
+    </div>
+    <a [routerLink]="['/dashboard/sucursales', branch.OldProfileId]" queryParamsHandling="preserve" class="cover-link"></a>
+  </div>
+</div>

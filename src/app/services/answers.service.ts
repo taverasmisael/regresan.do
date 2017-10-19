@@ -20,7 +20,7 @@ import { AnswerRequest } from '@models/answerRequest'
 import { ApiService } from '@services/api.service'
 
 @Injectable()
-export class RespuestasService {
+export class AnswersService {
   private BASE_URL = 'api/Respuesta'
   private authHeader: Headers
 

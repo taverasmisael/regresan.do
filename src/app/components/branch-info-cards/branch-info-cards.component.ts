@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
-  selector: 'app-totales-container',
-  templateUrl: './totales-container.component.html',
-  styleUrls: ['./totales-container.component.scss'],
+  selector: 'app-branch-info-cards',
+  templateUrl: './branch-info-cards.component.html',
+  styleUrls: ['./branch-info-cards.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TotalesContainerComponent implements OnInit {
+export class BranchInfoCardsComponent implements OnInit {
   @Input() total: number
   @Input() hoy: number
   @Input() indice: number

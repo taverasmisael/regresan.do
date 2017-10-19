@@ -25,7 +25,7 @@
     [chartData]="chartData.historic.data"
     [chartColors]="chartData.historic.colors">
   </app-chart-card>
-  <app-totales-container
+  <app-branch-info-cards
     class="mdl-cell mdl-cell--3-col-desktop mdl-cell--8-col-tablet mdl-cell--order-1 mdl-cell--order-2-desktop"
     [total]="totalGeneral | async"
     [hoy]="totalToday | async"
@@ -33,7 +33,7 @@
     [contactos]="newContacts | async"
     tipoIndice="de Sucursal"
     fullCards="true">
-  </app-totales-container>
+  </app-branch-info-cards>
 </div>
 <section class="section section--staff-kpi">
   <div class="mdl-grid">

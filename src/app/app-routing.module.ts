@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { LoginComponent } from '@pages/login/login.component'
 import { DashboardComponent } from '@pages/dashboard/dashboard.component'
-import { OverviewComponent } from '@pages/overview/dashboard-overview.component'
-import { DashboardSucursalesComponent } from '@pages/sucursales/dashboard-sucursales.component'
-import { SucursalesDetailsComponent } from '@pages/sucursales/details/sucursales-details.component'
+import { OverviewComponent } from '@pages/overview/overview.component'
+import { BranchesComponent } from '@pages/branches/branches.component'
+import { BranchComponent } from '@pages/branch/branch.component'
 
 // Security
 import { AuthGuardService } from '@services/auth-guard.service'
@@ -21,8 +21,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
-      { path: 'sucursales', component: DashboardSucursalesComponent },
-      { path: 'sucursales/:id', component: SucursalesDetailsComponent }
+      { path: 'sucursales', component: BranchesComponent },
+      { path: 'sucursales/:id', component: BranchComponent }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' } // All other Routes

@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription'
 import * as moment from 'moment'
 import compare from 'just-compare'
 
-import { QuestionsService } from '@services/preguntas.service'
+import { QuestionsService } from '@services/questions.service'
 
 import { ActionTypes } from '@actions/auth.actions'
 
@@ -36,9 +36,9 @@ const emptyResultsMessage =
   'No se ha encontrado información con esos requisitos. Cambie el filtro e intente de nuevo'
 
 @Component({
-  selector: 'app-dashboard-overview',
-  templateUrl: './dashboard-overview.component.html',
-  styleUrls: ['./dashboard-overview.component.scss']
+  selector: 'app-overview',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public userProfiles: UserProfile[]
