@@ -1,0 +1,37 @@
+<section class="section mdl-grid" [class.is--column]="fullCards">
+  <app-info-card
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--12-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
+    cardType="total"
+    [count]="total"
+    text="Total de Encuestas">
+  </app-info-card>
+  <app-info-card
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--12-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
+    cardType="hoy"
+    [count]="hoy"
+    text="Total de Hoy">
+  </app-info-card>
+  <app-info-card
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--12-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
+    cardType="indice"
+    [count]="(indice || 0) + '%'"
+    [text]="'Indice ' + tipoIndice">
+  </app-info-card>
+  <app-info-card
+    class="mdl-cell mdl-cell--4-col-tablet mdl-cell--12-col-phone"
+    [class.mdl-cell--3-col]="!halfCards"
+    [class.mdl-cell--6-col]="halfCards"
+    [class.mdl-cell--12-col]="fullCards"
+    [count]="contactos"
+    text="Nuevos Contactos">
+  </app-info-card>
+</section>

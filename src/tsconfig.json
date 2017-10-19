@@ -10,17 +10,20 @@
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
     "paths": {
+      "@actions/*": ["redux/actions/*"],
       "@app/*": ["app/*"],
-      "@actions/*": ["app/actions/*"],
-      "@models/*": ["app/models/*"],
-      "@services/*": ["app/services/*"],
-      "@utilities/*": ["app/utilities/*"],
-      "@thirdparty/*": ["app/thirdparty/*"]
+      "@components/*": ["app/components/*"],
+      "@effects/*": ["redux/effects/*"],
+      "@models/*": ["models/*"],
+      "@pages/*": ["app/pages/*"],
+      "@reducers/*": ["redux/reducers/*"],
+      "@redux/*": ["redux/*"],
+      "@services/*": ["services/*"],
+      "@thirdparty/*": ["thirdparty/*"],
+      "@utilities/*": ["utilities/*"]
     },
     "sourceMap": true,
     "target": "es5",
-    "typeRoots": [
-      "../node_modules/@types"
-    ]
+    "typeRoots": ["../node_modules/@types"]
   }
 }

@@ -1,8 +1,0 @@
-<div class="mdl-grid">
-  <div [style.backgroundColor]="colors[i]" class="card-sucursales mdl-cell mdl-cell--2-col mdl-cell--4-col-tablet mdl-card" *ngFor="let sucursal of sucursales; let i = index">
-    <div class="mdl-card__title mdl-card--expand">
-      <h4>{{ sucursal.Title }}</h4>
-    </div>
-    <a [routerLink]="['/dashboard/sucursales', sucursal.OldProfileId]" queryParamsHandling="preserve" class="cover-link"></a>
-  </div>
-</div>
