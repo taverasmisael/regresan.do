@@ -31,7 +31,7 @@
     "@types/moment": "^2.13.0",
     "@types/ramda": "^0.24.2",
     "@types/tinycolor2": "^1.1.0",
-    "chart.js": "^2.4.0",
+    "chart.js": "^2.9.4",
     "core-js": "^2.4.1",
     "crypto-js": "^3.1.9-1",
     "dialog-polyfill": "^0.4.5",
